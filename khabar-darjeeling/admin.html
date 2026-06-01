@@ -30,7 +30,6 @@
     </div>
 
     <div id="adminPanel" class="admin-panel" style="display:none;">
-        <!-- Admin Navbar -->
         <nav class="admin-navbar">
             <div class="admin-navbar-content">
                 <h2>Admin Panel</h2>
@@ -42,7 +41,102 @@
         </nav>
 
         <div class="admin-container">
-            <!-- Sidebar -->
             <aside class="admin-sidebar">
                 <ul class="admin-menu">
-                    <li><a href
+                    <li><a href="#" onclick="showTab('dashboard')" class="menu-item active">📊 Dashboard</a></li>
+                    <li><a href="#" onclick="showTab('pending')" class="menu-item">⏳ Pending News</a></li>
+                    <li><a href="#" onclick="showTab('published')" class="menu-item">✓ Published</a></li>
+                    <li><a href="#" onclick="showTab('rejected')" class="menu-item">✗ Rejected</a></li>
+                    <li><a href="#" onclick="showTab('categories')" class="menu-item">📁 Categories</a></li>
+                </ul>
+            </aside>
+
+            <main class="admin-main">
+                <div id="dashboard" class="tab-content active">
+                    <h3>Dashboard</h3>
+                    <div class="stats-grid">
+                        <div class="stat-card">
+                            <h4>Total Articles</h4>
+                            <p id="totalArticles">0</p>
+                        </div>
+                        <div class="stat-card">
+                            <h4>Pending Review</h4>
+                            <p id="pendingCount">0</p>
+                        </div>
+                        <div class="stat-card">
+                            <h4>Published</h4>
+                            <p id="publishedCount">0</p>
+                        </div>
+                        <div class="stat-card">
+                            <h4>Rejected</h4>
+                            <p id="rejectedCount">0</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="pending" class="tab-content">
+                    <h3>Pending News Review</h3>
+                    <div id="pendingList" class="articles-list"></div>
+                </div>
+
+                <div id="published" class="tab-content">
+                    <h3>Published Articles</h3>
+                    <div id="publishedList" class="articles-list"></div>
+                </div>
+
+                <div id="rejected" class="tab-content">
+                    <h3>Rejected Articles</h3>
+                    <div id="rejectedList" class="articles-list"></div>
+                </div>
+
+                <div id="categories" class="tab-content">
+                    <h3>Manage Categories</h3>
+                    <div class="categories-grid" id="categoriesList"></div>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <div id="editModal" class="modal">
+        <div class="modal-content">
+            <span class="close-modal" onclick="closeEditModal()">&times;</span>
+            <h3>Edit Article</h3>
+            <form id="editForm">
+                <input type="hidden" id="editArticleId">
+                <div class="form-group">
+                    <label for="editTitle">Title</label>
+                    <input type="text" id="editTitle" required>
+                </div>
+                <div class="form-group">
+                    <label for="editCategory">Category</label>
+                    <select id="editCategory" required>
+                        <option value="darjeeling">Darjeeling</option>
+                        <option value="kalimpong">Kalimpong</option>
+                        <option value="kurseong">Kurseong</option>
+                        <option value="mirik">Mirik</option>
+                        <option value="siliguri">Siliguri</option>
+                        <option value="west-bengal">West Bengal</option>
+                        <option value="national">National</option>
+                        <option value="entertainment">Entertainment</option>
+                        <option value="sports">Sports</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="editContent">Content</label>
+                    <textarea id="editContent" required rows="8"></textarea>
+                </div>
+                <div class="modal-buttons">
+                    <button type="submit" class="btn btn-primary">Save Changes</button>
+                    <button type="button" class="btn btn-secondary" onclick="closeEditModal()">Cancel</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Scripts - Load in this exact order -->
+    <script src="https://cdn.jsdelivr.net/npm/appwrite@14.0.1/dist/iife/sdk.js"></script>
+    <script src="js/config.js"></script>
+    <script src="js/appwrite.js"></script>
+    <script src="js/admin.js"></script>
+</body>
+</html>
