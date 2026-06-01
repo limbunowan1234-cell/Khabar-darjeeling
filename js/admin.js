@@ -1,24 +1,36 @@
-/* ==================== ADMIN DASHBOARD JAVASCRIPT ==================== */
+/* ==================== SECURE ADMIN DASHBOARD ==================== */
+
+// Appwrite SDK is loaded from admin.html: window.Appwrite
+// Assumes js/appwrite.js already initialized: const account = new Appwrite.Account(client);
 
 let adminUser = null;
-const ADMIN_EMAIL = 'admin@khabardarjeeling.space';
-const ADMIN_PASSWORD = 'ChangeMe123!'; // Change this password!
 
 document.addEventListener('DOMContentLoaded', async () => {
-    const adminPanel = document.getElementById('adminPanel');
-    const loginScreen = document.getElementById('loginScreen');
-    
-    // Check if admin is logged in
     const isLoggedIn = await checkAdminLogin();
     
     if (isLoggedIn) {
-        loginScreen.style.display = 'none';
-        adminPanel.style.display = 'flex';
+        document.getElementById('loginScreen').style.display = 'none';
+        document.getElementById('adminPanel').style.display = 'flex';
         setupAdminDashboard();
     } else {
         setupLoginForm();
     }
 });
+
+// Check Admin Login - Uses real Appwrite session
+async function checkAdminLogin() {
+    try {
+        const user = await account.get(); // Throws error if no session
+        adminUser = user;
+        // Optional: Check if user is in admin team
+        // const teams = await teams.list(); 
+        // if (!teams.teams.some(t => t.$id === 'ADMIN_TEAM_ID')) throw new Error('Not admin');
+        return true;
+    } catch {
+        adminUser = null;
+        return false;
+    }
+}
 
 // Setup Login Form
 function setupLoginForm() {
@@ -28,7 +40,7 @@ function setupLoginForm() {
     }
 }
 
-// Handle Admin Login
+// Handle Admin Login - Real Appwrite Auth
 async function handleAdminLogin(e) {
     e.preventDefault();
     
@@ -36,17 +48,11 @@ async function handleAdminLogin(e) {
     const password = document.getElementById('password').value;
     const loginError = document.getElementById('loginError');
     
+    loginError.style.display = 'none';
+    
     try {
-        if (email !== ADMIN_EMAIL) {
-            throw new Error('Invalid credentials');
-        }
-        
-        // In production, use proper authentication with Appwrite
-        await loginUser(email, password);
-        
-        localStorage.setItem('adminToken', 'authenticated');
+        await account.createEmailSession(email, password);
         window.location.reload();
-        
     } catch (error) {
         console.error('Login error:', error);
         loginError.textContent = 'Invalid email or password';
@@ -54,27 +60,23 @@ async function handleAdminLogin(e) {
     }
 }
 
-// Check Admin Login
-async function checkAdminLogin() {
-    const token = localStorage.getItem('adminToken');
-    if (!token) return false;
-    
-    try {
-        const user = await checkCurrentUser();
-        return user && user.email === ADMIN_EMAIL;
-    } catch {
-        return false;
+// Middleware: Verify admin before any action
+async function requireAdmin() {
+    const isAdmin = await checkAdminLogin();
+    if (!isAdmin) {
+        alert('Session expired. Please log in again.');
+        window.location.href = 'admin.html';
+        throw new Error('Unauthorized');
     }
+    return adminUser;
 }
 
 // Setup Admin Dashboard
 function setupAdminDashboard() {
-    const adminUser = document.getElementById('adminUser');
     if (adminUser) {
-        adminUser.textContent = ADMIN_EMAIL;
+        document.getElementById('adminUser').textContent = adminUser.email;
     }
     
-    // Setup menu clicks
     document.querySelectorAll('.menu-item').forEach(item => {
         item.addEventListener('click', (e) => {
             e.preventDefault();
@@ -83,16 +85,13 @@ function setupAdminDashboard() {
         });
     });
     
-    // Setup logout
     const logoutBtn = document.getElementById('logoutBtn');
     if (logoutBtn) {
         logoutBtn.addEventListener('click', handleAdminLogout);
     }
     
-    // Load initial data
     showTab('dashboard');
     
-    // Setup edit form
     const editForm = document.getElementById('editForm');
     if (editForm) {
         editForm.addEventListener('submit', handleArticleUpdate);
@@ -101,26 +100,20 @@ function setupAdminDashboard() {
 
 // Show Tab
 function showTab(tabName) {
-    // Hide all tabs
     document.querySelectorAll('.tab-content').forEach(tab => {
         tab.classList.remove('active');
     });
     
-    // Remove active from all menu items
     document.querySelectorAll('.menu-item').forEach(item => {
         item.classList.remove('active');
     });
     
-    // Show selected tab
     const tab = document.getElementById(tabName);
     if (tab) {
         tab.classList.add('active');
-        
-        // Mark menu item as active
         document.querySelector(`[onclick*="${tabName}"]`)?.classList.add('active');
     }
     
-    // Load data based on tab
     switch(tabName) {
         case 'dashboard':
             loadDashboard();
@@ -143,13 +136,13 @@ function showTab(tabName) {
 // Load Dashboard
 async function loadDashboard() {
     try {
+        await requireAdmin();
         const stats = await getArticleStatistics();
         
         document.getElementById('totalArticles').textContent = stats.total;
         document.getElementById('pendingCount').textContent = stats.pending;
         document.getElementById('publishedCount').textContent = stats.approved;
         document.getElementById('rejectedCount').textContent = stats.rejected;
-        
     } catch (error) {
         console.error('Error loading dashboard:', error);
     }
@@ -158,6 +151,7 @@ async function loadDashboard() {
 // Load Pending Articles
 async function loadPendingArticles() {
     try {
+        await requireAdmin();
         const response = await getPendingArticles(20, 0);
         displayArticlesList(response.documents || [], 'pendingList', 'pending');
     } catch (error) {
@@ -168,12 +162,9 @@ async function loadPendingArticles() {
 // Load Approved Articles
 async function loadApprovedArticles() {
     try {
+        await requireAdmin();
         const { Query } = window.Appwrite;
-        const response = await getArticles(
-            [Query.equal('status', ARTICLE_STATUS.APPROVED)],
-            20,
-            0
-        );
+        const response = await getArticles([Query.equal('status', ARTICLE_STATUS.APPROVED)], 20, 0);
         displayArticlesList(response.documents || [], 'approvedList', 'approved');
     } catch (error) {
         console.error('Error loading approved articles:', error);
@@ -183,12 +174,9 @@ async function loadApprovedArticles() {
 // Load Rejected Articles
 async function loadRejectedArticles() {
     try {
+        await requireAdmin();
         const { Query } = window.Appwrite;
-        const response = await getArticles(
-            [Query.equal('status', ARTICLE_STATUS.REJECTED)],
-            20,
-            0
-        );
+        const response = await getArticles([Query.equal('status', ARTICLE_STATUS.REJECTED)], 20, 0);
         displayArticlesList(response.documents || [], 'rejectedList', 'rejected');
     } catch (error) {
         console.error('Error loading rejected articles:', error);
@@ -212,29 +200,29 @@ function displayArticlesList(articles, containerId, status) {
         let actions = '';
         if (status === 'pending') {
             actions = `
-                <button class="btn-approve btn btn-small" onclick="approveArticle('${article.$id}')">Approve</button>
-                <button class="btn-reject btn btn-small" onclick="rejectArticle('${article.$id}')">Reject</button>
-                <button class="btn-edit btn btn-small" onclick="editArticle('${article.$id}')">Edit</button>
+                <button class="btn-approve btn btn-small" data-action="approve" data-id="${article.$id}">Approve</button>
+                <button class="btn-reject btn btn-small" data-action="reject" data-id="${article.$id}">Reject</button>
+                <button class="btn-edit btn btn-small" data-action="edit" data-id="${article.$id}">Edit</button>
             `;
         } else {
             actions = `
-                <button class="btn-edit btn btn-small" onclick="editArticle('${article.$id}')">Edit</button>
-                <button class="btn-delete btn btn-small" onclick="deleteArticleConfirm('${article.$id}', '${article.imageFileId}')">Delete</button>
-                <button class="btn-view btn btn-small" onclick="window.open('article.html?id=${article.$id}')">View</button>
+                <button class="btn-edit btn btn-small" data-action="edit" data-id="${article.$id}">Edit</button>
+                <button class="btn-delete btn btn-small" data-action="delete" data-id="${article.$id}" data-image="${article.imageFileId}">Delete</button>
+                <button class="btn-view btn btn-small" data-action="view" data-id="${article.$id}">View</button>
             `;
         }
         
         return `
             <div class="article-item">
-                <img src="${imageUrl}" alt="${article.title}" class="article-item-image">
+                <img src="${imageUrl}" alt="" class="article-item-image" onerror="this.src='images/placeholder.jpg'">
                 <div class="article-item-content">
-                    <h4>${article.title}</h4>
+                    <h4>${escapeHtml(article.title)}</h4>
                     <div class="article-item-meta">
                         <span>📅 ${pubDate}</span>
-                        <span>📍 ${article.location}</span>
-                        <span>👤 ${article.authorName}</span>
+                        <span>📍 ${escapeHtml(article.location)}</span>
+                        <span>👤 ${escapeHtml(article.authorName)}</span>
                     </div>
-                    <p class="article-item-excerpt">${article.content.substring(0, 150)}...</p>
+                    <p class="article-item-excerpt">${escapeHtml(article.content.substring(0, 150))}...</p>
                 </div>
                 <div class="article-item-actions">
                     ${actions}
@@ -242,6 +230,42 @@ function displayArticlesList(articles, containerId, status) {
             </div>
         `;
     }).join('');
+    
+    // Attach event listeners instead of inline onclick
+    container.querySelectorAll('[data-action]').forEach(btn => {
+        btn.addEventListener('click', handleArticleAction);
+    });
+}
+
+// Handle Article Actions
+async function handleArticleAction(e) {
+    const action = e.target.dataset.action;
+    const id = e.target.dataset.id;
+    
+    switch(action) {
+        case 'approve':
+            await approveArticle(id);
+            break;
+        case 'reject':
+            await rejectArticle(id);
+            break;
+        case 'edit':
+            await editArticle(id);
+            break;
+        case 'delete':
+            await deleteArticleConfirm(id, e.target.dataset.image);
+            break;
+        case 'view':
+            window.open(`article.html?id=${id}`, '_blank');
+            break;
+    }
+}
+
+// XSS Protection
+function escapeHtml(text) {
+    const div = document.createElement('div');
+    div.textContent = text;
+    return div.innerHTML;
 }
 
 // Load Categories
@@ -252,7 +276,7 @@ function loadCategories() {
     container.innerHTML = CATEGORIES.map(category => `
         <div class="category-card">
             <div class="category-card-icon">${category.icon}</div>
-            <h5 class="category-card-name">${category.name}</h5>
+            <h5 class="category-card-name">${escapeHtml(category.name)}</h5>
             <p class="category-card-count">ID: ${category.id}</p>
         </div>
     `).join('');
@@ -263,6 +287,7 @@ async function approveArticle(articleId) {
     if (!confirm('Approve this article?')) return;
     
     try {
+        await requireAdmin();
         await updateArticleStatus(articleId, ARTICLE_STATUS.APPROVED);
         alert('Article approved!');
         loadPendingArticles();
@@ -274,8 +299,10 @@ async function approveArticle(articleId) {
 // Reject Article
 async function rejectArticle(articleId) {
     const reason = prompt('Rejection reason (optional):');
+    if (reason === null) return;
     
     try {
+        await requireAdmin();
         await updateArticleStatus(articleId, ARTICLE_STATUS.REJECTED, reason);
         alert('Article rejected!');
         loadPendingArticles();
@@ -287,19 +314,16 @@ async function rejectArticle(articleId) {
 // Edit Article
 async function editArticle(articleId) {
     try {
+        await requireAdmin();
         const article = await getArticleById(articleId);
-        if (!article) {
-            throw new Error('Article not found');
-        }
+        if (!article) throw new Error('Article not found');
         
         document.getElementById('editArticleId').value = articleId;
         document.getElementById('editTitle').value = article.title;
         document.getElementById('editCategory').value = article.category;
         document.getElementById('editContent').value = article.content;
         
-        const modal = document.getElementById('editModal');
-        modal.classList.add('active');
-        
+        document.getElementById('editModal').classList.add('active');
     } catch (error) {
         alert('Error loading article: ' + error.message);
     }
@@ -315,25 +339,22 @@ async function handleArticleUpdate(e) {
     const content = document.getElementById('editContent').value;
     
     try {
+        await requireAdmin();
         await updateArticle(articleId, { title, category, content });
         alert('Article updated!');
         closeEditModal();
-        loadPendingArticles();
+        showTab('pending');
     } catch (error) {
         alert('Error updating article: ' + error.message);
     }
 }
 
 // Delete Article Confirm
-function deleteArticleConfirm(articleId, imageFileId) {
-    if (confirm('Are you sure? This cannot be undone.')) {
-        deleteArticleAction(articleId, imageFileId);
-    }
-}
-
-// Delete Article Action
-async function deleteArticleAction(articleId, imageFileId) {
+async function deleteArticleConfirm(articleId, imageFileId) {
+    if (!confirm('Are you sure? This cannot be undone.')) return;
+    
     try {
+        await requireAdmin();
         await deleteArticle(articleId, imageFileId);
         alert('Article deleted!');
         showTab('approved');
@@ -344,8 +365,7 @@ async function deleteArticleAction(articleId, imageFileId) {
 
 // Close Edit Modal
 function closeEditModal() {
-    const modal = document.getElementById('editModal');
-    modal.classList.remove('active');
+    document.getElementById('editModal').classList.remove('active');
 }
 
 // Handle Admin Logout
@@ -353,8 +373,7 @@ async function handleAdminLogout() {
     if (!confirm('Are you sure you want to logout?')) return;
     
     try {
-        await logoutUser();
-        localStorage.removeItem('adminToken');
+        await account.deleteSession('current');
         window.location.href = 'admin.html';
     } catch (error) {
         console.error('Logout error:', error);
