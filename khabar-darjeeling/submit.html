@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Submit news to Khabar Darjeeling">
+    <meta name="robots" content="noindex, follow">
+    <title>Submit News - Khabar Darjeeling</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/responsive.css">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="container">
+            <div class="navbar-content">
+                <div class="logo">
+                    <h1>खबर दार्जिलिंग</h1>
+                    <p class="tagline">Your Trusted News Source</p>
+                </div>
+                
+                <div class="nav-toggle" id="navToggle">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
+
+                <div class="nav-menu" id="navMenu">
+                    <ul class="nav-links">
+                        <li><a href="index.html">Home</a></li>
+                        <li><a href="index.html#breaking">Breaking</a></li>
+                        <li><a href="index.html#latest">Latest</a></li>
+                        <li class="dropdown">
+                            <a href="#">Categories</a>
+                            <ul class="dropdown-menu">
+                                <li><a href="index.html?category=darjeeling">Darjeeling</a></li>
+                                <li><a href="index.html?category=kalimpong">Kalimpong</a></li>
+                                <li><a href="index.html?category=kurseong">Kurseong</a></li>
+                                <li><a href="index.html?category=mirik">Mirik</a></li>
+                                <li><a href="index.html?category=siliguri">Siliguri</a></li>
+                                <li><a href="index.html?category=west-bengal">West Bengal</a></li>
+                                <li><a href="index.html?category=national">National</a></li>
+                                <li><a href="index.html?category=entertainment">Entertainment</a></li>
+                                <li><a href="index.html?category=sports">Sports</a></li>
+                            </ul>
+                        </li>
+                        <li><a href="submit.html" class="active">Submit News</a></li>
+                    </ul>
+                </div>
+
+                <div class="nav-right">
+                    <button class="theme-toggle" id="themeToggle">🌙</button>
+                    <a href="admin.html" class="admin-link">Admin</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <section class="submit-section">
+        <div class="container">
+            <div class="submit-container">
+                <h2>Submit News</h2>
+                <p class="submit-subtitle">Share breaking news or stories from your area</p>
+
+                <form id="newsForm" class="news-form">
+                    <!-- Title -->
+                    <div class="form-group">
+                        <label for="title">News Title *</label>
+                        <input type="text" id="title" name="title" required placeholder="Enter news headline">
+                        <small>Maximum 200 characters</small>
+                    </div>
+
+                    <!-- Category -->
+                    <div class="form-group">
+                        <label for="category">Category *</label>
+                        <select id="category" name="category" required>
+                            <option value="">Select a category</option>
+                            <option value="darjeeling">Darjeeling</option>
+                            <option value="kalimpong">Kalimpong</option>
+                            <option value="kurseong">Kurseong</option>
+                            <option value="mirik">Mirik</option>
+                            <option value="siliguri">Siliguri</option>
+                            <option value="west-bengal">West Bengal</option>
+                            <option value="national">National</option>
+                            <option value="entertainment">Entertainment</option>
+                            <option value="sports">Sports</option>
+                        </select>
+                    </div>
+
+                    <!-- Location -->
+                    <div class="form-group">
+                        <label for="location">Location *</label>
+                        <input type="text" id="location" name="location" required placeholder="Where is this news from?">
+                    </div>
+
+                    <!-- Featured Image -->
+                    <div class="form-group">
+                        <label for="image">Featured Image *</label>
+                        <div class="image-upload">
+                            <input type="file" id="image" name="image" accept="image/*" required>
+                            <div class="upload-info">
+                                <p>📷 Click to select an image</p>
+                                <small>Supported formats: JPG, PNG, WebP (Max 5MB)</small>
+                            </div>
+                        </div>
+                        <div id="imagePreview" class="image-preview" style="display:none;">
+                            <img id="previewImg" src="" alt="Preview">
+                            <button type="button" class="remove-btn" onclick="removeImage()">Remove</button>
+                        </div>
+                    </div>
+
+                    <!-- News Content -->
+                    <div class="form-group">
+                        <label for="content">News Content *</label>
+                        <textarea id="content" name="content" required placeholder="Write your news story here..." rows="10"></textarea>
+                        <small>Minimum 50 characters</small>
+                    </div>
+
+                    <!-- Author Info -->
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="authorName">Author Name *</label>
+                            <input type="text" id="authorName" name="authorName" required placeholder="Your name">
+                        </div>
+                        <div class="form-group">
+                            <label for="authorEmail">Author Email *</label>
+                            <input type="email" id="authorEmail" name="authorEmail" required placeholder="your@email.com">
+                        </div>
+                    </div>
+
+                    <!-- Phone -->
+                    <div class="form-group">
+                        <label for="authorPhone">Contact Phone *</label>
+                        <input type="tel" id="authorPhone" name="authorPhone" required placeholder="+91 XXXXX XXXXX">
+                    </div>
+
+                    <!-- Source -->
+                    <div class="form-group">
+                        <label for="source">News Source (Optional)</label>
+                        <input type="text" id="source" name="source" placeholder="Where did you get this information?">
+                    </div>
+
+                    <!-- Terms -->
+                    <div class="form-group checkbox">
+                        <input type="checkbox" id="terms" name="terms" required>
+                        <label for="terms">I agree that this news is accurate and I have permission to share it</label>
+                    </div>
+
+                    <!-- Buttons -->
+                    <div class="form-buttons">
+                        <button type="submit" class="btn btn-primary" id="submitBtn">Submit News</button>
+                        <button type="reset" class="btn btn-secondary">Clear Form</button>
+                    </div>
+                </form>
+
+                <!-- Success Message -->
+                <div id="successMessage" class="alert alert-success" style="display:none;">
+                    <h4>✓ News Submitted Successfully!</h4>
+                    <p>Your news has been submitted for review. Our team will verify and publish it soon.</p>
+                    <button onclick="location.href='index.html'" class="btn btn-primary">Back to Home</button>
+                </div>
+
+                <!-- Error Message -->
+                <div id="errorMessage" class="alert alert-error" style="display:none;">
+                    <h4>✗ Error Submitting News</h4>
+                    <p id="errorText"></p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-bottom">
+                <p>&copy; 2024 Khabar Darjeeling. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/appwrite@latest/dist/appwrite.umd.js"></script>
+    <script src="js/config.js"></script>
+    <script src="js/appwrite.js"></script>
+    <script src="js/submit.js"></script>
+</body>
+</html>
