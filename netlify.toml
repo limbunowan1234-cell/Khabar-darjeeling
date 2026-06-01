@@ -1,5 +1,5 @@
 [build]
-  publish = "."
+  publish = "khabar-darjeeling"
   command = "echo 'Static site - no build needed'"
 
 [[redirects]]
@@ -7,29 +7,27 @@
   to = "/index.html"
   status = 200
 
-[context.production]
-  environment = { NODE_ENV = "production" }
+[[headers]]
+  for = "/*"
+  [headers.values]
+    Cache-Control = "public, max-age=3600"
+    X-Content-Type-Options = "nosniff"
+    X-Frame-Options = "DENY"
+    X-XSS-Protection = "1; mode=block"
+    Referrer-Policy = "strict-origin-when-cross-origin"
+    Strict-Transport-Security = "max-age=31536000; includeSubDomains"
 
-[context.deploy-preview]
-  environment = { NODE_ENV = "development" }
+[[headers]]
+  for = "/css/*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
 
-[headers]
-  [[headers.values]]
-    key = "Cache-Control"
-    value = "max-age=3600"
+[[headers]]
+  for = "/js/*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
 
-[[headers.values]]
-  key = "X-Content-Type-Options"
-  value = "nosniff"
-
-[[headers.values]]
-  key = "X-Frame-Options"
-  value = "DENY"
-
-[[headers.values]]
-  key = "X-XSS-Protection"
-  value = "1; mode=block"
-
-[[headers.values]]
-  key = "Referrer-Policy"
-  value = "strict-origin-when-cross-origin"
+[[headers]]
+  for = "/*.html"
+  [headers.values]
+    Cache-Control = "public, max-age=0, must-revalidate"
