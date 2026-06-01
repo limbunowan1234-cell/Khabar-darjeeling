@@ -2,13 +2,16 @@
 
 // Appwrite Configuration
 const APPWRITE_ENDPOINT = 'https://cloud.appwrite.io/v1';
-const APPWRITE_PROJECT_ID = 'YOUR_PROJECT_ID'; // Replace with your project ID
-const APPWRITE_API_KEY = 'YOUR_API_KEY'; // Replace with your API key
-const APPWRITE_DB_ID = 'news_db'; // Database ID
-const APPWRITE_COLLECTION_ID = 'news'; // News collection ID
-const APPWRITE_BUCKET_ID = 'news-images'; // Storage bucket ID
+const APPWRITE_PROJECT_ID = 'khabardarjeeling';
+const APPWRITE_DB_ID = 'Khabar_db'; 
+const APPWRITE_COLLECTION_ID = 'articles'; 
+const APPWRITE_BUCKET_ID = 'article_images';
 
-// Categories
+// DO NOT use API keys in frontend code - it's insecure. 
+// Use account sessions instead. Remove this line:
+const APPWRITE_API_KEY = 'YOUR_API_KEY'; // ← DELETE THIS
+
+// Categories - update these to match your site
 const CATEGORIES = [
     { id: 'darjeeling', name: 'Darjeeling', icon: '📍' },
     { id: 'kalimpong', name: 'Kalimpong', icon: '🏔️' },
@@ -21,10 +24,10 @@ const CATEGORIES = [
     { id: 'sports', name: 'Sports', icon: '⚽' }
 ];
 
-// Article Status
+// Article Status - updated to match your table
 const ARTICLE_STATUS = {
     PENDING: 'pending',
-    APPROVED: 'approved',
+    PUBLISHED: 'published', // Changed from APPROVED to match your status column
     REJECTED: 'rejected'
 };
 
@@ -40,4 +43,16 @@ const SITE_CONFIG = {
         facebook: 'khabardarjeeling',
         instagram: 'khabardarjeeling'
     }
+};
+
+// Export for ES modules
+export { 
+    APPWRITE_ENDPOINT, 
+    APPWRITE_PROJECT_ID, 
+    APPWRITE_DB_ID, 
+    APPWRITE_COLLECTION_ID, 
+    APPWRITE_BUCKET_ID,
+    CATEGORIES,
+    ARTICLE_STATUS,
+    SITE_CONFIG
 };
