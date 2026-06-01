@@ -94,4 +94,50 @@ function setupAdminDashboard() {
     
     const editForm = document.getElementById('editForm');
     if (editForm) {
-        editForm.add
+        editForm.addEventListener('submit', handleArticleUpdate);
+    }
+}
+
+// Show Tab
+function showTab(tabName) {
+    document.querySelectorAll('.tab-content').forEach(tab => {
+        tab.classList.remove('active');
+    });
+    
+    document.querySelectorAll('.menu-item').forEach(item => {
+        item.classList.remove('active');
+    });
+    
+    const tab = document.getElementById(tabName);
+    if (tab) {
+        tab.classList.add('active');
+        document.querySelector(`[onclick*="${tabName}"]`)?.classList.add('active');
+    }
+    
+    switch(tabName) {
+        case 'dashboard':
+            loadDashboard();
+            break;
+        case 'pending':
+            loadPendingArticles();
+            break;
+        case 'published': // Changed from 'approved'
+            loadPublishedArticles(); // Changed from loadApprovedArticles
+            break;
+        case 'rejected':
+            loadRejectedArticles();
+            break;
+        case 'categories':
+            loadCategories();
+            break;
+    }
+}
+
+// Load Dashboard - FIXED
+async function loadDashboard() {
+    try {
+        await requireAdmin();
+        const stats = await getArticleStatistics();
+        
+        document.getElementById('totalArticles').textContent = stats.total;
+        document.getElementById('pendingCount').textContent = stats
