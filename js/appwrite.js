@@ -80,12 +80,10 @@ async function uploadImage(file, bucketId = APPWRITE_BUCKET_ID) {
     try {
         if (!file) throw new Error('No file provided');
         
-        // Validate file size (max 5MB)
         if (file.size > 5 * 1024 * 1024) {
             throw new Error('File size exceeds 5MB limit');
         }
         
-        // Validate file type
         const allowedTypes = ['image/jpeg', 'image/png', 'image/webp'];
         if (!allowedTypes.includes(file.type)) {
             throw new Error('Invalid file type. Allowed: JPG, PNG, WebP');
@@ -131,7 +129,6 @@ async function createArticle(articleData) {
     try {
         const { Query } = window.Appwrite;
         
-        // Check if title already exists
         const existing = await appwriteDatabase.listDocuments(
             APPWRITE_DB_ID,
             APPWRITE_COLLECTION_ID,
@@ -175,29 +172,29 @@ async function getArticles(filters = [], limit = 10, offset = 0) {
     }
 }
 
-// Get approved articles only
+// Get published articles only - FIXED
 async function getApprovedArticles(limit = 10, offset = 0) {
     try {
         const { Query } = window.Appwrite;
         const filters = [
-            Query.equal('status', ARTICLE_STATUS.APPROVED),
+            Query.equal('status', ARTICLE_STATUS.PUBLISHED), // Changed from APPROVED
             Query.orderDesc('publishedAt')
         ];
         
         return await getArticles(filters, limit, offset);
     } catch (error) {
-        console.error('✗ Failed to get approved articles:', error);
+        console.error('✗ Failed to get published articles:', error);
         return { documents: [], total: 0 };
     }
 }
 
-// Get articles by category
+// Get articles by category - FIXED
 async function getArticlesByCategory(category, limit = 10, offset = 0) {
     try {
         const { Query } = window.Appwrite;
         const filters = [
             Query.equal('category', category),
-            Query.equal('status', ARTICLE_STATUS.APPROVED),
+            Query.equal('status', ARTICLE_STATUS.PUBLISHED), // Changed from APPROVED
             Query.orderDesc('publishedAt')
         ];
         
@@ -224,14 +221,13 @@ async function getArticleById(articleId) {
     }
 }
 
-// Search articles
+// Search articles - FIXED
 async function searchArticles(query, limit = 10, offset = 0) {
     try {
         const { Query } = window.Appwrite;
         
-        // Search in title and content
         const filters = [
-            Query.equal('status', ARTICLE_STATUS.APPROVED),
+            Query.equal('status', ARTICLE_STATUS.PUBLISHED), // Changed from APPROVED
             Query.or([
                 Query.search('title', query),
                 Query.search('content', query)
@@ -262,14 +258,14 @@ async function getPendingArticles(limit = 20, offset = 0) {
     }
 }
 
-// Update article status
+// Update article status - FIXED
 async function updateArticleStatus(articleId, status, publisherNote = '') {
     try {
         const updateData = {
             status: status
         };
         
-        if (status === ARTICLE_STATUS.APPROVED) {
+        if (status === ARTICLE_STATUS.PUBLISHED) { // Changed from APPROVED
             updateData.publishedAt = new Date().toISOString();
         }
         
@@ -313,7 +309,6 @@ async function updateArticle(articleId, updateData) {
 // Delete article
 async function deleteArticle(articleId, imageFileId = null) {
     try {
-        // Delete associated image if provided
         if (imageFileId) {
             try {
                 await deleteImage(imageFileId);
@@ -322,7 +317,6 @@ async function deleteArticle(articleId, imageFileId = null) {
             }
         }
         
-        // Delete article document
         await appwriteDatabase.deleteDocument(
             APPWRITE_DB_ID,
             APPWRITE_COLLECTION_ID,
@@ -336,7 +330,7 @@ async function deleteArticle(articleId, imageFileId = null) {
     }
 }
 
-// Get article statistics (admin only)
+// Get article statistics - FIXED
 async function getArticleStatistics() {
     try {
         const { Query } = window.Appwrite;
@@ -348,7 +342,7 @@ async function getArticleStatistics() {
         const pending = pendingResponse.total;
         
         const approvedFilters = [
-            Query.equal('status', ARTICLE_STATUS.APPROVED)
+            Query.equal('status', ARTICLE_STATUS.PUBLISHED) // Changed from APPROVED
         ];
         const approvedResponse = await getArticles(approvedFilters, 1000, 0);
         const approved = approvedResponse.total;
@@ -371,12 +365,12 @@ async function getArticleStatistics() {
     }
 }
 
-// Get trending articles
+// Get trending articles - FIXED
 async function getTrendingArticles(limit = 5) {
     try {
         const { Query } = window.Appwrite;
         const filters = [
-            Query.equal('status', ARTICLE_STATUS.APPROVED),
+            Query.equal('status', ARTICLE_STATUS.PUBLISHED), // Changed from APPROVED
             Query.orderDesc('views'),
             Query.limit(limit)
         ];
