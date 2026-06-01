@@ -1,15 +1,11 @@
 /* ==================== CONFIG FILE ==================== */
 
 // Appwrite Configuration
-const APPWRITE_ENDPOINT = 'https://cloud.appwrite.io/v1';
+const APPWRITE_ENDPOINT = 'https://nyc.cloud.appwrite.io/v1';
 const APPWRITE_PROJECT_ID = 'khabardarjeeling';
 const APPWRITE_DB_ID = 'Khabar_db'; 
 const APPWRITE_COLLECTION_ID = 'articles'; 
 const APPWRITE_BUCKET_ID = 'article_images';
-
-// DO NOT use API keys in frontend code - it's insecure. 
-// Use account sessions instead. Remove this line:
-const APPWRITE_API_KEY = 'YOUR_API_KEY'; // ← DELETE THIS
 
 // Categories - update these to match your site
 const CATEGORIES = [
@@ -24,10 +20,10 @@ const CATEGORIES = [
     { id: 'sports', name: 'Sports', icon: '⚽' }
 ];
 
-// Article Status - updated to match your table
+// Article Status
 const ARTICLE_STATUS = {
     PENDING: 'pending',
-    PUBLISHED: 'published', // Changed from APPROVED to match your status column
+    PUBLISHED: 'published',
     REJECTED: 'rejected'
 };
 
