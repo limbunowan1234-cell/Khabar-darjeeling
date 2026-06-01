@@ -1,0 +1,26 @@
+User-agent: *
+Allow: /
+Allow: /index.html
+Allow: /article.html
+Allow: /submit.html
+Disallow: /admin.html
+Disallow: /admin/
+Disallow: /*.json
+Disallow: /*.js
+
+Sitemap: https://khabardarjeeling.online/sitemap.xml
+
+# Allow search engines to crawl
+Allow: /css/
+Allow: /js/
+Allow: /images/
+
+# Specific rules for popular bots
+User-agent: Googlebot
+Allow: /
+
+User-agent: Bingbot
+Allow: /
+
+# Crawl delay (in seconds)
+Crawl-delay: 1
