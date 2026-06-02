@@ -3,21 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Khabar Darjeeling - Your trusted source for news from Darjeeling, Kalimpong, and West Bengal">
-    <meta name="keywords" content="news, Darjeeling, Kalimpong, Kurseong, Mirik, Siliguri, West Bengal">
-    <meta property="og:title" content="Khabar Darjeeling - Latest News">
-    <meta property="og:description" content="Breaking news and latest updates from Darjeeling region">
-    <meta property="og:type" content="website">
-    <meta property="og:url" content="https://khabardarjeeling.space">
-    
-    <title>Khabar Darjeeling - Breaking News & Latest Updates</title>
+    <meta name="description" content="Khabar Darjeeling - Latest news from Darjeeling, Kalimpong, Kurseong, Mirik, Siliguri and West Bengal">
+    <title>खबर दार्जिलिंग - Your Trusted News Source</title>
     <link rel="stylesheet" href="css/style.css">
     <link rel="stylesheet" href="css/responsive.css">
-    <link rel="icon" type="image/png" href="favicon.png">
-    <link rel="canonical" href="https://khabardarjeeling.space">
 </head>
 <body>
-    <!-- Navigation -->
+    <!-- Navigation - Same as submit.html -->
     <nav class="navbar">
         <div class="container">
             <div class="navbar-content">
@@ -34,7 +26,7 @@
 
                 <div class="nav-menu" id="navMenu">
                     <ul class="nav-links">
-                        <li><a href="#" class="active">Home</a></li>
+                        <li><a href="index.html" class="active">Home</a></li>
                         <li><a href="#breaking">Breaking</a></li>
                         <li><a href="#latest">Latest</a></li>
                         <li class="dropdown">
@@ -56,10 +48,7 @@
                 </div>
 
                 <div class="nav-right">
-                    <div class="search-bar">
-                        <input type="text" id="searchInput" placeholder="Search news...">
-                        <button id="searchBtn">🔍</button>
-                    </div>
+                    <input type="text" id="searchInput" placeholder="Search news..." class="search-input">
                     <button class="theme-toggle" id="themeToggle">🌙</button>
                     <a href="admin.html" class="admin-link">Admin</a>
                 </div>
@@ -67,14 +56,12 @@
         </div>
     </nav>
 
-    <!-- Breaking News Banner -->
-    <section class="breaking-news" id="breaking">
+    <!-- Breaking News Ticker -->
+    <section class="breaking-ticker" id="breaking">
         <div class="container">
-            <div class="breaking-label">
-                <span class="pulse">●</span> BREAKING NEWS
-            </div>
-            <div class="breaking-content" id="breakingContent">
-                <p>Loading breaking news...</p>
+            <span class="breaking-label">BREAKING NEWS</span>
+            <div class="ticker-content" id="breakingTicker">
+                Loading breaking news...
             </div>
         </div>
     </section>
@@ -82,124 +69,39 @@
     <!-- Hero Section -->
     <section class="hero">
         <div class="container">
-            <div class="hero-content">
-                <h2>Stay Updated with Latest News</h2>
-                <p>Comprehensive coverage of Darjeeling, Kalimpong, and entire West Bengal region</p>
-                <div class="hero-buttons">
-                    <a href="#latest" class="btn btn-primary">Read Latest</a>
-                    <a href="submit.html" class="btn btn-secondary">Submit News</a>
-                </div>
+            <h2>Stay Updated with Latest News</h2>
+            <p>Comprehensive coverage of Darjeeling, Kalimpong, and entire West Bengal region</p>
+            <div class="hero-buttons">
+                <a href="#latest" class="btn btn-primary">Read Latest</a>
+                <a href="submit.html" class="btn btn-secondary">Submit News</a>
             </div>
         </div>
     </section>
 
-    <!-- Featured Article -->
+    <!-- Featured Story -->
     <section class="featured-section">
         <div class="container">
-            <h3>Featured Story</h3>
-            <div class="featured-article" id="featuredArticle">
-                <p>Loading featured article...</p>
+            <h3 class="section-title">Featured Story</h3>
+            <div id="featuredStory" class="featured-card">
+                Loading featured article...
             </div>
         </div>
     </section>
 
-    <!-- Main Content -->
-    <section class="main-content">
+    <!-- Latest News -->
+    <section class="news-section" id="latest">
         <div class="container">
-            <div class="content-wrapper">
-                <!-- Latest News Grid -->
-                <div class="news-grid">
-                    <h3 id="latest">Latest News</h3>
-                    <div class="articles-container" id="articlesContainer">
-                        <p>Loading articles...</p>
-                    </div>
-                    <div class="pagination" id="pagination"></div>
-                </div>
-
-                <!-- Sidebar -->
-                <aside class="sidebar">
-                    <!-- Popular News -->
-                    <div class="sidebar-widget">
-                        <h4>Popular News</h4>
-                        <div id="popularNews"></div>
-                    </div>
-
-                    <!-- Categories -->
-                    <div class="sidebar-widget">
-                        <h4>Categories</h4>
-                        <ul class="category-list">
-                            <li><a href="?category=darjeeling">Darjeeling</a></li>
-                            <li><a href="?category=kalimpong">Kalimpong</a></li>
-                            <li><a href="?category=kurseong">Kurseong</a></li>
-                            <li><a href="?category=mirik">Mirik</a></li>
-                            <li><a href="?category=siliguri">Siliguri</a></li>
-                            <li><a href="?category=west-bengal">West Bengal</a></li>
-                            <li><a href="?category=national">National</a></li>
-                            <li><a href="?category=entertainment">Entertainment</a></li>
-                            <li><a href="?category=sports">Sports</a></li>
-                        </ul>
-                    </div>
-
-                    <!-- Newsletter -->
-                    <div class="sidebar-widget newsletter">
-                        <h4>Newsletter</h4>
-                        <p>Get latest news in your inbox</p>
-                        <form id="newsletterForm">
-                            <input type="email" placeholder="Your email" required>
-                            <button type="submit" class="btn btn-primary">Subscribe</button>
-                        </form>
-                    </div>
-                </aside>
+            <h3 class="section-title">Latest News</h3>
+            <div id="newsGrid" class="news-grid">
+                Loading articles...
             </div>
         </div>
     </section>
 
-    <!-- Footer -->
-    <footer class="footer">
+    <!-- Categories -->
+    <section class="categories-section">
         <div class="container">
-            <div class="footer-content">
-                <div class="footer-section">
-                    <h5>About Khabar Darjeeling</h5>
-                    <p>Delivering accurate, timely news from Darjeeling and surrounding regions since 2024.</p>
-                </div>
-                <div class="footer-section">
-                    <h5>Quick Links</h5>
-                    <ul>
-                        <li><a href="#home">Home</a></li>
-                        <li><a href="submit.html">Submit News</a></li>
-                        <li><a href="#contact">Contact</a></li>
-                        <li><a href="#privacy">Privacy Policy</a></li>
-                    </ul>
-                </div>
-                <div class="footer-section">
-                    <h5>Categories</h5>
-                    <ul>
-                        <li><a href="?category=darjeeling">Darjeeling</a></li>
-                        <li><a href="?category=kalimpong">Kalimpong</a></li>
-                        <li><a href="?category=national">National</a></li>
-                        <li><a href="?category=sports">Sports</a></li>
-                    </ul>
-                </div>
-                <div class="footer-section">
-                    <h5>Follow Us</h5>
-                    <div class="social-links">
-                        <a href="#" class="social-icon">📘</a>
-                        <a href="#" class="social-icon">🐦</a>
-                        <a href="#" class="social-icon">📷</a>
-                        <a href="#" class="social-icon">▶️</a>
-                    </div>
-                </div>
-            </div>
-            <div class="footer-bottom">
-                <p>&copy; 2024 Khabar Darjeeling. All rights reserved.</p>
-            </div>
-        </div>
-    </footer>
-
-    <!-- Scripts -->
-    <script src="https://cdn.jsdelivr.net/npm/appwrite@latest/dist/appwrite.umd.js"></script>
-    <script src="js/config.js"></script>
-    <script src="js/appwrite.js"></script>
-    <script src="js/main.js"></script>
-</body>
-</html>
+            <h3 class="section-title">Popular News Categories</h3>
+            <div class="category-grid">
+                <a href="?category=darjeeling" class="category-card">Darjeeling</a>
+                <a href="?category=kalimpong" class="category
