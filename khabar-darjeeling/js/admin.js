@@ -1,38 +1,30 @@
-// js/admin.js - Khabar Darjeeling Admin Panel
-// NOTE: APPWRITE_DB_ID and APPWRITE_COLLECTION_ID are already defined in admin.html
+// js/admin.js - Fixed for SDK v14
 
-// Check if user is logged in on page load
-checkAuth();
+// Check if already logged in
+window.account.get().then(response => {
+    showAdminPanel(response);
+}).catch(() => {
+    document.getElementById('loginScreen').style.display = 'flex';
+});
 
-async function checkAuth() {
-    try {
-        const user = await window.account.get();
-        document.getElementById('loginScreen').style.display = 'none';
-        document.getElementById('adminPanel').style.display = 'block';
-        document.getElementById('logoutBtn').style.display = 'inline-block';
-        document.getElementById('adminUser').textContent = user.email;
-        loadDashboard();
-    } catch (error) {
-        document.getElementById('loginScreen').style.display = 'flex';
-        document.getElementById('adminPanel').style.display = 'none';
-    }
-}
-
-// Login Form
+// Login
 document.getElementById('loginForm').addEventListener('submit', async (e) => {
     e.preventDefault();
     const email = document.getElementById('email').value;
     const password = document.getElementById('password').value;
     const errorMsg = document.getElementById('loginError');
     
+    errorMsg.style.display = 'none';
+    
     try {
-        // FIXED: createEmailPasswordSession for Appwrite v14+
+        // FIXED: createEmailPasswordSession for SDK v14
         await window.account.createEmailPasswordSession(email, password);
-        errorMsg.style.display = 'none';
-        checkAuth();
+        const user = await window.account.get();
+        showAdminPanel(user);
     } catch (error) {
         errorMsg.textContent = 'Login failed: ' + error.message;
         errorMsg.style.display = 'block';
+        console.error(error);
     }
 });
 
@@ -42,12 +34,20 @@ document.getElementById('logoutBtn').addEventListener('click', async () => {
         await window.account.deleteSession('current');
         window.location.reload();
     } catch (error) {
-        alert('Logout failed: ' + error.message);
+        console.error('Logout error:', error);
     }
 });
 
-// Tab Navigation
-window.showTab = function(tabName) {
+function showAdminPanel(user) {
+    document.getElementById('loginScreen').style.display = 'none';
+    document.getElementById('adminPanel').style.display = 'block';
+    document.getElementById('logoutBtn').style.display = 'inline-block';
+    document.getElementById('adminUser').textContent = user.email;
+    loadDashboard();
+}
+
+function showTab(tabName) {
+    // Hide all tabs
     document.querySelectorAll('.tab-content').forEach(tab => {
         tab.classList.remove('active');
     });
@@ -55,195 +55,164 @@ window.showTab = function(tabName) {
         item.classList.remove('active');
     });
     
+    // Show selected tab
     document.getElementById(tabName).classList.add('active');
     event.target.classList.add('active');
     
-    if (tabName === 'dashboard') loadDashboard();
+    // Load content
     if (tabName === 'pending') loadPendingArticles();
     if (tabName === 'published') loadPublishedArticles();
     if (tabName === 'rejected') loadRejectedArticles();
 }
 
-// Load Dashboard Stats
 async function loadDashboard() {
     try {
         const allArticles = await window.database.listDocuments(
-            APPWRITE_DB_ID,
-            APPWRITE_COLLECTION_ID,
-            [Query.limit(1000)]
+            window.APPWRITE_DB_ID,
+            window.APPWRITE_COLLECTION_ID,
+            [window.Query.limit(1000)]
         );
         
-        const articles = allArticles.documents;
-        const pending = articles.filter(a => a.status === 'pending' || !a.status);
-        const published = articles.filter(a => a.status === 'published');
-        const rejected = articles.filter(a => a.status === 'rejected');
+        const pending = allArticles.documents.filter(a => a.status === 'pending').length;
+        const published = allArticles.documents.filter(a => a.status === 'published').length;
+        const rejected = allArticles.documents.filter(a => a.status === 'rejected').length;
         
-        document.getElementById('totalArticles').textContent = articles.length;
-        document.getElementById('pendingCount').textContent = pending.length;
-        document.getElementById('publishedCount').textContent = published.length;
-        document.getElementById('rejectedCount').textContent = rejected.length;
-        
+        document.getElementById('totalArticles').textContent = allArticles.total;
+        document.getElementById('pendingCount').textContent = pending;
+        document.getElementById('publishedCount').textContent = published;
+        document.getElementById('rejectedCount').textContent = rejected;
     } catch (error) {
         console.error('Dashboard error:', error);
     }
 }
 
-// Load Pending Articles
 async function loadPendingArticles() {
-    const container = document.getElementById('pendingArticlesList');
-    container.innerHTML = 'Loading...';
+    const list = document.getElementById('pendingArticlesList');
+    list.innerHTML = 'Loading...';
     
     try {
         const response = await window.database.listDocuments(
-            APPWRITE_DB_ID,
-            APPWRITE_COLLECTION_ID,
+            window.APPWRITE_DB_ID,
+            window.APPWRITE_COLLECTION_ID,
             [
-                Query.equal('status', 'pending'),
-                Query.orderDesc('$createdAt')
+                window.Query.equal('status', 'pending'),
+                window.Query.orderDesc('submittedAt')
             ]
         );
         
         if (response.documents.length === 0) {
-            container.innerHTML = '<p style="padding:20px;text-align:center;color:#666;">No pending articles.</p>';
+            list.innerHTML = '<p>No pending articles</p>';
             return;
         }
         
-        container.innerHTML = '';
-        response.documents.forEach(article => {
-            container.innerHTML += `
-                <div class="article-card">
-                    ${article.imageUrl ? `<img src="${article.imageUrl}" alt="${article.title}">` : '<div style="width:150px;height:100px;background:#eee;border-radius:6px;display:flex;align-items:center;justify-content:center;color:#999;">No Image</div>'}
-                    <div class="article-content">
-                        <h3>${article.title}</h3>
-                        <p>${article.content ? article.content.substring(0, 150) + '...' : ''}</p>
-                        <p style="margin:10px 0;color:#666;font-size:14px;">
-                            <strong>Category:</strong> ${article.category || 'N/A'} | 
-                            <strong>Author:</strong> ${article.authorName || 'Unknown'}
-                        </p>
-                        <button class="btn-approve" onclick="approveArticle('${article.$id}')">✓ Approve & Publish</button>
+        list.innerHTML = response.documents.map(article => `
+            <div class="article-card">
+                ${article.imageUrl ? `<img src="${article.imageUrl}" alt="${article.title}">` : ''}
+                <div class="article-content">
+                    <h3>${article.title}</h3>
+                    <p><strong>Category:</strong> ${article.category} | <strong>Location:</strong> ${article.location}</p>
+                    <p><strong>Author:</strong> ${article.authorName}</p>
+                    <p>${article.content.substring(0, 200)}...</p>
+                    <div style="margin-top:15px;">
+                        <button class="btn-approve" onclick="approveArticle('${article.$id}')">✓ Approve</button>
                         <button class="btn-reject" onclick="rejectArticle('${article.$id}')">✗ Reject</button>
                     </div>
                 </div>
-            `;
-        });
+            </div>
+        `).join('');
     } catch (error) {
-        container.innerHTML = `<p style="color:red;padding:20px;">Error: ${error.message}</p>`;
+        list.innerHTML = '<p style="color:red;">Error: ' + error.message + '</p>';
+        console.error(error);
     }
 }
 
-// Load Published Articles
 async function loadPublishedArticles() {
-    const container = document.getElementById('publishedArticlesList');
-    container.innerHTML = 'Loading...';
+    const list = document.getElementById('publishedArticlesList');
+    list.innerHTML = 'Loading...';
     
     try {
         const response = await window.database.listDocuments(
-            APPWRITE_DB_ID,
-            APPWRITE_COLLECTION_ID,
+            window.APPWRITE_DB_ID,
+            window.APPWRITE_COLLECTION_ID,
             [
-                Query.equal('status', 'published'),
-                Query.orderDesc('$createdAt')
+                window.Query.equal('status', 'published'),
+                window.Query.orderDesc('submittedAt'),
+                window.Query.limit(50)
             ]
         );
         
-        if (response.documents.length === 0) {
-            container.innerHTML = '<p style="padding:20px;text-align:center;color:#666;">No published articles yet.</p>';
-            return;
-        }
-        
-        container.innerHTML = '';
-        response.documents.forEach(article => {
-            container.innerHTML += `
-                <div class="article-card">
-                    ${article.imageUrl ? `<img src="${article.imageUrl}" alt="${article.title}">` : '<div style="width:150px;height:100px;background:#eee;border-radius:6px;"></div>'}
-                    <div class="article-content">
-                        <h3>${article.title} <span style="color:green;font-size:12px;background:#e8f5e9;padding:2px 8px;border-radius:4px;">✅ LIVE</span></h3>
-                        <p>${article.content ? article.content.substring(0, 150) + '...' : ''}</p>
-                    </div>
+        list.innerHTML = response.documents.map(article => `
+            <div class="article-card">
+                ${article.imageUrl ? `<img src="${article.imageUrl}" alt="${article.title}">` : ''}
+                <div class="article-content">
+                    <h3>${article.title}</h3>
+                    <p><strong>Category:</strong> ${article.category} | <strong>Location:</strong> ${article.location}</p>
+                    <p>${article.content.substring(0, 150)}...</p>
                 </div>
-            `;
-        });
+            </div>
+        `).join('') || '<p>No published articles</p>';
     } catch (error) {
-        container.innerHTML = `<p style="color:red;padding:20px;">Error: ${error.message}</p>`;
+        list.innerHTML = '<p style="color:red;">Error: ' + error.message + '</p>';
     }
 }
 
-// Load Rejected Articles
 async function loadRejectedArticles() {
-    const container = document.getElementById('rejectedArticlesList');
-    container.innerHTML = 'Loading...';
+    const list = document.getElementById('rejectedArticlesList');
+    list.innerHTML = 'Loading...';
     
     try {
         const response = await window.database.listDocuments(
-            APPWRITE_DB_ID,
-            APPWRITE_COLLECTION_ID,
+            window.APPWRITE_DB_ID,
+            window.APPWRITE_COLLECTION_ID,
             [
-                Query.equal('status', 'rejected'),
-                Query.orderDesc('$createdAt')
+                window.Query.equal('status', 'rejected'),
+                window.Query.orderDesc('submittedAt')
             ]
         );
         
-        if (response.documents.length === 0) {
-            container.innerHTML = '<p style="padding:20px;text-align:center;color:#666;">No rejected articles.</p>';
-            return;
-        }
-        
-        container.innerHTML = '';
-        response.documents.forEach(article => {
-            container.innerHTML += `
-                <div class="article-card">
-                    <div class="article-content">
-                        <h3>${article.title} <span style="color:#dc3545;font-size:12px;">❌ REJECTED</span></h3>
-                        <p>${article.content ? article.content.substring(0, 150) + '...' : ''}</p>
-                    </div>
+        list.innerHTML = response.documents.map(article => `
+            <div class="article-card">
+                ${article.imageUrl ? `<img src="${article.imageUrl}" alt="${article.title}">` : ''}
+                <div class="article-content">
+                    <h3>${article.title}</h3>
+                    <p><strong>Category:</strong> ${article.category} | <strong>Author:</strong> ${article.authorName}</p>
+                    <p>${article.content.substring(0, 150)}...</p>
                 </div>
-            `;
-        });
+            </div>
+        `).join('') || '<p>No rejected articles</p>';
     } catch (error) {
-        container.innerHTML = `<p style="color:red;padding:20px;">Error: ${error.message}</p>`;
+        list.innerHTML = '<p style="color:red;">Error: ' + error.message + '</p>';
     }
 }
 
-// APPROVE ARTICLE - AUTO PUBLISH
-window.approveArticle = async function(articleId) {
-    if (!confirm('Approve this article? It will go live on the homepage immediately.')) return;
-    
+async function approveArticle(id) {
     try {
         await window.database.updateDocument(
-            APPWRITE_DB_ID,
-            APPWRITE_COLLECTION_ID,
-            articleId,
-            {
-                status: 'published'
-            }
+            window.APPWRITE_DB_ID,
+            window.APPWRITE_COLLECTION_ID,
+            id,
+            { status: 'published' }
         );
-        
-        alert('✅ Article approved! It is now live on khabardarjeeling.space');
         loadPendingArticles();
         loadDashboard();
+        alert('Article approved!');
     } catch (error) {
-        console.error('APPROVE ERROR:', error);
-        alert('❌ Error: ' + error.message + '\n\nMake sure Users role has Update permission in Appwrite.');
+        alert('Error: ' + error.message);
     }
 }
 
-// REJECT ARTICLE
-window.rejectArticle = async function(articleId) {
+async function rejectArticle(id) {
     if (!confirm('Reject this article?')) return;
-    
     try {
         await window.database.updateDocument(
-            APPWRITE_DB_ID,
-            APPWRITE_COLLECTION_ID,
-            articleId,
-            {
-                status: 'rejected'
-            }
+            window.APPWRITE_DB_ID,
+            window.APPWRITE_COLLECTION_ID,
+            id,
+            { status: 'rejected' }
         );
-        
-        alert('Article rejected.');
         loadPendingArticles();
         loadDashboard();
+        alert('Article rejected!');
     } catch (error) {
         alert('Error: ' + error.message);
     }
