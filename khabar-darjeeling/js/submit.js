@@ -1,4 +1,4 @@
-// js/submit.js - FINAL WORKING VERSION
+// js/submit.js
 
 document.getElementById('newsForm').addEventListener('submit', async (e) => {
     e.preventDefault();
@@ -33,3 +33,54 @@ document.getElementById('newsForm').addEventListener('submit', async (e) => {
         }
         
         submitBtn.textContent = 'Saving article...';
+        
+        await databases.createDocument(
+            APPWRITE_DATABASE_ID,
+            APPWRITE_COLLECTION_ID,
+            ID.unique(),
+            {
+                title: title,
+                content: content,
+                category: category,
+                location: location,
+                authorName: authorName,
+                status: 'pending',
+                submittedAt: new Date().toISOString(),
+                imageFileId: imageUrl
+            }
+        );
+        
+        document.getElementById('newsForm').style.display = 'none';
+        successMessage.style.display = 'block';
+        
+    } catch (error) {
+        console.error('Submit error:', error);
+        errorText.textContent = error.message;
+        errorMessage.style.display = 'block';
+        submitBtn.disabled = false;
+        submitBtn.textContent = 'Submit News';
+    }
+});
+
+// Image preview functionality
+document.getElementById('image').addEventListener('change', function(e) {
+    const file = e.target.files[0];
+    const imagePreview = document.getElementById('imagePreview');
+    const previewImg = document.getElementById('previewImg');
+    
+    if (file) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            previewImg.src = e.target.result;
+            imagePreview.style.display = 'block';
+        };
+        reader.readAsDataURL(file);
+    } else {
+        imagePreview.style.display = 'none';
+    }
+});
+
+function removeImage() {
+    document.getElementById('image').value = '';
+    document.getElementById('imagePreview').style.display = 'none';
+}
