@@ -1,8 +1,5 @@
 // js/admin.js - Khabar Darjeeling Admin Panel
-// Full working version with auto-publish
-
-const APPWRITE_DB_ID = 'Khabar_db';
-const APPWRITE_COLLECTION_ID = 'articles';
+// NOTE: APPWRITE_DB_ID and APPWRITE_COLLECTION_ID are already defined in admin.html
 
 // Check if user is logged in on page load
 checkAuth();
@@ -16,7 +13,6 @@ async function checkAuth() {
         document.getElementById('adminUser').textContent = user.email;
         loadDashboard();
     } catch (error) {
-        // Not logged in - show login screen
         document.getElementById('loginScreen').style.display = 'flex';
         document.getElementById('adminPanel').style.display = 'none';
     }
@@ -36,7 +32,6 @@ document.getElementById('loginForm').addEventListener('submit', async (e) => {
     } catch (error) {
         errorMsg.textContent = 'Login failed: ' + error.message;
         errorMsg.style.display = 'block';
-        console.error('Login error:', error);
     }
 });
 
@@ -52,7 +47,6 @@ document.getElementById('logoutBtn').addEventListener('click', async () => {
 
 // Tab Navigation
 window.showTab = function(tabName) {
-    // Hide all tabs
     document.querySelectorAll('.tab-content').forEach(tab => {
         tab.classList.remove('active');
     });
@@ -60,11 +54,9 @@ window.showTab = function(tabName) {
         item.classList.remove('active');
     });
     
-    // Show selected tab
     document.getElementById(tabName).classList.add('active');
     event.target.classList.add('active');
     
-    // Load data for tab
     if (tabName === 'dashboard') loadDashboard();
     if (tabName === 'pending') loadPendingArticles();
     if (tabName === 'published') loadPublishedArticles();
@@ -125,8 +117,7 @@ async function loadPendingArticles() {
                         <p>${article.content ? article.content.substring(0, 150) + '...' : ''}</p>
                         <p style="margin:10px 0;color:#666;font-size:14px;">
                             <strong>Category:</strong> ${article.category || 'N/A'} | 
-                            <strong>Author:</strong> ${article.authorName || 'Unknown'} | 
-                            <strong>Date:</strong> ${new Date(article.$createdAt).toLocaleDateString()}
+                            <strong>Author:</strong> ${article.authorName || 'Unknown'}
                         </p>
                         <button class="btn-approve" onclick="approveArticle('${article.$id}')">✓ Approve & Publish</button>
                         <button class="btn-reject" onclick="rejectArticle('${article.$id}')">✗ Reject</button>
@@ -136,7 +127,6 @@ async function loadPendingArticles() {
         });
     } catch (error) {
         container.innerHTML = `<p style="color:red;padding:20px;">Error: ${error.message}</p>`;
-        console.error('Pending articles error:', error);
     }
 }
 
@@ -164,21 +154,16 @@ async function loadPublishedArticles() {
         response.documents.forEach(article => {
             container.innerHTML += `
                 <div class="article-card">
-                    ${article.imageUrl ? `<img src="${article.imageUrl}" alt="${article.title}">` : '<div style="width:150px;height:100px;background:#eee;border-radius:6px;display:flex;align-items:center;justify-content:center;color:#999;">No Image</div>'}
+                    ${article.imageUrl ? `<img src="${article.imageUrl}" alt="${article.title}">` : '<div style="width:150px;height:100px;background:#eee;border-radius:6px;"></div>'}
                     <div class="article-content">
                         <h3>${article.title} <span style="color:green;font-size:12px;background:#e8f5e9;padding:2px 8px;border-radius:4px;">✅ LIVE</span></h3>
                         <p>${article.content ? article.content.substring(0, 150) + '...' : ''}</p>
-                        <p style="margin:10px 0;color:#666;font-size:14px;">
-                            <strong>Category:</strong> ${article.category || 'N/A'} | 
-                            <strong>Published:</strong> ${new Date(article.$createdAt).toLocaleDateString()}
-                        </p>
                     </div>
                 </div>
             `;
         });
     } catch (error) {
         container.innerHTML = `<p style="color:red;padding:20px;">Error: ${error.message}</p>`;
-        console.error('Published articles error:', error);
     }
 }
 
@@ -207,50 +192,43 @@ async function loadRejectedArticles() {
             container.innerHTML += `
                 <div class="article-card">
                     <div class="article-content">
-                        <h3>${article.title} <span style="color:#dc3545;font-size:12px;background:#ffebee;padding:2px 8px;border-radius:4px;">❌ REJECTED</span></h3>
+                        <h3>${article.title} <span style="color:#dc3545;font-size:12px;">❌ REJECTED</span></h3>
                         <p>${article.content ? article.content.substring(0, 150) + '...' : ''}</p>
-                        <p style="margin:10px 0;color:#666;font-size:14px;">
-                            <strong>Category:</strong> ${article.category || 'N/A'}
-                        </p>
                     </div>
                 </div>
             `;
         });
     } catch (error) {
         container.innerHTML = `<p style="color:red;padding:20px;">Error: ${error.message}</p>`;
-        console.error('Rejected articles error:', error);
     }
 }
 
-// APPROVE ARTICLE - THIS IS THE AUTO-PUBLISH FUNCTION
+// APPROVE ARTICLE - AUTO PUBLISH
 window.approveArticle = async function(articleId) {
     if (!confirm('Approve this article? It will go live on the homepage immediately.')) return;
     
-    console.log('Approving article ID:', articleId);
-    
     try {
-        const result = await window.database.updateDocument(
+        await window.database.updateDocument(
             APPWRITE_DB_ID,
             APPWRITE_COLLECTION_ID,
             articleId,
             {
-                status: 'published' // This makes it show on homepage
+                status: 'published'
             }
         );
         
-        console.log('Article approved successfully:', result);
         alert('✅ Article approved! It is now live on khabardarjeeling.space');
         loadPendingArticles();
         loadDashboard();
     } catch (error) {
         console.error('APPROVE ERROR:', error);
-        alert('❌ Error approving article: ' + error.message + '\n\nCheck Console F12 for details. Most likely: Permissions issue. Go to Appwrite → Database → articles → Settings → Permissions → Add Role "Users" with Update permission.');
+        alert('❌ Error: ' + error.message + '\n\nMake sure Users role has Update permission in Appwrite.');
     }
 }
 
 // REJECT ARTICLE
 window.rejectArticle = async function(articleId) {
-    if (!confirm('Reject this article? It will not be published.')) return;
+    if (!confirm('Reject this article?')) return;
     
     try {
         await window.database.updateDocument(
@@ -266,7 +244,6 @@ window.rejectArticle = async function(articleId) {
         loadPendingArticles();
         loadDashboard();
     } catch (error) {
-        console.error('REJECT ERROR:', error);
-        alert('Error rejecting article: ' + error.message);
+        alert('Error: ' + error.message);
     }
 }
