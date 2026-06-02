@@ -12,12 +12,12 @@ document.getElementById('newsForm').addEventListener('submit', async (e) => {
     submitBtn.textContent = 'Submitting...';
     errorMessage.style.display = 'none';
     
-    // Get form values - ONLY use these if the attribute exists in Appwrite
     const title = document.getElementById('title').value.trim();
     const category = document.getElementById('category').value;
     const location = document.getElementById('location').value.trim();
     const content = document.getElementById('content').value.trim();
     const source = document.getElementById('source').value.trim();
+    const authorName = document.getElementById('authorName').value.trim(); // Added back
     const imageFile = document.getElementById('image').files[0];
     
     let imageUrl = '';
@@ -35,7 +35,6 @@ document.getElementById('newsForm').addEventListener('submit', async (e) => {
         
         submitBtn.textContent = 'Saving article...';
         
-        // ONLY include attributes that exist in your Appwrite collection
         await databases.createDocument(
             APPWRITE_DATABASE_ID,
             APPWRITE_COLLECTION_ID,
@@ -46,6 +45,7 @@ document.getElementById('newsForm').addEventListener('submit', async (e) => {
                 location: location,
                 content: content,
                 source: source,
+                authorName: authorName, // Added back - required by Appwrite
                 image: imageUrl,
                 status: 'pending',
                 submittedAt: new Date().toISOString()
