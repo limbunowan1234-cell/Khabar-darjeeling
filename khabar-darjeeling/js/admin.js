@@ -1,10 +1,9 @@
 /* ==================== SECURE ADMIN DASHBOARD ==================== */
 
-// FIX FOR CLOUDFLARE - get from window (no imports)
+// FIXED: No Query destructuring - use Appwrite.Query directly
 const account = window.account;
 const database = window.database;
 const storage = window.storage;
-const { Query } = window.Appwrite;
 
 let adminUser = null;
 
@@ -13,14 +12,13 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     if (isLoggedIn) {
         document.getElementById('loginScreen').style.display = 'none';
-        document.getElementById('adminPanel').style.display = 'flex';
+        document.getElementById('adminPanel').style.display = 'block';
         setupAdminDashboard();
     } else {
         setupLoginForm();
     }
 });
 
-// Check Admin Login - Uses real Appwrite session
 async function checkAdminLogin() {
     try {
         const user = await account.get();
@@ -32,7 +30,6 @@ async function checkAdminLogin() {
     }
 }
 
-// Setup Login Form
 function setupLoginForm() {
     const loginForm = document.getElementById('loginForm');
     if (loginForm) {
@@ -40,7 +37,6 @@ function setupLoginForm() {
     }
 }
 
-// Handle Admin Login - Real Appwrite Auth
 async function handleAdminLogin(e) {
     e.preventDefault();
 
@@ -65,7 +61,6 @@ async function handleAdminLogin(e) {
     }
 }
 
-// Middleware: Verify admin before any action
 async function requireAdmin() {
     const isAdmin = await checkAdminLogin();
     if (!isAdmin) {
@@ -76,7 +71,6 @@ async function requireAdmin() {
     return adminUser;
 }
 
-// Setup Admin Dashboard
 function setupAdminDashboard() {
     if (adminUser) {
         document.getElementById('adminUser').textContent = adminUser.email;
@@ -106,7 +100,6 @@ function setupAdminDashboard() {
     }
 }
 
-// Handle Logout
 async function handleAdminLogout() {
     try {
         await account.deleteSession('current');
@@ -116,7 +109,6 @@ async function handleAdminLogout() {
     }
 }
 
-// Show Tab
 function showTab(tabName) {
     document.querySelectorAll('.tab-content').forEach(tab => {
         tab.classList.remove('active');
@@ -151,7 +143,6 @@ function showTab(tabName) {
     }
 }
 
-// Load Dashboard
 async function loadDashboard() {
     try {
         await requireAdmin();
@@ -166,21 +157,20 @@ async function loadDashboard() {
     }
 }
 
-// Get Article Statistics
 async function getArticleStatistics() {
     try {
-        const totalResponse = await database.listDocuments(APPWRITE_DB_ID, APPWRITE_COLLECTION_ID, [Query.limit(1)]);
+        const totalResponse = await database.listDocuments(APPWRITE_DB_ID, APPWRITE_COLLECTION_ID, [Appwrite.Query.limit(1)]);
         const pendingResponse = await database.listDocuments(APPWRITE_DB_ID, APPWRITE_COLLECTION_ID, [
-            Query.equal('status', 'pending'),
-            Query.limit(1)
+            Appwrite.Query.equal('status', 'pending'),
+            Appwrite.Query.limit(1)
         ]);
         const approvedResponse = await database.listDocuments(APPWRITE_DB_ID, APPWRITE_COLLECTION_ID, [
-            Query.equal('status', 'approved'),
-            Query.limit(1)
+            Appwrite.Query.equal('status', 'approved'),
+            Appwrite.Query.limit(1)
         ]);
         const rejectedResponse = await database.listDocuments(APPWRITE_DB_ID, APPWRITE_COLLECTION_ID, [
-            Query.equal('status', 'rejected'),
-            Query.limit(1)
+            Appwrite.Query.equal('status', 'rejected'),
+            Appwrite.Query.limit(1)
         ]);
 
         return {
@@ -195,7 +185,6 @@ async function getArticleStatistics() {
     }
 }
 
-// Load Pending Articles - REAL CODE
 async function loadPendingArticles() {
     const container = document.getElementById('pendingArticlesList');
     if (!container) return;
@@ -208,9 +197,9 @@ async function loadPendingArticles() {
             APPWRITE_DB_ID,
             APPWRITE_COLLECTION_ID,
             [
-                Query.equal('status', 'pending'),
-                Query.orderDesc('submittedAt'),
-                Query.limit(50)
+                Appwrite.Query.equal('status', 'pending'),
+                Appwrite.Query.orderDesc('submittedAt'),
+                Appwrite.Query.limit(50)
             ]
         );
         
@@ -241,7 +230,6 @@ async function loadPendingArticles() {
     }
 }
 
-// Load Published Articles
 async function loadPublishedArticles() {
     const container = document.getElementById('publishedArticlesList');
     if (!container) return;
@@ -254,9 +242,9 @@ async function loadPublishedArticles() {
             APPWRITE_DB_ID,
             APPWRITE_COLLECTION_ID,
             [
-                Query.equal('status', 'approved'),
-                Query.orderDesc('submittedAt'),
-                Query.limit(50)
+                Appwrite.Query.equal('status', 'approved'),
+                Appwrite.Query.orderDesc('submittedAt'),
+                Appwrite.Query.limit(50)
             ]
         );
         
@@ -281,7 +269,6 @@ async function loadPublishedArticles() {
     }
 }
 
-// Load Rejected Articles
 async function loadRejectedArticles() {
     const container = document.getElementById('rejectedArticlesList');
     if (!container) return;
@@ -294,9 +281,9 @@ async function loadRejectedArticles() {
             APPWRITE_DB_ID,
             APPWRITE_COLLECTION_ID,
             [
-                Query.equal('status', 'rejected'),
-                Query.orderDesc('submittedAt'),
-                Query.limit(50)
+                Appwrite.Query.equal('status', 'rejected'),
+                Appwrite.Query.orderDesc('submittedAt'),
+                Appwrite.Query.limit(50)
             ]
         );
         
@@ -319,7 +306,6 @@ async function loadRejectedArticles() {
     }
 }
 
-// Approve Article
 async function approveArticle(id) {
     try {
         await requireAdmin();
@@ -337,7 +323,6 @@ async function approveArticle(id) {
     }
 }
 
-// Reject Article
 async function rejectArticle(id) {
     if (!confirm('Reject this article?')) return;
     try {
@@ -356,7 +341,6 @@ async function rejectArticle(id) {
     }
 }
 
-// Load Categories - placeholder
 async function loadCategories() {
     const container = document.getElementById('categoriesList');
     if (container) {
@@ -364,7 +348,6 @@ async function loadCategories() {
     }
 }
 
-// Handle Article Update - placeholder
 async function handleArticleUpdate(e) { 
     e.preventDefault(); 
     console.log('Update article...'); 
