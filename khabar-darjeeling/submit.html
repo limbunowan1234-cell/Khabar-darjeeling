@@ -95,20 +95,20 @@
                     </div>
 
                     <!-- Featured Image -->
-                    <div class="form-group">
-                        <label for="image">Featured Image *</label>
-                        <div class="image-upload">
-                            <input type="file" id="image" name="image" accept="image/*" required>
-                            <div class="upload-info">
-                                <p>📷 Click to select an image</p>
-                                <small>Supported formats: JPG, PNG, WebP (Max 5MB)</small>
-                            </div>
-                        </div>
-                        <div id="imagePreview" class="image-preview" style="display:none;">
-                            <img id="previewImg" src="" alt="Preview">
-                            <button type="button" class="remove-btn" onclick="removeImage()">Remove</button>
-                        </div>
-                    </div>
+<div class="form-group">
+    <label for="image">Featured Image <span style="color:#888; font-weight:normal;">(Optional)</span></label>
+    <div class="image-upload">
+        <input type="file" id="image" name="image" accept="image/*">
+        <div class="upload-info">
+            <p>📷 Click to select an image</p>
+            <small>Supported formats: JPG, PNG, WebP (Max 5MB). Leave empty if no image</small>
+        </div>
+    </div>
+    <div id="imagePreview" class="image-preview" style="display:none;">
+        <img id="previewImg" src="" alt="Preview">
+        <button type="button" class="remove-btn" onclick="removeImage()">Remove</button>
+    </div>
+</div>
 
                     <!-- News Content -->
                     <div class="form-group">
