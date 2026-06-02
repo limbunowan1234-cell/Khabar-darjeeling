@@ -12,7 +12,7 @@ const account = new Account(client);
 // Check Appwrite Console → Database → Copy exact ID
 const APPWRITE_DB_ID = 'khabar_db'; // lowercase k usually
 const APPWRITE_COLLECTION_ID = 'articles';
-const APPWRITE_BUCKET_ID = 'article-images'; // hyphen, not underscore
+const APPWRITE_BUCKET_ID = 'article_images'; // hyphen, not underscore
 
 window.account = account;
 window.database = databases;
