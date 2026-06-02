@@ -2,7 +2,7 @@
 const { Client, Databases, Storage, ID } = window.Appwrite;
 
 const client = new Client()
-    .setEndpoint('https://nyc-1.appwrite.io/v1') // New York region
+    .setEndpoint('https://nyc.cloud.appwrite.io/v1') // Correct New York endpoint
     .setProject('khabardarjeeling');
 
 const databases = new Databases(client);
