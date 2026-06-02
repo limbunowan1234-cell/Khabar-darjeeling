@@ -1,19 +1,27 @@
+// js/submit.js
+
 document.getElementById('newsForm').addEventListener('submit', async (e) => {
     e.preventDefault();
     
     const submitBtn = document.getElementById('submitBtn');
+    const errorMessage = document.getElementById('errorMessage');
+    const errorText = document.getElementById('errorText');
+    const successMessage = document.getElementById('successMessage');
+    
+    // Reset UI
     submitBtn.disabled = true;
     submitBtn.textContent = 'Submitting...';
+    errorMessage.style.display = 'none';
     
     // Get form values
-    const title = document.getElementById('title').value;
+    const title = document.getElementById('title').value.trim();
     const category = document.getElementById('category').value;
-    const location = document.getElementById('location').value;
-    const content = document.getElementById('content').value;
-    const authorName = document.getElementById('authorName').value;
-    const authorEmail = document.getElementById('authorEmail').value;
-    const authorPhone = document.getElementById('authorPhone').value;
-    const source = document.getElementById('source').value;
+    const location = document.getElementById('location').value.trim();
+    const content = document.getElementById('content').value.trim();
+    const authorName = document.getElementById('authorName').value.trim();
+    const authorEmail = document.getElementById('authorEmail').value.trim();
+    const authorPhone = document.getElementById('authorPhone').value.trim();
+    const source = document.getElementById('source').value.trim();
     const imageFile = document.getElementById('image').files[0];
     
     let imageUrl = ''; // Default empty if no image
@@ -33,7 +41,7 @@ document.getElementById('newsForm').addEventListener('submit', async (e) => {
         
         submitBtn.textContent = 'Saving article...';
         
-        // Create document - imageUrl will be '' if no image
+        // Create document - all required fields included
         await databases.createDocument(
             APPWRITE_DATABASE_ID,
             APPWRITE_COLLECTION_ID,
@@ -49,18 +57,18 @@ document.getElementById('newsForm').addEventListener('submit', async (e) => {
                 source: source,
                 image: imageUrl, // Empty string if no image
                 status: 'pending',
-                createdAt: new Date().toISOString()
+                submittedAt: new Date().toISOString() // Matches Appwrite attribute
             }
         );
         
         // Show success
         document.getElementById('newsForm').style.display = 'none';
-        document.getElementById('successMessage').style.display = 'block';
+        successMessage.style.display = 'block';
         
     } catch (error) {
         console.error('Submit error:', error);
-        document.getElementById('errorText').textContent = error.message;
-        document.getElementById('errorMessage').style.display = 'block';
+        errorText.textContent = error.message;
+        errorMessage.style.display = 'block';
         submitBtn.disabled = false;
         submitBtn.textContent = 'Submit News';
     }
@@ -69,13 +77,18 @@ document.getElementById('newsForm').addEventListener('submit', async (e) => {
 // Image preview function
 document.getElementById('image').addEventListener('change', function(e) {
     const file = e.target.files[0];
+    const imagePreview = document.getElementById('imagePreview');
+    const previewImg = document.getElementById('previewImg');
+    
     if (file) {
         const reader = new FileReader();
         reader.onload = function(e) {
-            document.getElementById('previewImg').src = e.target.result;
-            document.getElementById('imagePreview').style.display = 'block';
+            previewImg.src = e.target.result;
+            imagePreview.style.display = 'block';
         }
         reader.readAsDataURL(file);
+    } else {
+        imagePreview.style.display = 'none';
     }
 });
 
