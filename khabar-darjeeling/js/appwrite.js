@@ -9,9 +9,9 @@ const databases = new Databases(client);
 const storage = new Storage(client);
 const account = new Account(client);
 
-const APPWRITE_DB_ID = 'Khabar_db';           
-const APPWRITE_COLLECTION_ID = 'articles';    
-const APPWRITE_BUCKET_ID = 'article-image';   
+const APPWRITE_DB_ID = 'Khabar_db';
+const APPWRITE_COLLECTION_ID = 'articles';
+const APPWRITE_BUCKET_ID = 'article-image';
 
 window.account = account;
 window.database = databases;
