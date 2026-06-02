@@ -235,20 +235,21 @@
 
     <script src="https://cdn.jsdelivr.net/npm/appwrite@14.0.1/dist/iife/sdk.min.js"></script>
     <script>
-        // Global Appwrite setup
-        const { Client, Databases, Account, ID, Query } = Appwrite;
+        // Global Appwrite setup - CORRECTED
+        const { Client, Databases, Storage, Account, ID, Query } = Appwrite;
         
         const client = new Client();
         client
             .setEndpoint('https://nyc.cloud.appwrite.io/v1')
-            .setProject('68b43d61001a7c0b6c68');
+            .setProject('khabardarjeeling'); // ← FIXED: Use your actual Project ID
         
         window.account = new Account(client);
         window.database = new Databases(client);
+        window.storage = new Storage(client); // ← ADDED: Required for image uploads
         window.Appwrite = Appwrite;
         
-        const APPWRITE_DB_ID = '68b44bf2000e26f021d3';
-        const APPWRITE_COLLECTION_ID = 'articles';
+        const APPWRITE_DB_ID = 'Khabar_db'; // ← Update if your DB ID is different
+        const APPWRITE_COLLECTION_ID = 'articles'; // ← Update if your Collection ID is different
     </script>
     <script src="js/admin.js"></script>
 </body>
