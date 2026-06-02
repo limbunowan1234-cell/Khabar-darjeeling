@@ -1,4 +1,4 @@
-// js/submit.js
+// js/submit.js - Fixed for Khabar Darjeeling
 
 document.getElementById('newsForm').addEventListener('submit', async (e) => {
     e.preventDefault();
@@ -22,20 +22,28 @@ document.getElementById('newsForm').addEventListener('submit', async (e) => {
     let imageUrl = '';
     
     try {
+        // 5MB limit check
+        if (imageFile && imageFile.size > 5 * 1024 * 1024) {
+            throw new Error('Image too large. Max 5MB allowed.');
+        }
+        
         if (imageFile) {
             submitBtn.textContent = 'Uploading image...';
-            const file = await storage.createFile(
-                APPWRITE_BUCKET_ID,
+            const file = await window.storage.createFile(
+                'article-images', // Your bucket ID
                 ID.unique(),
                 imageFile
             );
-            imageUrl = storage.getFileView(APPWRITE_BUCKET_ID, file.$id);
+            imageUrl = window.storage.getFileView('article-images', file.$id);
         }
         
         submitBtn.textContent = 'Saving article...';
         
-        await databases.createDocument(
-            APPWRITE_DATABASE_ID,
+        // FIXED: Use APPWRITE_DB_ID not APPWRITE_DATABASE_ID
+        // FIXED: Use window.database not databases
+        // FIXED: Use imageUrl not imageFileId
+        await window.database.createDocument(
+            APPWRITE_DB_ID,
             APPWRITE_COLLECTION_ID,
             ID.unique(),
             {
@@ -44,9 +52,9 @@ document.getElementById('newsForm').addEventListener('submit', async (e) => {
                 category: category,
                 location: location,
                 authorName: authorName,
+                imageUrl: imageUrl, // Changed from imageFileId
                 status: 'pending',
-                submittedAt: new Date().toISOString(),
-                imageFileId: imageUrl
+                submittedAt: new Date().toISOString()
             }
         );
         
