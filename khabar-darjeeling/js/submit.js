@@ -30,17 +30,17 @@ document.getElementById('newsForm').addEventListener('submit', async (e) => {
         if (imageFile) {
             submitBtn.textContent = 'Uploading image...';
             const file = await window.storage.createFile(
-                window.APPWRITE_BUCKET_ID, // ← FIXED: Use variable from appwrite.js
+                window.APPWRITE_BUCKET_ID,
                 ID.unique(),
                 imageFile
             );
-            imageUrl = window.storage.getFileView(window.APPWRITE_BUCKET_ID, file.$id); // ← FIXED
+            imageUrl = window.storage.getFileView(window.APPWRITE_BUCKET_ID, file.$id);
         }
 
         submitBtn.textContent = 'Saving article...';
 
         await window.database.createDocument(
-            window.APPWRITE_DB_ID, // ← Use window. for safety
+            window.APPWRITE_DB_ID,
             window.APPWRITE_COLLECTION_ID,
             ID.unique(),
             {
@@ -78,3 +78,9 @@ document.getElementById('image').addEventListener('change', function(e) {
         reader.onload = function(e) {
             previewImg.src = e.target.result;
             imagePreview.style.display = 'block';
+        }; // <-- You were missing this
+        reader.readAsDataURL(file); // <-- And this
+    } else {
+        imagePreview.style.display = 'none'; // <-- And this block
+    }
+}); // <-- And this
