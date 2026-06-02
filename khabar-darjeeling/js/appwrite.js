@@ -1,9 +1,8 @@
-// js/appwrite.js
 const { Client, Databases, Storage, ID } = window.Appwrite;
 
 const client = new Client()
-    .setEndpoint('https://nyc.cloud.appwrite.io/v1') // This is the correct one
-    .setProject('khabardarjeeling');
+    .setEndpoint('https://nyc.cloud.appwrite.io/v1')
+    .setProject('68c3c0c00123abc456def'); // ← Paste your REAL Project ID here
 
 const databases = new Databases(client);
 const storage = new Storage(client);
