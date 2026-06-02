@@ -1,205 +1,109 @@
-/* ==================== SECURE ADMIN DASHBOARD ==================== */
+// js/admin.js - Khabar Darjeeling Admin Panel
 
-// FIXED: No Query destructuring - use Appwrite.Query directly
-const account = window.account;
-const database = window.database;
-const storage = window.storage;
+const APPWRITE_DB_ID = 'Khabar_db';
+const APPWRITE_COLLECTION_ID = 'articles';
 
-let adminUser = null;
+// Check if user is logged in on page load
+checkAuth();
 
-document.addEventListener('DOMContentLoaded', async () => {
-    const isLoggedIn = await checkAdminLogin();
-
-    if (isLoggedIn) {
+async function checkAuth() {
+    try {
+        const user = await window.account.get();
         document.getElementById('loginScreen').style.display = 'none';
         document.getElementById('adminPanel').style.display = 'block';
-        setupAdminDashboard();
-    } else {
-        setupLoginForm();
+        document.getElementById('logoutBtn').style.display = 'inline-block';
+        document.getElementById('adminUser').textContent = user.email;
+        loadDashboard();
+    } catch (error) {
+        // Not logged in - show login screen
+        document.getElementById('loginScreen').style.display = 'flex';
+        document.getElementById('adminPanel').style.display = 'none';
+    }
+}
+
+// Login Form
+document.getElementById('loginForm').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const email = document.getElementById('email').value;
+    const password = document.getElementById('password').value;
+    const errorMsg = document.getElementById('loginError');
+    
+    try {
+        await window.account.createEmailSession(email, password);
+        errorMsg.style.display = 'none';
+        checkAuth();
+    } catch (error) {
+        errorMsg.textContent = 'Login failed: ' + error.message;
+        errorMsg.style.display = 'block';
     }
 });
 
-async function checkAdminLogin() {
+// Logout
+document.getElementById('logoutBtn').addEventListener('click', async () => {
     try {
-        const user = await account.get();
-        adminUser = user;
-        return true;
-    } catch {
-        adminUser = null;
-        return false;
-    }
-}
-
-function setupLoginForm() {
-    const loginForm = document.getElementById('loginForm');
-    if (loginForm) {
-        loginForm.addEventListener('submit', handleAdminLogin);
-    }
-}
-
-async function handleAdminLogin(e) {
-    e.preventDefault();
-
-    const email = document.getElementById('email').value;
-    const password = document.getElementById('password').value;
-    const loginError = document.getElementById('loginError');
-    const loginBtn = e.target.querySelector('button[type="submit"]');
-
-    loginError.style.display = 'none';
-    loginBtn.textContent = 'Logging in...';
-    loginBtn.disabled = true;
-
-    try {
-        await account.createEmailPasswordSession(email, password);
+        await window.account.deleteSession('current');
         window.location.reload();
     } catch (error) {
-        console.error('Login error:', error);
-        loginError.textContent = 'Invalid email or password: ' + error.message;
-        loginError.style.display = 'block';
-        loginBtn.textContent = 'Login';
-        loginBtn.disabled = false;
+        alert('Logout failed: ' + error.message);
     }
-}
+});
 
-async function requireAdmin() {
-    const isAdmin = await checkAdminLogin();
-    if (!isAdmin) {
-        alert('Session expired. Please log in again.');
-        window.location.href = 'admin.html';
-        throw new Error('Unauthorized');
-    }
-    return adminUser;
-}
-
-function setupAdminDashboard() {
-    if (adminUser) {
-        document.getElementById('adminUser').textContent = adminUser.email;
-    }
-
-    document.querySelectorAll('.menu-item').forEach(item => {
-        item.addEventListener('click', (e) => {
-            e.preventDefault();
-            const onclick = item.getAttribute('onclick');
-            if (onclick) {
-                const match = onclick.match(/showTab\('([^']+)'\)/);
-                if (match) showTab(match[1]);
-            }
-        });
-    });
-
-    const logoutBtn = document.getElementById('logoutBtn');
-    if (logoutBtn) {
-        logoutBtn.addEventListener('click', handleAdminLogout);
-    }
-
-    showTab('dashboard');
-
-    const editForm = document.getElementById('editForm');
-    if (editForm) {
-        editForm.addEventListener('submit', handleArticleUpdate);
-    }
-}
-
-async function handleAdminLogout() {
-    try {
-        await account.deleteSession('current');
-        window.location.reload();
-    } catch (error) {
-        console.error('Logout error:', error);
-    }
-}
-
-function showTab(tabName) {
+// Tab Navigation
+window.showTab = function(tabName) {
+    // Hide all tabs
     document.querySelectorAll('.tab-content').forEach(tab => {
         tab.classList.remove('active');
     });
-
     document.querySelectorAll('.menu-item').forEach(item => {
         item.classList.remove('active');
     });
-
-    const tab = document.getElementById(tabName);
-    if (tab) {
-        tab.classList.add('active');
-        document.querySelector(`[onclick*="${tabName}"]`)?.classList.add('active');
-    }
-
-    switch(tabName) {
-        case 'dashboard':
-            loadDashboard();
-            break;
-        case 'pending':
-            loadPendingArticles();
-            break;
-        case 'published':
-            loadPublishedArticles();
-            break;
-        case 'rejected':
-            loadRejectedArticles();
-            break;
-        case 'categories':
-            loadCategories();
-            break;
-    }
+    
+    // Show selected tab
+    document.getElementById(tabName).classList.add('active');
+    event.target.classList.add('active');
+    
+    // Load data for tab
+    if (tabName === 'pending') loadPendingArticles();
+    if (tabName === 'published') loadPublishedArticles();
+    if (tabName === 'rejected') loadRejectedArticles();
 }
 
+// Load Dashboard Stats
 async function loadDashboard() {
     try {
-        await requireAdmin();
-        const stats = await getArticleStatistics();
-
-        document.getElementById('totalArticles').textContent = stats.total;
-        document.getElementById('pendingCount').textContent = stats.pending;
-        document.getElementById('publishedCount').textContent = stats.approved;
-        document.getElementById('rejectedCount').textContent = stats.rejected;
+        const allArticles = await window.database.listDocuments(
+            APPWRITE_DB_ID,
+            APPWRITE_COLLECTION_ID,
+            [Query.limit(1000)]
+        );
+        
+        const articles = allArticles.documents;
+        const pending = articles.filter(a => a.status === 'pending' || !a.status);
+        const published = articles.filter(a => a.status === 'published');
+        const rejected = articles.filter(a => a.status === 'rejected');
+        
+        document.getElementById('totalArticles').textContent = articles.length;
+        document.getElementById('pendingCount').textContent = pending.length;
+        document.getElementById('publishedCount').textContent = published.length;
+        document.getElementById('rejectedCount').textContent = rejected.length;
+        
     } catch (error) {
         console.error('Dashboard error:', error);
     }
 }
 
-async function getArticleStatistics() {
-    try {
-        const totalResponse = await database.listDocuments(APPWRITE_DB_ID, APPWRITE_COLLECTION_ID, [Appwrite.Query.limit(1)]);
-        const pendingResponse = await database.listDocuments(APPWRITE_DB_ID, APPWRITE_COLLECTION_ID, [
-            Appwrite.Query.equal('status', 'pending'),
-            Appwrite.Query.limit(1)
-        ]);
-        const approvedResponse = await database.listDocuments(APPWRITE_DB_ID, APPWRITE_COLLECTION_ID, [
-            Appwrite.Query.equal('status', 'approved'),
-            Appwrite.Query.limit(1)
-        ]);
-        const rejectedResponse = await database.listDocuments(APPWRITE_DB_ID, APPWRITE_COLLECTION_ID, [
-            Appwrite.Query.equal('status', 'rejected'),
-            Appwrite.Query.limit(1)
-        ]);
-
-        return {
-            total: totalResponse.total,
-            pending: pendingResponse.total,
-            approved: approvedResponse.total,
-            rejected: rejectedResponse.total
-        };
-    } catch (error) {
-        console.error('Failed to get statistics:', error);
-        return { total: 0, pending: 0, approved: 0, rejected: 0 };
-    }
-}
-
+// Load Pending Articles
 async function loadPendingArticles() {
     const container = document.getElementById('pendingArticlesList');
-    if (!container) return;
-    
-    container.innerHTML = '<p>Loading...</p>';
+    container.innerHTML = 'Loading...';
     
     try {
-        await requireAdmin();
-        const response = await database.listDocuments(
+        const response = await window.database.listDocuments(
             APPWRITE_DB_ID,
             APPWRITE_COLLECTION_ID,
             [
-                Appwrite.Query.equal('status', 'pending'),
-                Appwrite.Query.orderDesc('submittedAt'),
-                Appwrite.Query.limit(50)
+                Query.equal('status', 'pending'),
+                Query.orderDesc('$createdAt')
             ]
         );
         
@@ -208,43 +112,39 @@ async function loadPendingArticles() {
             return;
         }
         
-        container.innerHTML = response.documents.map(article => `
-            <div class="article-card">
-                ${article.imageFileId? `<img src="${article.imageFileId}" alt="${article.title}" style="width:150px;height:100px;object-fit:cover;border-radius:6px;">` : ''}
-                <div class="article-content">
-                    <h3>${article.title}</h3>
-                    <p><strong>Category:</strong> ${article.category} | <strong>Location:</strong> ${article.location}</p>
-                    <p><strong>Author:</strong> ${article.authorName}</p>
-                    <p>${article.content.substring(0, 200)}...</p>
-                    <small>Submitted: ${new Date(article.submittedAt).toLocaleString()}</small>
-                    <div style="margin-top:10px;display:flex;gap:10px;">
+        container.innerHTML = '';
+        response.documents.forEach(article => {
+            container.innerHTML += `
+                <div class="article-card">
+                    ${article.imageUrl ? `<img src="${article.imageUrl}" alt="${article.title}">` : '<div style="width:150px;height:100px;background:#eee;border-radius:6px;"></div>'}
+                    <div class="article-content">
+                        <h3>${article.title}</h3>
+                        <p>${article.content ? article.content.substring(0, 150) + '...' : ''}</p>
+                        <p><strong>Category:</strong> ${article.category || 'N/A'} | <strong>Author:</strong> ${article.authorName || 'Unknown'}</p>
                         <button class="btn-approve" onclick="approveArticle('${article.$id}')">✓ Approve</button>
                         <button class="btn-reject" onclick="rejectArticle('${article.$id}')">✗ Reject</button>
                     </div>
                 </div>
-            </div>
-        `).join('');
-        
+            `;
+        });
     } catch (error) {
-        container.innerHTML = `<p style="color:red;">Error: ${error.message}</p>`;
+        container.innerHTML = `<p style="color:red">Error: ${error.message}</p>`;
+        console.error('Pending articles error:', error);
     }
 }
 
+// Load Published Articles
 async function loadPublishedArticles() {
     const container = document.getElementById('publishedArticlesList');
-    if (!container) return;
-    
-    container.innerHTML = '<p>Loading...</p>';
+    container.innerHTML = 'Loading...';
     
     try {
-        await requireAdmin();
-        const response = await database.listDocuments(
+        const response = await window.database.listDocuments(
             APPWRITE_DB_ID,
             APPWRITE_COLLECTION_ID,
             [
-                Appwrite.Query.equal('status', 'approved'),
-                Appwrite.Query.orderDesc('submittedAt'),
-                Appwrite.Query.limit(50)
+                Query.equal('status', 'published'),
+                Query.orderDesc('$createdAt')
             ]
         );
         
@@ -253,37 +153,36 @@ async function loadPublishedArticles() {
             return;
         }
         
-        container.innerHTML = response.documents.map(article => `
-            <div class="article-card">
-                ${article.imageFileId? `<img src="${article.imageFileId}" alt="${article.title}" style="width:150px;height:100px;object-fit:cover;border-radius:6px;">` : ''}
-                <div class="article-content">
-                    <h3>${article.title}</h3>
-                    <p><strong>Category:</strong> ${article.category} | ${article.location}</p>
-                    <p><span style="color:green;font-weight:600;">✓ PUBLISHED</span></p>
+        container.innerHTML = '';
+        response.documents.forEach(article => {
+            container.innerHTML += `
+                <div class="article-card">
+                    ${article.imageUrl ? `<img src="${article.imageUrl}" alt="${article.title}">` : '<div style="width:150px;height:100px;background:#eee;border-radius:6px;"></div>'}
+                    <div class="article-content">
+                        <h3>${article.title} <span style="color:green;font-size:12px;">✅ PUBLISHED</span></h3>
+                        <p>${article.content ? article.content.substring(0, 150) + '...' : ''}</p>
+                        <p><strong>Category:</strong> ${article.category || 'N/A'}</p>
+                    </div>
                 </div>
-            </div>
-        `).join('');
-        
+            `;
+        });
     } catch (error) {
-        container.innerHTML = `<p style="color:red;">Error: ${error.message}</p>`;
+        container.innerHTML = `<p style="color:red">Error: ${error.message}</p>`;
     }
 }
 
+// Load Rejected Articles
 async function loadRejectedArticles() {
     const container = document.getElementById('rejectedArticlesList');
-    if (!container) return;
-    
-    container.innerHTML = '<p>Loading...</p>';
+    container.innerHTML = 'Loading...';
     
     try {
-        await requireAdmin();
-        const response = await database.listDocuments(
+        const response = await window.database.listDocuments(
             APPWRITE_DB_ID,
             APPWRITE_COLLECTION_ID,
             [
-                Appwrite.Query.equal('status', 'rejected'),
-                Appwrite.Query.orderDesc('submittedAt'),
-                Appwrite.Query.limit(50)
+                Query.equal('status', 'rejected'),
+                Query.orderDesc('$createdAt')
             ]
         );
         
@@ -292,63 +191,64 @@ async function loadRejectedArticles() {
             return;
         }
         
-        container.innerHTML = response.documents.map(article => `
-            <div class="article-card">
-                <div class="article-content">
-                    <h3>${article.title}</h3>
-                    <p><span style="color:red;font-weight:600;">✗ REJECTED</span></p>
+        container.innerHTML = '';
+        response.documents.forEach(article => {
+            container.innerHTML += `
+                <div class="article-card">
+                    <div class="article-content">
+                        <h3>${article.title} <span style="color:red;font-size:12px;">❌ REJECTED</span></h3>
+                        <p>${article.content ? article.content.substring(0, 150) + '...' : ''}</p>
+                    </div>
                 </div>
-            </div>
-        `).join('');
+            `;
+        });
+    } catch (error) {
+        container.innerHTML = `<p style="color:red">Error: ${error.message}</p>`;
+    }
+}
+
+// THIS IS THE KEY FIX - Approve Article
+window.approveArticle = async function(articleId) {
+    if (!confirm('Approve this article? It will go live on the homepage.')) return;
+    
+    try {
+        await window.database.updateDocument(
+            APPWRITE_DB_ID,
+            APPWRITE_COLLECTION_ID,
+            articleId,
+            {
+                status: 'published' // ← THIS LINE MAKES IT WORK
+            }
+        );
         
-    } catch (error) {
-        container.innerHTML = `<p style="color:red;">Error: ${error.message}</p>`;
-    }
-}
-
-async function approveArticle(id) {
-    try {
-        await requireAdmin();
-        await database.updateDocument(
-            APPWRITE_DB_ID,
-            APPWRITE_COLLECTION_ID,
-            id,
-            { status: 'approved' }
-        );
-        alert('Article approved!');
+        alert('Article approved! It is now live on the homepage.');
         loadPendingArticles();
         loadDashboard();
     } catch (error) {
-        alert('Error: ' + error.message);
+        alert('Error approving article: ' + error.message);
+        console.error(error);
     }
 }
 
-async function rejectArticle(id) {
+// Reject Article
+window.rejectArticle = async function(articleId) {
     if (!confirm('Reject this article?')) return;
+    
     try {
-        await requireAdmin();
-        await database.updateDocument(
+        await window.database.updateDocument(
             APPWRITE_DB_ID,
             APPWRITE_COLLECTION_ID,
-            id,
-            { status: 'rejected' }
+            articleId,
+            {
+                status: 'rejected'
+            }
         );
-        alert('Article rejected!');
+        
+        alert('Article rejected.');
         loadPendingArticles();
         loadDashboard();
     } catch (error) {
-        alert('Error: ' + error.message);
+        alert('Error rejecting article: ' + error.message);
+        console.error(error);
     }
-}
-
-async function loadCategories() {
-    const container = document.getElementById('categoriesList');
-    if (container) {
-        container.innerHTML = '<p>Categories: darjeeling, kalimpong, kurseong, mirik, siliguri, west-bengal, national, entertainment, sports</p>';
-    }
-}
-
-async function handleArticleUpdate(e) { 
-    e.preventDefault(); 
-    console.log('Update article...'); 
 }
