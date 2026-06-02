@@ -4,14 +4,14 @@ const { Client, Databases, Storage, ID } = Appwrite;
 const client = new Client();
 
 client
-    .setEndpoint('https://cloud.appwrite.io/v1') // Your Appwrite endpoint
-    .setProject('YOUR_PROJECT_ID'); // Replace with your Project ID
+    .setEndpoint('https://cloud.appwrite.io/v1')
+    .setProject('khabardarjeeling'); // Your project ID
 
-// Initialize services
+// Initialize Appwrite services
 const databases = new Databases(client);
 const storage = new Storage(client);
 
-// Your IDs - replace these with actual values from Appwrite Console
-const APPWRITE_DATABASE_ID = 'your_database_id';
-const APPWRITE_COLLECTION_ID = 'your_collection_id'; 
-const APPWRITE_BUCKET_ID = 'your_bucket_id';
+// Your database details
+const APPWRITE_DATABASE_ID = 'Khabar_db';
+const APPWRITE_COLLECTION_ID = 'articles';
+const APPWRITE_BUCKET_ID = 'article_images';
