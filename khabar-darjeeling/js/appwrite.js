@@ -1,11 +1,17 @@
-const appwriteClient = new window.Appwrite.Client()
-   .setEndpoint(APPWRITE_ENDPOINT)
-   .setProject(APPWRITE_PROJECT_ID);
+// js/appwrite.js
+const { Client, Databases, Storage, ID } = Appwrite;
 
-const appwriteAccount = new window.Appwrite.Account(appwriteClient);
-const appwriteDatabase = new window.Appwrite.Databases(appwriteClient);
-const appwriteStorage = new window.Appwrite.Storage(appwriteClient);
+const client = new Client();
 
-window.account = appwriteAccount;
-window.database = appwriteDatabase;
-window.storage = appwriteStorage;
+client
+    .setEndpoint('https://cloud.appwrite.io/v1') // Your Appwrite endpoint
+    .setProject('YOUR_PROJECT_ID'); // Replace with your Project ID
+
+// Initialize services
+const databases = new Databases(client);
+const storage = new Storage(client);
+
+// Your IDs - replace these with actual values from Appwrite Console
+const APPWRITE_DATABASE_ID = 'your_database_id';
+const APPWRITE_COLLECTION_ID = 'your_collection_id'; 
+const APPWRITE_BUCKET_ID = 'your_bucket_id';
