@@ -8,6 +8,52 @@
     <title>Submit News - Khabar Darjeeling</title>
     <link rel="stylesheet" href="css/style.css">
     <link rel="stylesheet" href="css/responsive.css">
+    <style>
+        /* Image Upload Styles */
+        .upload-area {
+            display: block;
+            border: 2px dashed #ccc;
+            border-radius: 8px;
+            padding: 30px;
+            text-align: center;
+            cursor: pointer;
+            background: #fafafa;
+            transition: all 0.3s;
+        }
+        .upload-area:hover {
+            border-color: #c41e3a;
+            background: #fff5f5;
+        }
+        .upload-info p {
+            margin: 0 0 5px 0;
+            font-size: 16px;
+        }
+        .upload-info small {
+            color: #666;
+        }
+        .image-preview {
+            margin-top: 15px;
+        }
+        .image-preview img {
+            max-width: 300px;
+            max-height: 200px;
+            border-radius: 8px;
+            border: 1px solid #ddd;
+            display: block;
+            margin-bottom: 10px;
+        }
+        .remove-btn {
+            padding: 6px 12px;
+            background: #dc3545;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        .remove-btn:hover {
+            background: #c82333;
+        }
+    </style>
 </head>
 <body>
     <!-- Navigation -->
@@ -67,7 +113,7 @@
                     <!-- Title -->
                     <div class="form-group">
                         <label for="title">News Title *</label>
-                        <input type="text" id="title" name="title" required placeholder="Enter news headline">
+                        <input type="text" id="title" name="title" required placeholder="Enter news headline" maxlength="200">
                         <small>Maximum 200 characters</small>
                     </div>
 
@@ -94,26 +140,26 @@
                         <input type="text" id="location" name="location" required placeholder="Where is this news from?">
                     </div>
 
-                    <!-- Featured Image -->
-<div class="form-group">
-    <label for="image">Featured Image <span style="color:#888; font-weight:normal;">(Optional)</span></label>
-    <div class="image-upload">
-        <input type="file" id="image" name="image" accept="image/*">
-        <div class="upload-info">
-            <p>📷 Click to select an image</p>
-            <small>Supported formats: JPG, PNG, WebP (Max 5MB). Leave empty if no image</small>
-        </div>
-    </div>
-    <div id="imagePreview" class="image-preview" style="display:none;">
-        <img id="previewImg" src="" alt="Preview">
-        <button type="button" class="remove-btn" onclick="removeImage()">Remove</button>
-    </div>
-</div>
+                    <!-- Featured Image - FIXED -->
+                    <div class="form-group">
+                        <label for="image">Featured Image <span style="color:#888; font-weight:normal;">(Optional)</span></label>
+                        <input type="file" id="image" name="image" accept="image/*" style="display: none;">
+                        <label for="image" class="upload-area">
+                            <div class="upload-info">
+                                <p>📷 Click to select an image</p>
+                                <small>Supported formats: JPG, PNG, WebP (Max 5MB)</small>
+                            </div>
+                        </label>
+                        <div id="imagePreview" class="image-preview" style="display:none;">
+                            <img id="previewImg" src="" alt="Preview">
+                            <button type="button" class="remove-btn" onclick="removeImage()">Remove Image</button>
+                        </div>
+                    </div>
 
                     <!-- News Content -->
                     <div class="form-group">
                         <label for="content">News Content *</label>
-                        <textarea id="content" name="content" required placeholder="Write your news story here..." rows="10"></textarea>
+                        <textarea id="content" name="content" required placeholder="Write your news story here..." rows="10" minlength="50"></textarea>
                         <small>Minimum 50 characters</small>
                     </div>
 
@@ -133,12 +179,6 @@
                     <div class="form-group">
                         <label for="authorPhone">Contact Phone *</label>
                         <input type="tel" id="authorPhone" name="authorPhone" required placeholder="+91 XXXXX XXXXX">
-                    </div>
-
-                    <!-- Source -->
-                    <div class="form-group">
-                        <label for="source">News Source (Optional)</label>
-                        <input type="text" id="source" name="source" placeholder="Where did you get this information?">
                     </div>
 
                     <!-- Terms -->
@@ -180,8 +220,20 @@
     </footer>
 
     <!-- Scripts -->
-<script src="https://cdn.jsdelivr.net/npm/appwrite@14.0.1/dist/iife/sdk.min.js"></script>
-<script src="js/appwrite.js"></script>
-<script src="js/submit.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/appwrite@14.0.1/dist/iife/sdk.min.js"></script>
+    <script src="js/appwrite.js"></script>
+    <script src="js/submit.js"></script>
+    <script>
+        // Mobile nav toggle
+        document.getElementById('navToggle')?.addEventListener('click', function() {
+            document.getElementById('navMenu').classList.toggle('active');
+        });
+
+        // Theme toggle
+        document.getElementById('themeToggle')?.addEventListener('click', function() {
+            document.body.classList.toggle('dark-theme');
+            this.textContent = document.body.classList.contains('dark-theme') ? '☀️' : '🌙';
+        });
+    </script>
 </body>
 </html>
