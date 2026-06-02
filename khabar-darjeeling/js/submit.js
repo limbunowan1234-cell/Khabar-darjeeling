@@ -1,4 +1,4 @@
-// js/submit.js
+// js/submit.js - TEST VERSION WITHOUT IMAGE
 
 document.getElementById('newsForm').addEventListener('submit', async (e) => {
     e.preventDefault();
@@ -12,43 +12,28 @@ document.getElementById('newsForm').addEventListener('submit', async (e) => {
     submitBtn.textContent = 'Submitting...';
     errorMessage.style.display = 'none';
     
-    // Get all REQUIRED fields from your form
     const title = document.getElementById('title').value.trim();
     const category = document.getElementById('category').value;
     const location = document.getElementById('location').value.trim();
     const content = document.getElementById('content').value.trim();
     const authorName = document.getElementById('authorName').value.trim();
-    const imageFile = document.getElementById('image').files[0];
-    
-    let imageUrl = '';
     
     try {
-        if (imageFile) {
-            submitBtn.textContent = 'Uploading image...';
-            const file = await storage.createFile(
-                APPWRITE_BUCKET_ID,
-                ID.unique(),
-                imageFile
-            );
-            imageUrl = storage.getFileView(APPWRITE_BUCKET_ID, file.$id);
-        }
-        
         submitBtn.textContent = 'Saving article...';
         
-        // Only attributes that exist in your Appwrite collection
+        // ONLY REQUIRED FIELDS - NO IMAGE YET
         await databases.createDocument(
             APPWRITE_DATABASE_ID,
             APPWRITE_COLLECTION_ID,
             ID.unique(),
             {
-                title: title, // required
-                content: content, // required
-                category: category, // required
-                location: location, // required
-                authorName: authorName, // required
-                status: 'pending', // required
-                submittedAt: new Date().toISOString(), // required
-                imageField: imageUrl // optional - uses 'imageField' not 'image'
+                title: title,
+                content: content,
+                category: category,
+                location: location,
+                authorName: authorName,
+                status: 'pending',
+                submittedAt: new Date().toISOString()
             }
         );
         
@@ -64,6 +49,7 @@ document.getElementById('newsForm').addEventListener('submit', async (e) => {
     }
 });
 
+// Keep image preview but don't submit it yet
 document.getElementById('image').addEventListener('change', function(e) {
     const file = e.target.files[0];
     const imagePreview = document.getElementById('imagePreview');
