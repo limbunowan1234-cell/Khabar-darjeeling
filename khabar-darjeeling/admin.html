@@ -31,7 +31,6 @@
         .btn-primary { background: #c41e3a; color: white; }
         .btn-secondary { background: #6c757d; color: white; }
         
-        /* Login Screen */
         #loginScreen {
             display: flex;
             align-items: center;
@@ -67,10 +66,7 @@
             font-size: 15px;
         }
         
-        /* Admin Panel */
-        #adminPanel {
-            display: none;
-        }
+        #adminPanel { display: none; }
         .admin-layout {
             display: flex;
             min-height: calc(100vh - 70px);
@@ -160,7 +156,6 @@
         </div>
     </div>
 
-    <!-- LOGIN SCREEN -->
     <div id="loginScreen">
         <div class="login-box">
             <h2>Admin Login</h2>
@@ -179,7 +174,6 @@
         </div>
     </div>
 
-    <!-- ADMIN PANEL -->
     <div id="adminPanel">
         <div class="admin-layout">
             <div class="sidebar">
@@ -234,23 +228,7 @@
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/appwrite@14.0.1/dist/iife/sdk.min.js"></script>
-    <script>
-        // Global Appwrite setup - CORRECTED
-        const { Client, Databases, Storage, Account, ID, Query } = Appwrite;
-        
-        const client = new Client();
-        client
-            .setEndpoint('https://nyc.cloud.appwrite.io/v1')
-            .setProject('khabardarjeeling'); // ← FIXED: Use your actual Project ID
-        
-        window.account = new Account(client);
-        window.database = new Databases(client);
-        window.storage = new Storage(client); // ← ADDED: Required for image uploads
-        window.Appwrite = Appwrite;
-        
-        const APPWRITE_DB_ID = 'Khabar_db'; // ← Update if your DB ID is different
-        const APPWRITE_COLLECTION_ID = 'articles'; // ← Update if your Collection ID is different
-    </script>
+    <script src="js/appwrite.js"></script>
     <script src="js/admin.js"></script>
 </body>
 </html>
