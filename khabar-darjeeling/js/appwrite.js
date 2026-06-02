@@ -11,7 +11,7 @@ const account = new Account(client);
 
 const APPWRITE_DB_ID = 'Khabar_db';           
 const APPWRITE_COLLECTION_ID = 'articles';    
-const APPWRITE_BUCKET_ID = 'article-image';   // ← NO 's' HERE
+const APPWRITE_BUCKET_ID = 'article-image';   
 
 window.account = account;
 window.database = databases;
