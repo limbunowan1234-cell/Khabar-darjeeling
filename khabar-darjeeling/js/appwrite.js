@@ -9,10 +9,10 @@ const databases = new Databases(client);
 const storage = new Storage(client);
 const account = new Account(client);
 
-// IMPORTANT: These IDs must match Appwrite Console exactly - case sensitive
-const APPWRITE_DB_ID = 'khabar_db';            // Check: lowercase 'k' or capital 'K'?
-const APPWRITE_COLLECTION_ID = 'articles';     
-const APPWRITE_BUCKET_ID = 'article_images';   // With underscore
+// Appwrite IDs - exact match from console
+const APPWRITE_DB_ID = 'Khabar_db';           // Capital K
+const APPWRITE_COLLECTION_ID = 'articles';    
+const APPWRITE_BUCKET_ID = 'article_images';  // Underscore
 
 // Make available globally for other scripts
 window.account = account;
