@@ -9,12 +9,10 @@ const databases = new Databases(client);
 const storage = new Storage(client);
 const account = new Account(client);
 
-// Appwrite IDs - exact match from console
-const APPWRITE_DB_ID = 'Khabar_db';           // Capital K
+const APPWRITE_DB_ID = 'Khabar_db';           
 const APPWRITE_COLLECTION_ID = 'articles';    
-const APPWRITE_BUCKET_ID = 'article-image';   // ← Changed: removed 's'
+const APPWRITE_BUCKET_ID = 'article-image';   // ← NO 's' HERE
 
-// Make available globally for other scripts
 window.account = account;
 window.database = databases;
 window.storage = storage;
