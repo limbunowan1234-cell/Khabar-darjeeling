@@ -12,6 +12,7 @@ document.getElementById('newsForm').addEventListener('submit', async (e) => {
     submitBtn.textContent = 'Submitting...';
     errorMessage.style.display = 'none';
     
+    // Get all REQUIRED fields from your form
     const title = document.getElementById('title').value.trim();
     const category = document.getElementById('category').value;
     const location = document.getElementById('location').value.trim();
@@ -34,19 +35,20 @@ document.getElementById('newsForm').addEventListener('submit', async (e) => {
         
         submitBtn.textContent = 'Saving article...';
         
+        // Only attributes that exist in your Appwrite collection
         await databases.createDocument(
             APPWRITE_DATABASE_ID,
             APPWRITE_COLLECTION_ID,
             ID.unique(),
             {
-                title: title,
-                category: category,
-                location: location,
-                content: content,
-                authorName: authorName,
-                image: imageUrl,
-                status: 'pending',
-                submittedAt: new Date().toISOString()
+                title: title, // required
+                content: content, // required
+                category: category, // required
+                location: location, // required
+                authorName: authorName, // required
+                status: 'pending', // required
+                submittedAt: new Date().toISOString(), // required
+                imageField: imageUrl // optional - uses 'imageField' not 'image'
             }
         );
         
