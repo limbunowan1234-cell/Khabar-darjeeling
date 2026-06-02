@@ -3,13 +3,13 @@ const { Client, Databases, Storage, Account, ID } = window.Appwrite;
 
 const client = new Client()
     .setEndpoint('https://nyc.cloud.appwrite.io/v1')
-    .setProject('68c3c0c00123abc456def'); // Replace with your REAL Project ID from Appwrite Settings
+    .setProject('khabardarjeeling'); // Using your actual Project ID
 
 const databases = new Databases(client);
 const storage = new Storage(client);
 const account = new Account(client);
 
-// Make them globally available for admin.js
+// Make them global for admin.js
 window.account = account;
 window.database = databases;
 window.storage = storage;
