@@ -1,4 +1,4 @@
-// js/submit.js - TEST VERSION WITHOUT IMAGE
+// js/submit.js - WORKING VERSION
 
 document.getElementById('newsForm').addEventListener('submit', async (e) => {
     e.preventDefault();
@@ -21,7 +21,6 @@ document.getElementById('newsForm').addEventListener('submit', async (e) => {
     try {
         submitBtn.textContent = 'Saving article...';
         
-        // ONLY REQUIRED FIELDS - NO IMAGE YET
         await databases.createDocument(
             APPWRITE_DATABASE_ID,
             APPWRITE_COLLECTION_ID,
@@ -49,25 +48,6 @@ document.getElementById('newsForm').addEventListener('submit', async (e) => {
     }
 });
 
-// Keep image preview but don't submit it yet
-document.getElementById('image').addEventListener('change', function(e) {
-    const file = e.target.files[0];
-    const imagePreview = document.getElementById('imagePreview');
-    const previewImg = document.getElementById('previewImg');
-    
-    if (file) {
-        const reader = new FileReader();
-        reader.onload = function(e) {
-            previewImg.src = e.target.result;
-            imagePreview.style.display = 'block';
-        }
-        reader.readAsDataURL(file);
-    } else {
-        imagePreview.style.display = 'none';
-    }
-});
-
-function removeImage() {
-    document.getElementById('image').value = '';
-    document.getElementById('imagePreview').style.display = 'none';
-}
+// Remove image preview code for now to avoid confusion
+document.getElementById('image').style.display = 'none';
+document.querySelector('label[for="image"]').style.display = 'none';
