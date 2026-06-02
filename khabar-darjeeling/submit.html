@@ -6,8 +6,8 @@
     <meta name="description" content="Submit news to Khabar Darjeeling">
     <meta name="robots" content="noindex, follow">
     <title>Submit News - Khabar Darjeeling</title>
-    <link rel="stylesheet" href="css/style.css">
-    <link rel="stylesheet" href="css/responsive.css">
+    <link rel="stylesheet" href="css/style.css?v=999">
+    <link rel="stylesheet" href="css/responsive.css?v=999">
     <style>
         /* Image Upload Styles */
         .upload-area {
@@ -140,7 +140,7 @@
                         <input type="text" id="location" name="location" required placeholder="Where is this news from?">
                     </div>
 
-                    <!-- Featured Image - FIXED -->
+                    <!-- Featured Image -->
                     <div class="form-group">
                         <label for="image">Featured Image <span style="color:#888; font-weight:normal;">(Optional)</span></label>
                         <input type="file" id="image" name="image" accept="image/*" style="display: none;">
@@ -221,8 +221,8 @@
 
     <!-- Scripts -->
     <script src="https://cdn.jsdelivr.net/npm/appwrite@14.0.1/dist/iife/sdk.min.js"></script>
-    <script src="js/appwrite.js"></script>
-    <script src="js/submit.js"></script>
+    <script src="js/appwrite.js?v=999"></script>
+    <script src="js/submit.js?v=999"></script>
     <script>
         // Mobile nav toggle
         document.getElementById('navToggle')?.addEventListener('click', function() {
@@ -234,6 +234,9 @@
             document.body.classList.toggle('dark-theme');
             this.textContent = document.body.classList.contains('dark-theme') ? '☀️' : '🌙';
         });
+
+        // Debug: Check bucket ID on page load
+        console.log('Appwrite Bucket ID:', window.APPWRITE_BUCKET_ID);
     </script>
 </body>
 </html>
