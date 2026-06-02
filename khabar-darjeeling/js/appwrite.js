@@ -2,18 +2,19 @@
 const { Client, Databases, Storage, Account, ID, Query } = window.Appwrite;
 
 const client = new Client()
-    .setEndpoint('https://nyc.cloud.appwrite.io/v1') // ← NYC region
+    .setEndpoint('https://nyc.cloud.appwrite.io/v1')
     .setProject('khabardarjeeling');
 
 const databases = new Databases(client);
 const storage = new Storage(client);
 const account = new Account(client);
 
-// Check Appwrite Console → Database → Copy exact ID
-const APPWRITE_DB_ID = 'khabar_db'; // lowercase k usually
-const APPWRITE_COLLECTION_ID = 'articles';
-const APPWRITE_BUCKET_ID = 'article_images'; // hyphen, not underscore
+// IMPORTANT: These IDs must match Appwrite Console exactly - case sensitive
+const APPWRITE_DB_ID = 'khabar_db';            // Check: lowercase 'k' or capital 'K'?
+const APPWRITE_COLLECTION_ID = 'articles';     
+const APPWRITE_BUCKET_ID = 'article_images';   // With underscore
 
+// Make available globally for other scripts
 window.account = account;
 window.database = databases;
 window.storage = storage;
