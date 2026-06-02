@@ -26,7 +26,8 @@ document.getElementById('loginForm').addEventListener('submit', async (e) => {
     const errorMsg = document.getElementById('loginError');
     
     try {
-        await window.account.createEmailSession(email, password);
+        // FIXED: createEmailPasswordSession for Appwrite v14+
+        await window.account.createEmailPasswordSession(email, password);
         errorMsg.style.display = 'none';
         checkAuth();
     } catch (error) {
