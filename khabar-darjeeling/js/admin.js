@@ -175,7 +175,7 @@ async function getArticleStatistics() {
             Query.limit(1)
         ]);
         const approvedResponse = await database.listDocuments(APPWRITE_DB_ID, APPWRITE_COLLECTION_ID, [
-            Query.equal('status', 'published'),
+            Query.equal('status', 'approved'),
             Query.limit(1)
         ]);
         const rejectedResponse = await database.listDocuments(APPWRITE_DB_ID, APPWRITE_COLLECTION_ID, [
@@ -195,9 +195,177 @@ async function getArticleStatistics() {
     }
 }
 
-// Placeholder functions - add your existing code below
-async function loadPendingArticles() { console.log('Loading pending...'); }
-async function loadPublishedArticles() { console.log('Loading published...'); }
-async function loadRejectedArticles() { console.log('Loading rejected...'); }
-async function loadCategories() { console.log('Loading categories...'); }
-async function handleArticleUpdate(e) { e.preventDefault(); console.log('Update article...'); }
+// Load Pending Articles - REAL CODE
+async function loadPendingArticles() {
+    const container = document.getElementById('pendingArticlesList');
+    if (!container) return;
+    
+    container.innerHTML = '<p>Loading...</p>';
+    
+    try {
+        await requireAdmin();
+        const response = await database.listDocuments(
+            APPWRITE_DB_ID,
+            APPWRITE_COLLECTION_ID,
+            [
+                Query.equal('status', 'pending'),
+                Query.orderDesc('submittedAt'),
+                Query.limit(50)
+            ]
+        );
+        
+        if (response.documents.length === 0) {
+            container.innerHTML = '<p>No pending articles.</p>';
+            return;
+        }
+        
+        container.innerHTML = response.documents.map(article => `
+            <div class="article-card">
+                ${article.imageFileId? `<img src="${article.imageFileId}" alt="${article.title}" style="width:150px;height:100px;object-fit:cover;border-radius:6px;">` : ''}
+                <div class="article-content">
+                    <h3>${article.title}</h3>
+                    <p><strong>Category:</strong> ${article.category} | <strong>Location:</strong> ${article.location}</p>
+                    <p><strong>Author:</strong> ${article.authorName}</p>
+                    <p>${article.content.substring(0, 200)}...</p>
+                    <small>Submitted: ${new Date(article.submittedAt).toLocaleString()}</small>
+                    <div style="margin-top:10px;display:flex;gap:10px;">
+                        <button class="btn-approve" onclick="approveArticle('${article.$id}')">✓ Approve</button>
+                        <button class="btn-reject" onclick="rejectArticle('${article.$id}')">✗ Reject</button>
+                    </div>
+                </div>
+            </div>
+        `).join('');
+        
+    } catch (error) {
+        container.innerHTML = `<p style="color:red;">Error: ${error.message}</p>`;
+    }
+}
+
+// Load Published Articles
+async function loadPublishedArticles() {
+    const container = document.getElementById('publishedArticlesList');
+    if (!container) return;
+    
+    container.innerHTML = '<p>Loading...</p>';
+    
+    try {
+        await requireAdmin();
+        const response = await database.listDocuments(
+            APPWRITE_DB_ID,
+            APPWRITE_COLLECTION_ID,
+            [
+                Query.equal('status', 'approved'),
+                Query.orderDesc('submittedAt'),
+                Query.limit(50)
+            ]
+        );
+        
+        if (response.documents.length === 0) {
+            container.innerHTML = '<p>No published articles.</p>';
+            return;
+        }
+        
+        container.innerHTML = response.documents.map(article => `
+            <div class="article-card">
+                ${article.imageFileId? `<img src="${article.imageFileId}" alt="${article.title}" style="width:150px;height:100px;object-fit:cover;border-radius:6px;">` : ''}
+                <div class="article-content">
+                    <h3>${article.title}</h3>
+                    <p><strong>Category:</strong> ${article.category} | ${article.location}</p>
+                    <p><span style="color:green;font-weight:600;">✓ PUBLISHED</span></p>
+                </div>
+            </div>
+        `).join('');
+        
+    } catch (error) {
+        container.innerHTML = `<p style="color:red;">Error: ${error.message}</p>`;
+    }
+}
+
+// Load Rejected Articles
+async function loadRejectedArticles() {
+    const container = document.getElementById('rejectedArticlesList');
+    if (!container) return;
+    
+    container.innerHTML = '<p>Loading...</p>';
+    
+    try {
+        await requireAdmin();
+        const response = await database.listDocuments(
+            APPWRITE_DB_ID,
+            APPWRITE_COLLECTION_ID,
+            [
+                Query.equal('status', 'rejected'),
+                Query.orderDesc('submittedAt'),
+                Query.limit(50)
+            ]
+        );
+        
+        if (response.documents.length === 0) {
+            container.innerHTML = '<p>No rejected articles.</p>';
+            return;
+        }
+        
+        container.innerHTML = response.documents.map(article => `
+            <div class="article-card">
+                <div class="article-content">
+                    <h3>${article.title}</h3>
+                    <p><span style="color:red;font-weight:600;">✗ REJECTED</span></p>
+                </div>
+            </div>
+        `).join('');
+        
+    } catch (error) {
+        container.innerHTML = `<p style="color:red;">Error: ${error.message}</p>`;
+    }
+}
+
+// Approve Article
+async function approveArticle(id) {
+    try {
+        await requireAdmin();
+        await database.updateDocument(
+            APPWRITE_DB_ID,
+            APPWRITE_COLLECTION_ID,
+            id,
+            { status: 'approved' }
+        );
+        alert('Article approved!');
+        loadPendingArticles();
+        loadDashboard();
+    } catch (error) {
+        alert('Error: ' + error.message);
+    }
+}
+
+// Reject Article
+async function rejectArticle(id) {
+    if (!confirm('Reject this article?')) return;
+    try {
+        await requireAdmin();
+        await database.updateDocument(
+            APPWRITE_DB_ID,
+            APPWRITE_COLLECTION_ID,
+            id,
+            { status: 'rejected' }
+        );
+        alert('Article rejected!');
+        loadPendingArticles();
+        loadDashboard();
+    } catch (error) {
+        alert('Error: ' + error.message);
+    }
+}
+
+// Load Categories - placeholder
+async function loadCategories() {
+    const container = document.getElementById('categoriesList');
+    if (container) {
+        container.innerHTML = '<p>Categories: darjeeling, kalimpong, kurseong, mirik, siliguri, west-bengal, national, entertainment, sports</p>';
+    }
+}
+
+// Handle Article Update - placeholder
+async function handleArticleUpdate(e) { 
+    e.preventDefault(); 
+    console.log('Update article...'); 
+}
