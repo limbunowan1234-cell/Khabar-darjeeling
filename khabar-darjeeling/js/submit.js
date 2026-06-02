@@ -16,8 +16,7 @@ document.getElementById('newsForm').addEventListener('submit', async (e) => {
     const category = document.getElementById('category').value;
     const location = document.getElementById('location').value.trim();
     const content = document.getElementById('content').value.trim();
-    const source = document.getElementById('source').value.trim();
-    const authorName = document.getElementById('authorName').value.trim(); // Added back
+    const authorName = document.getElementById('authorName').value.trim();
     const imageFile = document.getElementById('image').files[0];
     
     let imageUrl = '';
@@ -44,8 +43,7 @@ document.getElementById('newsForm').addEventListener('submit', async (e) => {
                 category: category,
                 location: location,
                 content: content,
-                source: source,
-                authorName: authorName, // Added back - required by Appwrite
+                authorName: authorName,
                 image: imageUrl,
                 status: 'pending',
                 submittedAt: new Date().toISOString()
