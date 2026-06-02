@@ -1,4 +1,4 @@
-// js/submit.js - WORKING VERSION
+// js/submit.js - FINAL VERSION WITH IMAGE
 
 document.getElementById('newsForm').addEventListener('submit', async (e) => {
     e.preventDefault();
@@ -17,8 +17,21 @@ document.getElementById('newsForm').addEventListener('submit', async (e) => {
     const location = document.getElementById('location').value.trim();
     const content = document.getElementById('content').value.trim();
     const authorName = document.getElementById('authorName').value.trim();
+    const imageFile = document.getElementById('image').files[0];
+    
+    let imageUrl = '';
     
     try {
+        if (imageFile) {
+            submitBtn.textContent = 'Uploading image...';
+            const file = await storage.createFile(
+                APPWRITE_BUCKET_ID,
+                ID.unique(),
+                imageFile
+            );
+            imageUrl = storage.getFileView(APPWRITE_BUCKET_ID, file.$id);
+        }
+        
         submitBtn.textContent = 'Saving article...';
         
         await databases.createDocument(
@@ -32,7 +45,8 @@ document.getElementById('newsForm').addEventListener('submit', async (e) => {
                 location: location,
                 authorName: authorName,
                 status: 'pending',
-                submittedAt: new Date().toISOString()
+                submittedAt: new Date().toISOString(),
+                imageFileId: imageUrl // Correct key: imageFileId
             }
         );
         
@@ -48,6 +62,25 @@ document.getElementById('newsForm').addEventListener('submit', async (e) => {
     }
 });
 
-// Remove image preview code for now to avoid confusion
-document.getElementById('image').style.display = 'none';
-document.querySelector('label[for="image"]').style.display = 'none';
+// Image preview code
+document.getElementById('image').addEventListener('change', function(e) {
+    const file = e.target.files[0];
+    const imagePreview = document.getElementById('imagePreview');
+    const previewImg = document.getElementById('previewImg');
+    
+    if (file) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            previewImg.src = e.target.result;
+            imagePreview.style.display = 'block';
+        }
+        reader.readAsDataURL(file);
+    } else {
+        imagePreview.style.display = 'none';
+    }
+});
+
+function removeImage() {
+    document.getElementById('image').value = '';
+    document.getElementById('imagePreview').style.display = 'none';
+}
