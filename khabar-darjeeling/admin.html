@@ -6,6 +6,7 @@
     <meta name="robots" content="noindex, nofollow">
     <title>Admin Dashboard - Khabar Darjeeling</title>
     <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/admin.css">
     <link rel="stylesheet" href="css/responsive.css">
 </head>
 <body>
@@ -60,4 +61,68 @@
                         </div>
                         <div class="stat-card">
                             <h4>Pending Review</h4>
-                            <p id
+                            <p id="pendingCount">0</p>
+                        </div>
+                        <div class="stat-card">
+                            <h4>Published</h4>
+                            <p id="publishedCount">0</p>
+                        </div>
+                        <div class="stat-card">
+                            <h4>Rejected</h4>
+                            <p id="rejectedCount">0</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="pending" class="tab-content">
+                    <h3>Pending Articles</h3>
+                    <div id="pendingList" class="articles-list"></div>
+                </div>
+
+                <div id="published" class="tab-content">
+                    <h3>Published Articles</h3>
+                    <div id="publishedList" class="articles-list"></div>
+                </div>
+
+                <div id="rejected" class="tab-content">
+                    <h3>Rejected Articles</h3>
+                    <div id="rejectedList" class="articles-list"></div>
+                </div>
+
+                <div id="categories" class="tab-content">
+                    <h3>Categories</h3>
+                    <div id="categoriesList"></div>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <!-- Edit Modal -->
+    <div id="editModal" class="modal" style="display:none;">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h3>Edit Article</h3>
+            <form id="editForm">
+                <input type="hidden" id="editId">
+                <div class="form-group">
+                    <label>Title</label>
+                    <input type="text" id="editTitle" required>
+                </div>
+                <div class="form-group">
+                    <label>Content</label>
+                    <textarea id="editContent" rows="10" required></textarea>
+                </div>
+                <button type="submit" class="btn btn-primary">Update</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Appwrite SDK -->
+    <script src="https://cdn.jsdelivr.net/npm/appwrite@15.0.0"></script>
+    
+    <!-- Config and Appwrite initialization -->
+    <script src="js/config.js"></script>
+    <script src="js/appwrite.js"></script>
+    <script src="js/admin.js"></script>
+</body>
+</html>
