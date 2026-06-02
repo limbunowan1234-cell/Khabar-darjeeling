@@ -8,29 +8,23 @@ document.getElementById('newsForm').addEventListener('submit', async (e) => {
     const errorText = document.getElementById('errorText');
     const successMessage = document.getElementById('successMessage');
     
-    // Reset UI
     submitBtn.disabled = true;
     submitBtn.textContent = 'Submitting...';
     errorMessage.style.display = 'none';
     
-    // Get form values
+    // Get form values - ONLY use these if the attribute exists in Appwrite
     const title = document.getElementById('title').value.trim();
     const category = document.getElementById('category').value;
     const location = document.getElementById('location').value.trim();
     const content = document.getElementById('content').value.trim();
-    const authorName = document.getElementById('authorName').value.trim();
-    const authorEmail = document.getElementById('authorEmail').value.trim();
-    const authorPhone = document.getElementById('authorPhone').value.trim();
     const source = document.getElementById('source').value.trim();
     const imageFile = document.getElementById('image').files[0];
     
-    let imageUrl = ''; // Default empty if no image
+    let imageUrl = '';
     
     try {
-        // Only upload image if user selected one
         if (imageFile) {
             submitBtn.textContent = 'Uploading image...';
-            
             const file = await storage.createFile(
                 APPWRITE_BUCKET_ID,
                 ID.unique(),
@@ -41,7 +35,7 @@ document.getElementById('newsForm').addEventListener('submit', async (e) => {
         
         submitBtn.textContent = 'Saving article...';
         
-        // Create document - all required fields included
+        // ONLY include attributes that exist in your Appwrite collection
         await databases.createDocument(
             APPWRITE_DATABASE_ID,
             APPWRITE_COLLECTION_ID,
@@ -51,17 +45,13 @@ document.getElementById('newsForm').addEventListener('submit', async (e) => {
                 category: category,
                 location: location,
                 content: content,
-                authorName: authorName,
-                authorEmail: authorEmail,
-                authorPhone: authorPhone,
                 source: source,
-                image: imageUrl, // Empty string if no image
+                image: imageUrl,
                 status: 'pending',
-                submittedAt: new Date().toISOString() // Matches Appwrite attribute
+                submittedAt: new Date().toISOString()
             }
         );
         
-        // Show success
         document.getElementById('newsForm').style.display = 'none';
         successMessage.style.display = 'block';
         
@@ -74,7 +64,6 @@ document.getElementById('newsForm').addEventListener('submit', async (e) => {
     }
 });
 
-// Image preview function
 document.getElementById('image').addEventListener('change', function(e) {
     const file = e.target.files[0];
     const imagePreview = document.getElementById('imagePreview');
