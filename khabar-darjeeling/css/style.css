@@ -48,7 +48,7 @@ body {
     padding: 15px 0;
 }
 
-/* ✅ UPDATED: Flex support for clean alignment of your custom navbar logo */
+/* Flex support for clean alignment of your custom navbar logo */
 .logo {
     display: flex;
     align-items: center;
@@ -207,10 +207,10 @@ body {
 }
 
 /* ==================== HERO SECTION ==================== */
-/* ✅ UPDATED: Loaded your new landscape image with a dark linear-gradient tint */
+/* ✅ OPTIMIZED: Root absolute directory routing applied with higher image contrast opacity */
 .hero {
-    background: linear-gradient(rgba(0, 0, 0, 0.45), rgba(0, 0, 0, 0.55)), 
-                url('../assets/banner.jpg');
+    background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.6)), 
+                url('/assets/banner.jpg');
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
@@ -223,7 +223,7 @@ body {
     font-size: 42px;
     margin-bottom: 15px;
     font-weight: 700;
-    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.4); /* High contrast pop */
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.4);
 }
 
 .hero p {
@@ -633,54 +633,56 @@ body {
 }
 
 /* ==================== DARK THEME ==================== */
-body.dark-theme {
+/* ✅ FIXED: Synchronized targeting selectors to allow 'dark-mode' or 'dark-theme' body classes to trigger perfectly */
+body.dark-theme,
+body.dark-mode {
     background: #1a1a1a;
     color: #e0e0e0;
 }
 
-body.dark-theme .navbar,
-body.dark-theme .submit-container,
-body.dark-theme .featured-content,
-body.dark-theme .news-card,
-body.dark-theme .dropdown-menu,
-body.dark-theme .category-card {
+body.dark-theme .navbar, body.dark-mode .navbar,
+body.dark-theme .submit-container, body.dark-mode .submit-container,
+body.dark-theme .featured-content, body.dark-mode .featured-content,
+body.dark-theme .news-card, body.dark-mode .news-card,
+body.dark-theme .dropdown-menu, body.dark-mode .dropdown-menu,
+body.dark-theme .category-card, body.dark-mode .category-card {
     background: #2d2d2d;
 }
 
-body.dark-theme .featured-text h2,
-body.dark-theme .news-card-content h3 {
+body.dark-theme .featured-text h2, body.dark-mode .featured-text h2,
+body.dark-theme .news-card-content h3, body.dark-mode .news-card-content h3 {
     color: #e0e0e0;
 }
 
-body.dark-theme .featured-text p,
-body.dark-theme .news-card-content p {
+body.dark-theme .featured-text p, body.dark-mode .featured-text p,
+body.dark-theme .news-card-content p, body.dark-mode .news-card-content p {
     color: #bbb;
 }
 
-body.dark-theme .form-group input,
-body.dark-theme .form-group select,
-body.dark-theme .form-group textarea,
-body.dark-theme .search-input {
+body.dark-theme .form-group input, body.dark-mode .form-group input,
+body.dark-theme .form-group select, body.dark-mode .form-group select,
+body.dark-theme .form-group textarea, body.dark-mode .form-group textarea,
+body.dark-theme .search-input, body.dark-mode .search-input {
     background: #1a1a1a;
     border-color: #444;
     color: #e0e0e0;
 }
 
-body.dark-theme .upload-area {
+body.dark-theme .upload-area, body.dark-mode .upload-area {
     background: #1a1a1a;
     border-color: #444;
 }
 
-body.dark-theme .upload-area:hover {
+body.dark-theme .upload-area:hover, body.dark-mode .upload-area:hover {
     background: #2d2d2d;
 }
 
-body.dark-theme .section-title,
-body.dark-theme .logo h1 {
+body.dark-theme .section-title, body.dark-mode .section-title,
+body.dark-theme .logo h1, body.dark-mode .logo h1 {
     color: #e0e0e0;
 }
 
-body.dark-theme .nav-links a {
+body.dark-theme .nav-links a, body.dark-mode .nav-links a {
     color: #e0e0e0;
 }
 
