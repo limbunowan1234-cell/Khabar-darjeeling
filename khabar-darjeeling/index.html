@@ -135,10 +135,11 @@
 
     <!-- 3. Dynamic Native UI Logic & Dynamic Filtering -->
     <script>
-        const database = window.databases;
-        const Query = window.Query;
-        const APPWRITE_DB_ID = window.APPWRITE_DB_ID;
-        const APPWRITE_COLLECTION_ID = window.APPWRITE_COLLECTION_ID;
+        // FIX: Removed 'const' keywords to prevent "Identifier already declared" crash
+        database = window.databases;
+        Query = window.Query;
+        APPWRITE_DB_ID = window.APPWRITE_DB_ID;
+        APPWRITE_COLLECTION_ID = window.APPWRITE_COLLECTION_ID;
 
         async function loadHomepage() {
             try {
