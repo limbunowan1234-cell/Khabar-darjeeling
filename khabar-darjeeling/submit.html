@@ -56,7 +56,6 @@
     </style>
 </head>
 <body>
-    <!-- Navigation -->
     <nav class="navbar">
         <div class="container">
             <div class="navbar-content">
@@ -102,7 +101,6 @@
         </div>
     </nav>
 
-    <!-- Main Content -->
     <section class="submit-section">
         <div class="container">
             <div class="submit-container">
@@ -110,133 +108,16 @@
                 <p class="submit-subtitle">Share breaking news or stories from your area</p>
 
                 <form id="newsForm" class="news-form">
-                    <!-- Title -->
                     <div class="form-group">
                         <label for="title">News Title *</label>
                         <input type="text" id="title" name="title" required placeholder="Enter news headline" maxlength="200">
                         <small>Maximum 200 characters</small>
                     </div>
 
-                    <!-- Category -->
                     <div class="form-group">
                         <label for="category">Category *</label>
                         <select id="category" name="category" required>
                             <option value="">Select a category</option>
                             <option value="darjeeling">Darjeeling</option>
                             <option value="kalimpong">Kalimpong</option>
-                            <option value="kurseong">Kurseong</option>
-                            <option value="mirik">Mirik</option>
-                            <option value="siliguri">Siliguri</option>
-                            <option value="west-bengal">West Bengal</option>
-                            <option value="national">National</option>
-                            <option value="entertainment">Entertainment</option>
-                            <option value="sports">Sports</option>
-                        </select>
-                    </div>
-
-                    <!-- Location -->
-                    <div class="form-group">
-                        <label for="location">Location *</label>
-                        <input type="text" id="location" name="location" required placeholder="Where is this news from?">
-                    </div>
-
-                    <!-- Featured Image -->
-                    <div class="form-group">
-                        <label for="image">Featured Image <span style="color:#888; font-weight:normal;">(Optional)</span></label>
-                        <input type="file" id="image" name="image" accept="image/*" style="display: none;">
-                        <label for="image" class="upload-area">
-                            <div class="upload-info">
-                                <p>📷 Click to select an image</p>
-                                <small>Supported formats: JPG, PNG, WebP (Max 5MB)</small>
-                            </div>
-                        </label>
-                        <div id="imagePreview" class="image-preview" style="display:none;">
-                            <img id="previewImg" src="" alt="Preview">
-                            <button type="button" class="remove-btn" onclick="removeImage()">Remove Image</button>
-                        </div>
-                    </div>
-
-                    <!-- News Content -->
-                    <div class="form-group">
-                        <label for="content">News Content *</label>
-                        <textarea id="content" name="content" required placeholder="Write your news story here..." rows="10" minlength="50"></textarea>
-                        <small>Minimum 50 characters</small>
-                    </div>
-
-                    <!-- Author Info -->
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label for="authorName">Author Name *</label>
-                            <input type="text" id="authorName" name="authorName" required placeholder="Your name">
-                        </div>
-                        <div class="form-group">
-                            <label for="authorEmail">Author Email *</label>
-                            <input type="email" id="authorEmail" name="authorEmail" required placeholder="your@email.com">
-                        </div>
-                    </div>
-
-                    <!-- Phone -->
-                    <div class="form-group">
-                        <label for="authorPhone">Contact Phone *</label>
-                        <input type="tel" id="authorPhone" name="authorPhone" required placeholder="+91 XXXXX XXXXX">
-                    </div>
-
-                    <!-- Terms -->
-                    <div class="form-group checkbox">
-                        <input type="checkbox" id="terms" name="terms" required>
-                        <label for="terms">I agree that this news is accurate and I have permission to share it</label>
-                    </div>
-
-                    <!-- Buttons -->
-                    <div class="form-buttons">
-                        <button type="submit" class="btn btn-primary" id="submitBtn">Submit News</button>
-                        <button type="reset" class="btn btn-secondary">Clear Form</button>
-                    </div>
-                </form>
-
-                <!-- Success Message -->
-                <div id="successMessage" class="alert alert-success" style="display:none;">
-                    <h4>✓ News Submitted Successfully!</h4>
-                    <p>Your news has been submitted for review. Our team will verify and publish it soon.</p>
-                    <button onclick="location.href='index.html'" class="btn btn-primary">Back to Home</button>
-                </div>
-
-                <!-- Error Message -->
-                <div id="errorMessage" class="alert alert-error" style="display:none;">
-                    <h4>✗ Error Submitting News</h4>
-                    <p id="errorText"></p>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Footer -->
-    <footer class="footer">
-        <div class="container">
-            <div class="footer-bottom">
-                <p>&copy; 2024 Khabar Darjeeling. All rights reserved.</p>
-            </div>
-        </div>
-    </footer>
-
-    <!-- Scripts -->
-    <script src="https://cdn.jsdelivr.net/npm/appwrite@14.0.1/dist/iife/sdk.min.js"></script>
-    <script src="js/appwrite.js?v=999"></script>
-    <script src="js/submit.js?v=999"></script>
-    <script>
-        // Mobile nav toggle
-        document.getElementById('navToggle')?.addEventListener('click', function() {
-            document.getElementById('navMenu').classList.toggle('active');
-        });
-
-        // Theme toggle
-        document.getElementById('themeToggle')?.addEventListener('click', function() {
-            document.body.classList.toggle('dark-theme');
-            this.textContent = document.body.classList.contains('dark-theme') ? '☀️' : '🌙';
-        });
-
-        // Debug: Check bucket ID on page load
-        console.log('Appwrite Bucket ID:', window.APPWRITE_BUCKET_ID);
-    </script>
-</body>
-</html>
+                            <option value="kurseong
