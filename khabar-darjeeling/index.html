@@ -10,9 +10,9 @@
     <meta http-equiv="Expires" content="0">
     
     <title>खबर दार्जिलिंग - Your Trusted News Source</title>
-    <!-- ✅ FORCED CACHE RELOAD: Version bumped to ?v=106 to completely bypass browser caching memory -->
-    <link rel="stylesheet" href="css/style.css?v=106">
-    <link rel="stylesheet" href="css/responsive.css?v=106">
+    <!-- ✅ FORCED CACHE RELOAD: Version bumped to ?v=108 to completely bypass browser caching memory -->
+    <link rel="stylesheet" href="css/style.css?v=108">
+    <link rel="stylesheet" href="css/responsive.css?v=108">
     
     <!-- 🔒 PRE-LOAD OVERLAY STYLE: Prevents unauthorized content flashing before redirect occurs -->
     <style>
@@ -86,6 +86,8 @@
                     <input type="text" id="searchInput" placeholder="Search news..." class="search-input">
                     <button class="theme-toggle" id="themeToggle">🌙</button>
                     <a href="admin.html" class="admin-link">Admin</a>
+                    <!-- 🔓 SECURE LOGOUT SHORTCUT -->
+                    <button id="logoutBtn" style="background: none; border: none; color: #c41e3a; font-weight: 600; font-size: 14px; cursor: pointer; margin-left: 15px; padding: 5px 10px; font-family: inherit;">Logout</button>
                 </div>
             </div>
         </div>
@@ -208,7 +210,7 @@
 
                 } catch (error) {
                     console.warn("⛔ No active session. Redirecting to access gate...");
-                    // Bounced! Force user to go log in with their 6-digit OTP
+                    // Bounced! Force user to go log in with their credentials
                     window.location.href = 'login.html';
                 }
             }
@@ -394,6 +396,27 @@
                 if (localStorage.getItem('theme') === 'dark') {
                     themeToggle.textContent = '☀️';
                 }
+            }
+
+            // 🔓 SECURE LOGOUT ENGINE
+            const logoutBtn = document.getElementById('logoutBtn');
+            if (logoutBtn) {
+                logoutBtn.addEventListener('click', async () => {
+                    const confirmLogout = confirm("Are you sure you want to sign out of Khabar Darjeeling?");
+                    if (!confirmLogout) return;
+
+                    try {
+                        // Destroy current session tracking cookies within Appwrite
+                        await window.account.deleteSession('current');
+                        console.log("🔒 Session destroyed successfully.");
+                        
+                        // Drop user straight back to the login screen panel layout
+                        window.location.href = 'login.html';
+                    } catch (error) {
+                        console.error("❌ Logout processing failed:", error);
+                        alert("Failed to sign out safely. Please refresh and try again.");
+                    }
+                });
             }
 
             // Safe init execution using our wait loop
