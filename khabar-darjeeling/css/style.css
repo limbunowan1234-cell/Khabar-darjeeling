@@ -48,6 +48,12 @@ body {
     padding: 15px 0;
 }
 
+/* ✅ UPDATED: Flex support for clean alignment of your custom navbar logo */
+.logo {
+    display: flex;
+    align-items: center;
+}
+
 .logo h1 {
     font-size: 28px;
     color: var(--primary-color);
@@ -58,7 +64,7 @@ body {
 .logo .tagline {
     font-size: 12px;
     color: var(--text-light);
-    margin-top: -5px;
+    margin-top: 2px;
 }
 
 .nav-toggle {
@@ -201,10 +207,15 @@ body {
 }
 
 /* ==================== HERO SECTION ==================== */
+/* ✅ UPDATED: Loaded your new landscape image with a dark linear-gradient tint */
 .hero {
-    background: linear-gradient(135deg, var(--primary-color), var(--primary-dark));
+    background: linear-gradient(rgba(0, 0, 0, 0.45), rgba(0, 0, 0, 0.55)), 
+                url('../assets/banner.jpg');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
     color: white;
-    padding: 80px 0;
+    padding: 95px 0;
     text-align: center;
 }
 
@@ -212,12 +223,14 @@ body {
     font-size: 42px;
     margin-bottom: 15px;
     font-weight: 700;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.4); /* High contrast pop */
 }
 
 .hero p {
     font-size: 18px;
     margin-bottom: 30px;
     opacity: 0.95;
+    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.4);
 }
 
 .hero-buttons {
@@ -264,7 +277,7 @@ body {
 .featured-content img {
     width: 55%;
     max-height: 450px;
-    object-fit: cover; /* Stops the image from stretching */
+    object-fit: cover;
     background-color: #f4f4f4;
 }
 
@@ -314,7 +327,7 @@ body {
 
 .news-card img {
     width: 100%;
-    height: 220px; /* Forces all grid images to be the exact same height */
+    height: 220px;
     object-fit: cover; 
     border-bottom: 1px solid var(--border-color);
     background-color: #f4f4f4;
@@ -324,7 +337,7 @@ body {
     padding: 20px;
     display: flex;
     flex-direction: column;
-    flex-grow: 1; /* Pushes the date to the bottom automatically */
+    flex-grow: 1;
 }
 
 .news-card-content h3 {
@@ -625,11 +638,11 @@ body.dark-theme {
     color: #e0e0e0;
 }
 
-/* Updated dark theme targets for the new cards */
 body.dark-theme .navbar,
 body.dark-theme .submit-container,
 body.dark-theme .featured-content,
 body.dark-theme .news-card,
+body.dark-theme .dropdown-menu,
 body.dark-theme .category-card {
     background: #2d2d2d;
 }
@@ -669,10 +682,6 @@ body.dark-theme .logo h1 {
 
 body.dark-theme .nav-links a {
     color: #e0e0e0;
-}
-
-body.dark-theme .dropdown-menu {
-    background: #2d2d2d;
 }
 
 /* ==================== MOBILE RESPONSIVE FIXES ==================== */
