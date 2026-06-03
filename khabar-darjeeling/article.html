@@ -4,9 +4,15 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="Read full news stories on Khabar Darjeeling">
+    
+    <!-- Cache busters added to match index.html -->
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+    
     <title>Loading Article... - खबर दार्जिलिंग</title>
-    <link rel="stylesheet" href="css/style.css?v=1001">
-    <link rel="stylesheet" href="css/responsive.css?v=1001">
+    <link rel="stylesheet" href="css/style.css?v=2">
+    <link rel="stylesheet" href="css/responsive.css?v=2">
     <style>
         /* Specific Styles for Single Article Page */
         .article-container {
@@ -118,7 +124,8 @@
             <div class="article-body" id="artBody">
                 <!-- Main article paragraphs go here -->
             </div>
-        </main>
+        </article>
+    </main>
 
     <!-- Footer -->
     <footer class="footer">
@@ -137,89 +144,98 @@
     <!-- 2. Configuration Mappings -->
     <script src="js/appwrite.js"></script>
 
-    <!-- 3. Dynamic Article Loader Logic -->
+    <!-- 3. Dynamic Article Loader Logic - SAFELY SCOPED -->
     <script>
-        const database = window.databases;
-        const APPWRITE_DB_ID = window.APPWRITE_DB_ID;
-        const APPWRITE_COLLECTION_ID = window.APPWRITE_COLLECTION_ID;
+        (() => {
+            // ✅ Safely reference variables without redefining them globally
+            const appwriteDatabase = window.databases;
+            const dbId = window.APPWRITE_DB_ID;
+            const collectionId = window.APPWRITE_COLLECTION_ID;
 
-        async function fetchFullArticle() {
-            try {
-                if (!database) {
-                    throw new Error("Appwrite instance missing.");
+            async function fetchFullArticle() {
+                try {
+                    if (!appwriteDatabase) {
+                        throw new Error("Appwrite instance missing.");
+                    }
+
+                    // 1. Get the Unique Document ID from URL parameters (?id=XXXX)
+                    const urlParams = new URLSearchParams(window.location.search);
+                    const articleId = urlParams.get('id');
+
+                    if (!articleId) {
+                        showErrorPage("Invalid Article URL. No article ID provided.");
+                        return;
+                    }
+
+                    // 2. Fetch the specific document directly from Appwrite
+                    const article = await appwriteDatabase.getDocument(
+                        dbId,
+                        collectionId,
+                        articleId
+                    );
+
+                    // 3. Populate elements with database contents
+                    document.getElementById('artTitle').textContent = article.title;
+                    document.title = `${article.title} - खबर दार्जिलिंग`; // Sets tab title dynamically
+                    
+                    document.getElementById('artCategory').textContent = article.category ? article.category.toUpperCase() : 'GENERAL';
+                    document.getElementById('artAuthor').textContent = `By: ${article.authorName || 'Staff Reporter'}`;
+                    document.getElementById('artLocation').textContent = article.location ? `📍 ${article.location}` : '';
+                    document.getElementById('artDate').textContent = `📅 ${new Date(article.$createdAt).toLocaleDateString(undefined, {dateStyle: 'medium'})}`;
+                    
+                    // Content Rendering safely preserving paragraphs
+                    document.getElementById('artBody').textContent = article.content;
+
+                    // Handle Image Fallbacks gracefully
+                    const artImgElement = document.getElementById('artImage');
+                    if (article.imageUrl) {
+                        artImgElement.src = article.imageUrl;
+                        artImgElement.alt = article.title;
+                    } else {
+                        artImgElement.style.display = 'none'; // Hides space if no image exists
+                    }
+
+                    // Toggle visibility states
+                    document.getElementById('loadingArticle').style.display = 'none';
+                    document.getElementById('articleContent').style.display = 'block';
+
+                } catch (error) {
+                    console.error("Error retrieving article details:", error);
+                    showErrorPage("The article you are trying to view could not be found or has been removed.");
                 }
-
-                // 1. Get the Unique Document ID from URL parameters (?id=XXXX)
-                const urlParams = new URLSearchParams(window.location.search);
-                const articleId = urlParams.get('id');
-
-                if (!articleId) {
-                    showErrorPage("Invalid Article URL. No article ID provided.");
-                    return;
-                }
-
-                // 2. Fetch the specific document directly from Appwrite
-                const article = await database.getDocument(
-                    APPWRITE_DB_ID,
-                    APPWRITE_COLLECTION_ID,
-                    articleId
-                );
-
-                // 3. Populate elements with database contents
-                document.getElementById('artTitle').textContent = article.title;
-                document.title = `${article.title} - खबर दार्जिलिंग`; // Sets tab title dynamically
-                
-                document.getElementById('artCategory').textContent = article.category ? article.category.toUpperCase() : 'GENERAL';
-                document.getElementById('artAuthor').textContent = `By: ${article.authorName || 'Staff Reporter'}`;
-                document.getElementById('artLocation').textContent = article.location ? `📍 ${article.location}` : '';
-                document.getElementById('artDate').textContent = `📅 ${new Date(article.$createdAt).toLocaleDateString(undefined, {dateStyle: 'medium'})}`;
-                
-                // Content Rendering safely preserving paragraphs
-                document.getElementById('artBody').textContent = article.content;
-
-                // Handle Image Fallbacks gracefully
-                const artImgElement = document.getElementById('artImage');
-                if (article.imageUrl) {
-                    artImgElement.src = article.imageUrl;
-                    artImgElement.alt = article.title;
-                } else {
-                    artImgElement.style.display = 'none'; // Hides space if no image exists
-                }
-
-                // Toggle visibility states
-                document.getElementById('loadingArticle').style.display = 'none';
-                document.getElementById('articleContent').style.display = 'block';
-
-            } catch (error) {
-                console.error("Error retrieving article details:", error);
-                showErrorPage("The article you are trying to view could not be found or has been removed.");
             }
-        }
 
-        function showErrorPage(message) {
-            document.getElementById('loadingArticle').style.display = 'none';
-            document.getElementById('articleContent').innerHTML = `
-                <div class="error-box">
-                    <h2>Oops! Story Not Found</h2>
-                    <p style="margin: 15px 0; color:#666;">${message}</p>
-                    <a href="index.html" class="btn btn-primary" style="text-decoration:none; display:inline-block; padding:10px 20px; background:#c41e3a; color:#white; border-radius:4px;">Back to Home</a>
-                </div>
-            `;
-            document.getElementById('articleContent').style.display = 'block';
-        }
+            function showErrorPage(message) {
+                document.getElementById('loadingArticle').style.display = 'none';
+                document.getElementById('articleContent').innerHTML = `
+                    <div class="error-box">
+                        <h2>Oops! Story Not Found</h2>
+                        <p style="margin: 15px 0; color:#666;">${message}</p>
+                        <a href="index.html" class="btn btn-primary" style="text-decoration:none; display:inline-block; padding:10px 20px; background:#c41e3a; color:white; border-radius:4px;">Back to Home</a>
+                    </div>
+                `;
+                document.getElementById('articleContent').style.display = 'block';
+            }
 
-        // UI toggles
-        document.getElementById('navToggle').addEventListener('click', () => {
-            document.getElementById('navMenu').classList.toggle('active');
-        });
+            // UI toggles
+            const navToggle = document.getElementById('navToggle');
+            if (navToggle) {
+                navToggle.addEventListener('click', () => {
+                    document.getElementById('navMenu').classList.toggle('active');
+                });
+            }
 
-        document.getElementById('themeToggle').addEventListener('click', () => {
-            document.body.classList.toggle('dark-mode');
-            document.getElementById('themeToggle').textContent = 
-                document.body.classList.contains('dark-mode') ? '☀️' : '🌙';
-        });
+            const themeToggle = document.getElementById('themeToggle');
+            if (themeToggle) {
+                themeToggle.addEventListener('click', () => {
+                    document.body.classList.toggle('dark-mode');
+                    themeToggle.textContent = 
+                        document.body.classList.contains('dark-mode') ? '☀️' : '🌙';
+                });
+            }
 
-        document.addEventListener('DOMContentLoaded', fetchFullArticle);
+            document.addEventListener('DOMContentLoaded', fetchFullArticle);
+        })();
     </script>
 </body>
 </html>
