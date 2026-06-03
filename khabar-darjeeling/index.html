@@ -10,9 +10,9 @@
     <meta http-equiv="Expires" content="0">
     
     <title>खबर दार्जिलिंग - Your Trusted News Source</title>
-    <!-- Cache buster ?v=3 -->
-    <link rel="stylesheet" href="css/style.css?v=3">
-    <link rel="stylesheet" href="css/responsive.css?v=3">
+    <!-- Cache buster ?v=4 -->
+    <link rel="stylesheet" href="css/style.css?v=4">
+    <link rel="stylesheet" href="css/responsive.css?v=4">
 </head>
 <body>
     <nav class="navbar">
@@ -131,25 +131,17 @@
 
     <script>
         (() => {
-            // Safe references to global Appwrite instances
             const appwriteDatabase = window.databases;
             const QueryAPI = window.Query;
             const dbId = window.APPWRITE_DB_ID;
             const collectionId = window.APPWRITE_COLLECTION_ID;
 
-            // Validate initialization
             if (!appwriteDatabase || !QueryAPI || !dbId || !collectionId) {
-                console.error('❌ Appwrite not initialized. Check js/appwrite.js is loaded correctly.');
-                document.getElementById('newsGrid').innerHTML = 
-                    '<p style="color: red; padding: 20px;">Configuration Error: Appwrite SDK not initialized.</p>';
+                console.error('❌ Appwrite not initialized.');
+                document.getElementById('newsGrid').innerHTML = '<p style="color: red; padding: 20px;">Configuration Error: Appwrite SDK not initialized.</p>';
                 return;
             }
 
-            console.log('✅ Appwrite initialized successfully');
-
-            /**
-             * Load articles based on URL parameters
-             */
             async function loadHomepage() {
                 try {
                     const urlParams = new URLSearchParams(window.location.search);
@@ -158,14 +150,12 @@
                     const queries = [
                         QueryAPI.equal('status', 'published'),
                         QueryAPI.orderDesc('$createdAt'),
-                        QueryAPI.limit(20)
+                        QueryAPI.limit(10) // ✅ FIX: Now strictly limited to 10 news items per page
                     ];
 
                     if (currentCategory) {
                         queries.push(QueryAPI.equal('category', currentCategory));
                     }
-
-                    console.log(`Loading articles for ${currentCategory ? 'category: ' + currentCategory : 'homepage'}`);
 
                     const response = await appwriteDatabase.listDocuments(dbId, collectionId, queries);
 
@@ -180,8 +170,6 @@
                         renderHomepageView(response.documents);
                     }
 
-                    console.log(`✅ Loaded ${response.documents.length} articles`);
-
                 } catch (error) {
                     console.error('❌ Error loading articles:', error);
                     handleError();
@@ -189,11 +177,7 @@
             }
 
             function renderCategoryView(articles, category) {
-                const categoryFormatted = category
-                    .split('-')
-                    .map(word => word.charAt(0).toUpperCase() + word.slice(1))
-                    .join(' ');
-                
+                const categoryFormatted = category.split('-').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
                 document.getElementById('mainSectionTitle').textContent = categoryFormatted + ' Updates';
                 document.title = `${categoryFormatted} News - खबर दार्जिलिंग`;
 
@@ -217,8 +201,7 @@
                     const el = document.getElementById(id);
                     if (el) el.style.display = 'none';
                 });
-                const homeLink = document.getElementById('homeLink');
-                if (homeLink) homeLink.classList.remove('active');
+                document.getElementById('homeLink')?.classList.remove('active');
             }
 
             function showHomepageSections() {
@@ -232,25 +215,17 @@
             function renderBreakingTicker(article) {
                 const tickerEl = document.getElementById('breakingTicker');
                 if (!tickerEl) return;
-
-                tickerEl.innerHTML = `
-                    <a href="article.html?id=${article.$id}" 
-                       style="color: inherit; text-decoration: none; display: block; padding: 10px 0;">
-                        ${escapeHtml(article.title)}
-                    </a>
-                `;
+                tickerEl.innerHTML = `<a href="article.html?id=${article.$id}" style="color: inherit; text-decoration: none; display: block; padding: 10px 0;">${escapeHtml(article.title)}</a>`;
             }
 
             function renderFeaturedStory(article) {
                 const featuredEl = document.getElementById('featuredStory');
                 if (!featuredEl) return;
 
-                const imageHtml = article.imageUrl 
-                    ? `<img src="${article.imageUrl}" alt="${escapeHtml(article.title)}" loading="lazy">` 
-                    : '';
+                const imageHtml = article.imageUrl ? `<img src="${article.imageUrl}" alt="${escapeHtml(article.title)}" loading="lazy">` : '';
                 
-                // ✅ SHIELD APPLIED: Content is now forced to be safe text
-                const content = article.content ? escapeHtml(article.content) : '';
+                // ✅ FIX: Extract plain text and truncate to approx 5 lines (250 chars for featured)
+                const content = article.content ? truncateText(article.content, 250) : '';
                 const textStyle = article.imageUrl ? '' : 'width: 100%;';
 
                 featuredEl.innerHTML = `
@@ -260,7 +235,10 @@
                             <span class="category-badge">${escapeHtml(article.category || 'General')}</span>
                             <h2>${escapeHtml(article.title)}</h2>
                             <p>${content}</p>
-                            <span class="date">${formatDate(article.$createdAt)}</span>
+                            <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 15px;">
+                                <span class="date">${formatDate(article.$createdAt)}</span>
+                                <span style="color: #c41e3a; font-weight: 600;">Read full story &rarr;</span>
+                            </div>
                         </div>
                     </a>
                 `;
@@ -270,44 +248,36 @@
                 const gridEl = document.getElementById(elementId);
                 if (!gridEl) return;
 
-                gridEl.innerHTML = articles
-                    .map(article => {
-                        const imageHtml = article.imageUrl 
-                            ? `<img src="${article.imageUrl}" alt="${escapeHtml(article.title)}" loading="lazy">` 
-                            : '';
-                        
-                        // ✅ SHIELD APPLIED: Content is now forced to be safe text
-                        const content = article.content ? escapeHtml(article.content) : '';
+                gridEl.innerHTML = articles.map(article => {
+                    const imageHtml = article.imageUrl ? `<img src="${article.imageUrl}" alt="${escapeHtml(article.title)}" loading="lazy">` : '';
+                    
+                    // ✅ FIX: Extract plain text and truncate to approx 5 lines (150 chars for grid)
+                    const content = article.content ? truncateText(article.content, 150) : '';
 
-                        return `
-                            <a href="article.html?id=${article.$id}" class="news-card" style="text-decoration: none; color: inherit; display: block;">
-                                ${imageHtml}
-                                <div class="news-card-content">
-                                    <span class="category-badge">${escapeHtml(article.category || 'General')}</span>
-                                    <h3>${escapeHtml(article.title)}</h3>
-                                    <p>${content}</p>
+                    return `
+                        <a href="article.html?id=${article.$id}" class="news-card" style="text-decoration: none; color: inherit; display: flex; flex-direction: column;">
+                            ${imageHtml}
+                            <div class="news-card-content" style="display: flex; flex-direction: column; flex-grow: 1;">
+                                <span class="category-badge">${escapeHtml(article.category || 'General')}</span>
+                                <h3>${escapeHtml(article.title)}</h3>
+                                <p style="flex-grow: 1;">${content}</p>
+                                <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 15px;">
                                     <span class="date">${formatDate(article.$createdAt)}</span>
+                                    <span style="color: #c41e3a; font-weight: 600; font-size: 0.9rem;">Read more &rarr;</span>
                                 </div>
-                            </a>
-                        `;
-                    })
-                    .join('');
+                            </div>
+                        </a>
+                    `;
+                }).join('');
             }
 
             function handleEmptyState(category) {
-                const message = category 
-                    ? 'No articles published in this category yet.'
-                    : 'No articles published yet.';
-                
-                if (category) {
-                    hideHomepageSections();
-                }
-
+                const message = category ? 'No articles published in this category yet.' : 'No articles published yet.';
+                if (category) hideHomepageSections();
                 if (!category) {
                     document.getElementById('featuredStory').innerHTML = '<p>No articles published yet.</p>';
                     document.getElementById('breakingTicker').innerHTML = 'No breaking news at the moment.';
                 }
-                
                 document.getElementById('newsGrid').innerHTML = `<p>${message}</p>`;
             }
 
@@ -315,24 +285,23 @@
                 const errorHtml = '<p style="color: #d32f2f; padding: 20px;">Failed to load articles. Please try refreshing.</p>';
                 const newsGridEl = document.getElementById('newsGrid');
                 if (newsGridEl) newsGridEl.innerHTML = errorHtml;
-                
-                const featuredEl = document.getElementById('featuredStory');
-                if (featuredEl) featuredEl.innerHTML = errorHtml;
-                
-                const tickerEl = document.getElementById('breakingTicker');
-                if (tickerEl) tickerEl.innerHTML = 'Failed to load breaking news.';
+            }
+
+            // ✅ NEW UTILITY: Strips HTML and limits character length beautifully
+            function truncateText(htmlStr, maxLength) {
+                const div = document.createElement('div');
+                div.innerHTML = htmlStr;
+                let text = div.textContent || div.innerText || '';
+                if (text.length > maxLength) {
+                    return text.substring(0, maxLength) + '...';
+                }
+                return text;
             }
 
             function formatDate(dateString) {
                 try {
-                    return new Date(dateString).toLocaleDateString('en-US', {
-                        year: 'numeric',
-                        month: 'short',
-                        day: 'numeric'
-                    });
-                } catch {
-                    return 'Date unknown';
-                }
+                    return new Date(dateString).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' });
+                } catch { return 'Date unknown'; }
             }
 
             function escapeHtml(text) {
@@ -344,9 +313,7 @@
             const navToggle = document.getElementById('navToggle');
             const navMenu = document.getElementById('navMenu');
             if (navToggle) {
-                navToggle.addEventListener('click', () => {
-                    navMenu.classList.toggle('active');
-                });
+                navToggle.addEventListener('click', () => { navMenu.classList.toggle('active'); });
             }
 
             const themeToggle = document.getElementById('themeToggle');
@@ -357,9 +324,7 @@
                     themeToggle.textContent = isDarkMode ? '☀️' : '🌙';
                     localStorage.setItem('theme', isDarkMode ? 'dark' : 'light');
                 });
-
-                const savedTheme = localStorage.getItem('theme');
-                if (savedTheme === 'dark') {
+                if (localStorage.getItem('theme') === 'dark') {
                     document.body.classList.add('dark-mode');
                     themeToggle.textContent = '☀️';
                 }
