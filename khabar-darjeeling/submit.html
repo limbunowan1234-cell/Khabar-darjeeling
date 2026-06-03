@@ -13,17 +13,71 @@
     <link rel="stylesheet" href="css/style.css?v=1000">
     <link rel="stylesheet" href="css/responsive.css?v=1000">
     <style>
-        .upload-area { display: block; border: 2px dashed #ccc; border-radius: 8px; padding: 30px; text-align: center; cursor: pointer; background: #fafafa; transition: all 0.3s; }
-        .upload-area:hover { border-color: #c41e3a; background: #fff5f5; }
-        .upload-info p { margin: 0 0 5px 0; font-size: 16px; }
-        .upload-info small { color: #666; }
-        .image-preview { margin-top: 15px; }
-        .image-preview img { max-width: 300px; max-height: 200px; border-radius: 8px; border: 1px solid #ddd; display: block; margin-bottom: 10px; }
-        .remove-btn { padding: 6px 12px; background: #dc3545; color: white; border: none; border-radius: 4px; cursor: pointer; }
-        .remove-btn:hover { background: #c82333; }
-        .user-lock-banner { display: flex; align-items: center; gap: 12px; background: #f0f2f5; padding: 14px; border-radius: 6px; border-left: 4px solid #1877f2; margin-bottom: 20px; }
-        body.dark-theme .user-lock-banner { background: #242526; border-left-color: #c41e3a; }
-        .user-lock-avatar { width: 40px; height: 40px; background: #c41e3a; color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 16px; }
+        /* Image Upload Styles */
+        .upload-area {
+            display: block;
+            border: 2px dashed #ccc;
+            border-radius: 8px;
+            padding: 30px;
+            text-align: center;
+            cursor: pointer;
+            background: #fafafa;
+            transition: all 0.3s;
+        }
+        .upload-area:hover {
+            border-color: #c41e3a;
+            background: #fff5f5;
+        }
+        .upload-info p {
+            margin: 0 0 5px 0;
+            font-size: 16px;
+        }
+        .upload-info small {
+            color: #666;
+        }
+        .image-preview {
+            margin-top: 15px;
+        }
+        .image-preview img {
+            max-width: 300px;
+            max-height: 200px;
+            border-radius: 8px;
+            border: 1px solid #ddd;
+            display: block;
+            margin-bottom: 10px;
+        }
+        .remove-btn {
+            padding: 6px 12px;
+            background: #dc3545;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        .remove-btn:hover {
+            background: #c82333;
+        }
+        
+        /* Branded Profile Box Style */
+        .user-lock-banner {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            background: #f0f2f5;
+            padding: 14px;
+            border-radius: 6px;
+            border-left: 4px solid #1877f2;
+            margin-bottom: 20px;
+        }
+        body.dark-theme .user-lock-banner {
+            background: #242526;
+            border-left-color: #c41e3a;
+        }
+        .user-lock-avatar {
+            width: 40px; height: 40px; background: #c41e3a; color: white;
+            border-radius: 50%; display: flex; align-items: center;
+            justify-content: center; font-weight: 700; font-size: 16px;
+        }
     </style>
 </head>
 <body>
@@ -34,13 +88,36 @@
                     <h1>खबर दार्जिलिंग</h1>
                     <p class="tagline">Your Trusted News Source</p>
                 </div>
-                <div class="nav-toggle" id="navToggle"><span></span><span></span><span></span></div>
+                
+                <div class="nav-toggle" id="navToggle">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
+
                 <div class="nav-menu" id="navMenu">
                     <ul class="nav-links">
                         <li><a href="index.html">Home</a></li>
+                        <li><a href="index.html#breaking">Breaking</a></li>
+                        <li><a href="index.html#latest">Latest</a></li>
+                        <li class="dropdown">
+                            <a href="#">Categories</a>
+                            <ul class="dropdown-menu">
+                                <li><a href="index.html?category=darjeeling">Darjeeling</a></li>
+                                <li><a href="index.html?category=kalimpong">Kalimpong</a></li>
+                                <li><a href="index.html?category=kurseong">Kurseong</a></li>
+                                <li><a href="index.html?category=mirik">Mirik</a></li>
+                                <li><a href="index.html?category=siliguri">Siliguri</a></li>
+                                <li><a href="index.html?category=west-bengal">West Bengal</a></li>
+                                <li><a href="index.html?category=national">National</a></li>
+                                <li><a href="index.html?category=entertainment">Entertainment</a></li>
+                                <li><a href="index.html?category=sports">Sports</a></li>
+                            </ul>
+                        </li>
                         <li><a href="submit.html" class="active">Submit News</a></li>
                     </ul>
                 </div>
+
                 <div class="nav-right">
                     <button class="theme-toggle" id="themeToggle">🌙</button>
                     <a href="admin.html" class="admin-link">Admin</a>
@@ -53,6 +130,9 @@
         <div class="container">
             <div class="submit-container">
                 <h2>Submit News</h2>
+                <p class="submit-subtitle">Share breaking news or stories from your area</p>
+
+                <!-- 👤 LOCKED AUTHOR CREDENTIAL BANNER -->
                 <div class="user-lock-banner">
                     <div class="user-lock-avatar" id="authorAvatar">...</div>
                     <div>
@@ -64,44 +144,84 @@
                 <form id="newsForm" class="news-form">
                     <div class="form-group">
                         <label for="title">News Title *</label>
-                        <input type="text" id="title" required placeholder="Enter news headline" maxlength="200">
+                        <input type="text" id="title" name="title" required placeholder="Enter news headline" maxlength="200">
+                        <small>Maximum 200 characters</small>
                     </div>
+
                     <div class="form-group">
                         <label for="category">Category *</label>
-                        <select id="category" required>
+                        <select id="category" name="category" required>
                             <option value="">Select a category</option>
                             <option value="darjeeling">Darjeeling</option>
                             <option value="kalimpong">Kalimpong</option>
                             <option value="kurseong">Kurseong</option>
+                            <option value="mirik">Mirik</option>
+                            <option value="siliguri">Siliguri</option>
                             <option value="west-bengal">West Bengal</option>
+                            <option value="national">National</option>
+                            <option value="entertainment">Entertainment</option>
+                            <option value="sports">Sports</option>
                         </select>
                     </div>
+
                     <div class="form-group">
                         <label for="location">Location *</label>
-                        <input type="text" id="location" required placeholder="Where is this news from?">
+                        <input type="text" id="location" name="location" required placeholder="Where is this news from?">
                     </div>
+
+                    <div class="form-group">
+                        <label for="imageInput">Featured Image <span style="color:#888; font-weight:normal;">(Optional)</span></label>
+                        <input type="file" id="imageInput" name="image" accept="image/*" style="display: none;">
+                        <label for="imageInput" class="upload-area">
+                            <div class="upload-info">
+                                <p>📷 Click to select an image</p>
+                                <small>Supported formats: JPG, PNG, WebP (Max 5MB)</small>
+                            </div>
+                        </label>
+                        <div id="imagePreview" class="image-preview" style="display:none;">
+                            <img id="previewImg" src="" alt="Preview">
+                            <button type="button" class="remove-btn" id="removeImageBtn">Remove Image</button>
+                        </div>
+                    </div>
+
                     <div class="form-group">
                         <label for="content">News Content *</label>
-                        <textarea id="content" required placeholder="Write your news story here..." rows="10" minlength="50"></textarea>
+                        <textarea id="content" name="content" required placeholder="Write your news story here..." rows="10" minlength="50"></textarea>
+                        <small>Minimum 50 characters</small>
                     </div>
+
                     <div class="form-group checkbox">
-                        <input type="checkbox" id="terms" required>
-                        <label for="terms">I agree that this news is accurate</label>
+                        <input type="checkbox" id="terms" name="terms" required>
+                        <label for="terms">I agree that this news is accurate and I have permission to share it</label>
                     </div>
+
                     <div class="form-buttons">
                         <button type="submit" class="btn btn-primary" id="submitBtn">Submit News</button>
+                        <button type="reset" class="btn btn-secondary">Clear Form</button>
                     </div>
                 </form>
 
                 <div id="successMessage" class="alert alert-success" style="display:none;">
                     <h4>✓ News Submitted Successfully!</h4>
-                    <p>Your news is being reviewed. Check your Discord for the alert!</p>
+                    <p>Your news has been submitted for review. Our team will verify and publish it soon.</p>
                     <button onclick="location.href='index.html'" class="btn btn-primary">Back to Home</button>
                 </div>
-                <div id="errorMessage" class="alert alert-error" style="display:none;"><p id="errorText"></p></div>
+
+                <div id="errorMessage" class="alert alert-error" style="display:none;">
+                    <h4>✗ Error Submitting News</h4>
+                    <p id="errorText"></p>
+                </div>
             </div>
         </div>
     </section>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-bottom">
+                <p>&copy; 2026 Khabar Darjeeling. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
 
     <script src="https://cdn.jsdelivr.net/npm/appwrite@14.0.1/dist/iife/sdk.min.js"></script>
     <script src="js/appwrite.js?v=1000"></script>
@@ -110,6 +230,7 @@
         let verifiedUserSession = null;
         const discordWebhookUrl = "https://discord.com/api/webhooks/1511823519166759023/gaOpmYw3IqkOMdLg3uIwrNASCSFYQrDSJQ-ZFcVQLl6A6fseFFKrmNo350qHkiZeGx7W";
 
+        // 🔒 AUTH GATEKEEPER CHECK ON LOAD
         function verifyUserSessionState(retries = 0) {
             if (window.account) {
                 window.account.get()
@@ -118,74 +239,139 @@
                         document.getElementById('authorDisplayLabel').textContent = `${user.name} (${user.email})`;
                         document.getElementById('authorAvatar').textContent = user.name ? user.name.charAt(0).toUpperCase() : '👤';
                     })
-                    .catch(() => window.location.href = 'login.html');
+                    .catch(err => {
+                        console.warn("⛔ Unauthorized user attempt on submission interface. Redirecting...", err);
+                        window.location.href = 'login.html';
+                    });
             } else if (retries < 30) {
                 setTimeout(() => verifyUserSessionState(retries + 1), 100);
+            } else {
+                alert("Authentication subsystem timeout. Please refresh.");
             }
         }
         verifyUserSessionState();
 
-        document.getElementById('newsForm').addEventListener('submit', async function(e) {
-            e.preventDefault();
-            const submitBtn = document.getElementById('submitBtn');
-            const successMsg = document.getElementById('successMessage');
-            const errorMsg = document.getElementById('errorMessage');
+        // 📝 DATA SUBMISSION HANDLING
+        const newsForm = document.getElementById('newsForm');
+        if (newsForm) {
+            newsForm.addEventListener('submit', async function(e) {
+                e.preventDefault();
+                
+                const submitBtn = document.getElementById('submitBtn');
+                const successMsg = document.getElementById('successMessage');
+                const errorMsg = document.getElementById('errorMessage');
+                const errorText = document.getElementById('errorText');
 
-            submitBtn.disabled = true;
-            submitBtn.textContent = "Publishing...";
+                if (!verifiedUserSession) {
+                    alert("Your account context expired. Please log in again.");
+                    window.location.href = 'login.html';
+                    return;
+                }
 
-            try {
-                const title = document.getElementById('title').value.trim();
-                const category = document.getElementById('category').value;
-                const location = document.getElementById('location').value.trim();
-                const content = document.getElementById('content').value.trim();
+                submitBtn.disabled = true;
+                submitBtn.textContent = "Publishing Story...";
+                errorMsg.style.display = 'none';
 
-                // 1. Save to Appwrite
-                await window.databases.createDocument(
-                    window.APPWRITE_DB_ID,
-                    window.APPWRITE_COLLECTION_ID,
-                    window.ID.unique(),
-                    {
-                        title, category, content, location, status: "pending",
-                        authorName: verifiedUserSession.name,
-                        authorEmail: verifiedUserSession.email
+                try {
+                    const title = document.getElementById('title').value.trim();
+                    const category = document.getElementById('category').value;
+                    const location = document.getElementById('location').value.trim();
+                    const content = document.getElementById('content').value.trim();
+                    const finalImageUrl = ""; // Placeholder layout mapping space for storage integration if needed later
+
+                    // 📝 ASYNC DATABASE PAYLOAD WRITING WITH TARGET RULE ATTRIBUTES
+                    const articlePayload = {
+                        title: title,
+                        category: category,
+                        content: content,
+                        location: location,
+                        status: "pending", 
+                        authorName: verifiedUserSession.name,  // 🔒 SECURE AUTOMATIC AUTH BINDING
+                        authorEmail: verifiedUserSession.email, // 🔒 SECURE AUTOMATIC AUTH BINDING
+                        submittedAt: new Date().toISOString()   // ✅ ADDED: Fixes the missing attribute issue completely!
+                    };
+
+                    await window.databases.createDocument(
+                        window.APPWRITE_DB_ID,
+                        window.APPWRITE_COLLECTION_ID,
+                        window.ID.unique(),
+                        articlePayload
+                    );
+
+                    // 🚀 2. INSTANT DISCORD TEAM NOTIFICATION PING
+                    const discordPayload = {
+                        embeds: [{
+                            title: "🚨 New Article Submitted for Review!",
+                            color: 12852794, // Brand accent crimson color conversion integer
+                            fields: [
+                                { name: "📰 Headline", value: title, inline: false },
+                                { name: "👤 Author", value: verifiedUserSession.name, inline: true },
+                                { name: "📍 Location", value: location, inline: true },
+                                { name: "📁 Category", value: category.toUpperCase(), inline: true }
+                            ],
+                            footer: { text: "Khabar Darjeeling Portal Control System" },
+                            timestamp: new Date().toISOString()
+                        }]
+                    };
+
+                    fetch(discordWebhookUrl, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(discordPayload)
+                    }).catch(err => console.error("Webhook trace handled exception:", err));
+
+                    // Success interface transitions
+                    newsForm.style.display = 'none';
+                    document.querySelector('.user-lock-banner').style.display = 'none';
+                    successMsg.style.display = 'block';
+
+                } catch (error) {
+                    submitBtn.disabled = false;
+                    submitBtn.textContent = "Submit News";
+                    errorText.textContent = error.message || "Network exception writing to Appwrite schema collection.";
+                    errorMsg.style.display = 'block';
+                }
+            });
+        }
+
+        // Image Preview UI System Logic
+        const imageInputFile = document.getElementById('imageInput');
+        const imagePreviewDiv = document.getElementById('imagePreview');
+        const previewImageElement = document.getElementById('previewImg');
+        const removeImageButton = document.getElementById('removeImageBtn');
+
+        if (imageInputFile) {
+            imageInputFile.addEventListener('change', function(e) {
+                const file = e.target.files[0];
+                if (file) {
+                    const reader = new FileReader();
+                    reader.onload = function(e) {
+                        previewImageElement.src = e.target.result;
+                        imagePreviewDiv.style.display = 'block';
                     }
-                );
+                    reader.readAsDataURL(file);
+                }
+            });
+        }
 
-                // 2. Fire Discord Notification
-                const discordPayload = {
-                    embeds: [{
-                        title: "🚨 New Article Submitted!",
-                        color: 12852794,
-                        fields: [
-                            { name: "📰 Headline", value: title },
-                            { name: "👤 Author", value: verifiedUserSession.name, inline: true },
-                            { name: "📍 Location", value: location, inline: true }
-                        ],
-                        footer: { text: "Khabar Darjeeling Portal Control" },
-                        timestamp: new Date().toISOString()
-                    }]
-                };
+        if (removeImageButton) {
+            removeImageButton.addEventListener('click', function() {
+                imageInputFile.value = ''; 
+                previewImageElement.src = '';
+                imagePreviewDiv.style.display = 'none';
+            });
+        }
 
-                fetch(discordWebhookUrl, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(discordPayload)
-                });
-
-                document.getElementById('newsForm').style.display = 'none';
-                document.querySelector('.user-lock-banner').style.display = 'none';
-                successMsg.style.display = 'block';
-
-            } catch (error) {
-                submitBtn.disabled = false;
-                submitBtn.textContent = "Submit News";
-                document.getElementById('errorText').textContent = error.message;
-                errorMsg.style.display = 'block';
-            }
+        // Mobile nav tracking switch toggle
+        document.getElementById('navToggle')?.addEventListener('click', function() {
+            document.getElementById('navMenu').classList.toggle('active');
         });
 
-        document.getElementById('navToggle')?.addEventListener('click', () => document.getElementById('navMenu').classList.toggle('active'));
+        // Interface Theme tracking toggle switcher
+        document.getElementById('themeToggle')?.addEventListener('click', function() {
+            document.body.classList.toggle('dark-theme');
+            this.textContent = document.body.classList.contains('dark-theme') ? '☀️' : '🌙';
+        });
     </script>
 </body>
 </html>
