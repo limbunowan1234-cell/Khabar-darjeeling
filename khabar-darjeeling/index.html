@@ -10,7 +10,8 @@
     <meta http-equiv="Expires" content="0">
     
     <title>खबर दार्जिलिंग - Your Trusted News Source</title>
-    <link rel="stylesheet" href="css/style.css">
+    <!-- Cache buster added here ?v=2 -->
+    <link rel="stylesheet" href="css/style.css?v=2">
     <link rel="stylesheet" href="css/responsive.css">
 </head>
 <body>
@@ -130,9 +131,6 @@
 
     <script>
         (() => {
-            // ✅ FIX: All variables scoped within IIFE to prevent global collisions
-            // This prevents "Identifier 'Query' already declared" errors
-            
             // Safe references to global Appwrite instances
             const appwriteDatabase = window.databases;
             const QueryAPI = window.Query;
@@ -201,7 +199,6 @@
              * Render category-filtered view (clean grid only)
              */
             function renderCategoryView(articles, category) {
-                // Update page title and heading
                 const categoryFormatted = category
                     .split('-')
                     .map(word => word.charAt(0).toUpperCase() + word.slice(1))
@@ -210,10 +207,7 @@
                 document.getElementById('mainSectionTitle').textContent = categoryFormatted + ' Updates';
                 document.title = `${categoryFormatted} News - खबर दार्जिलिंग`;
 
-                // Hide homepage-specific sections
                 hideHomepageSections();
-
-                // Render news grid with all articles
                 renderNewsGrid(articles, 'newsGrid');
             }
 
@@ -221,20 +215,12 @@
              * Render homepage view (breaking ticker, featured story, news grid)
              */
             function renderHomepageView(articles) {
-                // Reset page title and heading
                 document.title = 'खबर दार्जिलिंग - Your Trusted News Source';
                 document.getElementById('mainSectionTitle').textContent = 'Latest News';
 
-                // Show homepage-specific sections
                 showHomepageSections();
-
-                // Render breaking news ticker (first article)
                 renderBreakingTicker(articles[0]);
-
-                // Render featured story (first article)
                 renderFeaturedStory(articles[0]);
-
-                // Render news grid (all articles except first)
                 renderNewsGrid(articles.slice(1), 'newsGrid');
             }
 
@@ -294,15 +280,21 @@
                 const featuredEl = document.getElementById('featuredStory');
                 if (!featuredEl) return;
 
-                const imageUrl = article.imageUrl || 'https://via.placeholder.com/800x400?text=Khabar+Darjeeling';
-                const content = article.content ? article.content.substring(0, 200) + '...' : '';
+                // Only create the image HTML if an image URL exists
+                const imageHtml = article.imageUrl 
+                    ? `<img src="${article.imageUrl}" alt="${escapeHtml(article.title)}" loading="lazy">` 
+                    : '';
+
+                // Remove the cutoff limit to show the full text
+                const content = article.content ? article.content : '';
+
+                // If no image, make the text area take up the full 100% width
+                const textStyle = article.imageUrl ? '' : 'width: 100%;';
 
                 featuredEl.innerHTML = `
-                    <a href="article.html?id=${article.$id}" 
-                       class="featured-content" 
-                       style="text-decoration: none; color: inherit; display: flex; flex-direction: inherit;">
-                        <img src="${imageUrl}" alt="${escapeHtml(article.title)}" loading="lazy">
-                        <div class="featured-text">
+                    <a href="article.html?id=${article.$id}" class="featured-content" style="text-decoration: none; color: inherit;">
+                        ${imageHtml}
+                        <div class="featured-text" style="${textStyle}">
                             <span class="category-badge">${escapeHtml(article.category || 'General')}</span>
                             <h2>${escapeHtml(article.title)}</h2>
                             <p>${content}</p>
@@ -321,14 +313,17 @@
 
                 gridEl.innerHTML = articles
                     .map(article => {
-                        const imageUrl = article.imageUrl || 'https://via.placeholder.com/400x250?text=News';
-                        const content = article.content ? article.content.substring(0, 100) + '...' : '';
+                        // Only create the image HTML if an image URL exists
+                        const imageHtml = article.imageUrl 
+                            ? `<img src="${article.imageUrl}" alt="${escapeHtml(article.title)}" loading="lazy">` 
+                            : '';
+
+                        // Remove the cutoff limit to show the full text
+                        const content = article.content ? article.content : '';
 
                         return `
-                            <a href="article.html?id=${article.$id}" 
-                               class="news-card" 
-                               style="text-decoration: none; color: inherit; display: block;">
-                                <img src="${imageUrl}" alt="${escapeHtml(article.title)}" loading="lazy">
+                            <a href="article.html?id=${article.$id}" class="news-card" style="text-decoration: none; color: inherit; display: block;">
+                                ${imageHtml}
                                 <div class="news-card-content">
                                     <span class="category-badge">${escapeHtml(article.category || 'General')}</span>
                                     <h3>${escapeHtml(article.title)}</h3>
@@ -349,7 +344,6 @@
                     ? 'No articles published in this category yet.'
                     : 'No articles published yet.';
                 
-                // ✅ FIX: Hide homepage sections when viewing an empty category
                 if (category) {
                     hideHomepageSections();
                 }
@@ -441,7 +435,6 @@
             }
 
         })();
-        // End of IIFE - all variables are safely scoped above
     </script>
 </body>
 </html>
