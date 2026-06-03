@@ -9,12 +9,36 @@
     <meta http-equiv="Pragma" content="no-cache">
     <meta http-equiv="Expires" content="0">
     
-    <title>खबर दार्जiling - Your Trusted News Source</title>
-    <!-- ✅ FORCED CACHE RELOAD: Version bumped to ?v=99 to completely bypass browser caching memory -->
-    <link rel="stylesheet" href="css/style.css?v=99">
-    <link rel="stylesheet" href="css/responsive.css?v=99">
+    <title>खबर दार्जिलिंग - Your Trusted News Source</title>
+    <!-- ✅ FORCED CACHE RELOAD: Version bumped to ?v=104 to completely bypass browser caching memory -->
+    <link rel="stylesheet" href="css/style.css?v=104">
+    <link rel="stylesheet" href="css/responsive.css?v=104">
+    
+    <!-- 🔒 PRE-LOAD OVERLAY STYLE: Prevents unauthorized content flashing before redirect occurs -->
+    <style>
+        #gatekeeperLoader {
+            position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
+            background: #ffffff; z-index: 99999; display: flex;
+            flex-direction: column; justify-content: center; align-items: center;
+            font-family: sans-serif; transition: opacity 0.3s ease;
+        }
+        body.dark-mode #gatekeeperLoader { background: #1a1a1a; color: #ffffff; }
+        .spinner {
+            width: 40px; height: 40px; border: 4px solid rgba(196, 30, 58, 0.1);
+            border-left-color: #c41e3a; border-radius: 50%; animation: spin 1s linear infinite;
+            margin-bottom: 15px;
+        }
+        @keyframes spin { to { transform: rotate(360deg); } }
+    </style>
 </head>
 <body>
+
+    <!-- 🔒 SECURITY BLOCKER VIEW SCREEN -->
+    <div id="gatekeeperLoader">
+        <div class="spinner"></div>
+        <p style="font-weight: 600; letter-spacing: 0.5px;">Securing Portal Session...</p>
+    </div>
+
     <nav class="navbar">
         <div class="container">
             <div class="navbar-content">
@@ -133,7 +157,6 @@
     <script>eruda.init();</script>
 
     <script src="https://cdn.jsdelivr.net/npm/appwrite@14.0.1/dist/iife/sdk.min.js"></script>
-    
     <script src="js/appwrite.js"></script>
 
     <script>
@@ -143,12 +166,42 @@
             const dbId = window.APPWRITE_DB_ID;
             const collectionId = window.APPWRITE_COLLECTION_ID;
 
+            // Apply early dark mode theme to the gatekeeper loader screen if preferred
+            if (localStorage.getItem('theme') === 'dark') {
+                document.body.classList.add('dark-mode');
+            }
+
             if (!appwriteDatabase || !QueryAPI || !dbId || !collectionId) {
                 console.error('❌ Appwrite not initialized.');
                 document.getElementById('newsGrid').innerHTML = '<p style="color: red; padding: 20px;">Configuration Error: Appwrite SDK not initialized.</p>';
                 return;
             }
 
+            // 🔒 STEP 1: AUTHENTICATION ENFORCEMENT ENGINE (THE GATEKEEPER)
+            async function checkAuthGate() {
+                try {
+                    // Check if there's a logged-in user session in Appwrite
+                    const activeUser = await window.account.get();
+                    console.log(`🔒 Access verified for user: ${activeUser.email}`);
+                    
+                    // User is authenticated! Hide the block overlay screen
+                    const loader = document.getElementById('gatekeeperLoader');
+                    if (loader) {
+                        loader.style.opacity = '0';
+                        setTimeout(() => loader.style.display = 'none', 300);
+                    }
+
+                    // Proceed to pull database documents safely
+                    loadHomepage();
+
+                } catch (error) {
+                    console.warn("⛔ No active session. Redirecting to access gate...");
+                    // Bounced! Force user to go log in with their 6-digit OTP
+                    window.location.href = 'login.html';
+                }
+            }
+
+            // STEP 2: LOAD NORMAL CONTENT (Only runs if user passes Step 1)
             async function loadHomepage() {
                 try {
                     const urlParams = new URLSearchParams(window.location.search);
@@ -327,15 +380,15 @@
                     localStorage.setItem('theme', isDarkMode ? 'dark' : 'light');
                 });
                 if (localStorage.getItem('theme') === 'dark') {
-                    document.body.classList.add('dark-mode');
                     themeToggle.textContent = '☀️';
                 }
             }
 
+            // Start verification process immediately on load
             if (document.readyState === 'loading') {
-                document.addEventListener('DOMContentLoaded', loadHomepage);
+                document.addEventListener('DOMContentLoaded', checkAuthGate);
             } else {
-                loadHomepage();
+                checkAuthGate();
             }
 
         })();
