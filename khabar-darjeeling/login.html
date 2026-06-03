@@ -3,48 +3,170 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>KD Login - खबर दार्जिलिंग</title>
-    <link rel="stylesheet" href="css/style.css?v=107">
+    <title>Portal Access • खबर दार्जिलिंग</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
-        .login-container {
-            display: flex; justify-content: center; align-items: center;
-            min-height: 100vh; background: #f4f4f4; padding: 20px;
+        :root {
+            --fb-blue: #1877f2;
+            --brand-red: #c41e3a;
+            --text-dark: #1c1e21;
+            --bg-gray: #f0f2f5;
+            --border-color: #dddfe2;
         }
-        .login-card {
-            background: white; padding: 30px; border-radius: 15px;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.1); width: 100%; max-width: 400px;
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Poppins', sans-serif;
         }
-        .login-card h2 { color: #c41e3a; text-align: center; margin-bottom: 20px; }
-        .hidden { display: none; }
-        .status-msg { margin-top: 15px; text-align: center; font-size: 14px; font-weight: bold; }
+
+        body {
+            background-color: var(--bg-gray);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            color: var(--text-dark);
+        }
+
+        .login-wrapper {
+            width: 100%;
+            max-width: 396px;
+            padding: 16px;
+        }
+
+        .brand-header {
+            text-align: center;
+            margin-bottom: 24px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .brand-logo {
+            height: 75px; width: 75px; object-fit: cover; 
+            border-radius: 50%; margin-bottom: 12px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            border: 2px solid #ffffff;
+        }
+
+        .brand-header h1 {
+            color: var(--brand-red);
+            font-size: 34px; font-weight: 700;
+            letter-spacing: -0.5px; margin-bottom: 2px;
+        }
+
+        .brand-header p {
+            color: #606770; font-size: 14px;
+            font-weight: 600; letter-spacing: 0.5px;
+            text-transform: uppercase;
+        }
+
+        .card {
+            background: #ffffff; border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1), 0 8px 16px rgba(0, 0, 0, 0.1);
+            padding: 24px; width: 100%;
+        }
+
+        .form-control {
+            width: 100%; margin-bottom: 14px;
+        }
+
+        .form-control input {
+            width: 100%; padding: 14px 12px; font-size: 14px;
+            border: 1px solid var(--border-color); border-radius: 6px;
+            background: #f5f6f7; color: var(--text-dark); outline: none;
+            transition: all 0.2s;
+        }
+
+        .form-control input:focus {
+            border-color: var(--fb-blue); background: #ffffff;
+            box-shadow: 0 0 0 2px rgba(24, 119, 242, 0.2);
+        }
+
+        .btn-submit {
+            width: 100%; padding: 12px; font-size: 16px; font-weight: 600;
+            color: #ffffff; background-color: var(--fb-blue);
+            border: none; border-radius: 6px; cursor: pointer;
+            margin-top: 6px; transition: background-color 0.2s;
+        }
+
+        .btn-submit:hover { background-color: #166fe5; }
+
+        .toggle-box {
+            text-align: center; margin-top: 20px;
+            padding-top: 20px; border-top: 1px solid var(--border-color);
+            font-size: 14px; color: #606770;
+        }
+
+        .toggle-link {
+            color: var(--fb-blue); font-weight: 600;
+            text-decoration: none; cursor: pointer;
+        }
+
+        .status-feedback {
+            margin-top: 16px; text-align: center;
+            font-size: 13px; font-weight: 500; min-height: 20px;
+        }
+
+        .hidden { display: none !important; }
+
+        body.dark-mode { background-color: #121212; color: #f5f6f7; }
+        body.dark-mode .card { background: #242526; box-shadow: 0 4px 12px rgba(0,0,0,0.3); border-top: 1px solid #3a3b3c;}
+        body.dark-mode .form-control input { background: #3a3b3c; border-color: #4e4f50; color: #ffffff; }
+        body.dark-mode .form-control input:focus { border-color: var(--fb-blue); background: #242526; }
+        body.dark-mode .toggle-box { border-top-color: #3a3b3c; }
+        body.dark-mode .brand-logo { border-color: #242526; }
     </style>
 </head>
 <body>
-    <div class="login-container">
-        <div class="login-card">
-            <h2>खबर दार्जिलिंग Access</h2>
 
-            <div id="step1">
-                <p style="text-align:center; margin-bottom:15px;">Enter your email to receive a 6-digit code.</p>
-                <input type="email" id="userEmail" placeholder="yourname@gmail.com" 
-                       style="width:100%; padding:12px; margin-bottom:15px; border:1px solid #ddd; border-radius:8px;">
-                <button onclick="sendOTP()" id="sendBtn" 
-                        style="width:100%; padding:12px; background:#c41e3a; color:white; border:none; border-radius:8px; cursor:pointer;">
-                    Send Code
-                </button>
-            </div>
+    <div class="login-wrapper">
+        
+        <div class="brand-header">
+            <img src="assets/logo.png" alt="Khabar Darjeeling Logo" class="brand-logo">
+            <h1>खबर दार्जिलिंग</h1>
+            <p>WE WRITE, WE READ</p>
+        </div>
 
-            <div id="step2" class="hidden">
-                <p style="text-align:center; margin-bottom:15px;">Enter the 6-digit code sent to your email.</p>
-                <input type="text" id="otpCode" maxlength="6" placeholder="000000" 
-                       style="width:100%; padding:12px; margin-bottom:15px; border:1px solid #ddd; border-radius:8px; text-align:center; font-size:24px; letter-spacing:5px;">
-                <button onclick="verifyOTP()" id="verifyBtn" 
-                        style="width:100%; padding:12px; background:green; color:white; border:none; border-radius:8px; cursor:pointer;">
-                    Verify & Login
-                </button>
-            </div>
+        <div class="card">
+            
+            <!-- MODE 1: LOG IN FORM -->
+            <form id="loginForm" onsubmit="handleLogin(event)">
+                <div class="form-control">
+                    <input type="email" id="loginEmail" placeholder="Email address" required>
+                </div>
+                <div class="form-control">
+                    <input type="password" id="loginPassword" placeholder="Password" required>
+                </div>
+                <button type="submit" id="loginBtn" class="btn-submit">Log In</button>
+                
+                <div class="toggle-box">
+                    Don't have an account? <span class="toggle-link" onclick="switchMode('signup')">Sign Up</span>
+                </div>
+            </form>
 
-            <p id="feedback" class="status-msg"></p>
+            <!-- MODE 2: SIGN UP FORM (Hidden initially) -->
+            <form id="signupForm" class="hidden" onsubmit="handleSignup(event)">
+                <div class="form-control">
+                    <input type="text" id="signupName" placeholder="Full name" required>
+                </div>
+                <div class="form-control">
+                    <input type="email" id="signupEmail" placeholder="Email address" required>
+                </div>
+                <div class="form-control">
+                    <input type="password" id="signupPassword" placeholder="Create password (min 8 chars)" minlength="8" required>
+                </div>
+                <button type="submit" id="signupBtn" class="btn-submit" style="background-color: #42b72a;">Create Account</button>
+                
+                <div class="toggle-box">
+                    Already have an account? <span class="toggle-link" onclick="switchMode('login')">Log In</span>
+                </div>
+            </form>
+
+            <p id="feedback" class="status-feedback"></p>
         </div>
     </div>
 
@@ -52,53 +174,84 @@
     <script src="js/appwrite.js"></script>
 
     <script>
-        let userId = "";
-
-        async function sendOTP() {
-            const email = document.getElementById('userEmail').value;
+        // Toggle view smoothly between Sign In and Sign Up modes
+        function switchMode(mode) {
+            const loginForm = document.getElementById('loginForm');
+            const signupForm = document.getElementById('signupForm');
             const feedback = document.getElementById('feedback');
             
-            if(!email) { alert("Please enter email"); return; }
-
-            feedback.style.color = "blue";
-            feedback.textContent = "Sending code...";
-
-            try {
-                // Appwrite generates a 6-digit code and emails it
-                const sessionToken = await window.account.createEmailToken(window.ID.unique(), email);
-                userId = sessionToken.userId;
-
-                feedback.style.color = "green";
-                feedback.textContent = "Code sent to your inbox!";
-                
-                document.getElementById('step1').classList.add('hidden');
-                document.getElementById('step2').classList.remove('hidden');
-            } catch (error) {
-                feedback.style.color = "red";
-                feedback.textContent = "Error: " + error.message;
+            feedback.textContent = ""; // Clear any messages
+            
+            if (mode === 'signup') {
+                loginForm.classList.add('hidden');
+                signupForm.classList.remove('hidden');
+            } else {
+                signupForm.classList.add('hidden');
+                loginForm.classList.remove('hidden');
             }
         }
 
-        async function verifyOTP() {
-            const code = document.getElementById('otpCode').value;
+        // 1. Handle Account Registration (Sign Up)
+        async function handleSignup(e) {
+            e.preventDefault();
+            const name = document.getElementById('signupName').value.trim();
+            const email = document.getElementById('signupEmail').value.trim();
+            const password = document.getElementById('signupPassword').value;
             const feedback = document.getElementById('feedback');
+            const btn = document.getElementById('signupBtn');
 
-            feedback.style.color = "blue";
-            feedback.textContent = "Verifying...";
+            feedback.style.color = "var(--fb-blue)";
+            feedback.textContent = "Registering your credentials...";
+            btn.disabled = true;
 
             try {
-                // Confirm the code and create the session
-                await window.account.createSession(userId, code);
+                // Appwrite builds the user profile credentials
+                await window.account.create(window.ID.unique(), email, password, name);
                 
-                feedback.style.color = "green";
-                feedback.textContent = "Login Successful!";
+                feedback.style.color = "#42b72a";
+                feedback.textContent = "✓ Account created successfully! Logging you in...";
+
+                // Immediately create a session so they don't have to sign in manually after signing up
+                await window.account.createEmailPasswordSession(email, password);
                 
-                // Success! Go to admin or home
                 setTimeout(() => { window.location.href = "index.html"; }, 1500);
             } catch (error) {
-                feedback.style.color = "red";
-                feedback.textContent = "Invalid code. Try again.";
+                btn.disabled = false;
+                feedback.style.color = "#c41e3a";
+                feedback.textContent = error.message || "Registration failed.";
             }
+        }
+
+        // 2. Handle User Authentication (Log In)
+        async function handleLogin(e) {
+            e.preventDefault();
+            const email = document.getElementById('loginEmail').value.trim();
+            const password = document.getElementById('loginPassword').value;
+            const feedback = document.getElementById('feedback');
+            const btn = document.getElementById('loginBtn');
+
+            feedback.style.color = "var(--fb-blue)";
+            feedback.textContent = "Verifying access credentials...";
+            btn.disabled = true;
+
+            try {
+                // Verify email + password session request
+                await window.account.createEmailPasswordSession(email, password);
+                
+                feedback.style.color = "#42b72a";
+                feedback.textContent = "✓ Access granted! Loading workspace...";
+                
+                setTimeout(() => { window.location.href = "index.html"; }, 1200);
+            } catch (error) {
+                btn.disabled = false;
+                feedback.style.color = "#c41e3a";
+                feedback.textContent = "Invalid email or password combination.";
+            }
+        }
+
+        // Match site dark mode setting
+        if (localStorage.getItem('theme') === 'dark') {
+            document.body.classList.add('dark-mode');
         }
     </script>
 </body>
