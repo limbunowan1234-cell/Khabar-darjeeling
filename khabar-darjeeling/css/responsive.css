@@ -3,36 +3,33 @@
 /* Tablet (768px and below) */
 @media (max-width: 768px) {
     .container {
-        padding: 0 var(--spacing-md);
+        padding: 0 15px;
     }
 
-    h1 { font-size: 2rem; }
-    h2 { font-size: 1.5rem; }
-    h3 { font-size: 1.25rem; }
-    h4 { font-size: 1.1rem; }
-
-    /* ✅ CLEAN MOBILE NAVBAR CONTENT WRAPPING */
+    /* ✅ MOBILE NAVBAR UN-TANGLING: Keeps the logo on the left, buttons on the right, and prevents any overlapping */
     .navbar-content {
-        padding: 8px 0 !important;
+        padding: 10px 0 !important;
         display: flex !important;
+        flex-direction: row !important;
         justify-content: space-between !important;
         align-items: center !important;
         width: 100% !important;
+        position: relative !important;
     }
 
-    /* Navigation Menu Toggle */
+    /* Navigation Menu Toggle Drawer */
     .nav-links {
         display: none;
     }
 
     .nav-toggle {
-        display: flex;
+        display: flex !important;
     }
 
     .nav-menu.active {
         display: block;
         position: absolute;
-        top: 75px;
+        top: 70px;
         left: 0;
         right: 0;
         background-color: white;
@@ -59,46 +56,40 @@
         padding: 12px 20px;
     }
 
-    /* ✅ NAVIGATION RIGHT RE-ALIGNMENT: Completely fixes logo merging/clashing */
+    /* ✅ FIX NAV MERGING: Drops absolute placement so the Admin link can never slide over the logo text */
     .nav-right {
         display: flex !important;
-        position: relative !important; /* Forces layout tracking flow back instead of overlapping absolute */
+        position: relative !important; 
         top: auto !important;
         right: auto !important;
-        gap: 12px !important;
-        margin-left: auto;
-        margin-right: 15px;
+        gap: 10px !important;
+        align-items: center !important;
     }
 
-    /* Completely hide desktop style input form blocks on phone dimensions */
+    /* Completely hide desktop style search box on mobile layout */
     .search-input, .search-bar {
         display: none !important;
     }
 
-    /* Logo Scale Improvements */
+    /* Logo Text Resize for Mobile */
     .logo h1 {
-        font-size: 1.15rem !important;
+        font-size: 18px !important;
     }
 
     .logo .tagline {
         display: none !important;
     }
 
-    /* Breaking News Ticker Bounds */
-    .breaking-content {
-        font-size: 0.95rem;
-    }
-
-    /* ✅ HERO COMPRESSION FIX: Pulls your buttons up onto your beautiful scenic banner picture */
+    /* ✅ HERO COMPRESSION FIX: Moves buttons up cleanly onto the screen */
     .hero {
         aspect-ratio: auto !important;
         background-size: cover !important;
         background-position: center center !important;
-        padding: 40px 0 45px 0 !important; 
+        padding: 50px 0 55px 0 !important; 
     }
 
-    .hero-content h2, .hero h2 {
-        font-size: 1.7rem !important;
+    .hero h2 {
+        font-size: 1.6rem !important;
         margin-bottom: 10px !important;
     }
 
@@ -109,19 +100,19 @@
     }
 
     .hero-buttons {
-        flex-direction: row !important; /* Horizontal inline button display across smaller viewports */
+        flex-direction: row !important;
         gap: 10px !important;
-        justify-content: center;
+        justify-content: center !important;
     }
 
-    /* Featured Story Section Scaling rules */
-    .featured-article, .featured-content {
+    /* Featured Story Stack Adjustments */
+    .featured-content {
         flex-direction: column !important;
     }
 
-    .featured-image, .featured-content img {
+    .featured-content img {
         width: 100% !important;
-        height: 250px !important;
+        height: 220px !important;
     }
 
     .featured-text {
@@ -129,64 +120,23 @@
         padding: 20px !important;
     }
 
-    /* Main Grid Restructures */
-    .content-wrapper {
+    .form-row {
         grid-template-columns: 1fr;
     }
-
-    .sidebar { order: 2; }
-    .news-grid { order: 1; }
-    .articles-container { grid-template-columns: 1fr; }
-
-    /* Input Submission Grid adjustments */
-    .form-row { grid-template-columns: 1fr; }
-    .form-buttons { flex-direction: column; }
-    .form-buttons button { width: 100%; }
-
-    /* Dynamic Content Layout adjustments */
-    .article-content-wrapper { grid-template-columns: 1fr; }
-    .article-featured-image { height: 300px; }
-    .related-grid { grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); }
-    .footer-content { grid-template-columns: 1fr; }
 }
 
 /* Mobile (480px and below) */
 @media (max-width: 480px) {
     .logo h1 {
-        font-size: 1.1rem !important;
+        font-size: 16px !important;
     }
-    
+
     .admin-link {
-        padding: 4px 10px !important;
-        font-size: 0.75rem !important;
+        padding: 6px 12px !important;
+        font-size: 12px !important;
     }
 
     .hero h2 {
-        font-size: 1.5rem !important;
+        font-size: 1.4rem !important;
     }
-
-    .article-card-title { font-size: 1rem; }
-    .article-card-excerpt { font-size: 0.85rem; }
-    .image-upload { padding: 15px; }
-    .submit-container h2 { font-size: 1.25rem; }
-    .article-body { padding: 15px; }
-    .article-featured-image { height: 220px; }
-    .related-grid { grid-template-columns: 1fr; }
-}
-
-/* Print Layout Specifications */
-@media print {
-    .navbar, .footer, .sidebar, .share-buttons, .related-articles, 
-    .pagination, .admin-link, .theme-toggle, .search-bar, .newsletter {
-        display: none !important;
-    }
-    body { background-color: white; color: black; }
-}
-
-/* High Contrast Mode fallback rules */
-@media (prefers-contrast: more) {
-    :root {
-        --border-color: #000;
-    }
-    .btn-primary, .btn-secondary { border: 2px solid #000; }
 }
