@@ -10,7 +10,7 @@ const { Client, Databases, Storage, Account, ID, Query } = window.Appwrite;
 // 2. Initialize the Client
 const client = new Client()
     .setEndpoint('https://nyc.cloud.appwrite.io/v1')
-    .setProject('khabardarjeeling'); // Double check if this is your ID or Name
+    .setProject('khabardarjeeling'); 
 
 // 3. Initialize Services
 const databases = new Databases(client);
@@ -27,6 +27,7 @@ const APPWRITE_BUCKET_ID = 'article-image';
 window.client = client;
 window.account = account;
 window.databases = databases;
+window.database = databases; // FIX: Fallback for scripts expecting window.database (like admin.js)
 window.storage = storage;
 window.ID = ID;
 window.Query = Query;
