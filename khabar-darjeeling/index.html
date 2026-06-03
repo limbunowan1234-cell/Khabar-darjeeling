@@ -10,9 +10,9 @@
     <meta http-equiv="Expires" content="0">
     
     <title>खबर दार्जिलिंग - Your Trusted News Source</title>
-    <!-- Cache buster added here ?v=2 -->
+    <!-- Cache buster ?v=2 -->
     <link rel="stylesheet" href="css/style.css?v=2">
-    <link rel="stylesheet" href="css/responsive.css">
+    <link rel="stylesheet" href="css/responsive.css?v=2">
 </head>
 <body>
     <nav class="navbar">
@@ -149,38 +149,31 @@
 
             /**
              * Load articles based on URL parameters
-             * Handles both homepage (default) and category-filtered views
              */
             async function loadHomepage() {
                 try {
-                    // Parse URL parameter to detect Category Mode
                     const urlParams = new URLSearchParams(window.location.search);
                     const currentCategory = urlParams.get('category');
 
-                    // Build query filters array
                     const queries = [
                         QueryAPI.equal('status', 'published'),
                         QueryAPI.orderDesc('$createdAt'),
                         QueryAPI.limit(20)
                     ];
 
-                    // If category is specified, add category filter
                     if (currentCategory) {
                         queries.push(QueryAPI.equal('category', currentCategory));
                     }
 
                     console.log(`Loading articles for ${currentCategory ? 'category: ' + currentCategory : 'homepage'}`);
 
-                    // Fetch articles from Appwrite
                     const response = await appwriteDatabase.listDocuments(dbId, collectionId, queries);
 
-                    // Handle empty results
                     if (!response.documents || response.documents.length === 0) {
                         handleEmptyState(currentCategory);
                         return;
                     }
 
-                    // Render based on view mode (category or homepage)
                     if (currentCategory) {
                         renderCategoryView(response.documents, currentCategory);
                     } else {
@@ -195,9 +188,6 @@
                 }
             }
 
-            /**
-             * Render category-filtered view (clean grid only)
-             */
             function renderCategoryView(articles, category) {
                 const categoryFormatted = category
                     .split('-')
@@ -211,9 +201,6 @@
                 renderNewsGrid(articles, 'newsGrid');
             }
 
-            /**
-             * Render homepage view (breaking ticker, featured story, news grid)
-             */
             function renderHomepageView(articles) {
                 document.title = 'खबर दार्जिलिंग - Your Trusted News Source';
                 document.getElementById('mainSectionTitle').textContent = 'Latest News';
@@ -224,16 +211,8 @@
                 renderNewsGrid(articles.slice(1), 'newsGrid');
             }
 
-            /**
-             * Hide sections not needed for category views
-             */
             function hideHomepageSections() {
-                const sections = [
-                    'breaking',
-                    'heroSection',
-                    'featuredSection',
-                    'categoriesSection'
-                ];
+                const sections = ['breaking', 'heroSection', 'featuredSection', 'categoriesSection'];
                 sections.forEach(id => {
                     const el = document.getElementById(id);
                     if (el) el.style.display = 'none';
@@ -242,25 +221,14 @@
                 if (homeLink) homeLink.classList.remove('active');
             }
 
-            /**
-             * Show homepage sections
-             */
             function showHomepageSections() {
-                const sections = [
-                    'breaking',
-                    'heroSection',
-                    'featuredSection',
-                    'categoriesSection'
-                ];
+                const sections = ['breaking', 'heroSection', 'featuredSection', 'categoriesSection'];
                 sections.forEach(id => {
                     const el = document.getElementById(id);
                     if (el) el.style.display = '';
                 });
             }
 
-            /**
-             * Render breaking news ticker
-             */
             function renderBreakingTicker(article) {
                 const tickerEl = document.getElementById('breakingTicker');
                 if (!tickerEl) return;
@@ -273,22 +241,14 @@
                 `;
             }
 
-            /**
-             * Render featured story card
-             */
             function renderFeaturedStory(article) {
                 const featuredEl = document.getElementById('featuredStory');
                 if (!featuredEl) return;
 
-                // Only create the image HTML if an image URL exists
                 const imageHtml = article.imageUrl 
                     ? `<img src="${article.imageUrl}" alt="${escapeHtml(article.title)}" loading="lazy">` 
                     : '';
-
-                // Remove the cutoff limit to show the full text
                 const content = article.content ? article.content : '';
-
-                // If no image, make the text area take up the full 100% width
                 const textStyle = article.imageUrl ? '' : 'width: 100%;';
 
                 featuredEl.innerHTML = `
@@ -304,21 +264,15 @@
                 `;
             }
 
-            /**
-             * Render news grid (reusable for both homepage and category views)
-             */
             function renderNewsGrid(articles, elementId) {
                 const gridEl = document.getElementById(elementId);
                 if (!gridEl) return;
 
                 gridEl.innerHTML = articles
                     .map(article => {
-                        // Only create the image HTML if an image URL exists
                         const imageHtml = article.imageUrl 
                             ? `<img src="${article.imageUrl}" alt="${escapeHtml(article.title)}" loading="lazy">` 
                             : '';
-
-                        // Remove the cutoff limit to show the full text
                         const content = article.content ? article.content : '';
 
                         return `
@@ -336,9 +290,6 @@
                     .join('');
             }
 
-            /**
-             * Handle empty state
-             */
             function handleEmptyState(category) {
                 const message = category 
                     ? 'No articles published in this category yet.'
@@ -356,9 +307,6 @@
                 document.getElementById('newsGrid').innerHTML = `<p>${message}</p>`;
             }
 
-            /**
-             * Handle error state
-             */
             function handleError() {
                 const errorHtml = '<p style="color: #d32f2f; padding: 20px;">Failed to load articles. Please try refreshing.</p>';
                 const newsGridEl = document.getElementById('newsGrid');
@@ -371,9 +319,6 @@
                 if (tickerEl) tickerEl.innerHTML = 'Failed to load breaking news.';
             }
 
-            /**
-             * Utility: Format date
-             */
             function formatDate(dateString) {
                 try {
                     return new Date(dateString).toLocaleDateString('en-US', {
@@ -386,20 +331,12 @@
                 }
             }
 
-            /**
-             * Utility: Escape HTML to prevent XSS
-             */
             function escapeHtml(text) {
                 const div = document.createElement('div');
                 div.textContent = text;
                 return div.innerHTML;
             }
 
-            // ============================================
-            // EVENT LISTENERS
-            // ============================================
-
-            // Mobile menu toggle
             const navToggle = document.getElementById('navToggle');
             const navMenu = document.getElementById('navMenu');
             if (navToggle) {
@@ -408,18 +345,15 @@
                 });
             }
 
-            // Theme toggle
             const themeToggle = document.getElementById('themeToggle');
             if (themeToggle) {
                 themeToggle.addEventListener('click', () => {
                     document.body.classList.toggle('dark-mode');
                     const isDarkMode = document.body.classList.contains('dark-mode');
                     themeToggle.textContent = isDarkMode ? '☀️' : '🌙';
-                    // Persist theme preference
                     localStorage.setItem('theme', isDarkMode ? 'dark' : 'light');
                 });
 
-                // Apply saved theme on load
                 const savedTheme = localStorage.getItem('theme');
                 if (savedTheme === 'dark') {
                     document.body.classList.add('dark-mode');
@@ -427,7 +361,6 @@
                 }
             }
 
-            // Load articles when DOM is ready
             if (document.readyState === 'loading') {
                 document.addEventListener('DOMContentLoaded', loadHomepage);
             } else {
