@@ -201,7 +201,7 @@
                     newsGrid.innerHTML = '';
                     response.documents.forEach(article => {
                         newsGrid.innerHTML += `
-                            <div class="news-card">
+                            <a href="article.html?id=${article.$id}" class="news-card" style="text-decoration: none; color: inherit; display: block;">
                                 <img src="${article.imageUrl || 'https://via.placeholder.com/400x250?text=News'}" alt="${article.title}">
                                 <div class="news-card-content">
                                     <span class="category-badge">${article.category || 'General'}</span>
@@ -209,16 +209,19 @@
                                     <p>${article.content ? article.content.substring(0, 100) + '...' : ''}</p>
                                     <span class="date">${new Date(article.$createdAt).toLocaleDateString()}</span>
                                 </div>
-                            </div>
+                            </a>
                         `;
                     });
                 } else {
                     // STANDARD HOMEPAGE TEMPLATE VIEW: Splice off standard featured card blocks and top breaking nodes
-                    breakingTicker.innerHTML = response.documents[0].title;
+                    
+                    // Clickable Breaking Ticker
+                    breakingTicker.innerHTML = `<a href="article.html?id=${response.documents[0].$id}" style="color: inherit; text-decoration: none;">${response.documents[0].title}</a>`;
 
+                    // Clickable Featured Story
                     const featured = response.documents[0];
                     featuredStory.innerHTML = `
-                        <div class="featured-content">
+                        <a href="article.html?id=${featured.$id}" class="featured-content" style="text-decoration: none; color: inherit; display: flex; flex-direction: inherit;">
                             <img src="${featured.imageUrl || 'https://via.placeholder.com/800x400?text=Khabar+Darjeeling'}" alt="${featured.title}">
                             <div class="featured-text">
                                 <span class="category-badge">${featured.category || 'General'}</span>
@@ -226,13 +229,14 @@
                                 <p>${featured.content ? featured.content.substring(0, 200) + '...' : ''}</p>
                                 <span class="date">${new Date(featured.$createdAt).toLocaleDateString()}</span>
                             </div>
-                        </div>
+                        </a>
                     `;
 
+                    // Clickable Latest News Grid
                     newsGrid.innerHTML = '';
                     response.documents.slice(1).forEach(article => {
                         newsGrid.innerHTML += `
-                            <div class="news-card">
+                            <a href="article.html?id=${article.$id}" class="news-card" style="text-decoration: none; color: inherit; display: block;">
                                 <img src="${article.imageUrl || 'https://via.placeholder.com/400x250?text=News'}" alt="${article.title}">
                                 <div class="news-card-content">
                                     <span class="category-badge">${article.category || 'General'}</span>
@@ -240,7 +244,7 @@
                                     <p>${article.content ? article.content.substring(0, 100) + '...' : ''}</p>
                                     <span class="date">${new Date(article.$createdAt).toLocaleDateString()}</span>
                                 </div>
-                            </div>
+                            </a>
                         `;
                     });
                 }
