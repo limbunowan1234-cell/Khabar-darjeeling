@@ -84,9 +84,12 @@
     <nav class="navbar">
         <div class="container">
             <div class="navbar-content">
+                <!-- 🏠 REDIRECTING BRAND LOGO HEADER -->
                 <div class="logo">
-                    <h1>खबर दार्जिलिंग</h1>
-                    <p class="tagline">Your Trusted News Source</p>
+                    <a href="index.html" style="text-decoration: none; color: inherit;">
+                        <h1>खबर दार्जिलिंग</h1>
+                        <p class="tagline">Your Trusted News Source</p>
+                    </a>
                 </div>
                 
                 <div class="nav-toggle" id="navToggle">
@@ -148,6 +151,7 @@
                         <small>Maximum 200 characters</small>
                     </div>
 
+                    <!-- 📁 ALL 9 RESTORED CATEGORIES -->
                     <div class="form-group">
                         <label for="category">Category *</label>
                         <select id="category" name="category" required>
@@ -277,7 +281,6 @@
                     const category = document.getElementById('category').value;
                     const location = document.getElementById('location').value.trim();
                     const content = document.getElementById('content').value.trim();
-                    const finalImageUrl = ""; // Placeholder layout mapping space for storage integration if needed later
 
                     // 📝 ASYNC DATABASE PAYLOAD WRITING WITH TARGET RULE ATTRIBUTES
                     const articlePayload = {
@@ -286,9 +289,9 @@
                         content: content,
                         location: location,
                         status: "pending", 
-                        authorName: verifiedUserSession.name,  // 🔒 SECURE AUTOMATIC AUTH BINDING
-                        authorEmail: verifiedUserSession.email, // 🔒 SECURE AUTOMATIC AUTH BINDING
-                        submittedAt: new Date().toISOString()   // ✅ ADDED: Fixes the missing attribute issue completely!
+                        authorName: verifiedUserSession.name,  
+                        authorEmail: verifiedUserSession.email, 
+                        submittedAt: new Date().toISOString()   // ✅ Satisfies Appwrite schema structure rules
                     };
 
                     await window.databases.createDocument(
@@ -298,11 +301,11 @@
                         articlePayload
                     );
 
-                    // 🚀 2. INSTANT DISCORD TEAM NOTIFICATION PING
+                    // 🚀 INSTANT DISCORD TEAM NOTIFICATION PING
                     const discordPayload = {
                         embeds: [{
                             title: "🚨 New Article Submitted for Review!",
-                            color: 12852794, // Brand accent crimson color conversion integer
+                            color: 12852794, 
                             fields: [
                                 { name: "📰 Headline", value: title, inline: false },
                                 { name: "👤 Author", value: verifiedUserSession.name, inline: true },
@@ -318,7 +321,7 @@
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json' },
                         body: JSON.stringify(discordPayload)
-                    }).catch(err => console.error("Webhook trace handled exception:", err));
+                    }).catch(err => console.error("Webhook exception traced:", err));
 
                     // Success interface transitions
                     newsForm.style.display = 'none';
