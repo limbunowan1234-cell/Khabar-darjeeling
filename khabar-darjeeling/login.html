@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KD Login - खबर दार्जिलिंग</title>
+    <link rel="stylesheet" href="css/style.css?v=107">
+    <style>
+        .login-container {
+            display: flex; justify-content: center; align-items: center;
+            min-height: 100vh; background: #f4f4f4; padding: 20px;
+        }
+        .login-card {
+            background: white; padding: 30px; border-radius: 15px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1); width: 100%; max-width: 400px;
+        }
+        .login-card h2 { color: #c41e3a; text-align: center; margin-bottom: 20px; }
+        .hidden { display: none; }
+        .status-msg { margin-top: 15px; text-align: center; font-size: 14px; font-weight: bold; }
+    </style>
+</head>
+<body>
+    <div class="login-container">
+        <div class="login-card">
+            <h2>खबर दार्जिलिंग Access</h2>
+
+            <div id="step1">
+                <p style="text-align:center; margin-bottom:15px;">Enter your email to receive a 6-digit code.</p>
+                <input type="email" id="userEmail" placeholder="yourname@gmail.com" 
+                       style="width:100%; padding:12px; margin-bottom:15px; border:1px solid #ddd; border-radius:8px;">
+                <button onclick="sendOTP()" id="sendBtn" 
+                        style="width:100%; padding:12px; background:#c41e3a; color:white; border:none; border-radius:8px; cursor:pointer;">
+                    Send Code
+                </button>
+            </div>
+
+            <div id="step2" class="hidden">
+                <p style="text-align:center; margin-bottom:15px;">Enter the 6-digit code sent to your email.</p>
+                <input type="text" id="otpCode" maxlength="6" placeholder="000000" 
+                       style="width:100%; padding:12px; margin-bottom:15px; border:1px solid #ddd; border-radius:8px; text-align:center; font-size:24px; letter-spacing:5px;">
+                <button onclick="verifyOTP()" id="verifyBtn" 
+                        style="width:100%; padding:12px; background:green; color:white; border:none; border-radius:8px; cursor:pointer;">
+                    Verify & Login
+                </button>
+            </div>
+
+            <p id="feedback" class="status-msg"></p>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/appwrite@14.0.1/dist/iife/sdk.min.js"></script>
+    <script src="js/appwrite.js"></script>
+
+    <script>
+        let userId = "";
+
+        async function sendOTP() {
+            const email = document.getElementById('userEmail').value;
+            const feedback = document.getElementById('feedback');
+            
+            if(!email) { alert("Please enter email"); return; }
+
+            feedback.style.color = "blue";
+            feedback.textContent = "Sending code...";
+
+            try {
+                // Appwrite generates a 6-digit code and emails it
+                const sessionToken = await window.account.createEmailToken(window.ID.unique(), email);
+                userId = sessionToken.userId;
+
+                feedback.style.color = "green";
+                feedback.textContent = "Code sent to your inbox!";
+                
+                document.getElementById('step1').classList.add('hidden');
+                document.getElementById('step2').classList.remove('hidden');
+            } catch (error) {
+                feedback.style.color = "red";
+                feedback.textContent = "Error: " + error.message;
+            }
+        }
+
+        async function verifyOTP() {
+            const code = document.getElementById('otpCode').value;
+            const feedback = document.getElementById('feedback');
+
+            feedback.style.color = "blue";
+            feedback.textContent = "Verifying...";
+
+            try {
+                // Confirm the code and create the session
+                await window.account.createSession(userId, code);
+                
+                feedback.style.color = "green";
+                feedback.textContent = "Login Successful!";
+                
+                // Success! Go to admin or home
+                setTimeout(() => { window.location.href = "index.html"; }, 1500);
+            } catch (error) {
+                feedback.style.color = "red";
+                feedback.textContent = "Invalid code. Try again.";
+            }
+        }
+    </script>
+</body>
+</html>
