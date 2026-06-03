@@ -123,22 +123,31 @@
         </div>
     </footer>
 
-    <!-- Appwrite SDK + Homepage Logic -->
+    <!-- DEPENDENCY LOAD ORDER (Crucial for Cloudflare & Eruda) -->
+    <script src="https://cdn.jsdelivr.net/npm/eruda"></script>
+    <script>eruda.init();</script>
+
+    <!-- 1. Core SDK -->
     <script src="https://cdn.jsdelivr.net/npm/appwrite@14.0.1/dist/iife/sdk.min.js"></script>
+    
+    <!-- 2. Your Centralized Configuration Configuration -->
+    <script src="js/appwrite.js"></script>
+
+    <!-- 3. Cleaned Native UI Logic & Document Fetching -->
     <script>
-        // Appwrite Setup
-        const { Client, Databases, Query } = Appwrite;
-        const client = new Client()
-            .setEndpoint('https://nyc.cloud.appwrite.io/v1')
-            .setProject('khabardarjeeling');
-        
-        const database = new Databases(client);
-        const APPWRITE_DB_ID = 'Khabar_db';
-        const APPWRITE_COLLECTION_ID = 'articles';
+        // Use the globally exposed instances from js/appwrite.js to prevent collisions
+        const database = window.databases;
+        const Query = window.Query;
+        const APPWRITE_DB_ID = window.APPWRITE_DB_ID;
+        const APPWRITE_COLLECTION_ID = window.APPWRITE_COLLECTION_ID;
 
         // Load Articles on Homepage
         async function loadHomepage() {
             try {
+                if (!database) {
+                    throw new Error("Appwrite Database instance is not initialized yet.");
+                }
+
                 const response = await database.listDocuments(
                     APPWRITE_DB_ID,
                     APPWRITE_COLLECTION_ID,
@@ -153,7 +162,7 @@
                 const newsGrid = document.getElementById('newsGrid');
                 const breakingTicker = document.getElementById('breakingTicker');
 
-                if (response.documents.length === 0) {
+                if (!response.documents || response.documents.length === 0) {
                     featuredStory.innerHTML = '<p>No articles published yet.</p>';
                     newsGrid.innerHTML = '<p>No articles published yet.</p>';
                     breakingTicker.innerHTML = 'No breaking news at the moment.';
@@ -213,7 +222,7 @@
                 document.body.classList.contains('dark-mode') ? '☀️' : '🌙';
         });
 
-        // Load articles when page loads
+        // Load articles when DOM is completely parsed to prevent "null" layout updates
         document.addEventListener('DOMContentLoaded', loadHomepage);
     </script>
 </body>
