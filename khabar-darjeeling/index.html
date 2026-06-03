@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="Khabar Darjeeling - Latest news from Darjeeling, Kalimpong, Kurseong, Mirik, Siliguri and West Bengal">
     
-    <!-- CACHE CONTROL: Force browsers to check for newer versions -->
     <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
     <meta http-equiv="Pragma" content="no-cache">
     <meta http-equiv="Expires" content="0">
@@ -15,7 +14,6 @@
     <link rel="stylesheet" href="css/responsive.css">
 </head>
 <body>
-    <!-- Navigation -->
     <nav class="navbar">
         <div class="container">
             <div class="navbar-content">
@@ -62,7 +60,6 @@
         </div>
     </nav>
 
-    <!-- Breaking News Ticker (Hidden when viewing specific category pages) -->
     <section class="breaking-ticker" id="breaking">
         <div class="container">
             <span class="breaking-label">BREAKING NEWS</span>
@@ -72,7 +69,6 @@
         </div>
     </section>
 
-    <!-- Hero Section (Hidden when viewing specific category pages) -->
     <section class="hero" id="heroSection">
         <div class="container">
             <h2>Stay Updated with Latest News</h2>
@@ -84,7 +80,6 @@
         </div>
     </section>
 
-    <!-- Featured Story (Hidden when viewing specific category pages) -->
     <section class="featured-section" id="featuredSection">
         <div class="container">
             <h3 class="section-title">Featured Story</h3>
@@ -94,7 +89,6 @@
         </div>
     </section>
 
-    <!-- Latest News Grid (Handles both default views and filtered categorizations dynamically) -->
     <section class="news-section" id="latest">
         <div class="container">
             <h3 class="section-title" id="mainSectionTitle">Latest News</h3>
@@ -104,7 +98,6 @@
         </div>
     </section>
 
-    <!-- Categories Grid (Hidden when viewing specific category pages) -->
     <section class="categories-section" id="categoriesSection">
         <div class="container">
             <h3 class="section-title">Popular News Categories</h3>
@@ -122,30 +115,19 @@
         </div>
     </section>
 
-    <!-- Footer -->
     <footer class="footer">
         <div class="container">
             <p>&copy; 2026 Khabar Darjeeling. All rights reserved.</p>
         </div>
     </footer>
 
-    <!-- ============================================
-         DEPENDENCY LOAD ORDER (DO NOT CHANGE)
-         ============================================ -->
-    
-    <!-- Eruda Console for Mobile Debugging -->
     <script src="https://cdn.jsdelivr.net/npm/eruda"></script>
     <script>eruda.init();</script>
 
-    <!-- Appwrite SDK (v14.0.1 IIFE) -->
     <script src="https://cdn.jsdelivr.net/npm/appwrite@14.0.1/dist/iife/sdk.min.js"></script>
     
-    <!-- Your Appwrite Configuration -->
     <script src="js/appwrite.js"></script>
 
-    <!-- ============================================
-         MAIN APPLICATION LOGIC - SAFE SCOPING
-         ============================================ -->
     <script>
         (() => {
             // ✅ FIX: All variables scoped within IIFE to prevent global collisions
@@ -367,10 +349,16 @@
                     ? 'No articles published in this category yet.'
                     : 'No articles published yet.';
                 
+                // ✅ FIX: Hide homepage sections when viewing an empty category
+                if (category) {
+                    hideHomepageSections();
+                }
+
                 if (!category) {
                     document.getElementById('featuredStory').innerHTML = '<p>No articles published yet.</p>';
                     document.getElementById('breakingTicker').innerHTML = 'No breaking news at the moment.';
                 }
+                
                 document.getElementById('newsGrid').innerHTML = `<p>${message}</p>`;
             }
 
