@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="Read full news stories on Khabar Darjeeling">
     
-    <!-- Cache busters added to match index.html -->
     <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
     <meta http-equiv="Pragma" content="no-cache">
     <meta http-equiv="Expires" content="0">
@@ -14,7 +13,6 @@
     <link rel="stylesheet" href="css/style.css?v=2">
     <link rel="stylesheet" href="css/responsive.css?v=2">
     <style>
-        /* Specific Styles for Single Article Page */
         .article-container {
             max-width: 800px;
             margin: 40px auto;
@@ -43,7 +41,7 @@
             font-size: 18px;
             line-height: 1.8;
             color: #333;
-            white-space: pre-line; /* Preserves paragraph line breaks from the database */
+            white-space: pre-line;
         }
         .dark-mode .article-body {
             color: #ddd;
@@ -53,44 +51,156 @@
             padding: 50px 20px;
         }
 
-        /* 📊 Engagement Styles Integration */
+        /* ✨ MODERN ENGAGEMENT UI STYLES */
+        .interaction-panel {
+            margin-top: 40px;
+            padding: 20px 0;
+            border-top: 1px solid #eef0f2;
+            border-bottom: 1px solid #eef0f2;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        .dark-mode .interaction-panel {
+            border-color: #2f3031;
+        }
+        
+        /* Smooth Instagram-style Like Button */
         .like-btn {
             background: #f0f2f5; 
-            color: #333; 
-            border: 1px solid #ddd;
-            padding: 10px 20px;
-            border-radius: 6px;
+            color: #555; 
+            border: none;
+            padding: 10px 22px;
+            border-radius: 20px;
             font-weight: 600;
+            font-size: 15px;
             cursor: pointer;
-            transition: 0.2s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.2s ease;
         }
         .like-btn:hover {
             background: #e4e6e9;
+            transform: scale(1.03);
         }
+        /* Active State (Liked) */
+        .like-btn.liked {
+            background: #ffebee;
+            color: #e63946;
+        }
+        .like-btn.liked:hover {
+            background: #ffcdd2;
+        }
+        
         .dark-mode .like-btn {
-            background: #3a3b3c;
-            color: white;
-            border-color: #555;
+            background: #242526;
+            color: #b0b3b8;
         }
         .dark-mode .like-btn:hover {
-            background: #4e4f50;
+            background: #3a3b3c;
+        }
+        .dark-mode .like-btn.liked {
+            background: #3e1f23;
+            color: #ff6b6b;
+        }
+
+        /* Elegant Comments Section */
+        .comments-section {
+            margin-top: 40px;
+        }
+        .comments-section h3 {
+            font-size: 1.4rem;
+            margin-bottom: 20px;
+            color: #222;
         }
         .dark-mode .comments-section h3 {
-            color: white;
+            color: #fff;
         }
-        .comment-box {
-            background: #fcfcfc; 
-            padding: 15px; 
-            border-radius: 6px; 
-            border: 1px solid #eee;
-            transition: background 0.2s;
+        
+        .comment-input-wrapper {
+            background: #fff;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            padding: 10px;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.02);
+            margin-bottom: 30px;
         }
-        .dark-mode .comment-box {
-            background: #242526;
+        .dark-mode .comment-input-wrapper {
+            background: #18191a;
             border-color: #3e4042;
         }
-        .dark-mode .comment-box p {
-            color: #e4e6eb !important;
+        .comment-input-wrapper textarea {
+            width: 100%;
+            border: none;
+            outline: none;
+            resize: none;
+            font-size: 15px;
+            font-family: inherit;
+            background: transparent;
+            padding: 8px;
+            color: inherit;
+        }
+        .comment-submit-row {
+            display: flex;
+            justify-content: flex-end;
+            margin-top: 5px;
+        }
+        .comment-submit-btn {
+            background: #c41e3a; 
+            color: white; 
+            padding: 8px 18px; 
+            border: none; 
+            border-radius: 6px; 
+            font-weight: 600; 
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        .comment-submit-btn:hover {
+            background: #a0162e;
+        }
+
+        /* Modern Comment Cards */
+        .comment-card {
+            background: #fff; 
+            padding: 18px; 
+            border-radius: 8px; 
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+            border: 1px solid #edf0f2;
+            margin-bottom: 15px;
+        }
+        .dark-mode .comment-card {
+            background: #242526;
+            border-color: #2f3031;
+            box-shadow: none;
+        }
+        .comment-meta {
+            display: flex; 
+            justify-content: space-between; 
+            margin-bottom: 8px;
+            align-items: center;
+        }
+        .comment-author {
+            color: #c41e3a; 
+            font-weight: 600;
+            font-size: 14px;
+        }
+        .dark-mode .comment-author {
+            color: #ff4d6d;
+        }
+        .comment-date {
+            color: #999; 
+            font-size: 12px;
+        }
+        .comment-text {
+            margin: 0; 
+            font-size: 15px; 
+            color: #333; 
+            line-height: 1.5; 
+            white-space: pre-wrap;
+        }
+        .dark-mode .comment-text {
+            color: #e4e6eb;
         }
     </style>
 </head>
@@ -100,7 +210,7 @@
         <div class="container">
             <div class="navbar-content">
                 <div class="logo">
-                    <h1><a href="index.html" style="color: inherit; text-decoration: none;">खबर दार्जिलिंग</a></h1>
+                    <h1><a href="index.html" style="color: inherit; text-decoration: none;">खबर दार्जিলिंग</a></h1>
                     <p class="tagline">Your Trusted News Source</p>
                 </div>
                 
@@ -165,30 +275,29 @@
                 <!-- Main article paragraphs go here -->
             </div>
 
-            <!-- ❤️ LIKES INTERACTION INTERFACE -->
-            <div class="interaction-section" style="margin-top: 40px; padding-top: 25px; border-top: 1px solid #ddd;">
+            <!-- ❤️ RE-DESIGNED LIKES INTERACTION PANEL -->
+            <div class="interaction-panel">
                 <button id="likeBtn" class="like-btn">
-                    ❤️ Like (<span id="likeCount">0</span>)
+                    <span class="heart-icon">❤️</span> Like (<span id="likeCount">0</span>)
                 </button>
             </div>
 
-            <!-- 💬 COMMENTS ENGAGEMENT ENGINE LAYOUT -->
-            <div class="comments-section" style="margin-top: 40px;">
-                <h3 style="font-size: 1.3rem; margin-bottom: 15px;">Discussion (<span id="commentCount">0</span>)</h3>
+            <!-- 💬 RE-DESIGNED COMMENTS THREAD -->
+            <div class="comments-section">
+                <h3 id="commentHeaderTitle">Discussion (0)</h3>
                 
-                <!-- Input Form Block -->
-                <form id="commentForm" style="margin-bottom: 30px;">
-                    <textarea id="newCommentText" required placeholder="Share your thoughts on this story..." rows="3" 
-                              style="width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 6px; resize: none; font-size: 15px; font-family: inherit;"></textarea>
-                    <button type="submit" style="margin-top: 10px; background: #c41e3a; color: white; padding: 10px 20px; border: none; border-radius: 6px; font-weight: 600; cursor: pointer;">
-                        Post Comment
-                    </button>
+                <!-- Styled Custom Input Box Container -->
+                <form id="commentForm">
+                    <div class="comment-input-wrapper">
+                        <textarea id="newCommentText" required placeholder="Share your thoughts on this story..." rows="3"></textarea>
+                        <div class="comment-submit-row">
+                            <button type="submit" class="comment-submit-btn">Post Comment</button>
+                        </div>
+                    </div>
                 </form>
 
-                <!-- Target Wrapper for Dynamic Thread Feeds -->
-                <div id="commentsList" style="display: flex; flex-direction: column; gap: 15px;">
-                    <!-- Appwrite generated markup loops append inside here -->
-                </div>
+                <!-- Thread Stack Outputs -->
+                <div id="commentsList"></div>
             </div>
         </article>
     </main>
@@ -210,14 +319,13 @@
     <!-- 2. Configuration Mappings -->
     <script src="js/appwrite.js"></script>
 
-    <!-- 3. Dynamic Article Loader Logic + Likes/Comments Hooks -->
+    <!-- 3. Logic Engine Operations -->
     <script>
         (() => {
             const appwriteDatabase = window.databases;
             const dbId = window.APPWRITE_DB_ID;
             const collectionId = window.APPWRITE_COLLECTION_ID;
 
-            // 📢 Define collection IDs explicitly to hook into your separate tables
             const LIKES_COLLECTION_ID = "likes"; 
             const COMMENTS_COLLECTION_ID = "comments";
 
@@ -225,19 +333,19 @@
             const articleId = urlParams.get('id');
 
             let currentLoggedUser = null;
+            let userExistingLikeId = null; // Tracks if the user liked this specific doc instance
 
-            // Fetch visitor identity attributes if an active user context session profiles open
             async function fetchUserContext() {
                 if (window.account) {
                     try {
                         currentLoggedUser = await window.account.get();
                     } catch (e) {
-                        console.log("Reading text anonymously: No session profile found.");
+                        console.log("Reading anonymously.");
                     }
                 }
             }
 
-            // 📈 Load Likes Subroutine
+            // 📈 Load Likes & Determine Toggle State
             async function renderLikesMetric() {
                 try {
                     const response = await appwriteDatabase.listDocuments(
@@ -245,49 +353,68 @@
                         LIKES_COLLECTION_ID,
                         [window.Query.equal("articleId", articleId)]
                     );
+                    
                     document.getElementById('likeCount').textContent = response.total;
+                    
+                    // Check if current logged-in account is in the liked document array records
+                    if (currentLoggedUser) {
+                        const userLikeDoc = response.documents.find(doc => doc.userEmail === currentLoggedUser.email);
+                        const likeBtn = document.getElementById('likeBtn');
+                        
+                        if (userLikeDoc) {
+                            userExistingLikeId = userLikeDoc.$id; // Save ID for unliking
+                            likeBtn.classList.add('liked');
+                        } else {
+                            userExistingLikeId = null;
+                            likeBtn.classList.remove('liked');
+                        }
+                    }
                 } catch (err) {
-                    console.error("Failed to load likes metrics:", err);
+                    console.error("Failed loading likes metrics:", err);
                 }
             }
 
-            // ❤️ Like Button Interactive Submission
+            // ❤️ TOGGLE LIKE / UNLIKE HANDLER
             document.getElementById('likeBtn').addEventListener('click', async () => {
                 if (!currentLoggedUser) {
-                    alert("Please log in to leave reactions on stories!");
+                    alert("Please log in to like articles!");
                     window.location.href = 'login.html';
                     return;
                 }
 
+                const likeBtn = document.getElementById('likeBtn');
+                likeBtn.disabled = true; // Anti-spam lock
+
                 try {
-                    // Check if this specific email signature trace exists for this article ID
-                    const existingLikes = await appwriteDatabase.listDocuments(
-                        dbId,
-                        LIKES_COLLECTION_ID,
-                        [
-                            window.Query.equal("articleId", articleId),
-                            window.Query.equal("userEmail", currentLoggedUser.email)
-                        ]
-                    );
-
-                    if (existingLikes.total > 0) {
-                        alert("You've already verified a reaction like entry tracking token for this news story!");
-                        return;
+                    if (userExistingLikeId) {
+                        // ❌ UNLIKE ACTION: Document exists, so delete it
+                        await appwriteDatabase.deleteDocument(
+                            dbId,
+                            LIKES_COLLECTION_ID,
+                            userExistingLikeId
+                        );
+                        userExistingLikeId = null;
+                        likeBtn.classList.remove('liked');
+                    } else {
+                        //  LIKE ACTION: Create document entries record
+                        const newLike = await appwriteDatabase.createDocument(
+                            dbId,
+                            LIKES_COLLECTION_ID,
+                            window.ID.unique(),
+                            {
+                                articleId: articleId,
+                                userEmail: currentLoggedUser.email
+                            }
+                        );
+                        userExistingLikeId = newLike.$id;
+                        likeBtn.classList.add('liked');
                     }
-
-                    // Save transaction entry block
-                    await appwriteDatabase.createDocument(
-                        dbId,
-                        LIKES_COLLECTION_ID,
-                        window.ID.unique(),
-                        {
-                            articleId: articleId,
-                            userEmail: currentLoggedUser.email
-                        }
-                    );
-                    renderLikesMetric();
+                    // Refresh metrics smoothly
+                    await renderLikesMetric();
                 } catch (err) {
-                    alert("Could not process your reaction like right now.");
+                    console.error("Error toggling like context signature:", err);
+                } finally {
+                    likeBtn.disabled = false;
                 }
             });
 
@@ -303,33 +430,32 @@
                         ]
                     );
 
-                    document.getElementById('commentCount').textContent = response.total;
+                    document.getElementById('commentHeaderTitle').textContent = `Discussion (${response.total})`;
                     const listContainer = document.getElementById('commentsList');
                     listContainer.innerHTML = '';
 
                     if (response.total === 0) {
-                        listContainer.innerHTML = `<p style="color:#666; font-style:italic; font-size:14px;">No comments posted yet. Be the first to start the discussion!</p>`;
+                        listContainer.innerHTML = `<p style="color:#666; font-style:italic; font-size:14px; padding: 10px 5px;">No comments posted yet. Be the first to start the discussion!</p>`;
                         return;
                     }
 
                     response.documents.forEach(doc => {
-                        const box = document.createElement('div');
-                        box.className = "comment-box";
-                        box.innerHTML = `
-                            <div style="display:flex; justify-content:space-between; margin-bottom:6px;">
-                                <strong style="color:#c41e3a; font-size:14px;">${doc.authorName}</strong>
-                                <small style="color:#888; font-size:11px;">${new Date(doc.createdAt).toLocaleDateString()}</small>
+                        const card = document.createElement('div');
+                        card.className = "comment-card";
+                        card.innerHTML = `
+                            <div class="comment-meta">
+                                <span class="comment-author">${doc.authorName}</span>
+                                <span class="comment-date">${new Date(doc.createdAt).toLocaleDateString(undefined, {dateStyle: 'medium'})}</span>
                             </div>
-                            <p style="margin:0; font-size:14.5px; color:#333; line-height:1.4; white-space:pre-wrap;">${doc.commentText}</p>
+                            <p class="comment-text">${doc.commentText}</p>
                         `;
-                        listContainer.appendChild(box);
+                        listContainer.appendChild(card);
                     });
                 } catch (err) {
                     console.error("Database feedback read stream exception mapping error:", err);
                 }
             }
 
-            // 📝 Form submission workflow for sending text content rows to Appwrite
             document.getElementById('commentForm').addEventListener('submit', async (e) => {
                 e.preventDefault();
                 if (!currentLoggedUser) {
@@ -355,14 +481,14 @@
                             createdAt: new Date().toISOString()
                         }
                     );
-                    inputEl.value = ''; // Clean field wrapper tracking box text out
+                    inputEl.value = ''; 
                     renderCommentsThread();
                 } catch (err) {
-                    alert("Could not post comment data collection block. Try again.");
+                    alert("Could not post comment. Try again.");
                 }
             });
 
-            // Original Full Article Hydration Core Functionality Engine
+            // Original Full Article Hydration Engine
             async function fetchFullArticle() {
                 try {
                     if (!appwriteDatabase) {
@@ -381,7 +507,7 @@
                     );
 
                     document.getElementById('artTitle').textContent = article.title;
-                    document.title = `${article.title} - खबर दार्जिलिंग`; 
+                    document.title = `${article.title} - खबर दार्जিলिंग`; 
                     
                     document.getElementById('artCategory').textContent = article.category ? article.category.toUpperCase() : 'GENERAL';
                     document.getElementById('artAuthor').textContent = `By: ${article.authorName || 'Staff Reporter'}`;
@@ -401,7 +527,6 @@
                     document.getElementById('loadingArticle').style.display = 'none';
                     document.getElementById('articleContent').style.display = 'block';
 
-                    // ⚡ Fire Engagement loaders safely right after layout content populates
                     await fetchUserContext();
                     renderLikesMetric();
                     renderCommentsThread();
@@ -424,7 +549,7 @@
                 document.getElementById('articleContent').style.display = 'block';
             }
 
-            // UI toggles
+            // UI Toggles
             const navToggle = document.getElementById('navToggle');
             if (navToggle) {
                 navToggle.addEventListener('click', () => {
