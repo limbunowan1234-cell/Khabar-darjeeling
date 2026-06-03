@@ -207,30 +207,34 @@ body {
 }
 
 /* ==================== HERO SECTION ==================== */
-/* ✅ OPTIMIZED: Root absolute directory routing applied with higher image contrast opacity */
+/* ✅ OPTIMIZED: Aspect padding additions + position alignment tweaks to stop badge clipping */
 .hero {
-    background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.6)), 
+    background: linear-gradient(rgba(0, 0, 0, 0.45), rgba(0, 0, 0, 0.55)), 
                 url('/assets/banner.jpg');
     background-size: cover;
-    background-position: center;
+    background-position: center top; /* Keeps mountain heights anchored while stretching downwards */
     background-repeat: no-repeat;
     color: white;
-    padding: 95px 0;
+    padding: 120px 0 260px 0; /* Significant bottom padding buffer to reveal asset icons */
     text-align: center;
+    min-height: 85vh; /* Expands view footprint on large panels */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
 }
 
 .hero h2 {
     font-size: 42px;
     margin-bottom: 15px;
     font-weight: 700;
-    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.4);
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.6);
 }
 
 .hero p {
     font-size: 18px;
     margin-bottom: 30px;
     opacity: 0.95;
-    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.4);
+    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.6);
 }
 
 .hero-buttons {
@@ -633,7 +637,6 @@ body {
 }
 
 /* ==================== DARK THEME ==================== */
-/* ✅ FIXED: Synchronized targeting selectors to allow 'dark-mode' or 'dark-theme' body classes to trigger perfectly */
 body.dark-theme,
 body.dark-mode {
     background: #1a1a1a;
