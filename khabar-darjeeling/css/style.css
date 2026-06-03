@@ -207,7 +207,6 @@ body {
 }
 
 /* ==================== HERO SECTION ==================== */
-/* PERFECT DESKTOP VIEW: Keeps exact aspect ratio so full image is visible */
 .hero {
     background: linear-gradient(rgba(0, 0, 0, 0.35), rgba(0, 0, 0, 0.45)), 
                 url('/assets/banner.jpg');
@@ -215,7 +214,7 @@ body {
     background-position: center;
     background-repeat: no-repeat;
     color: white;
-    padding: 6% 0; /* Uses fluid percentage padding to keep text centered on all screens */
+    padding: 6% 0; 
     text-align: center;
     width: 100%;
     aspect-ratio: 1920 / 1008; 
@@ -702,37 +701,44 @@ body.dark-theme .nav-links a, body.dark-mode .nav-links a {
         padding: 20px;
     }
     
-    /* ✅ FIXED MOBILE VIEW: Prevents text stretching and shifts buttons up onto a scenic background */
+    /* ✅ FIXED HERO HEIGHT: Pulls the submit button up on mobile layout */
     .hero {
-        aspect-ratio: auto;
-        background-size: cover;
-        background-position: center center;
-        padding: 45px 0 50px 0; /* Tightened padding to slide buttons upwards */
+        aspect-ratio: auto !important;
+        background-size: cover !important;
+        background-position: center center !important;
+        padding: 40px 0 45px 0 !important; 
     }
     .hero h2 {
-        font-size: 1.8rem;
+        font-size: 1.7rem !important;
     }
     .hero p {
-        font-size: 0.95rem;
-        padding: 0 10px;
-        margin-bottom: 18px; /* Lift up structural bounds */
+        font-size: 0.95rem !important;
+        padding: 0 10px !important;
+        margin-bottom: 15px !important; 
     }
     .hero-buttons {
-        gap: 8px;
+        gap: 8px !important;
     }
 
-    /* ✅ NAVBAR FIX: Drops the intrusive desktop input form out of mobile space to fix the merging bug */
+    /* ✅ FIXED MOBILE NAVBAR MERGE: Forces elements to wrap and completely hides desktop search bar input field */
     .navbar-content {
-        padding: 8px 0;
+        padding: 8px 0 !important;
+        display: flex !important;
+        justify-content: space-between !important;
+        align-items: center !important;
+        width: 100% !important;
     }
     .logo h1 {
-        font-size: 19px;
+        font-size: 18px !important;
     }
     .logo img {
-        height: 38px !important;
-        width: 38px !important;
+        height: 35px !important;
+        width: 35px !important;
     }
     .nav-right .search-input {
-        display: none !important; /* Forces search field hidden on compact screens */
+        display: none !important; 
+    }
+    .nav-right {
+        gap: 10px !important;
     }
 }
