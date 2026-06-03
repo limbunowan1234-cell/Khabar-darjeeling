@@ -207,7 +207,7 @@ body {
 }
 
 /* ==================== HERO SECTION ==================== */
-/* ✅ PERFECT DESKTOP VIEW: Keeps exact aspect ratio so full image is visible */
+/* PERFECT DESKTOP VIEW: Keeps exact aspect ratio so full image is visible */
 .hero {
     background: linear-gradient(rgba(0, 0, 0, 0.35), rgba(0, 0, 0, 0.45)), 
                 url('/assets/banner.jpg');
@@ -702,18 +702,37 @@ body.dark-theme .nav-links a, body.dark-mode .nav-links a {
         padding: 20px;
     }
     
-    /* ✅ PERFECT MOBILE VIEW: Scales down header fonts and drops aspect ratio lock to look flawless on smartphones */
+    /* ✅ FIXED MOBILE VIEW: Prevents text stretching and shifts buttons up onto a scenic background */
     .hero {
         aspect-ratio: auto;
         background-size: cover;
         background-position: center center;
-        padding: 80px 0;
+        padding: 45px 0 50px 0; /* Tightened padding to slide buttons upwards */
     }
     .hero h2 {
-        font-size: 2rem;
+        font-size: 1.8rem;
     }
     .hero p {
-        font-size: 1rem;
+        font-size: 0.95rem;
         padding: 0 10px;
+        margin-bottom: 18px; /* Lift up structural bounds */
+    }
+    .hero-buttons {
+        gap: 8px;
+    }
+
+    /* ✅ NAVBAR FIX: Drops the intrusive desktop input form out of mobile space to fix the merging bug */
+    .navbar-content {
+        padding: 8px 0;
+    }
+    .logo h1 {
+        font-size: 19px;
+    }
+    .logo img {
+        height: 38px !important;
+        width: 38px !important;
+    }
+    .nav-right .search-input {
+        display: none !important; /* Forces search field hidden on compact screens */
     }
 }
