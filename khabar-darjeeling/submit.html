@@ -57,6 +57,27 @@
         .remove-btn:hover {
             background: #c82333;
         }
+        
+        /* Branded Profile Box Style */
+        .user-lock-banner {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            background: #f0f2f5;
+            padding: 14px;
+            border-radius: 6px;
+            border-left: 4px solid #1877f2;
+            margin-bottom: 8px;
+        }
+        body.dark-theme .user-lock-banner {
+            background: #242526;
+            border-left-color: #c41e3a;
+        }
+        .user-lock-avatar {
+            width: 40px; height: 40px; background: #c41e3a; color: white;
+            border-radius: 50%; display: flex; align-items: center;
+            justify-content: center; font-weight: 700; font-size: 16px;
+        }
     </style>
 </head>
 <body>
@@ -111,6 +132,15 @@
                 <h2>Submit News</h2>
                 <p class="submit-subtitle">Share breaking news or stories from your area</p>
 
+                <!-- 👤 LOCKED AUTHOR CREDENTIAL BANNER -->
+                <div class="user-lock-banner">
+                    <div class="user-lock-avatar" id="authorAvatar">...</div>
+                    <div>
+                        <p style="margin:0; font-weight:600; font-size:14px;" id="authorDisplayLabel">Loading profile...</p>
+                        <p style="margin:0; font-size:11px; color:#606770;">Verified Publishing Identity (Locked)</p>
+                    </div>
+                </div>
+
                 <form id="newsForm" class="news-form">
                     <div class="form-group">
                         <label for="title">News Title *</label>
@@ -160,17 +190,7 @@
                         <small>Minimum 50 characters</small>
                     </div>
 
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label for="authorName">Author Name *</label>
-                            <input type="text" id="authorName" name="authorName" required placeholder="Your name">
-                        </div>
-                        <div class="form-group">
-                            <label for="authorEmail">Author Email *</label>
-                            <input type="email" id="authorEmail" name="authorEmail" required placeholder="your@email.com">
-                        </div>
-                    </div>
-
+                    <!-- 📞 ONLY KEEP NECESSARY VOLATILE METADATA (PHONE NUMBER) -->
                     <div class="form-group">
                         <label for="authorPhone">Contact Phone *</label>
                         <input type="tel" id="authorPhone" name="authorPhone" required placeholder="+91 XXXXX XXXXX">
@@ -211,9 +231,98 @@
 
     <script src="https://cdn.jsdelivr.net/npm/appwrite@14.0.1/dist/iife/sdk.min.js"></script>
     <script src="js/appwrite.js?v=1000"></script>
-    <script src="js/submit.js?v=1000"></script>
     
     <script>
+        let verifiedUserSession = null;
+
+        // 🔒 AUTH GATEKEEPER CHECK ON LOAD
+        function verifyUserSessionState(retries = 0) {
+            if (window.account) {
+                window.account.get()
+                    .then(user => {
+                        verifiedUserSession = user;
+                        // Display verified data in the locked profile UI card banner
+                        document.getElementById('authorDisplayLabel').textContent = `${user.name} (${user.email})`;
+                        document.getElementById('authorAvatar').textContent = user.name ? user.name.charAt(0).toUpperCase() : '👤';
+                    })
+                    .catch(err => {
+                        console.warn("⛔ Unauthorized user attempt on submission interface. Redirecting...", err);
+                        window.location.href = 'login.html';
+                    });
+            } else if (retries < 30) {
+                setTimeout(() => verifyUserSessionState(retries + 1), 100);
+            } else {
+                alert("Authentication subsystem timeout. Please refresh.");
+            }
+        }
+        verifyUserSessionState();
+
+        // 📝 HARDCODED INJECTED SUBMISSION INTERCEPTOR
+        const newsForm = document.getElementById('newsForm');
+        if (newsForm) {
+            newsForm.addEventListener('submit', async function(e) {
+                e.preventDefault();
+                
+                const submitBtn = document.getElementById('submitBtn');
+                const successMsg = document.getElementById('successMessage');
+                const errorMsg = document.getElementById('errorMessage');
+                const errorText = document.getElementById('errorText');
+
+                if (!verifiedUserSession) {
+                    alert("Your account context expired. Please log in again.");
+                    window.location.href = 'login.html';
+                    return;
+                }
+
+                // UI Processing status
+                submitBtn.disabled = true;
+                submitBtn.textContent = "Publishing Story...";
+                errorMsg.style.display = 'none';
+
+                try {
+                    // Gather form data elements
+                    const title = document.getElementById('title').value.trim();
+                    const category = document.getElementById('category').value;
+                    const location = document.getElementById('location').value.trim();
+                    const content = document.getElementById('content').value.trim();
+                    const phone = document.getElementById('authorPhone').value.trim();
+
+                    // Handle placeholder logic for standard image processing
+                    // (If your js/submit.js tracks Appwrite storage buckets upload, map that output URL value here)
+                    const finalImageUrl = ""; 
+
+                    const articlePayload = {
+                        title: title,
+                        category: category,
+                        content: content,
+                        location: location,
+                        authorPhone: phone,
+                        status: "pending", // Always default to dashboard review workflow
+                        authorName: verifiedUserSession.name,  // 🔒 HARDCODED INJECTED BY APPWRITE AUTH
+                        authorEmail: verifiedUserSession.email // 🔒 HARDCODED INJECTED BY APPWRITE AUTH
+                    };
+
+                    await window.databases.createDocument(
+                        window.APPWRITE_DB_ID,
+                        window.APPWRITE_COLLECTION_ID,
+                        window.ID.unique(),
+                        articlePayload
+                    );
+
+                    // Success display block handling
+                    newsForm.style.display = 'none';
+                    document.querySelector('.user-lock-banner').style.display = 'none';
+                    successMsg.style.display = 'block';
+
+                } catch (error) {
+                    submitBtn.disabled = false;
+                    submitBtn.textContent = "Submit News";
+                    errorText.textContent = error.message || "Network exception encountered writing to Appwrite schema collection.";
+                    errorMsg.style.display = 'block';
+                }
+            });
+        }
+
         // Image Preview Logic
         const imageInputFile = document.getElementById('imageInput');
         const imagePreviewDiv = document.getElementById('imagePreview');
@@ -236,7 +345,7 @@
 
         if (removeImageButton) {
             removeImageButton.addEventListener('click', function() {
-                imageInputFile.value = ''; // Clear the input
+                imageInputFile.value = ''; 
                 previewImageElement.src = '';
                 imagePreviewDiv.style.display = 'none';
             });
