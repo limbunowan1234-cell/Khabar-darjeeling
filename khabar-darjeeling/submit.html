@@ -67,7 +67,7 @@
             padding: 14px;
             border-radius: 6px;
             border-left: 4px solid #1877f2;
-            margin-bottom: 8px;
+            margin-bottom: 20px;
         }
         body.dark-theme .user-lock-banner {
             background: #242526;
@@ -190,12 +190,6 @@
                         <small>Minimum 50 characters</small>
                     </div>
 
-                    <!-- 📞 ONLY KEEP NECESSARY VOLATILE METADATA (PHONE NUMBER) -->
-                    <div class="form-group">
-                        <label for="authorPhone">Contact Phone *</label>
-                        <input type="tel" id="authorPhone" name="authorPhone" required placeholder="+91 XXXXX XXXXX">
-                    </div>
-
                     <div class="form-group checkbox">
                         <input type="checkbox" id="terms" name="terms" required>
                         <label for="terms">I agree that this news is accurate and I have permission to share it</label>
@@ -241,7 +235,6 @@
                 window.account.get()
                     .then(user => {
                         verifiedUserSession = user;
-                        // Display verified data in the locked profile UI card banner
                         document.getElementById('authorDisplayLabel').textContent = `${user.name} (${user.email})`;
                         document.getElementById('authorAvatar').textContent = user.name ? user.name.charAt(0).toUpperCase() : '👤';
                     })
@@ -257,7 +250,7 @@
         }
         verifyUserSessionState();
 
-        // 📝 HARDCODED INJECTED SUBMISSION INTERCEPTOR
+        // 📝 DATA SUBMISSION HANDLING
         const newsForm = document.getElementById('newsForm');
         if (newsForm) {
             newsForm.addEventListener('submit', async function(e) {
@@ -274,32 +267,25 @@
                     return;
                 }
 
-                // UI Processing status
                 submitBtn.disabled = true;
                 submitBtn.textContent = "Publishing Story...";
                 errorMsg.style.display = 'none';
 
                 try {
-                    // Gather form data elements
                     const title = document.getElementById('title').value.trim();
                     const category = document.getElementById('category').value;
                     const location = document.getElementById('location').value.trim();
                     const content = document.getElementById('content').value.trim();
-                    const phone = document.getElementById('authorPhone').value.trim();
-
-                    // Handle placeholder logic for standard image processing
-                    // (If your js/submit.js tracks Appwrite storage buckets upload, map that output URL value here)
-                    const finalImageUrl = ""; 
+                    const finalImageUrl = ""; // Maps to storage output URL if configured
 
                     const articlePayload = {
                         title: title,
                         category: category,
                         content: content,
                         location: location,
-                        authorPhone: phone,
-                        status: "pending", // Always default to dashboard review workflow
-                        authorName: verifiedUserSession.name,  // 🔒 HARDCODED INJECTED BY APPWRITE AUTH
-                        authorEmail: verifiedUserSession.email // 🔒 HARDCODED INJECTED BY APPWRITE AUTH
+                        status: "pending", 
+                        authorName: verifiedUserSession.name,  // 🔒 SECURE AUTOMATIC BINDING
+                        authorEmail: verifiedUserSession.email // 🔒 SECURE AUTOMATIC BINDING
                     };
 
                     await window.databases.createDocument(
@@ -309,7 +295,6 @@
                         articlePayload
                     );
 
-                    // Success display block handling
                     newsForm.style.display = 'none';
                     document.querySelector('.user-lock-banner').style.display = 'none';
                     successMsg.style.display = 'block';
@@ -317,7 +302,7 @@
                 } catch (error) {
                     submitBtn.disabled = false;
                     submitBtn.textContent = "Submit News";
-                    errorText.textContent = error.message || "Network exception encountered writing to Appwrite schema collection.";
+                    errorText.textContent = error.message || "Network exception writing to Appwrite.";
                     errorMsg.style.display = 'block';
                 }
             });
