@@ -14,105 +14,34 @@
             --border-color: #dddfe2;
         }
 
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-            font-family: 'Poppins', sans-serif;
-        }
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Poppins', sans-serif; }
+        body { background-color: var(--bg-gray); display: flex; flex-direction: column; justify-content: center; align-items: center; min-height: 100vh; color: var(--text-dark); }
+        .login-wrapper { width: 100%; max-width: 396px; padding: 16px; }
+        
+        .brand-header { text-align: center; margin-bottom: 24px; display: flex; flex-direction: column; align-items: center; }
+        .brand-logo { height: 75px; width: 75px; object-fit: cover; border-radius: 50%; margin-bottom: 12px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); border: 2px solid #ffffff; }
+        .brand-header h1 { color: var(--brand-red); font-size: 34px; font-weight: 700; letter-spacing: -0.5px; margin-bottom: 2px; }
+        .brand-header p { color: #606770; font-size: 14px; font-weight: 600; letter-spacing: 0.5px; text-transform: uppercase; }
 
-        body {
-            background-color: var(--bg-gray);
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-            color: var(--text-dark);
-        }
+        .card { background: #ffffff; border-radius: 8px; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1), 0 8px 16px rgba(0, 0, 0, 0.1); padding: 24px; width: 100%; }
+        .instruction-text { color: #606770; font-size: 13px; line-height: 1.4; text-align: center; margin-bottom: 16px; }
+        .form-control { width: 100%; margin-bottom: 14px; }
+        .form-control input { width: 100%; padding: 14px 12px; font-size: 14px; border: 1px solid var(--border-color); border-radius: 6px; background: #f5f6f7; color: var(--text-dark); outline: none; transition: all 0.2s; }
+        .form-control input:focus { border-color: var(--fb-blue); background: #ffffff; box-shadow: 0 0 0 2px rgba(24, 119, 242, 0.2); }
+        
+        .form-control input.otp-style { font-size: 26px; letter-spacing: 6px; text-align: center; font-weight: 700; padding: 8px; }
 
-        .login-wrapper {
-            width: 100%;
-            max-width: 396px;
-            padding: 16px;
-        }
-
-        .brand-header {
-            text-align: center;
-            margin-bottom: 24px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
-
-        .brand-logo {
-            height: 75px; width: 75px; object-fit: cover; 
-            border-radius: 50%; margin-bottom: 12px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            border: 2px solid #ffffff;
-        }
-
-        .brand-header h1 {
-            color: var(--brand-red);
-            font-size: 34px; font-weight: 700;
-            letter-spacing: -0.5px; margin-bottom: 2px;
-        }
-
-        .brand-header p {
-            color: #606770; font-size: 14px;
-            font-weight: 600; letter-spacing: 0.5px;
-            text-transform: uppercase;
-        }
-
-        .card {
-            background: #ffffff; border-radius: 8px;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1), 0 8px 16px rgba(0, 0, 0, 0.1);
-            padding: 24px; width: 100%;
-        }
-
-        .form-control {
-            width: 100%; margin-bottom: 14px;
-        }
-
-        .form-control input {
-            width: 100%; padding: 14px 12px; font-size: 14px;
-            border: 1px solid var(--border-color); border-radius: 6px;
-            background: #f5f6f7; color: var(--text-dark); outline: none;
-            transition: all 0.2s;
-        }
-
-        .form-control input:focus {
-            border-color: var(--fb-blue); background: #ffffff;
-            box-shadow: 0 0 0 2px rgba(24, 119, 242, 0.2);
-        }
-
-        .btn-submit {
-            width: 100%; padding: 12px; font-size: 16px; font-weight: 600;
-            color: #ffffff; background-color: var(--fb-blue);
-            border: none; border-radius: 6px; cursor: pointer;
-            margin-top: 6px; transition: background-color 0.2s;
-        }
-
+        .btn-submit { width: 100%; padding: 12px; font-size: 16px; font-weight: 600; color: #ffffff; background-color: var(--fb-blue); border: none; border-radius: 6px; cursor: pointer; margin-top: 6px; transition: background-color 0.2s; }
         .btn-submit:hover { background-color: #166fe5; }
-
-        .toggle-box {
-            text-align: center; margin-top: 20px;
-            padding-top: 20px; border-top: 1px solid var(--border-color);
-            font-size: 14px; color: #606770;
-        }
-
-        .toggle-link {
-            color: var(--fb-blue); font-weight: 600;
-            text-decoration: none; cursor: pointer;
-        }
-
-        .status-feedback {
-            margin-top: 16px; text-align: center;
-            font-size: 13px; font-weight: 500; min-height: 20px;
-        }
-
+        .btn-submit:disabled { opacity: 0.5; cursor: not-allowed; }
+        
+        .forgot-link { display: block; text-align: center; margin-top: 14px; font-size: 13px; color: var(--fb-blue); text-decoration: none; cursor: pointer; font-weight: 500; }
+        .toggle-box { text-align: center; margin-top: 20px; padding-top: 20px; border-top: 1px solid var(--border-color); font-size: 14px; color: #606770; }
+        .toggle-link { color: var(--fb-blue); font-weight: 600; text-decoration: none; cursor: pointer; }
+        .status-feedback { margin-top: 16px; text-align: center; font-size: 13px; font-weight: 500; min-height: 20px; }
         .hidden { display: none !important; }
 
+        /* Dark Mode overrides */
         body.dark-mode { background-color: #121212; color: #f5f6f7; }
         body.dark-mode .card { background: #242526; box-shadow: 0 4px 12px rgba(0,0,0,0.3); border-top: 1px solid #3a3b3c;}
         body.dark-mode .form-control input { background: #3a3b3c; border-color: #4e4f50; color: #ffffff; }
@@ -124,7 +53,6 @@
 <body>
 
     <div class="login-wrapper">
-        
         <div class="brand-header">
             <img src="assets/logo.png" alt="Khabar Darjeeling Logo" class="brand-logo">
             <h1>खबर दार्जिलिंग</h1>
@@ -132,8 +60,7 @@
         </div>
 
         <div class="card">
-            
-            <!-- MODE 1: LOG IN FORM -->
+            <!-- 1. LOGIN VIEW -->
             <form id="loginForm" onsubmit="handleLogin(event)">
                 <div class="form-control">
                     <input type="email" id="loginEmail" placeholder="Email address" required>
@@ -142,13 +69,14 @@
                     <input type="password" id="loginPassword" placeholder="Password" required>
                 </div>
                 <button type="submit" id="loginBtn" class="btn-submit">Log In</button>
+                <span class="forgot-link" onclick="switchMode('forgot')">Forgot Password?</span>
                 
                 <div class="toggle-box">
                     Don't have an account? <span class="toggle-link" onclick="switchMode('signup')">Sign Up</span>
                 </div>
             </form>
 
-            <!-- MODE 2: SIGN UP FORM (Hidden initially) -->
+            <!-- 2. SIGN UP VIEW -->
             <form id="signupForm" class="hidden" onsubmit="handleSignup(event)">
                 <div class="form-control">
                     <input type="text" id="signupName" placeholder="Full name" required>
@@ -159,12 +87,37 @@
                 <div class="form-control">
                     <input type="password" id="signupPassword" placeholder="Create password (min 8 chars)" minlength="8" required>
                 </div>
-                <button type="submit" id="signupBtn" class="btn-submit" style="background-color: #42b72a;">Create Account</button>
+                <button type="submit" id="signupBtn" class="btn-submit" style="background-color: #42b72a;">Verify Email via OTP</button>
                 
                 <div class="toggle-box">
                     Already have an account? <span class="toggle-link" onclick="switchMode('login')">Log In</span>
                 </div>
             </form>
+
+            <!-- 3. FORGOT PASSWORD REQUEST VIEW -->
+            <form id="forgotForm" class="hidden" onsubmit="handleForgotRequest(event)">
+                <p class="instruction-text">Enter your account email. We'll transmit a security OTP code to reset your access password safely.</p>
+                <div class="form-control">
+                    <input type="email" id="forgotEmail" placeholder="Account email address" required>
+                </div>
+                <button type="submit" id="forgotBtn" class="btn-submit" style="background-color: #008080;">Send Reset OTP</button>
+                <div class="toggle-box">
+                    Remembered credentials? <span class="toggle-link" onclick="switchMode('login')">Back to Log In</span>
+                </div>
+            </form>
+
+            <!-- 4. OTP VERIFICATION BOX (SHARED VIEW FOR CREATION & RESET) -->
+            <div id="otpVerificationView" class="hidden">
+                <p id="otpInstructions" class="instruction-text">Processing status...</p>
+                <div class="form-control">
+                    <input type="text" id="otpInputCode" class="otp-style" maxlength="6" placeholder="000000" inputmode="numeric">
+                </div>
+                <!-- This field only unhides during password reset execution -->
+                <div id="newPasswordGroup" class="form-control hidden">
+                    <input type="password" id="newPasswordInput" placeholder="Enter new password (min 8 chars)" minlength="8">
+                </div>
+                <button onclick="submitOtpAction()" id="otpVerifyActionButton" class="btn-submit" style="background-color: #42b72a;">Verify Code</button>
+            </div>
 
             <p id="feedback" class="status-feedback"></p>
         </div>
@@ -174,55 +127,141 @@
     <script src="js/appwrite.js"></script>
 
     <script>
-        // Toggle view smoothly between Sign In and Sign Up modes
+        let currentFlowType = ""; // Keeps track of 'signup_verify' or 'password_reset'
+        let cachedEmail = "";
+        let cachedPassword = "";
+        let cachedName = "";
+        let signupUserId = "";
+
         function switchMode(mode) {
-            const loginForm = document.getElementById('loginForm');
-            const signupForm = document.getElementById('signupForm');
-            const feedback = document.getElementById('feedback');
-            
-            feedback.textContent = ""; // Clear any messages
-            
-            if (mode === 'signup') {
-                loginForm.classList.add('hidden');
-                signupForm.classList.remove('hidden');
-            } else {
-                signupForm.classList.add('hidden');
-                loginForm.classList.remove('hidden');
-            }
+            const forms = ['loginForm', 'signupForm', 'forgotForm', 'otpVerificationView'];
+            forms.forEach(f => document.getElementById(f).classList.add('hidden'));
+            document.getElementById('feedback').textContent = "";
+            document.getElementById('newPasswordGroup').classList.add('hidden');
+
+            if(mode === 'login') document.getElementById('loginForm').classList.remove('hidden');
+            if(mode === 'signup') document.getElementById('signupForm').classList.remove('hidden');
+            if(mode === 'forgot') document.getElementById('forgotForm').classList.remove('hidden');
         }
 
-        // 1. Handle Account Registration (Sign Up)
+        // --- 1. SIGN UP WITH MANDATORY EMAIL OTP ---
         async function handleSignup(e) {
             e.preventDefault();
-            const name = document.getElementById('signupName').value.trim();
-            const email = document.getElementById('signupEmail').value.trim();
-            const password = document.getElementById('signupPassword').value;
+            cachedName = document.getElementById('signupName').value.trim();
+            cachedEmail = document.getElementById('signupEmail').value.trim();
+            cachedPassword = document.getElementById('signupPassword').value;
             const feedback = document.getElementById('feedback');
-            const btn = document.getElementById('signupBtn');
 
             feedback.style.color = "var(--fb-blue)";
-            feedback.textContent = "Registering your credentials...";
-            btn.disabled = true;
+            feedback.textContent = "Sending verification OTP token...";
 
             try {
-                // Appwrite builds the user profile credentials
-                await window.account.create(window.ID.unique(), email, password, name);
+                // Generate a verification OTP token for account creation directly
+                const tokenResponse = await window.account.createEmailToken(window.ID.unique(), cachedEmail);
+                signupUserId = tokenResponse.userId;
                 
-                feedback.style.color = "#42b72a";
-                feedback.textContent = "✓ Account created successfully! Logging you in...";
-
-                // Immediately create a session so they don't have to sign in manually after signing up
-                await window.account.createEmailPasswordSession(email, password);
+                currentFlowType = "signup_verify";
                 
-                setTimeout(() => { window.location.href = "index.html"; }, 1500);
+                document.getElementById('signupForm').classList.add('hidden');
+                document.getElementById('otpInstructions').innerHTML = `📨 Registration code sent to <b>${cachedEmail}</b>. Provide the 6-digit pin to create your password profile.`;
+                document.getElementById('otpVerificationView').classList.remove('hidden');
+                feedback.textContent = "";
             } catch (error) {
-                btn.disabled = false;
-                feedback.style.color = "#c41e3a";
-                feedback.textContent = error.message || "Registration failed.";
+                feedback.style.color = "var(--brand-red)";
+                feedback.textContent = error.message || "Could not dispatch verification token.";
             }
         }
 
-        // 2. Handle User Authentication (Log In)
+        // --- 2. FORGOT PASSWORD REQUEST ---
+        async function handleForgotRequest(e) {
+            e.preventDefault();
+            cachedEmail = document.getElementById('forgotEmail').value.trim();
+            const feedback = document.getElementById('feedback');
+
+            feedback.style.color = "var(--fb-blue)";
+            feedback.textContent = "Transmitting recovery ticket...";
+
+            try {
+                // Sends recovery code template to the user email link cluster
+                // For direct web apps, the domain redirect points directly back to this workspace index
+                await window.account.createRecovery(cachedEmail, window.location.href);
+                
+                currentFlowType = "password_reset";
+                
+                document.getElementById('forgotForm').classList.add('hidden');
+                document.getElementById('otpInstructions').innerHTML = `📨 Password reset link/token dispatched to <b>${cachedEmail}</b>. Paste your 6-digit verification code below to authorize recovery.`;
+                document.getElementById('newPasswordGroup').classList.remove('hidden'); // Show new password box
+                document.getElementById('otpVerificationView').classList.remove('hidden');
+                feedback.textContent = "";
+            } catch (error) {
+                feedback.style.color = "var(--brand-red)";
+                feedback.textContent = error.message || "Failed to trigger recovery loop.";
+            }
+        }
+
+        // --- 3. UNIVERSAL CODE SUBMISSION GATEWAY ---
+        async function submitOtpAction() {
+            const code = document.getElementById('otpInputCode').value.trim();
+            const feedback = document.getElementById('feedback');
+            
+            if(code.length !== 6) {
+                feedback.style.color = "var(--brand-red)";
+                feedback.textContent = "Please insert your complete 6-digit pin.";
+                return;
+            }
+
+            feedback.style.color = "var(--fb-blue)";
+            feedback.textContent = "Processing security validation token...";
+
+            if (currentFlowType === "signup_verify") {
+                try {
+                    // Step A: Finalize the new session using the verification OTP
+                    await window.account.createSession(signupUserId, code);
+                    
+                    // Step B: Now that session is alive, create the permanent email/password link block
+                    // Appwrite needs an authenticated account context initialization structure to execute profile upgrades
+                    await window.account.updatePassword(cachedPassword);
+                    await window.account.updateName(cachedName);
+
+                    feedback.style.color = "#42b72a";
+                    feedback.textContent = "✓ Account setup complete! Launching news workspace...";
+                    setTimeout(() => { window.location.href = "index.html"; }, 1500);
+                } catch (error) {
+                    feedback.style.color = "var(--brand-red)";
+                    feedback.textContent = "Invalid setup token pin code. Try again.";
+                }
+            } 
+            
+            else if (currentFlowType === "password_reset") {
+                const newPassword = document.getElementById('newPasswordInput').value;
+                if(newPassword.length < 8) {
+                    feedback.style.color = "var(--brand-red)";
+                    feedback.textContent = "New password must hit at least 8 characters.";
+                    return;
+                }
+
+                try {
+                    // Extract token values embedded inside redirected URL search metrics or fallback manually
+                    // In simple setups, Appwrite maps recovery OTP values directly as the 'secret/token' metric
+                    const urlParams = new URLSearchParams(window.location.search);
+                    const recoverySecret = urlParams.get('secret') || code; // Captures direct input text pin or URL fallback
+
+                    await window.account.updateRecovery(signupUserId || window.ID.unique(), recoverySecret, newPassword, newPassword);
+                    
+                    feedback.style.color = "#42b72a";
+                    feedback.textContent = "✓ Password revised successfully! Logging in...";
+                    
+                    // Direct log-in with the fresh credentials safely
+                    await window.account.createEmailPasswordSession(cachedEmail, newPassword);
+                    setTimeout(() => { window.location.href = "index.html"; }, 1500);
+                } catch (error) {
+                    feedback.style.color = "var(--brand-red)";
+                    feedback.textContent = "Failed to update recovery settings. Verify input code token validity.";
+                }
+            }
+        }
+
+        // --- 4. TRADITIONAL LOGIN FOR RE-ENTRY ---
         async function handleLogin(e) {
             e.preventDefault();
             const email = document.getElementById('loginEmail').value.trim();
@@ -235,21 +274,17 @@
             btn.disabled = true;
 
             try {
-                // Verify email + password session request
                 await window.account.createEmailPasswordSession(email, password);
-                
                 feedback.style.color = "#42b72a";
                 feedback.textContent = "✓ Access granted! Loading workspace...";
-                
                 setTimeout(() => { window.location.href = "index.html"; }, 1200);
             } catch (error) {
                 btn.disabled = false;
-                feedback.style.color = "#c41e3a";
+                feedback.style.color = "var(--brand-red)";
                 feedback.textContent = "Invalid email or password combination.";
             }
         }
 
-        // Match site dark mode setting
         if (localStorage.getItem('theme') === 'dark') {
             document.body.classList.add('dark-mode');
         }
