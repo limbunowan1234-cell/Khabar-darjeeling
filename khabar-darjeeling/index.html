@@ -14,7 +14,7 @@
         <div class="container">
             <div class="navbar-content">
                 <div class="logo">
-                    <h1>खबर दार्जिलिंग</h1>
+                    <h1><a href="index.html" style="color: inherit; text-decoration: none;">खबर दार्जिलिंग</a></h1>
                     <p class="tagline">Your Trusted News Source</p>
                 </div>
                 
@@ -26,7 +26,7 @@
 
                 <div class="nav-menu" id="navMenu">
                     <ul class="nav-links">
-                        <li><a href="index.html" class="active">Home</a></li>
+                        <li><a href="index.html" id="homeLink" class="active">Home</a></li>
                         <li><a href="#breaking">Breaking</a></li>
                         <li><a href="#latest">Latest</a></li>
                         <li class="dropdown">
@@ -56,7 +56,7 @@
         </div>
     </nav>
 
-    <!-- Breaking News Ticker -->
+    <!-- Breaking News Ticker (Hidden when viewing specific category pages) -->
     <section class="breaking-ticker" id="breaking">
         <div class="container">
             <span class="breaking-label">BREAKING NEWS</span>
@@ -66,8 +66,8 @@
         </div>
     </section>
 
-    <!-- Hero Section -->
-    <section class="hero">
+    <!-- Hero Section (Hidden when viewing specific category pages) -->
+    <section class="hero" id="heroSection">
         <div class="container">
             <h2>Stay Updated with Latest News</h2>
             <p>Comprehensive coverage of Darjeeling, Kalimpong, and entire West Bengal region</p>
@@ -78,8 +78,8 @@
         </div>
     </section>
 
-    <!-- Featured Story -->
-    <section class="featured-section">
+    <!-- Featured Story (Hidden when viewing specific category pages) -->
+    <section class="featured-section" id="featuredSection">
         <div class="container">
             <h3 class="section-title">Featured Story</h3>
             <div id="featuredStory" class="featured-card">
@@ -88,18 +88,18 @@
         </div>
     </section>
 
-    <!-- Latest News -->
+    <!-- Latest News Grid (Handles both default views and filtered categorizations dynamically) -->
     <section class="news-section" id="latest">
         <div class="container">
-            <h3 class="section-title">Latest News</h3>
+            <h3 class="section-title" id="mainSectionTitle">Latest News</h3>
             <div id="newsGrid" class="news-grid">
                 Loading articles...
             </div>
         </div>
     </section>
 
-    <!-- Categories -->
-    <section class="categories-section">
+    <!-- Categories Grid (Hidden when viewing specific category pages) -->
+    <section class="categories-section" id="categoriesSection">
         <div class="container">
             <h3 class="section-title">Popular News Categories</h3>
             <div class="category-grid">
@@ -133,78 +133,123 @@
     <!-- 2. Your Centralized Configuration Configuration -->
     <script src="js/appwrite.js"></script>
 
-    <!-- 3. Cleaned Native UI Logic & Document Fetching -->
+    <!-- 3. Dynamic Native UI Logic & Dynamic Filtering -->
     <script>
-        // Use the globally exposed instances from js/appwrite.js to prevent collisions
         const database = window.databases;
         const Query = window.Query;
         const APPWRITE_DB_ID = window.APPWRITE_DB_ID;
         const APPWRITE_COLLECTION_ID = window.APPWRITE_COLLECTION_ID;
 
-        // Load Articles on Homepage
         async function loadHomepage() {
             try {
                 if (!database) {
                     throw new Error("Appwrite Database instance is not initialized yet.");
                 }
 
-                const response = await database.listDocuments(
-                    APPWRITE_DB_ID,
-                    APPWRITE_COLLECTION_ID,
-                    [
-                        Query.equal('status', 'published'),
-                        Query.orderDesc('$createdAt'),
-                        Query.limit(20)
-                    ]
-                );
+                // 1. Parse URL Parameter to detect Category Mode
+                const urlParams = new URLSearchParams(window.location.search);
+                const currentCategory = urlParams.get('category');
+
+                // 2. Build Query Filters Array
+                let queries = [
+                    Query.equal('status', 'published'),
+                    Query.orderDesc('$createdAt'),
+                    Query.limit(20)
+                ];
+
+                // Adjust UI blocks and query conditionally based on page configuration parameters
+                if (currentCategory) {
+                    // Inject Category Filter to Query String
+                    queries.push(Query.equal('category', currentCategory));
+
+                    // Modify Page Header Titles dynamically
+                    const categoryTitleFormatted = currentCategory.replace('-', ' ').replace(/\b\w/g, c => c.toUpperCase());
+                    document.getElementById('mainSectionTitle').textContent = categoryTitleFormatted + " Updates";
+                    document.title = `${categoryTitleFormatted} News - खबर दार्जिलिंग`;
+
+                    // Safely collapse structural sections unnecessary for filtered layout rows
+                    document.getElementById('breaking').style.display = 'none';
+                    document.getElementById('heroSection').style.display = 'none';
+                    document.getElementById('featuredSection').style.display = 'none';
+                    document.getElementById('categoriesSection').style.display = 'none';
+                    document.getElementById('homeLink').classList.remove('active');
+                } else {
+                    // Keep general landing elements active if viewing general core layout
+                    document.title = "खबर दार्जिलिंग - Your Trusted News Source";
+                    document.getElementById('mainSectionTitle').textContent = "Latest News";
+                }
+
+                // 3. Fetch from Appwrite
+                const response = await database.listDocuments(APPWRITE_DB_ID, APPWRITE_COLLECTION_ID, queries);
 
                 const featuredStory = document.getElementById('featuredStory');
                 const newsGrid = document.getElementById('newsGrid');
                 const breakingTicker = document.getElementById('breakingTicker');
 
                 if (!response.documents || response.documents.length === 0) {
-                    featuredStory.innerHTML = '<p>No articles published yet.</p>';
-                    newsGrid.innerHTML = '<p>No articles published yet.</p>';
+                    if (!currentCategory) {
+                        featuredStory.innerHTML = '<p>No articles published yet.</p>';
+                    }
+                    newsGrid.innerHTML = '<p>No articles published in this category yet.</p>';
                     breakingTicker.innerHTML = 'No breaking news at the moment.';
                     return;
                 }
 
-                // Breaking News Ticker - Show latest article title
-                breakingTicker.innerHTML = response.documents[0].title;
+                // 4. Handle Content Rendering Based on Active View Template Mode
+                if (currentCategory) {
+                    // CATEGORY PAGE TEMPLATE VIEW: Render everything straight into a unified content grid
+                    newsGrid.innerHTML = '';
+                    response.documents.forEach(article => {
+                        newsGrid.innerHTML += `
+                            <div class="news-card">
+                                <img src="${article.imageUrl || 'https://via.placeholder.com/400x250?text=News'}" alt="${article.title}">
+                                <div class="news-card-content">
+                                    <span class="category-badge">${article.category || 'General'}</span>
+                                    <h3>${article.title}</h3>
+                                    <p>${article.content ? article.content.substring(0, 100) + '...' : ''}</p>
+                                    <span class="date">${new Date(article.$createdAt).toLocaleDateString()}</span>
+                                </div>
+                            </div>
+                        `;
+                    });
+                } else {
+                    // STANDARD HOMEPAGE TEMPLATE VIEW: Splice off standard featured card blocks and top breaking nodes
+                    breakingTicker.innerHTML = response.documents[0].title;
 
-                // Featured Story = First article
-                const featured = response.documents[0];
-                featuredStory.innerHTML = `
-                    <div class="featured-content">
-                        <img src="${featured.imageUrl || 'https://via.placeholder.com/800x400?text=Khabar+Darjeeling'}" alt="${featured.title}">
-                        <div class="featured-text">
-                            <span class="category-badge">${featured.category || 'General'}</span>
-                            <h2>${featured.title}</h2>
-                            <p>${featured.content ? featured.content.substring(0, 200) + '...' : ''}</p>
-                            <span class="date">${new Date(featured.$createdAt).toLocaleDateString()}</span>
-                        </div>
-                    </div>
-                `;
-
-                // Latest News Grid = Rest of articles
-                newsGrid.innerHTML = '';
-                response.documents.slice(1).forEach(article => {
-                    newsGrid.innerHTML += `
-                        <div class="news-card">
-                            <img src="${article.imageUrl || 'https://via.placeholder.com/400x250?text=News'}" alt="${article.title}">
-                            <div class="news-card-content">
-                                <span class="category-badge">${article.category || 'General'}</span>
-                                <h3>${article.title}</h3>
-                                <p>${article.content ? article.content.substring(0, 100) + '...' : ''}</p>
-                                <span class="date">${new Date(article.$createdAt).toLocaleDateString()}</span>
+                    const featured = response.documents[0];
+                    featuredStory.innerHTML = `
+                        <div class="featured-content">
+                            <img src="${featured.imageUrl || 'https://via.placeholder.com/800x400?text=Khabar+Darjeeling'}" alt="${featured.title}">
+                            <div class="featured-text">
+                                <span class="category-badge">${featured.category || 'General'}</span>
+                                <h2>${featured.title}</h2>
+                                <p>${featured.content ? featured.content.substring(0, 200) + '...' : ''}</p>
+                                <span class="date">${new Date(featured.$createdAt).toLocaleDateString()}</span>
                             </div>
                         </div>
                     `;
-                });
+
+                    newsGrid.innerHTML = '';
+                    response.documents.slice(1).forEach(article => {
+                        newsGrid.innerHTML += `
+                            <div class="news-card">
+                                <img src="${article.imageUrl || 'https://via.placeholder.com/400x250?text=News'}" alt="${article.title}">
+                                <div class="news-card-content">
+                                    <span class="category-badge">${article.category || 'General'}</span>
+                                    <h3>${article.title}</h3>
+                                    <p>${article.content ? article.content.substring(0, 100) + '...' : ''}</p>
+                                    <span class="date">${new Date(article.$createdAt).toLocaleDateString()}</span>
+                                </div>
+                            </div>
+                        `;
+                    });
+                }
 
             } catch (error) {
                 console.error('Error loading articles:', error);
-                document.getElementById('featuredStory').innerHTML = '<p>Failed to load articles. Please try again later.</p>';
+                if(document.getElementById('featuredStory')) {
+                    document.getElementById('featuredStory').innerHTML = '<p>Failed to load articles.</p>';
+                }
                 document.getElementById('newsGrid').innerHTML = '<p>Failed to load articles.</p>';
                 document.getElementById('breakingTicker').innerHTML = 'Failed to load breaking news.';
             }
@@ -222,7 +267,6 @@
                 document.body.classList.contains('dark-mode') ? '☀️' : '🌙';
         });
 
-        // Load articles when DOM is completely parsed to prevent "null" layout updates
         document.addEventListener('DOMContentLoaded', loadHomepage);
     </script>
 </body>
