@@ -4,6 +4,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="Khabar Darjeeling - Latest news from Darjeeling, Kalimpong, Kurseong, Mirik, Siliguri and West Bengal">
+    
+    <!-- CACHE CONTROL: Force browsers to check for newer versions -->
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+    
     <title>खबर दार्जिलिंग - Your Trusted News Source</title>
     <link rel="stylesheet" href="css/style.css">
     <link rel="stylesheet" href="css/responsive.css">
@@ -123,156 +129,331 @@
         </div>
     </footer>
 
-    <!-- DEPENDENCY LOAD ORDER (Crucial for Cloudflare & Eruda) -->
+    <!-- ============================================
+         DEPENDENCY LOAD ORDER (DO NOT CHANGE)
+         ============================================ -->
+    
+    <!-- Eruda Console for Mobile Debugging -->
     <script src="https://cdn.jsdelivr.net/npm/eruda"></script>
     <script>eruda.init();</script>
 
-    <!-- 1. Core SDK -->
+    <!-- Appwrite SDK (v14.0.1 IIFE) -->
     <script src="https://cdn.jsdelivr.net/npm/appwrite@14.0.1/dist/iife/sdk.min.js"></script>
     
-    <!-- 2. Your Centralized Configuration Configuration -->
+    <!-- Your Appwrite Configuration -->
     <script src="js/appwrite.js"></script>
 
-    <!-- 3. Dynamic Native UI Logic & Dynamic Filtering -->
+    <!-- ============================================
+         MAIN APPLICATION LOGIC - SAFE SCOPING
+         ============================================ -->
     <script>
-        // FIX: Removed 'const' keywords to prevent "Identifier already declared" crash
-        database = window.databases;
-        Query = window.Query;
-        APPWRITE_DB_ID = window.APPWRITE_DB_ID;
-        APPWRITE_COLLECTION_ID = window.APPWRITE_COLLECTION_ID;
+        (() => {
+            // ✅ FIX: All variables scoped within IIFE to prevent global collisions
+            // This prevents "Identifier 'Query' already declared" errors
+            
+            // Safe references to global Appwrite instances
+            const appwriteDatabase = window.databases;
+            const QueryAPI = window.Query;
+            const dbId = window.APPWRITE_DB_ID;
+            const collectionId = window.APPWRITE_COLLECTION_ID;
 
-        async function loadHomepage() {
-            try {
-                if (!database) {
-                    throw new Error("Appwrite Database instance is not initialized yet.");
-                }
-
-                // 1. Parse URL Parameter to detect Category Mode
-                const urlParams = new URLSearchParams(window.location.search);
-                const currentCategory = urlParams.get('category');
-
-                // 2. Build Query Filters Array
-                let queries = [
-                    Query.equal('status', 'published'),
-                    Query.orderDesc('$createdAt'),
-                    Query.limit(20)
-                ];
-
-                // Adjust UI blocks and query conditionally based on page configuration parameters
-                if (currentCategory) {
-                    // Inject Category Filter to Query String
-                    queries.push(Query.equal('category', currentCategory));
-
-                    // Modify Page Header Titles dynamically
-                    const categoryTitleFormatted = currentCategory.replace('-', ' ').replace(/\b\w/g, c => c.toUpperCase());
-                    document.getElementById('mainSectionTitle').textContent = categoryTitleFormatted + " Updates";
-                    document.title = `${categoryTitleFormatted} News - खबर दार्जिलिंग`;
-
-                    // Safely collapse structural sections unnecessary for filtered layout rows
-                    document.getElementById('breaking').style.display = 'none';
-                    document.getElementById('heroSection').style.display = 'none';
-                    document.getElementById('featuredSection').style.display = 'none';
-                    document.getElementById('categoriesSection').style.display = 'none';
-                    document.getElementById('homeLink').classList.remove('active');
-                } else {
-                    // Keep general landing elements active if viewing general core layout
-                    document.title = "खबर दार्जिलिंग - Your Trusted News Source";
-                    document.getElementById('mainSectionTitle').textContent = "Latest News";
-                }
-
-                // 3. Fetch from Appwrite
-                const response = await database.listDocuments(APPWRITE_DB_ID, APPWRITE_COLLECTION_ID, queries);
-
-                const featuredStory = document.getElementById('featuredStory');
-                const newsGrid = document.getElementById('newsGrid');
-                const breakingTicker = document.getElementById('breakingTicker');
-
-                if (!response.documents || response.documents.length === 0) {
-                    if (!currentCategory) {
-                        featuredStory.innerHTML = '<p>No articles published yet.</p>';
-                    }
-                    newsGrid.innerHTML = '<p>No articles published in this category yet.</p>';
-                    breakingTicker.innerHTML = 'No breaking news at the moment.';
-                    return;
-                }
-
-                // 4. Handle Content Rendering Based on Active View Template Mode
-                if (currentCategory) {
-                    // CATEGORY PAGE TEMPLATE VIEW: Render everything straight into a unified content grid
-                    newsGrid.innerHTML = '';
-                    response.documents.forEach(article => {
-                        newsGrid.innerHTML += `
-                            <a href="article.html?id=${article.$id}" class="news-card" style="text-decoration: none; color: inherit; display: block;">
-                                <img src="${article.imageUrl || 'https://via.placeholder.com/400x250?text=News'}" alt="${article.title}">
-                                <div class="news-card-content">
-                                    <span class="category-badge">${article.category || 'General'}</span>
-                                    <h3>${article.title}</h3>
-                                    <p>${article.content ? article.content.substring(0, 100) + '...' : ''}</p>
-                                    <span class="date">${new Date(article.$createdAt).toLocaleDateString()}</span>
-                                </div>
-                            </a>
-                        `;
-                    });
-                } else {
-                    // STANDARD HOMEPAGE TEMPLATE VIEW: Splice off standard featured card blocks and top breaking nodes
-                    
-                    // Clickable Breaking Ticker
-                    breakingTicker.innerHTML = `<a href="article.html?id=${response.documents[0].$id}" style="color: inherit; text-decoration: none;">${response.documents[0].title}</a>`;
-
-                    // Clickable Featured Story
-                    const featured = response.documents[0];
-                    featuredStory.innerHTML = `
-                        <a href="article.html?id=${featured.$id}" class="featured-content" style="text-decoration: none; color: inherit; display: flex; flex-direction: inherit;">
-                            <img src="${featured.imageUrl || 'https://via.placeholder.com/800x400?text=Khabar+Darjeeling'}" alt="${featured.title}">
-                            <div class="featured-text">
-                                <span class="category-badge">${featured.category || 'General'}</span>
-                                <h2>${featured.title}</h2>
-                                <p>${featured.content ? featured.content.substring(0, 200) + '...' : ''}</p>
-                                <span class="date">${new Date(featured.$createdAt).toLocaleDateString()}</span>
-                            </div>
-                        </a>
-                    `;
-
-                    // Clickable Latest News Grid
-                    newsGrid.innerHTML = '';
-                    response.documents.slice(1).forEach(article => {
-                        newsGrid.innerHTML += `
-                            <a href="article.html?id=${article.$id}" class="news-card" style="text-decoration: none; color: inherit; display: block;">
-                                <img src="${article.imageUrl || 'https://via.placeholder.com/400x250?text=News'}" alt="${article.title}">
-                                <div class="news-card-content">
-                                    <span class="category-badge">${article.category || 'General'}</span>
-                                    <h3>${article.title}</h3>
-                                    <p>${article.content ? article.content.substring(0, 100) + '...' : ''}</p>
-                                    <span class="date">${new Date(article.$createdAt).toLocaleDateString()}</span>
-                                </div>
-                            </a>
-                        `;
-                    });
-                }
-
-            } catch (error) {
-                console.error('Error loading articles:', error);
-                if(document.getElementById('featuredStory')) {
-                    document.getElementById('featuredStory').innerHTML = '<p>Failed to load articles.</p>';
-                }
-                document.getElementById('newsGrid').innerHTML = '<p>Failed to load articles.</p>';
-                document.getElementById('breakingTicker').innerHTML = 'Failed to load breaking news.';
+            // Validate initialization
+            if (!appwriteDatabase || !QueryAPI || !dbId || !collectionId) {
+                console.error('❌ Appwrite not initialized. Check js/appwrite.js is loaded correctly.');
+                document.getElementById('newsGrid').innerHTML = 
+                    '<p style="color: red; padding: 20px;">Configuration Error: Appwrite SDK not initialized.</p>';
+                return;
             }
-        }
 
-        // Mobile Menu Toggle
-        document.getElementById('navToggle').addEventListener('click', () => {
-            document.getElementById('navMenu').classList.toggle('active');
-        });
+            console.log('✅ Appwrite initialized successfully');
 
-        // Theme Toggle
-        document.getElementById('themeToggle').addEventListener('click', () => {
-            document.body.classList.toggle('dark-mode');
-            document.getElementById('themeToggle').textContent = 
-                document.body.classList.contains('dark-mode') ? '☀️' : '🌙';
-        });
+            /**
+             * Load articles based on URL parameters
+             * Handles both homepage (default) and category-filtered views
+             */
+            async function loadHomepage() {
+                try {
+                    // Parse URL parameter to detect Category Mode
+                    const urlParams = new URLSearchParams(window.location.search);
+                    const currentCategory = urlParams.get('category');
 
-        document.addEventListener('DOMContentLoaded', loadHomepage);
+                    // Build query filters array
+                    const queries = [
+                        QueryAPI.equal('status', 'published'),
+                        QueryAPI.orderDesc('$createdAt'),
+                        QueryAPI.limit(20)
+                    ];
+
+                    // If category is specified, add category filter
+                    if (currentCategory) {
+                        queries.push(QueryAPI.equal('category', currentCategory));
+                    }
+
+                    console.log(`Loading articles for ${currentCategory ? 'category: ' + currentCategory : 'homepage'}`);
+
+                    // Fetch articles from Appwrite
+                    const response = await appwriteDatabase.listDocuments(dbId, collectionId, queries);
+
+                    // Handle empty results
+                    if (!response.documents || response.documents.length === 0) {
+                        handleEmptyState(currentCategory);
+                        return;
+                    }
+
+                    // Render based on view mode (category or homepage)
+                    if (currentCategory) {
+                        renderCategoryView(response.documents, currentCategory);
+                    } else {
+                        renderHomepageView(response.documents);
+                    }
+
+                    console.log(`✅ Loaded ${response.documents.length} articles`);
+
+                } catch (error) {
+                    console.error('❌ Error loading articles:', error);
+                    handleError();
+                }
+            }
+
+            /**
+             * Render category-filtered view (clean grid only)
+             */
+            function renderCategoryView(articles, category) {
+                // Update page title and heading
+                const categoryFormatted = category
+                    .split('-')
+                    .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+                    .join(' ');
+                
+                document.getElementById('mainSectionTitle').textContent = categoryFormatted + ' Updates';
+                document.title = `${categoryFormatted} News - खबर दार्जिलिंग`;
+
+                // Hide homepage-specific sections
+                hideHomepageSections();
+
+                // Render news grid with all articles
+                renderNewsGrid(articles, 'newsGrid');
+            }
+
+            /**
+             * Render homepage view (breaking ticker, featured story, news grid)
+             */
+            function renderHomepageView(articles) {
+                // Reset page title and heading
+                document.title = 'खबर दार्जिलिंग - Your Trusted News Source';
+                document.getElementById('mainSectionTitle').textContent = 'Latest News';
+
+                // Show homepage-specific sections
+                showHomepageSections();
+
+                // Render breaking news ticker (first article)
+                renderBreakingTicker(articles[0]);
+
+                // Render featured story (first article)
+                renderFeaturedStory(articles[0]);
+
+                // Render news grid (all articles except first)
+                renderNewsGrid(articles.slice(1), 'newsGrid');
+            }
+
+            /**
+             * Hide sections not needed for category views
+             */
+            function hideHomepageSections() {
+                const sections = [
+                    'breaking',
+                    'heroSection',
+                    'featuredSection',
+                    'categoriesSection'
+                ];
+                sections.forEach(id => {
+                    const el = document.getElementById(id);
+                    if (el) el.style.display = 'none';
+                });
+                const homeLink = document.getElementById('homeLink');
+                if (homeLink) homeLink.classList.remove('active');
+            }
+
+            /**
+             * Show homepage sections
+             */
+            function showHomepageSections() {
+                const sections = [
+                    'breaking',
+                    'heroSection',
+                    'featuredSection',
+                    'categoriesSection'
+                ];
+                sections.forEach(id => {
+                    const el = document.getElementById(id);
+                    if (el) el.style.display = '';
+                });
+            }
+
+            /**
+             * Render breaking news ticker
+             */
+            function renderBreakingTicker(article) {
+                const tickerEl = document.getElementById('breakingTicker');
+                if (!tickerEl) return;
+
+                tickerEl.innerHTML = `
+                    <a href="article.html?id=${article.$id}" 
+                       style="color: inherit; text-decoration: none; display: block; padding: 10px 0;">
+                        ${escapeHtml(article.title)}
+                    </a>
+                `;
+            }
+
+            /**
+             * Render featured story card
+             */
+            function renderFeaturedStory(article) {
+                const featuredEl = document.getElementById('featuredStory');
+                if (!featuredEl) return;
+
+                const imageUrl = article.imageUrl || 'https://via.placeholder.com/800x400?text=Khabar+Darjeeling';
+                const content = article.content ? article.content.substring(0, 200) + '...' : '';
+
+                featuredEl.innerHTML = `
+                    <a href="article.html?id=${article.$id}" 
+                       class="featured-content" 
+                       style="text-decoration: none; color: inherit; display: flex; flex-direction: inherit;">
+                        <img src="${imageUrl}" alt="${escapeHtml(article.title)}" loading="lazy">
+                        <div class="featured-text">
+                            <span class="category-badge">${escapeHtml(article.category || 'General')}</span>
+                            <h2>${escapeHtml(article.title)}</h2>
+                            <p>${content}</p>
+                            <span class="date">${formatDate(article.$createdAt)}</span>
+                        </div>
+                    </a>
+                `;
+            }
+
+            /**
+             * Render news grid (reusable for both homepage and category views)
+             */
+            function renderNewsGrid(articles, elementId) {
+                const gridEl = document.getElementById(elementId);
+                if (!gridEl) return;
+
+                gridEl.innerHTML = articles
+                    .map(article => {
+                        const imageUrl = article.imageUrl || 'https://via.placeholder.com/400x250?text=News';
+                        const content = article.content ? article.content.substring(0, 100) + '...' : '';
+
+                        return `
+                            <a href="article.html?id=${article.$id}" 
+                               class="news-card" 
+                               style="text-decoration: none; color: inherit; display: block;">
+                                <img src="${imageUrl}" alt="${escapeHtml(article.title)}" loading="lazy">
+                                <div class="news-card-content">
+                                    <span class="category-badge">${escapeHtml(article.category || 'General')}</span>
+                                    <h3>${escapeHtml(article.title)}</h3>
+                                    <p>${content}</p>
+                                    <span class="date">${formatDate(article.$createdAt)}</span>
+                                </div>
+                            </a>
+                        `;
+                    })
+                    .join('');
+            }
+
+            /**
+             * Handle empty state
+             */
+            function handleEmptyState(category) {
+                const message = category 
+                    ? 'No articles published in this category yet.'
+                    : 'No articles published yet.';
+                
+                if (!category) {
+                    document.getElementById('featuredStory').innerHTML = '<p>No articles published yet.</p>';
+                    document.getElementById('breakingTicker').innerHTML = 'No breaking news at the moment.';
+                }
+                document.getElementById('newsGrid').innerHTML = `<p>${message}</p>`;
+            }
+
+            /**
+             * Handle error state
+             */
+            function handleError() {
+                const errorHtml = '<p style="color: #d32f2f; padding: 20px;">Failed to load articles. Please try refreshing.</p>';
+                const newsGridEl = document.getElementById('newsGrid');
+                if (newsGridEl) newsGridEl.innerHTML = errorHtml;
+                
+                const featuredEl = document.getElementById('featuredStory');
+                if (featuredEl) featuredEl.innerHTML = errorHtml;
+                
+                const tickerEl = document.getElementById('breakingTicker');
+                if (tickerEl) tickerEl.innerHTML = 'Failed to load breaking news.';
+            }
+
+            /**
+             * Utility: Format date
+             */
+            function formatDate(dateString) {
+                try {
+                    return new Date(dateString).toLocaleDateString('en-US', {
+                        year: 'numeric',
+                        month: 'short',
+                        day: 'numeric'
+                    });
+                } catch {
+                    return 'Date unknown';
+                }
+            }
+
+            /**
+             * Utility: Escape HTML to prevent XSS
+             */
+            function escapeHtml(text) {
+                const div = document.createElement('div');
+                div.textContent = text;
+                return div.innerHTML;
+            }
+
+            // ============================================
+            // EVENT LISTENERS
+            // ============================================
+
+            // Mobile menu toggle
+            const navToggle = document.getElementById('navToggle');
+            const navMenu = document.getElementById('navMenu');
+            if (navToggle) {
+                navToggle.addEventListener('click', () => {
+                    navMenu.classList.toggle('active');
+                });
+            }
+
+            // Theme toggle
+            const themeToggle = document.getElementById('themeToggle');
+            if (themeToggle) {
+                themeToggle.addEventListener('click', () => {
+                    document.body.classList.toggle('dark-mode');
+                    const isDarkMode = document.body.classList.contains('dark-mode');
+                    themeToggle.textContent = isDarkMode ? '☀️' : '🌙';
+                    // Persist theme preference
+                    localStorage.setItem('theme', isDarkMode ? 'dark' : 'light');
+                });
+
+                // Apply saved theme on load
+                const savedTheme = localStorage.getItem('theme');
+                if (savedTheme === 'dark') {
+                    document.body.classList.add('dark-mode');
+                    themeToggle.textContent = '☀️';
+                }
+            }
+
+            // Load articles when DOM is ready
+            if (document.readyState === 'loading') {
+                document.addEventListener('DOMContentLoaded', loadHomepage);
+            } else {
+                loadHomepage();
+            }
+
+        })();
+        // End of IIFE - all variables are safely scoped above
     </script>
 </body>
 </html>
