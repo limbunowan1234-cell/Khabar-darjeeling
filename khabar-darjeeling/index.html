@@ -10,9 +10,9 @@
     <meta http-equiv="Expires" content="0">
     
     <title>खबर दार्जिलिंग - Your Trusted News Source</title>
-    <!-- ✅ FORCED CACHE RELOAD: Version bumped to ?v=104 to completely bypass browser caching memory -->
-    <link rel="stylesheet" href="css/style.css?v=104">
-    <link rel="stylesheet" href="css/responsive.css?v=104">
+    <!-- ✅ FORCED CACHE RELOAD: Version bumped to ?v=106 to completely bypass browser caching memory -->
+    <link rel="stylesheet" href="css/style.css?v=106">
+    <link rel="stylesheet" href="css/responsive.css?v=106">
     
     <!-- 🔒 PRE-LOAD OVERLAY STYLE: Prevents unauthorized content flashing before redirect occurs -->
     <style>
@@ -175,6 +175,18 @@
                 console.error('❌ Appwrite not initialized.');
                 document.getElementById('newsGrid').innerHTML = '<p style="color: red; padding: 20px;">Configuration Error: Appwrite SDK not initialized.</p>';
                 return;
+            }
+
+            // 🔒 HELPER: Wait for appwrite.js variables to fully attach to window object
+            function waitForAppwrite(callback, retries = 0) {
+                if (window.account) {
+                    callback();
+                } else if (retries < 30) { // Max 3 seconds check time buffer loop
+                    setTimeout(() => waitForAppwrite(callback, retries + 1), 100);
+                } else {
+                    console.error("❌ Timeout: appwrite.js failed to initialize window.account service.");
+                    document.getElementById('gatekeeperLoader').innerHTML = '<p style="color:red; font-weight:bold; padding:20px; text-align:center;">Authentication Engine Timeout.</p>';
+                }
             }
 
             // 🔒 STEP 1: AUTHENTICATION ENFORCEMENT ENGINE (THE GATEKEEPER)
@@ -384,11 +396,11 @@
                 }
             }
 
-            // Start verification process immediately on load
+            // Safe init execution using our wait loop
             if (document.readyState === 'loading') {
-                document.addEventListener('DOMContentLoaded', checkAuthGate);
+                document.addEventListener('DOMContentLoaded', () => waitForAppwrite(checkAuthGate));
             } else {
-                checkAuthGate();
+                waitForAppwrite(checkAuthGate);
             }
 
         })();
