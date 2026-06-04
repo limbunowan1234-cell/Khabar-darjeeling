@@ -1,6 +1,6 @@
 {
   "$schema": "node_modules/wrangler/config-schema.json",
-  "name": "khabardarjeeling",
+  "name": "worker-holy-surf-98f5",
   "compatibility_date": "2026-06-02",
   "observability": {
     "enabled": true
