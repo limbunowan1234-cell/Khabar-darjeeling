@@ -6,7 +6,7 @@
     <title>Khabar Darjeeling</title>
     <style>
         :root { --primary-red: #b81d24; --bg-color: #f0f2f5; }
-        body { font-family: -apple-system, BlinkMacSystemFont, sans-serif; background: var(--bg-color); margin: 0; }
+        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; background: var(--bg-color); margin: 0; }
         .header { background: #fff; padding: 15px; text-align: center; border-bottom: 2px solid var(--primary-red); font-weight: bold; color: var(--primary-red); font-size: 1.2rem; }
         .article-container { max-width: 600px; margin: 20px auto; background: #fff; padding: 20px; border-radius: 8px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
         .category-badge { background: var(--primary-red); color: white; padding: 4px 8px; border-radius: 4px; font-size: 11px; text-transform: uppercase; }
@@ -27,11 +27,12 @@
         </div>
     </main>
 
+    <!-- Dependencies -->
     <script src="https://cdn.jsdelivr.net/npm/eruda"></script>
     <script>eruda.init();</script>
     <script src="https://cdn.jsdelivr.net/npm/appwrite@14.0.1/dist/iife/sdk.min.js"></script>
     <script>
-        // Use values from your dashboard
+        // Configuration
         const PROJECT_ID = 'khabardarjeeling';
         const ENDPOINT = 'https://nyc.cloud.appwrite.io/v1';
         const DB_ID = 'Khabar_db'; 
@@ -44,16 +45,20 @@
         async function loadData() {
             try {
                 const params = new URLSearchParams(window.location.search);
-                const art = await db.getDocument(DB_ID, COL_ID, params.get('id'));
+                const articleId = params.get('id');
+                
+                if (!articleId) throw new Error("No Article ID found");
+
+                const art = await db.getDocument(DB_ID, COL_ID, articleId);
                 
                 document.getElementById('title').textContent = art.title;
                 document.getElementById('body').textContent = art.content;
                 
-                // Image view URL generation
+                // Construct the image URL correctly
                 document.getElementById('mainImg').src = `${ENDPOINT}/storage/buckets/article-image/files/${art.imageUrl}/view?project=${PROJECT_ID}`;
             } catch(e) {
                 console.error("Load failed:", e);
-                document.getElementById('title').textContent = "Error loading article.";
+                document.getElementById('title').textContent = "Article loading error.";
             }
         }
         loadData();
