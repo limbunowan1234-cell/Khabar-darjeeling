@@ -1,5 +1,9 @@
 // js/index.js
-import { categoryThemes } from './categoryConfig.js'; // 1. Import your themes
+import { categoryThemes } from './categoryConfig.js'; 
+
+// Make sure your Appwrite variables match your setup!
+const PROJECT_ID = 'khabardarjeeling';
+const ENDPOINT = 'https://nyc.cloud.appwrite.io/v1';
 
 async function loadArticles() {
     try {
@@ -16,20 +20,30 @@ async function loadArticles() {
 
         const articles = response.documents;
 
-        // Breaking news ticker - first 3 articles
+        // 1. BREAKING NEWS (FAILSAFE ADDED)
         const breakingNews = articles.slice(0, 3).map(a => a.title).join(' • ');
-        document.getElementById('breakingTicker').textContent = breakingNews || 'No breaking news';
+        const breakingTicker = document.getElementById('breakingTicker');
+        if (breakingTicker) {
+            breakingTicker.textContent = breakingNews || 'No breaking news';
+        }
 
-        // Featured story - first article
-        if (articles.length > 0) {
+        // Helper to get real image URL instead of just the ID
+        function getImageUrl(id) {
+            if (!id || id === 'Text' || id === 'null' || id === 'undefined') return '';
+            if (id.startsWith('http')) return id;
+            return `${ENDPOINT}/storage/buckets/article-image/files/${id}/view?project=${PROJECT_ID}`;
+        }
+
+        // 2. FEATURED STORY (FAILSAFE ADDED)
+        const featuredElement = document.getElementById('featuredStory');
+        if (featuredElement && articles.length > 0) {
             const featured = articles[0];
-            
-            // 2. Calculate theme for Featured Story
             const featCategoryKey = featured.category ? featured.category.toLowerCase() : 'default';
             const featTheme = categoryThemes[featCategoryKey] || categoryThemes['default'] || { color: '#b81d24' };
+            const imgUrl = getImageUrl(featured.imageFileId);
 
-            document.getElementById('featuredStory').innerHTML = `
-                ${featured.imageFileId? `<img src="${featured.imageFileId}" alt="${featured.title}" style="width:100%;height:400px;object-fit:cover; border-bottom: 4px solid ${featTheme.color};">` : ''}
+            featuredElement.innerHTML = `
+                ${imgUrl ? `<img src="${imgUrl}" alt="${featured.title}" style="width:100%;height:400px;object-fit:cover; border-bottom: 4px solid ${featTheme.color};">` : ''}
                 <div style="padding: 30px;">
                     <span class="category-badge" style="background-color: ${featTheme.color}; color: white;">${featured.category}</span>
                     <h2>${featured.title}</h2>
@@ -39,30 +53,32 @@ async function loadArticles() {
             `;
         }
 
-        // Latest news grid
+        // 3. LATEST NEWS GRID (FAILSAFE ADDED)
         const newsGrid = document.getElementById('newsGrid');
-        newsGrid.innerHTML = articles.map(article => {
-            
-            // 3. Calculate theme for each Grid Card
-            const categoryKey = article.category ? article.category.toLowerCase() : 'default';
-            const theme = categoryThemes[categoryKey] || categoryThemes['default'] || { color: '#b81d24' };
+        if (newsGrid) {
+            newsGrid.innerHTML = articles.map(article => {
+                const categoryKey = article.category ? article.category.toLowerCase() : 'default';
+                const theme = categoryThemes[categoryKey] || categoryThemes['default'] || { color: '#b81d24' };
+                const imgUrl = getImageUrl(article.imageFileId);
 
-            return `
-            <div class="news-card" style="border-top: 4px solid ${theme.color};">
-                ${article.imageFileId? `<img src="${article.imageFileId}" alt="${article.title}">` : ''}
-                <div class="news-card-content">
-                    <span class="category-badge" style="background-color: ${theme.color}; color: white;">${article.category}</span>
-                    <h4>${article.title}</h4>
-                    <p class="meta">${article.location} • ${new Date(article.submittedAt).toLocaleDateString()}</p>
-                    <p>${article.content.substring(0, 100)}...</p>
+                return `
+                <div class="news-card" style="border-top: 4px solid ${theme.color};">
+                    ${imgUrl ? `<img src="${imgUrl}" alt="${article.title}">` : ''}
+                    <div class="news-card-content">
+                        <span class="category-badge" style="background-color: ${theme.color}; color: white;">${article.category}</span>
+                        <h4>${article.title}</h4>
+                        <p class="meta">${article.location} • ${new Date(article.submittedAt).toLocaleDateString()}</p>
+                        <p>${article.content.substring(0, 100)}...</p>
+                    </div>
                 </div>
-            </div>
-            `;
-        }).join('');
+                `;
+            }).join('');
+        }
 
     } catch (error) {
         console.error('Error loading articles:', error);
-        document.getElementById('newsGrid').innerHTML = '<p>Error loading news. Please refresh.</p>';
+        const newsGrid = document.getElementById('newsGrid');
+        if (newsGrid) newsGrid.innerHTML = '<p>Error loading news. Please refresh.</p>';
     }
 }
 
