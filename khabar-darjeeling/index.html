@@ -10,11 +10,11 @@
     <meta http-equiv="Expires" content="0">
     
     <title>खबर दार्जिलिंग - Your Trusted News Source</title>
-    <!-- ✅ FORCED CACHE RELOAD: Version bumped to ?v=108 to completely bypass browser caching memory -->
-    <link rel="stylesheet" href="css/style.css?v=108">
-    <link rel="stylesheet" href="css/responsive.css?v=108">
+    <!-- ✅ FORCED CACHE RELOAD -->
+    <link rel="stylesheet" href="css/style.css?v=109">
+    <link rel="stylesheet" href="css/responsive.css?v=109">
     
-    <!-- 🔒 PRE-LOAD OVERLAY STYLE: Prevents unauthorized content flashing before redirect occurs -->
+    <!-- 🔒 PRE-LOAD OVERLAY STYLE -->
     <style>
         #gatekeeperLoader {
             position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
@@ -42,7 +42,6 @@
     <nav class="navbar">
         <div class="container">
             <div class="navbar-content">
-                <!-- Circular logo next to title text -->
                 <div class="logo">
                     <a href="index.html" style="display: flex; align-items: center; text-decoration: none; gap: 12px;">
                         <img src="assets/logo.png" alt="Khabar Darjeeling Logo" style="height: 55px; width: 55px; object-fit: cover; border-radius: 50%; flex-shrink: 0;">
@@ -168,11 +167,9 @@
             const dbId = window.APPWRITE_DB_ID;
             const collectionId = window.APPWRITE_COLLECTION_ID;
 
-            // Image URL parameters config
             const ENDPOINT = 'https://nyc.cloud.appwrite.io/v1';
             const PROJECT_ID = 'khabardarjeeling';
 
-            // Apply early dark mode theme to the gatekeeper loader screen if preferred
             if (localStorage.getItem('theme') === 'dark') {
                 document.body.classList.add('dark-mode');
             }
@@ -183,52 +180,43 @@
                 return;
             }
 
-            // ⚡ FIXED: Using /view instead of /preview to avoid Appwrite free-tier block
+            // ⚡ FIXED: Smart Failsafe to block 'Text', 'null', and empty data
             function getAppwriteImageUrl(article) {
                 const imageId = article.imageFileId || article.imageUrl;
-                if (!imageId) return '';
-                // Failsafe if a complete URL is somehow stored instead of an ID
+                
+                // If it is completely empty or just holds junk text, return nothing
+                if (!imageId || imageId === 'Text' || imageId === 'null' || imageId === 'undefined') {
+                    return ''; 
+                }
+                
                 if (imageId.startsWith('http')) return imageId;
                 return `${ENDPOINT}/storage/buckets/article-image/files/${imageId}/view?project=${PROJECT_ID}`;
             }
 
-            // 🔒 HELPER: Wait for appwrite.js variables to fully attach to window object
             function waitForAppwrite(callback, retries = 0) {
                 if (window.account) {
                     callback();
-                } else if (retries < 30) { // Max 3 seconds check time buffer loop
+                } else if (retries < 30) {
                     setTimeout(() => waitForAppwrite(callback, retries + 1), 100);
                 } else {
-                    console.error("❌ Timeout: appwrite.js failed to initialize window.account service.");
                     document.getElementById('gatekeeperLoader').innerHTML = '<p style="color:red; font-weight:bold; padding:20px; text-align:center;">Authentication Engine Timeout.</p>';
                 }
             }
 
-            // 🔒 STEP 1: AUTHENTICATION ENFORCEMENT ENGINE (THE GATEKEEPER)
             async function checkAuthGate() {
                 try {
-                    // Check if there's a logged-in user session in Appwrite
                     const activeUser = await window.account.get();
-                    console.log(`🔒 Access verified for user: ${activeUser.email}`);
-                    
-                    // User is authenticated! Hide the block overlay screen
                     const loader = document.getElementById('gatekeeperLoader');
                     if (loader) {
                         loader.style.opacity = '0';
                         setTimeout(() => loader.style.display = 'none', 300);
                     }
-
-                    // Proceed to pull database documents safely
                     loadHomepage();
-
                 } catch (error) {
-                    console.warn("⛔ No active session. Redirecting to access gate...");
-                    // Bounced! Force user to go log in with their credentials
                     window.location.href = 'login.html';
                 }
             }
 
-            // STEP 2: LOAD NORMAL CONTENT (Only runs if user passes Step 1)
             async function loadHomepage() {
                 try {
                     const urlParams = new URLSearchParams(window.location.search);
@@ -237,7 +225,7 @@
                     const queries = [
                         QueryAPI.equal('status', 'published'),
                         QueryAPI.orderDesc('$createdAt'),
-                        QueryAPI.limit(10)
+                        QueryAPI.limit(20) // Pulled 20 so we have enough to find featured ones
                     ];
 
                     if (currentCategory) {
@@ -277,9 +265,18 @@
                 document.getElementById('mainSectionTitle').textContent = 'Latest News';
 
                 showHomepageSections();
-                renderBreakingTicker(articles[0]);
-                renderFeaturedStory(articles[0]);
-                renderNewsGrid(articles.slice(1), 'newsGrid');
+                
+                // 🔥 NEW: Identify the special articles based on admin toggles
+                const featuredArticle = articles.find(a => a.isFeatured === true) || articles[0];
+                const topNewsArticles = articles.filter(a => a.isTopNews === true);
+                const breakingArticle = topNewsArticles.length > 0 ? topNewsArticles[0] : articles[0];
+                
+                // Remove the featured article from the regular grid so it isn't listed twice
+                const gridArticles = articles.filter(a => a.$id !== featuredArticle.$id).slice(0, 10);
+
+                renderBreakingTicker(breakingArticle);
+                renderFeaturedStory(featuredArticle);
+                renderNewsGrid(gridArticles, 'newsGrid');
             }
 
             function hideHomepageSections() {
@@ -413,7 +410,6 @@
                 }
             }
 
-            // 🔓 SECURE LOGOUT ENGINE
             const logoutBtn = document.getElementById('logoutBtn');
             if (logoutBtn) {
                 logoutBtn.addEventListener('click', async () => {
@@ -421,20 +417,14 @@
                     if (!confirmLogout) return;
 
                     try {
-                        // Destroy current session tracking cookies within Appwrite
                         await window.account.deleteSession('current');
-                        console.log("🔒 Session destroyed successfully.");
-                        
-                        // Drop user straight back to the login screen panel layout
                         window.location.href = 'login.html';
                     } catch (error) {
-                        console.error("❌ Logout processing failed:", error);
                         alert("Failed to sign out safely. Please refresh and try again.");
                     }
                 });
             }
 
-            // Safe init execution using our wait loop
             if (document.readyState === 'loading') {
                 document.addEventListener('DOMContentLoaded', () => waitForAppwrite(checkAuthGate));
             } else {
