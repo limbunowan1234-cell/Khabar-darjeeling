@@ -3,195 +3,59 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Read full news stories on Khabar Darjeeling">
-    
-    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
-    <meta http-equiv="Pragma" content="no-cache">
-    <meta http-equiv="Expires" content="0">
-    
-    <title>Loading Article... - खबर दार्जिलिंग</title>
+    <title>Article - खबर दार्जिलिंग</title>
     <link rel="stylesheet" href="css/style.css?v=2">
-    <link rel="stylesheet" href="css/responsive.css?v=2">
     <style>
-        .article-container {
-            max-width: 800px;
-            margin: 40px auto;
-            padding: 0 20px;
+        :root {
+            --primary-red: #b81d24;
+            --dark-bg: #121212;
         }
-        .article-header {
-            margin-bottom: 25px;
+        .article-container { max-width: 750px; margin: 30px auto; padding: 0 20px; }
+        
+        .category-badge { 
+            background: var(--primary-red); color: white; padding: 4px 10px; 
+            border-radius: 4px; font-size: 12px; font-weight: bold; text-transform: uppercase; 
         }
-        .article-meta {
-            display: flex;
-            gap: 15px;
-            color: #666;
-            font-size: 14px;
-            margin: 15px 0;
-            flex-wrap: wrap;
-        }
-        .article-featured-img {
-            width: 100%;
-            max-height: 450px;
-            object-fit: cover;
-            border-radius: 8px;
-            margin-bottom: 30px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-        }
+        
+        h2#artTitle { font-size: 2rem; color: #1a1a1a; margin-top: 15px; }
+        
         .article-body {
-            font-size: 18px;
-            line-height: 1.8;
-            color: #333;
-            white-space: pre-line;
-            /* 🛡️ FIX FOR ZOOM/BOUNDARY ISSUES */
-            word-wrap: break-word;
-            overflow-wrap: break-word;
-            word-break: break-word;
-        }
-        .dark-mode .article-body {
-            color: #ddd;
-        }
-        .error-box {
-            text-align: center;
-            padding: 50px 20px;
+            font-size: 18px; line-height: 1.8; color: #333; white-space: pre-line;
+            word-wrap: break-word; overflow-wrap: break-word; word-break: break-word;
         }
 
-        /* ✨ MODERN ENGAGEMENT UI STYLES */
-        .interaction-panel {
-            margin-top: 40px;
-            padding: 20px 0;
-            border-top: 1px solid #eef0f2;
-            border-bottom: 1px solid #eef0f2;
-            display: flex;
-            align-items: center;
-            gap: 15px;
-        }
-        .dark-mode .interaction-panel {
-            border-color: #2f3031;
-        }
+        /* Professional Interaction Panel */
+        .interaction-panel { margin-top: 40px; padding: 20px 0; border-top: 1px solid #eee; display: flex; align-items: center; }
         
         .like-btn {
-            background: #f0f2f5; 
-            color: #555; 
-            border: none;
-            padding: 10px 22px;
-            border-radius: 20px;
-            font-weight: 600;
-            font-size: 15px;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            transition: all 0.2s ease;
+            background: #f8f9fa; border: 1px solid #ddd; color: #555;
+            padding: 10px 20px; border-radius: 20px; font-weight: 600; cursor: pointer; transition: 0.3s;
         }
-        .like-btn:hover {
-            background: #e4e6e9;
-            transform: scale(1.03);
-        }
-        .like-btn.liked {
-            background: #ffebee;
-            color: #e63946;
-        }
-        .dark-mode .like-btn {
-            background: #242526;
-            color: #b0b3b8;
-        }
-        .dark-mode .like-btn.liked {
-            background: #3e1f23;
-            color: #ff6b6b;
-        }
+        .like-btn.liked { background: var(--primary-red); color: white; border-color: var(--primary-red); }
 
-        .comments-section {
-            margin-top: 40px;
-        }
-        .comments-section h3 {
-            font-size: 1.4rem;
-            margin-bottom: 20px;
-        }
-        
-        .comment-input-wrapper {
-            background: #fff;
-            border: 1px solid #ddd;
-            border-radius: 8px;
-            padding: 10px;
-            margin-bottom: 30px;
-        }
-        .dark-mode .comment-input-wrapper {
-            background: #18191a;
-            border-color: #3e4042;
-        }
-        .comment-input-wrapper textarea {
-            width: 100%;
-            border: none;
-            outline: none;
-            resize: none;
-            font-size: 15px;
-            background: transparent;
-            color: inherit;
+        /* Comment Section */
+        .comments-section { margin-top: 40px; }
+        .comment-card {
+            border-left: 4px solid var(--primary-red); background: #fff;
+            padding: 15px; margin-bottom: 12px; border-radius: 0 8px 8px 0;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
         }
         .comment-submit-btn {
-            background: #c41e3a; 
-            color: white; 
-            padding: 8px 18px; 
-            border: none; 
-            border-radius: 6px; 
-            font-weight: 600; 
-            cursor: pointer;
+            background: var(--primary-red); color: white; padding: 10px 20px;
+            border-radius: 4px; border: none; font-weight: bold; cursor: pointer;
         }
 
-        .comment-card {
-            background: #fff; 
-            padding: 18px; 
-            border-radius: 8px; 
-            border: 1px solid #edf0f2;
-            margin-bottom: 15px;
-        }
-        .dark-mode .comment-card {
-            background: #242526;
-            border-color: #2f3031;
-        }
-        .comment-text {
-            margin: 8px 0 0 0; 
-            font-size: 15px; 
-            white-space: pre-wrap;
-            word-wrap: break-word;
-        }
+        .dark-mode { background-color: var(--dark-bg); color: #e0e0e0; }
+        .dark-mode h2#artTitle { color: #ffffff; }
     </style>
 </head>
 <body>
-    <nav class="navbar">
-        <div class="container">
-            <div class="navbar-content">
-                <div class="logo">
-                    <h1><a href="index.html" style="color: inherit; text-decoration: none;">खबर दार्जिलिंग</a></h1>
-                </div>
-                <div class="nav-toggle" id="navToggle"><span></span><span></span><span></span></div>
-                <div class="nav-menu" id="navMenu">
-                    <ul class="nav-links">
-                        <li><a href="index.html">Home</a></li>
-                        <li><a href="submit.html">Submit News</a></li>
-                    </ul>
-                </div>
-                <div class="nav-right">
-                    <button class="theme-toggle" id="themeToggle">🌙</button>
-                    <a href="admin.html" class="admin-link">Admin</a>
-                </div>
-            </div>
-        </div>
-    </nav>
-
     <main class="article-container">
-        <div id="loadingArticle" style="text-align: center; padding: 50px;"><h3>📖 Loading...</h3></div>
+        <div id="loadingArticle"><h3>📖 Loading...</h3></div>
         <article id="articleContent" style="display: none;">
-            <div class="article-header">
-                <span class="category-badge" id="artCategory">General</span>
-                <h2 id="artTitle" style="font-size: 2.2rem;">Article Title</h2>
-                <div class="article-meta">
-                    <span id="artAuthor">By: Staff</span>
-                    <span id="artLocation"></span>
-                    <span id="artDate"></span>
-                </div>
-            </div>
-            <img id="artImage" class="article-featured-img" src="" alt="Featured">
+            <span class="category-badge" id="artCategory">General</span>
+            <h2 id="artTitle">Article Title</h2>
+            <img id="artImage" style="width:100%; border-radius:8px; margin:20px 0;" src="" alt="">
             <div class="article-body" id="artBody"></div>
 
             <div class="interaction-panel">
@@ -201,14 +65,10 @@
             <div class="comments-section">
                 <h3 id="commentHeaderTitle">Discussion (0)</h3>
                 <form id="commentForm">
-                    <div class="comment-input-wrapper">
-                        <textarea id="newCommentText" required placeholder="Share your thoughts..." rows="3"></textarea>
-                        <div class="comment-submit-row" style="display:flex; justify-content:flex-end;">
-                            <button type="submit" class="comment-submit-btn">Post Comment</button>
-                        </div>
-                    </div>
+                    <textarea id="newCommentText" required placeholder="Share your thoughts..." rows="3" style="width:100%; padding:10px; border-radius:4px;"></textarea>
+                    <button type="submit" class="comment-submit-btn" style="margin-top:10px;">Post Comment</button>
                 </form>
-                <div id="commentsList"></div>
+                <div id="commentsList" style="margin-top:20px;"></div>
             </div>
         </article>
     </main>
@@ -217,71 +77,60 @@
     <script src="js/appwrite.js"></script>
     <script>
         (() => {
-            const appwriteDatabase = window.databases;
+            const db = window.databases;
             const dbId = window.APPWRITE_DB_ID;
-            const collectionId = window.APPWRITE_COLLECTION_ID;
             const articleId = new URLSearchParams(window.location.search).get('id');
-            let currentLoggedUser = null;
-            let userExistingLikeId = null;
+            let user = null, likeDocId = null;
 
             async function init() {
-                if (window.account) {
-                    try { currentLoggedUser = await window.account.get(); } catch (e) {}
-                }
-                fetchFullArticle();
-            }
-
-            async function renderLikes() {
-                const res = await appwriteDatabase.listDocuments(dbId, "likes", [window.Query.equal("articleId", articleId)]);
-                document.getElementById('likeCount').textContent = res.total;
-                if (currentLoggedUser) {
-                    const liked = res.documents.find(d => d.userEmail === currentLoggedUser.email);
-                    userExistingLikeId = liked ? liked.$id : null;
-                    document.getElementById('likeBtn').className = liked ? 'like-btn liked' : 'like-btn';
-                }
-            }
-
-            document.getElementById('likeBtn').addEventListener('click', async () => {
-                if (!currentLoggedUser) { window.location.href = 'login.html'; return; }
-                if (userExistingLikeId) {
-                    await appwriteDatabase.deleteDocument(dbId, "likes", userExistingLikeId);
-                    userExistingLikeId = null;
-                } else {
-                    await appwriteDatabase.createDocument(dbId, "likes", window.ID.unique(), { articleId, userEmail: currentLoggedUser.email });
-                }
-                renderLikes();
-            });
-
-            async function renderComments() {
-                const res = await appwriteDatabase.listDocuments(dbId, "comments", [window.Query.equal("articleId", articleId), window.Query.orderDesc("createdAt")]);
-                document.getElementById('commentHeaderTitle').textContent = `Discussion (${res.total})`;
-                document.getElementById('commentsList').innerHTML = res.documents.map(d => `
-                    <div class="comment-card">
-                        <div style="font-weight:600; color:#c41e3a;">${d.authorName}</div>
-                        <p class="comment-text">${d.commentText}</p>
-                    </div>`).join('');
-            }
-
-            document.getElementById('commentForm').addEventListener('submit', async (e) => {
-                e.preventDefault();
-                await appwriteDatabase.createDocument(dbId, "comments", window.ID.unique(), {
-                    articleId, authorName: currentLoggedUser.name || "Reader", commentText: document.getElementById('newCommentText').value, createdAt: new Date().toISOString()
-                });
-                document.getElementById('newCommentText').value = '';
-                renderComments();
-            });
-
-            async function fetchFullArticle() {
-                const art = await appwriteDatabase.getDocument(dbId, collectionId, articleId);
+                try { user = await window.account.get(); } catch(e) {}
+                const art = await db.getDocument(dbId, window.APPWRITE_COLLECTION_ID, articleId);
                 document.getElementById('artTitle').textContent = art.title;
                 document.getElementById('artBody').textContent = art.content;
                 document.getElementById('loadingArticle').style.display = 'none';
                 document.getElementById('articleContent').style.display = 'block';
-                renderLikes();
-                renderComments();
+                updateUI();
             }
 
-            document.addEventListener('DOMContentLoaded', init);
+            async function updateUI() {
+                const likes = await db.listDocuments(dbId, "likes", [window.Query.equal("articleId", articleId)]);
+                document.getElementById('likeCount').textContent = likes.total;
+                const myLike = user ? likes.documents.find(d => d.userEmail === user.email) : null;
+                likeDocId = myLike ? myLike.$id : null;
+                document.getElementById('likeBtn').className = myLike ? 'like-btn liked' : 'like-btn';
+                
+                const comments = await db.listDocuments(dbId, "comments", [window.Query.equal("articleId", articleId), window.Query.orderDesc("createdAt")]);
+                document.getElementById('commentHeaderTitle').textContent = `Discussion (${comments.total})`;
+                document.getElementById('commentsList').innerHTML = comments.documents.map(d => `
+                    <div class="comment-card">
+                        <div style="font-weight:600; color:#b81d24;">${d.authorName}</div>
+                        <p class="comment-text">${d.commentText}</p>
+                    </div>`).join('');
+            }
+
+            document.getElementById('likeBtn').addEventListener('click', async () => {
+                if(!user) { window.location.href = 'login.html'; return; }
+                if(likeDocId) {
+                    await db.deleteDocument(dbId, "likes", likeDocId);
+                    likeDocId = null;
+                } else {
+                    await db.createDocument(dbId, "likes", window.ID.unique(), { articleId, userEmail: user.email });
+                }
+                updateUI();
+            });
+
+            document.getElementById('commentForm').addEventListener('submit', async (e) => {
+                e.preventDefault();
+                await db.createDocument(dbId, "comments", window.ID.unique(), { 
+                    articleId, authorName: user.name || "Reader", 
+                    commentText: document.getElementById('newCommentText').value, 
+                    createdAt: new Date().toISOString() 
+                });
+                document.getElementById('newCommentText').value = '';
+                updateUI();
+            });
+
+            init();
         })();
     </script>
 </body>
