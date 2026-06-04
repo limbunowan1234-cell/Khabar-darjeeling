@@ -3,135 +3,51 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Article - खबर दार्जिलिंग</title>
-    <link rel="stylesheet" href="css/style.css?v=2">
+    <title>Khabar Darjeeling</title>
+    <!-- Professional Red Theme CSS -->
     <style>
-        :root {
-            --primary-red: #b81d24;
-            --dark-bg: #121212;
-        }
-        .article-container { max-width: 750px; margin: 30px auto; padding: 0 20px; }
-        
-        .category-badge { 
-            background: var(--primary-red); color: white; padding: 4px 10px; 
-            border-radius: 4px; font-size: 12px; font-weight: bold; text-transform: uppercase; 
-        }
-        
-        h2#artTitle { font-size: 2rem; color: #1a1a1a; margin-top: 15px; }
-        
-        .article-body {
-            font-size: 18px; line-height: 1.8; color: #333; white-space: pre-line;
-            word-wrap: break-word; overflow-wrap: break-word; word-break: break-word;
-        }
-
-        /* Professional Interaction Panel */
-        .interaction-panel { margin-top: 40px; padding: 20px 0; border-top: 1px solid #eee; display: flex; align-items: center; }
-        
-        .like-btn {
-            background: #f8f9fa; border: 1px solid #ddd; color: #555;
-            padding: 10px 20px; border-radius: 20px; font-weight: 600; cursor: pointer; transition: 0.3s;
-        }
-        .like-btn.liked { background: var(--primary-red); color: white; border-color: var(--primary-red); }
-
-        /* Comment Section */
-        .comments-section { margin-top: 40px; }
-        .comment-card {
-            border-left: 4px solid var(--primary-red); background: #fff;
-            padding: 15px; margin-bottom: 12px; border-radius: 0 8px 8px 0;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
-        }
-        .comment-submit-btn {
-            background: var(--primary-red); color: white; padding: 10px 20px;
-            border-radius: 4px; border: none; font-weight: bold; cursor: pointer;
-        }
-
-        .dark-mode { background-color: var(--dark-bg); color: #e0e0e0; }
-        .dark-mode h2#artTitle { color: #ffffff; }
+        :root { --primary-red: #b81d24; --bg-color: #f0f2f5; }
+        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; background: var(--bg-color); margin: 0; }
+        .header { background: #fff; padding: 15px; text-align: center; border-bottom: 1px solid #ddd; font-weight: bold; color: var(--primary-red); }
+        .article-container { max-width: 600px; margin: 20px auto; background: #fff; padding: 20px; border-radius: 8px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
+        .category-badge { background: var(--primary-red); color: white; padding: 3px 8px; border-radius: 4px; font-size: 11px; text-transform: uppercase; }
+        .art-img { width: 100%; border-radius: 8px; margin: 15px 0; }
+        .like-btn { background: #e4e6eb; border: none; padding: 10px 20px; border-radius: 20px; font-weight: 600; cursor: pointer; }
+        .like-btn.liked { background: var(--primary-red); color: white; }
     </style>
 </head>
 <body>
-    <main class="article-container">
-        <div id="loadingArticle"><h3>📖 Loading...</h3></div>
-        <article id="articleContent" style="display: none;">
-            <span class="category-badge" id="artCategory">General</span>
-            <h2 id="artTitle">Article Title</h2>
-            <img id="artImage" style="width:100%; border-radius:8px; margin:20px 0;" src="" alt="">
-            <div class="article-body" id="artBody"></div>
-
-            <div class="interaction-panel">
-                <button id="likeBtn" class="like-btn">❤️ Like (<span id="likeCount">0</span>)</button>
-            </div>
-
-            <div class="comments-section">
-                <h3 id="commentHeaderTitle">Discussion (0)</h3>
-                <form id="commentForm">
-                    <textarea id="newCommentText" required placeholder="Share your thoughts..." rows="3" style="width:100%; padding:10px; border-radius:4px;"></textarea>
-                    <button type="submit" class="comment-submit-btn" style="margin-top:10px;">Post Comment</button>
-                </form>
-                <div id="commentsList" style="margin-top:20px;"></div>
-            </div>
-        </article>
+    <div class="header">खबर दार्जिलिंग</div>
+    <main class="article-container" id="content">
+        <span class="category-badge">General</span>
+        <h1 id="title">Loading...</h1>
+        <img id="mainImg" class="art-img" src="" alt="">
+        <div id="body" style="line-height: 1.6;"></div>
+        <div style="margin-top:20px;">
+            <button id="likeBtn" class="like-btn">❤️ Like</button>
+        </div>
     </main>
 
+    <!-- Dependencies -->
     <script src="https://cdn.jsdelivr.net/npm/appwrite@14.0.1/dist/iife/sdk.min.js"></script>
-    <script src="js/appwrite.js"></script>
     <script>
-        (() => {
-            const db = window.databases;
-            const dbId = window.APPWRITE_DB_ID;
-            const articleId = new URLSearchParams(window.location.search).get('id');
-            let user = null, likeDocId = null;
-
-            async function init() {
-                try { user = await window.account.get(); } catch(e) {}
-                const art = await db.getDocument(dbId, window.APPWRITE_COLLECTION_ID, articleId);
-                document.getElementById('artTitle').textContent = art.title;
-                document.getElementById('artBody').textContent = art.content;
-                document.getElementById('loadingArticle').style.display = 'none';
-                document.getElementById('articleContent').style.display = 'block';
-                updateUI();
+        // Minimal Init to prevent "eruda" crashes
+        const { Client, Databases } = Appwrite;
+        const client = new Client().setProject('YOUR_PROJECT_ID').setEndpoint('https://cloud.appwrite.io/v1');
+        const db = new Databases(client);
+        
+        async function loadData() {
+            try {
+                const params = new URLSearchParams(window.location.search);
+                const art = await db.getDocument('YOUR_DB_ID', 'YOUR_COL_ID', params.get('id'));
+                document.getElementById('title').textContent = art.title;
+                document.getElementById('body').textContent = art.content;
+                document.getElementById('mainImg').src = art.imageUrl;
+            } catch(e) {
+                console.error("Load failed:", e);
             }
-
-            async function updateUI() {
-                const likes = await db.listDocuments(dbId, "likes", [window.Query.equal("articleId", articleId)]);
-                document.getElementById('likeCount').textContent = likes.total;
-                const myLike = user ? likes.documents.find(d => d.userEmail === user.email) : null;
-                likeDocId = myLike ? myLike.$id : null;
-                document.getElementById('likeBtn').className = myLike ? 'like-btn liked' : 'like-btn';
-                
-                const comments = await db.listDocuments(dbId, "comments", [window.Query.equal("articleId", articleId), window.Query.orderDesc("createdAt")]);
-                document.getElementById('commentHeaderTitle').textContent = `Discussion (${comments.total})`;
-                document.getElementById('commentsList').innerHTML = comments.documents.map(d => `
-                    <div class="comment-card">
-                        <div style="font-weight:600; color:#b81d24;">${d.authorName}</div>
-                        <p class="comment-text">${d.commentText}</p>
-                    </div>`).join('');
-            }
-
-            document.getElementById('likeBtn').addEventListener('click', async () => {
-                if(!user) { window.location.href = 'login.html'; return; }
-                if(likeDocId) {
-                    await db.deleteDocument(dbId, "likes", likeDocId);
-                    likeDocId = null;
-                } else {
-                    await db.createDocument(dbId, "likes", window.ID.unique(), { articleId, userEmail: user.email });
-                }
-                updateUI();
-            });
-
-            document.getElementById('commentForm').addEventListener('submit', async (e) => {
-                e.preventDefault();
-                await db.createDocument(dbId, "comments", window.ID.unique(), { 
-                    articleId, authorName: user.name || "Reader", 
-                    commentText: document.getElementById('newCommentText').value, 
-                    createdAt: new Date().toISOString() 
-                });
-                document.getElementById('newCommentText').value = '';
-                updateUI();
-            });
-
-            init();
-        })();
+        }
+        loadData();
     </script>
 </body>
 </html>
