@@ -14,7 +14,6 @@
         :root { --primary-red: #b81d24; --bg-color: #f0f2f5; }
         body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; background: var(--bg-color); margin: 0; }
         
-        /* Header styling - now clickable */
         .header-link { text-decoration: none; display: block; }
         .header { background: #fff; padding: 15px; text-align: center; border-bottom: 2px solid var(--primary-red); font-weight: bold; color: var(--primary-red); font-size: 1.2rem; transition: background 0.2s; }
         .header:hover { background: #f9f9f9; }
@@ -23,12 +22,11 @@
         .category-badge { background: var(--primary-red); color: white; padding: 4px 8px; border-radius: 4px; font-size: 11px; text-transform: uppercase; }
         .art-img { width: 100%; border-radius: 8px; margin: 15px 0; object-fit: cover; display: none; box-sizing: border-box; }
         
-        /* Like Button Styles */
+        /* Updated Like Button Styles to support Unliking */
         .like-btn { background: #e4e6eb; border: none; padding: 10px 20px; border-radius: 20px; font-weight: 600; cursor: pointer; transition: 0.3s; display: inline-flex; align-items: center; gap: 5px; }
         .like-btn:hover:not(:disabled) { background: #d8dadf; }
-        .like-btn.liked { background: var(--primary-red); color: white; cursor: default; }
+        .like-btn.liked { background: var(--primary-red); color: white; } 
 
-        /* Comments Section Styling */
         .comments-section { margin-top: 40px; border-top: 1px solid #eee; padding-top: 20px; }
         .comments-section h3 { margin-bottom: 15px; font-size: 1.1rem; }
         .comment-input { width: 100%; padding: 12px; border: 1px solid #ccc; border-radius: 6px; box-sizing: border-box; resize: vertical; min-height: 80px; font-family: inherit; margin-bottom: 10px; }
@@ -81,7 +79,7 @@
         const DB_ID = 'Khabar_db'; 
         const COL_ID = 'articles';
         const COMMENTS_COL_ID = 'comments'; 
-        const LIKES_COL_ID = 'likes'; // Connected to your likes collection
+        const LIKES_COL_ID = 'likes'; 
 
         const { Client, Databases, Query, ID, Account } = Appwrite;
         const client = new Client().setProject(PROJECT_ID).setEndpoint(ENDPOINT);
@@ -125,7 +123,6 @@
                     document.getElementById('mainImg').style.display = 'none';
                 }
 
-                // Load Comments and Likes simultaneously 
                 loadComments(currentArticleId);
                 loadLikes(currentArticleId);
 
@@ -136,10 +133,9 @@
             }
         }
         
-        // --- LIKES LOGIC ---
+        // --- LIKES & UNLIKES LOGIC ---
         async function loadLikes(articleId) {
             try {
-                // Fetch the total number of likes for this specific article
                 const response = await db.listDocuments(DB_ID, LIKES_COL_ID, [
                     Query.equal('articleId', articleId),
                     Query.limit(1) 
@@ -148,12 +144,12 @@
                 const totalLikes = response.total;
                 const btn = document.getElementById('likeBtn');
                 
-                // Check browser storage to see if they already clicked it
+                // If local storage has the Document ID for the like, they liked it
                 if (localStorage.getItem(`liked_${articleId}`)) {
                     btn.classList.add('liked');
                     btn.innerHTML = `❤️ Liked (${totalLikes})`;
-                    btn.disabled = true;
                 } else {
+                    btn.classList.remove('liked');
                     btn.innerHTML = `❤️ Like (${totalLikes})`;
                 }
             } catch (error) {
@@ -167,41 +163,52 @@
             const btn = document.getElementById('likeBtn');
             const originalText = btn.innerHTML;
             
-            // Failsafe: Prevent double clicking
-            if (localStorage.getItem(`liked_${currentArticleId}`)) return;
+            // Check if they already liked it (it will hold the specific Appwrite Document ID)
+            const likeDocId = localStorage.getItem(`liked_${currentArticleId}`);
             
             btn.innerHTML = '...';
             btn.disabled = true;
             
             try {
-                let emailToSave = "anonymous@khabardarjeeling.com";
-                
-                try {
-                    const user = await account.get();
-                    if (user && user.email) {
-                        emailToSave = user.email;
+                if (likeDocId) {
+                    // 🔴 UNLIKE SCENARIO: Delete the document from Appwrite
+                    try {
+                        await db.deleteDocument(DB_ID, LIKES_COL_ID, likeDocId);
+                    } catch(e) {
+                        console.warn("Could not delete from server. It might already be gone.", e);
                     }
-                } catch (e) {
-                    // Ignore error, they just aren't logged in
-                }
+                    // Remove from local storage and update button
+                    localStorage.removeItem(`liked_${currentArticleId}`);
+                    btn.classList.remove('liked');
+                } else {
+                    // 🟢 LIKE SCENARIO: Create the document in Appwrite
+                    let emailToSave = "anonymous@khabardarjeeling.com";
+                    
+                    try {
+                        const user = await account.get();
+                        if (user && user.email) {
+                            emailToSave = user.email;
+                        }
+                    } catch (e) {}
 
-                // Save the like to Appwrite
-                await db.createDocument(DB_ID, LIKES_COL_ID, ID.unique(), {
-                    articleId: currentArticleId,
-                    userEmail: emailToSave
-                });
-                
-                // Save to local storage so they stay 'liked' if they refresh
-                localStorage.setItem(`liked_${currentArticleId}`, 'true');
-                btn.classList.add('liked');
+                    const newLike = await db.createDocument(DB_ID, LIKES_COL_ID, ID.unique(), {
+                        articleId: currentArticleId,
+                        userEmail: emailToSave
+                    });
+                    
+                    // Save the actual Document ID to local storage so we can delete it later
+                    localStorage.setItem(`liked_${currentArticleId}`, newLike.$id);
+                    btn.classList.add('liked');
+                }
                 
                 // Refresh the number counter
                 await loadLikes(currentArticleId);
                 
             } catch (error) {
-                console.error("Failed to like:", error);
-                alert("Could not register your like. Check database permissions.");
+                console.error("Failed to toggle like:", error);
+                alert("Could not update your like. Check database permissions (Make sure 'Delete' is enabled).");
                 btn.innerHTML = originalText;
+            } finally {
                 btn.disabled = false;
             }
         });
