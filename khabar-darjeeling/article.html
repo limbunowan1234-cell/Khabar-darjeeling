@@ -21,7 +21,7 @@
 
         .article-container { max-width: 600px; margin: 20px auto; background: #fff; padding: 20px; border-radius: 8px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
         .category-badge { background: var(--primary-red); color: white; padding: 4px 8px; border-radius: 4px; font-size: 11px; text-transform: uppercase; }
-        .art-img { width: 100%; border-radius: 8px; margin: 15px 0; object-fit: cover; display: none; /* Hidden by default */ box-sizing: border-box; }
+        .art-img { width: 100%; border-radius: 8px; margin: 15px 0; object-fit: cover; display: none; box-sizing: border-box; }
         .like-btn { background: #e4e6eb; border: none; padding: 10px 20px; border-radius: 20px; font-weight: 600; cursor: pointer; transition: 0.3s; }
         .like-btn.liked { background: var(--primary-red); color: white; }
 
@@ -39,7 +39,6 @@
 </head>
 <body>
     
-    <!-- Clickable Header redirecting to Home -->
     <a href="index.html" class="header-link">
         <div class="header">खबर दार्जिलिंग</div>
     </a>
@@ -54,7 +53,6 @@
             <button id="likeBtn" class="like-btn">❤️ Like</button>
         </div>
 
-        <!-- NEW: Comments Section UI -->
         <div class="comments-section">
             <h3>Discussion</h3>
             <div class="comment-form">
@@ -63,59 +61,53 @@
             </div>
             
             <div id="commentsList" class="comment-list">
-                <!-- Placeholder for when there are no comments -->
-                <p style="color: #888; font-size: 0.9rem; font-style: italic;">No comments yet. Be the first to share your thoughts!</p>
+                <p style="color: #888; font-size: 0.9rem; font-style: italic;">Loading comments...</p>
             </div>
         </div>
     </main>
 
-    <!-- Dependencies -->
     <script src="https://cdn.jsdelivr.net/npm/eruda"></script>
     <script>eruda.init();</script>
     <script src="https://cdn.jsdelivr.net/npm/appwrite@14.0.1/dist/iife/sdk.min.js"></script>
     
-    <!-- UPDATED SCRIPT TAG: Added type="module" -->
     <script type="module">
-        // 1. IMPORT YOUR THEMES (Make sure the path matches where your js folder is)
         import { categoryThemes } from './js/categoryConfig.js'; 
 
-        // Configuration
         const PROJECT_ID = 'khabardarjeeling';
         const ENDPOINT = 'https://nyc.cloud.appwrite.io/v1';
         const DB_ID = 'Khabar_db'; 
         const COL_ID = 'articles';
+        const COMMENTS_COL_ID = 'comments'; // Tied to your new collection
 
-        const { Client, Databases } = Appwrite;
+        const { Client, Databases, Query, ID, Account } = Appwrite;
         const client = new Client().setProject(PROJECT_ID).setEndpoint(ENDPOINT);
         const db = new Databases(client);
+        const account = new Account(client);
         
+        let currentArticleId = null; 
+
         async function loadData() {
             try {
                 const params = new URLSearchParams(window.location.search);
-                const articleId = params.get('id');
+                currentArticleId = params.get('id');
                 
-                if (!articleId) throw new Error("No Article ID found");
+                if (!currentArticleId) throw new Error("No Article ID found");
 
-                const art = await db.getDocument(DB_ID, COL_ID, articleId);
+                const art = await db.getDocument(DB_ID, COL_ID, currentArticleId);
                 
                 document.getElementById('title').textContent = art.title;
                 document.getElementById('body').textContent = art.content;
                 
-                // 2. APPLY CATEGORY THEME COLOR
-                // We make the category string lowercase to match your config file keys safely
                 const categoryKey = art.category ? art.category.toLowerCase() : 'default';
                 const theme = categoryThemes[categoryKey] || categoryThemes['default'] || { color: '#b81d24' };
 
                 if(art.category) {
                     const badge = document.getElementById('categoryBadge');
                     badge.textContent = art.category;
-                    badge.style.backgroundColor = theme.color; // Dynamically change badge color
+                    badge.style.backgroundColor = theme.color; 
                 }
                 
-                // Fetch ID and apply SMART FAILSAFE
                 const imageId = art.imageFileId || art.imageUrl;
-                
-                // Only load if it exists AND isn't junk text
                 if (imageId && imageId !== 'Text' && imageId !== 'null' && imageId !== 'undefined') {
                     const imgElement = document.getElementById('mainImg');
                     if (imageId.startsWith('http')) {
@@ -123,12 +115,15 @@
                     } else {
                         imgElement.src = `${ENDPOINT}/storage/buckets/article-image/files/${imageId}/view?project=${PROJECT_ID}`;
                     }
-                    imgElement.style.display = 'block'; // Unhide the image
-                    imgElement.style.border = `3px solid ${theme.color}`; // Apply matching color border to image
+                    imgElement.style.display = 'block'; 
+                    imgElement.style.border = `3px solid ${theme.color}`; 
                 } else {
-                    // Force image to stay hidden if no valid photo exists
                     document.getElementById('mainImg').style.display = 'none';
                 }
+
+                // Call the comment loader
+                loadComments(currentArticleId);
+
             } catch(e) {
                 console.error("Load failed:", e);
                 document.getElementById('title').textContent = "Article loading error.";
@@ -136,16 +131,87 @@
             }
         }
         
-        loadData();
+        async function loadComments(articleId) {
+            try {
+                const response = await db.listDocuments(DB_ID, COMMENTS_COL_ID, [
+                    Query.equal('articleId', articleId),
+                    Query.orderDesc('createdAt')
+                ]);
+                
+                const commentsList = document.getElementById('commentsList');
+                
+                if (response.documents.length === 0) {
+                    commentsList.innerHTML = '<p style="color: #888; font-size: 0.9rem; font-style: italic;">No comments yet. Be the first to share your thoughts!</p>';
+                    return;
+                }
+                
+                commentsList.innerHTML = response.documents.map(comment => {
+                    const dateObj = new Date(comment.createdAt);
+                    const dateString = dateObj.toLocaleDateString() + ' ' + dateObj.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+                    
+                    return `
+                        <div class="comment-item">
+                            <div class="comment-author">
+                                ${escapeHtml(comment.authorName)} 
+                                <span style="color:#888; font-size:0.8em; font-weight:normal; margin-left:10px;">${dateString}</span>
+                            </div>
+                            <p class="comment-text">${escapeHtml(comment.commentText)}</p>
+                        </div>
+                    `;
+                }).join('');
+                
+            } catch (error) {
+                console.error("Error loading comments:", error);
+                document.getElementById('commentsList').innerHTML = '<p style="color: red; font-size: 0.9rem;">Could not load comments.</p>';
+            }
+        }
 
-        // Basic front-end interaction for the new comment button
-        document.getElementById('submitComment').addEventListener('click', () => {
+        document.getElementById('submitComment').addEventListener('click', async () => {
             const input = document.getElementById('commentInput');
-            if(input.value.trim() === '') return;
+            const text = input.value.trim();
+            const btn = document.getElementById('submitComment');
             
-            alert("To save this comment, we will need to create a 'Comments' collection in Appwrite next!");
-            // input.value = ''; // Clears the box after saving
+            if(text === '' || !currentArticleId) return;
+            
+            btn.disabled = true;
+            btn.textContent = 'Posting...';
+            
+            try {
+                let authorName = "Anonymous Reader";
+                
+                try {
+                    const user = await account.get();
+                    authorName = user.name || "Reader";
+                } catch (e) {
+                    // Not logged in, defaults to Anonymous Reader
+                }
+
+                await db.createDocument(DB_ID, COMMENTS_COL_ID, ID.unique(), {
+                    articleId: currentArticleId,
+                    authorName: authorName,
+                    commentText: text,
+                    createdAt: new Date().toISOString()
+                });
+                
+                input.value = '';
+                await loadComments(currentArticleId);
+                
+            } catch (error) {
+                console.error("Failed to post comment:", error);
+                alert("Could not post your comment. Please check your connection and database permissions.");
+            } finally {
+                btn.disabled = false;
+                btn.textContent = 'Post Comment';
+            }
         });
+
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+
+        loadData();
     </script>
 </body>
 </html>
