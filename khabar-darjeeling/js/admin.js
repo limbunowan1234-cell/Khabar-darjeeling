@@ -162,6 +162,7 @@ async function loadPublishedArticles() {
             ]
         );
         
+        // ⚡ ADDED 'featured-checkbox' CLASS TO TRACK HOW MANY ARE CHECKED
         list.innerHTML = response.documents.map(article => `
             <div class="article-card">
                 ${article.imageUrl ? `<img src="${article.imageUrl}" alt="${article.title}">` : ''}
@@ -170,10 +171,9 @@ async function loadPublishedArticles() {
                     <p style="margin:5px 0; font-size:13px; color:#666;"><strong>Category:</strong> ${article.category} | <strong>Location:</strong> ${article.location}</p>
                     <p style="font-size:14px; color:#333;">${article.content ? article.content.substring(0, 150) : ''}...</p>
                     
-                    <!-- NEW ADMIN CONTROLS: Featured, Top News, Delete -->
                     <div style="margin-top: 15px; padding-top: 10px; border-top: 1px solid #eee; display: flex; gap: 15px; align-items: center; flex-wrap: wrap;">
                         <label style="font-size: 13px; cursor: pointer; color: #333; font-weight: 500;">
-                            <input type="checkbox" onchange="toggleFeatured('${article.$id}', this.checked)" ${article.isFeatured ? 'checked' : ''}>
+                            <input type="checkbox" class="featured-checkbox" onchange="toggleFeatured('${article.$id}', this.checked, this)" ${article.isFeatured ? 'checked' : ''}>
                             ⭐ Featured Story
                         </label>
                         <label style="font-size: 13px; cursor: pointer; color: #333; font-weight: 500;">
@@ -258,8 +258,18 @@ window.rejectArticle = async function(id) {
     }
 };
 
-// NEW: Toggle Featured Status
-window.toggleFeatured = async function(id, isChecked) {
+// ⚡ SMART TOGGLE: BLOCKS SELECTION IF MORE THAN 3 ARE CHECKED
+window.toggleFeatured = async function(id, isChecked, checkboxElement) {
+    if (isChecked) {
+        // Count how many are checked on the screen right now
+        const currentFeaturedCount = document.querySelectorAll('.featured-checkbox:checked').length;
+        if (currentFeaturedCount > 3) {
+            alert('🛑 Limit Reached: You can only have up to 3 Featured Articles at a time.\n\nPlease un-check an older featured story first.');
+            checkboxElement.checked = false; // Revert the box back to empty
+            return; // Stop here, do not update database
+        }
+    }
+
     try {
         await window.databases.updateDocument(
             window.APPWRITE_DB_ID,
@@ -274,7 +284,6 @@ window.toggleFeatured = async function(id, isChecked) {
     }
 };
 
-// NEW: Toggle Top News Status
 window.toggleTopNews = async function(id, isChecked) {
     try {
         await window.databases.updateDocument(
@@ -286,11 +295,10 @@ window.toggleTopNews = async function(id, isChecked) {
         console.log(`Article ${id} Top News status set to: ${isChecked}`);
     } catch (error) {
         alert('Failed to update Top News status: ' + error.message);
-        loadPublishedArticles(); // Reloads to reset the checkbox if it failed
+        loadPublishedArticles(); 
     }
 };
 
-// NEW: Delete Article Permanently
 window.deleteArticle = async function(id) {
     if (!confirm('🛑 WARNING: Are you sure you want to permanently delete this article? This action cannot be undone.')) return;
     
@@ -301,7 +309,7 @@ window.deleteArticle = async function(id) {
             id
         );
         loadPublishedArticles();
-        loadDashboard(); // Update the article count at the top
+        loadDashboard(); 
     } catch (error) {
         alert('Delete failed: ' + error.message);
     }
