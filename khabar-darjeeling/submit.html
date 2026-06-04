@@ -234,11 +234,11 @@
         let verifiedUserSession = null;
         const discordWebhookUrl = "https://discord.com/api/webhooks/1511823519166759023/gaOpmYw3IqkOMdLg3uIwrNASCSFYQrDSJQ-ZFcVQLl6A6fseFFKrmNo350qHkiZeGx7W";
         
-        // Setup Appwrite Storage for Image Uploads
-        const appwriteClient = new Appwrite.Client()
+        // Setup Isolated Appwrite Storage for Image Uploads to prevent variable collisions
+        const submitAppwriteClient = new Appwrite.Client()
             .setEndpoint('https://nyc.cloud.appwrite.io/v1')
             .setProject('khabardarjeeling');
-        const storage = new Appwrite.Storage(appwriteClient);
+        const submitStorage = new Appwrite.Storage(submitAppwriteClient);
         const BUCKET_ID = 'article-image';
 
         // 🔒 AUTH GATEKEEPER CHECK ON LOAD
@@ -294,7 +294,7 @@
                     // 🖼️ STEP 1: UPLOAD IMAGE (IF ATTACHED)
                     if (imageFile) {
                         submitBtn.textContent = "Uploading Image...";
-                        const uploadResponse = await storage.createFile(
+                        const uploadResponse = await submitStorage.createFile(
                             BUCKET_ID,
                             Appwrite.ID.unique(),
                             imageFile
@@ -317,7 +317,6 @@
                     };
 
                     // Only send an image ID if we actually uploaded an image!
-                    // This explicitly sets it to native `null` if the box was left empty
                     if (uploadedImageId) {
                         articlePayload.imageFileId = uploadedImageId;
                     } else {
