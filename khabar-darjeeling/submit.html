@@ -214,8 +214,8 @@
                     document.getElementById('errorMessage').style.display = 'none';
 
                     try {
-                        // Check SDK is ready
-                        if (!window.Appwrite || !window.databases || !window.submitStorage) {
+                        // Check SDK is ready (Changed submitStorage to storage)
+                        if (!window.Appwrite || !window.databases || !window.storage) {
                             throw new Error('Appwrite not loaded. Refresh page.');
                         }
 
@@ -224,8 +224,9 @@
 
                         if (imageFile) {
                             submitBtn.textContent = 'Uploading image...';
-                            const uploadResponse = await window.submitStorage.createFile(
-                                'article-image',
+                            // Changed submitStorage to storage
+                            const uploadResponse = await window.storage.createFile(
+                                window.APPWRITE_BUCKET_ID || 'article-image',
                                 window.Appwrite.ID.unique(),
                                 imageFile
                             );
@@ -261,7 +262,9 @@
 
                     } catch (error) {
                         console.error("Submit failed:", error);
-                        document.getElementById('errorText').textContent = error.message;
+                        // Enhanced Error Reporting for Appwrite
+                        const errorMsg = error.response?.message || error.message || "Unknown error occurred.";
+                        document.getElementById('errorText').textContent = errorMsg;
                         document.getElementById('errorMessage').style.display = 'block';
                     } finally {
                         submitBtn.disabled = false;
