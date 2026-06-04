@@ -233,6 +233,13 @@
     <script>
         let verifiedUserSession = null;
         const discordWebhookUrl = "https://discord.com/api/webhooks/1511823519166759023/gaOpmYw3IqkOMdLg3uIwrNASCSFYQrDSJQ-ZFcVQLl6A6fseFFKrmNo350qHkiZeGx7W";
+        
+        // Setup Appwrite Storage for Image Uploads
+        const appwriteClient = new Appwrite.Client()
+            .setEndpoint('https://nyc.cloud.appwrite.io/v1')
+            .setProject('khabardarjeeling');
+        const storage = new Appwrite.Storage(appwriteClient);
+        const BUCKET_ID = 'article-image';
 
         // 🔒 AUTH GATEKEEPER CHECK ON LOAD
         function verifyUserSessionState(retries = 0) {
@@ -273,7 +280,6 @@
                 }
 
                 submitBtn.disabled = true;
-                submitBtn.textContent = "Publishing Story...";
                 errorMsg.style.display = 'none';
 
                 try {
@@ -281,8 +287,24 @@
                     const category = document.getElementById('category').value;
                     const location = document.getElementById('location').value.trim();
                     const content = document.getElementById('content').value.trim();
+                    const imageFile = document.getElementById('imageInput').files[0];
 
-                    // 📝 ASYNC DATABASE PAYLOAD WRITING WITH TARGET RULE ATTRIBUTES
+                    let uploadedImageId = null;
+
+                    // 🖼️ STEP 1: UPLOAD IMAGE (IF ATTACHED)
+                    if (imageFile) {
+                        submitBtn.textContent = "Uploading Image...";
+                        const uploadResponse = await storage.createFile(
+                            BUCKET_ID,
+                            Appwrite.ID.unique(),
+                            imageFile
+                        );
+                        uploadedImageId = uploadResponse.$id;
+                    }
+
+                    submitBtn.textContent = "Publishing Story...";
+
+                    // 📝 STEP 2: WRITE TO DATABASE
                     const articlePayload = {
                         title: title,
                         category: category,
@@ -291,8 +313,16 @@
                         status: "pending", 
                         authorName: verifiedUserSession.name,  
                         authorEmail: verifiedUserSession.email, 
-                        submittedAt: new Date().toISOString()   // ✅ Satisfies Appwrite schema structure rules
+                        submittedAt: new Date().toISOString()
                     };
+
+                    // Only send an image ID if we actually uploaded an image!
+                    // This explicitly sets it to native `null` if the box was left empty
+                    if (uploadedImageId) {
+                        articlePayload.imageFileId = uploadedImageId;
+                    } else {
+                        articlePayload.imageFileId = null; 
+                    }
 
                     await window.databases.createDocument(
                         window.APPWRITE_DB_ID,
@@ -301,7 +331,7 @@
                         articlePayload
                     );
 
-                    // 🚀 INSTANT DISCORD TEAM NOTIFICATION PING
+                    // 🚀 STEP 3: DISCORD PING
                     const discordPayload = {
                         embeds: [{
                             title: "🚨 New Article Submitted for Review!",
