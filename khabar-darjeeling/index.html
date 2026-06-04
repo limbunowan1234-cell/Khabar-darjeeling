@@ -183,13 +183,13 @@
                 return;
             }
 
-            // ⚡ OPTIMIZATION HELPER: Build fast compressed preview URL
+            // ⚡ FIXED: Using /view instead of /preview to avoid Appwrite free-tier block
             function getAppwriteImageUrl(article) {
                 const imageId = article.imageFileId || article.imageUrl;
                 if (!imageId) return '';
                 // Failsafe if a complete URL is somehow stored instead of an ID
                 if (imageId.startsWith('http')) return imageId;
-                return `${ENDPOINT}/storage/buckets/article-image/files/${imageId}/preview?project=${PROJECT_ID}&width=600&quality=80&output=webp`;
+                return `${ENDPOINT}/storage/buckets/article-image/files/${imageId}/view?project=${PROJECT_ID}`;
             }
 
             // 🔒 HELPER: Wait for appwrite.js variables to fully attach to window object
