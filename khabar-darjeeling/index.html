@@ -168,6 +168,10 @@
             const dbId = window.APPWRITE_DB_ID;
             const collectionId = window.APPWRITE_COLLECTION_ID;
 
+            // Image URL parameters config
+            const ENDPOINT = 'https://nyc.cloud.appwrite.io/v1';
+            const PROJECT_ID = 'khabardarjeeling';
+
             // Apply early dark mode theme to the gatekeeper loader screen if preferred
             if (localStorage.getItem('theme') === 'dark') {
                 document.body.classList.add('dark-mode');
@@ -177,6 +181,15 @@
                 console.error('❌ Appwrite not initialized.');
                 document.getElementById('newsGrid').innerHTML = '<p style="color: red; padding: 20px;">Configuration Error: Appwrite SDK not initialized.</p>';
                 return;
+            }
+
+            // ⚡ OPTIMIZATION HELPER: Build fast compressed preview URL
+            function getAppwriteImageUrl(article) {
+                const imageId = article.imageFileId || article.imageUrl;
+                if (!imageId) return '';
+                // Failsafe if a complete URL is somehow stored instead of an ID
+                if (imageId.startsWith('http')) return imageId;
+                return `${ENDPOINT}/storage/buckets/article-image/files/${imageId}/preview?project=${PROJECT_ID}&width=600&quality=80&output=webp`;
             }
 
             // 🔒 HELPER: Wait for appwrite.js variables to fully attach to window object
@@ -296,9 +309,10 @@
                 const featuredEl = document.getElementById('featuredStory');
                 if (!featuredEl) return;
 
-                const imageHtml = article.imageUrl ? `<img src="${article.imageUrl}" alt="${escapeHtml(article.title)}" loading="lazy">` : '';
+                const optimizedSrc = getAppwriteImageUrl(article);
+                const imageHtml = optimizedSrc ? `<img src="${optimizedSrc}" alt="${escapeHtml(article.title)}" loading="lazy">` : '';
                 const content = article.content ? truncateText(article.content, 250) : '';
-                const textStyle = article.imageUrl ? '' : 'width: 100%;';
+                const textStyle = optimizedSrc ? '' : 'width: 100%;';
 
                 featuredEl.innerHTML = `
                     <a href="article.html?id=${article.$id}" class="featured-content" style="text-decoration: none; color: inherit;">
@@ -321,7 +335,8 @@
                 if (!gridEl) return;
 
                 gridEl.innerHTML = articles.map(article => {
-                    const imageHtml = article.imageUrl ? `<img src="${article.imageUrl}" alt="${escapeHtml(article.title)}" loading="lazy">` : '';
+                    const optimizedSrc = getAppwriteImageUrl(article);
+                    const imageHtml = optimizedSrc ? `<img src="${optimizedSrc}" alt="${escapeHtml(article.title)}" loading="lazy">` : '';
                     const content = article.content ? truncateText(article.content, 150) : '';
 
                     return `
