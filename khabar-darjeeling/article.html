@@ -14,59 +14,36 @@
         :root { --primary-red: #b81d24; --bg-color: #f0f2f5; }
         body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; background: var(--bg-color); margin: 0; }
 
-       .header-link { text-decoration: none; display: block; }
-       .header { background: #fff; padding: 15px; text-align: center; border-bottom: 2px solid var(--primary-red); font-weight: bold; color: var(--primary-red); font-size: 1.2rem; transition: background 0.2s; }
-       .header:hover { background: #f9f9f9; }
+      .header-link { text-decoration: none; display: block; }
+      .header { background: #fff; padding: 15px; text-align: center; border-bottom: 2px solid var(--primary-red); font-weight: bold; color: var(--primary-red); font-size: 1.2rem; transition: background 0.2s; }
+      .header:hover { background: #f9f9f9; }
 
-       .article-container { max-width: 600px; margin: 20px auto; background: #fff; padding: 20px; border-radius: 8px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
-       .category-badge { background: var(--primary-red); color: white; padding: 4px 8px; border-radius: 4px; font-size: 11px; text-transform: uppercase; }
-       .art-img { width: 100%; border-radius: 8px; margin: 15px 0; object-fit: cover; display: none; box-sizing: border-box; }
+      .article-container { max-width: 600px; margin: 20px auto; background: #fff; padding: 20px; border-radius: 8px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
+      .category-badge { background: var(--primary-red); color: white; padding: 4px 8px; border-radius: 4px; font-size: 11px; text-transform: uppercase; }
+      .art-img { width: 100%; border-radius: 8px; margin: 15px 0; object-fit: cover; display: none; box-sizing: border-box; }
 
-        /* Updated Like Button Styles to support Unliking */
-       .like-btn { background: #e4e6eb; border: none; padding: 10px 20px; border-radius: 20px; font-weight: 600; cursor: pointer; transition: 0.3s; display: inline-flex; align-items: center; gap: 5px; }
-       .like-btn:hover:not(:disabled) { background: #d8dadf; }
-       .like-btn.liked { background: var(--primary-red); color: white; }
+       /* NEW: Article video */
+      .art-video { position: relative; width: 100%; padding-bottom: 56.25%; margin: 15px 0; border-radius: 8px; overflow: hidden; display: none; box-sizing: border-box; }
+      .art-video iframe { position: absolute; top:0; left:0; width:100%; height:100%; border:0; border-radius:8px; }
 
-       .comments-section { margin-top: 40px; border-top: 1px solid #eee; padding-top: 20px; }
-       .comments-section h3 { margin-bottom: 15px; font-size: 1.1rem; }
-       .comment-input { width: 100%; padding: 12px; border: 1px solid #ccc; border-radius: 6px; box-sizing: border-box; resize: vertical; min-height: 80px; font-family: inherit; margin-bottom: 10px; }
-       .submit-comment-btn { background: var(--primary-red); color: white; border: none; padding: 10px 16px; border-radius: 6px; font-weight: bold; cursor: pointer; transition: 0.2s; }
-       .submit-comment-btn:hover { background: #96161b; }
-       .comment-list { margin-top: 25px; }
-       .comment-item { background: #f8f9fa; padding: 15px; border-radius: 8px; margin-bottom: 15px; border-left: 3px solid var(--primary-red); }
-       .comment-author { font-weight: bold; color: #333; margin-bottom: 5px; font-size: 0.9rem; }
-       .comment-text { color: #555; font-size: 0.95rem; margin: 0; line-height: 1.4; }
+      .like-btn { background: #e4e6eb; border: none; padding: 10px 20px; border-radius: 20px; font-weight: 600; cursor: pointer; transition: 0.3s; display: inline-flex; align-items: center; gap: 5px; }
+      .like-btn:hover:not(:disabled) { background: #d8dadf; }
+      .like-btn.liked { background: var(--primary-red); color: white; }
 
-        /* NEW: Comment media styles */
-       .comment-image {
-            width: 100%;
-            max-width: 100%;
-            height: auto;
-            border-radius: 6px;
-            margin-top: 0.75rem;
-            display: block;
-        }
-       .comment-video {
-            position: relative;
-            width: 100%;
-            padding-bottom: 56.25%; /* 16:9 */
-            margin-top: 0.75rem;
-        }
-       .comment-video iframe {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            border: 0;
-            border-radius: 6px;
-        }
-       .comment-meta {
-            color:#888;
-            font-size:0.8em;
-            font-weight:normal;
-            margin-left:10px;
-        }
+      .comments-section { margin-top: 40px; border-top: 1px solid #eee; padding-top: 20px; }
+      .comments-section h3 { margin-bottom: 15px; font-size: 1.1rem; }
+      .comment-input { width: 100%; padding: 12px; border: 1px solid #ccc; border-radius: 6px; box-sizing: border-box; resize: vertical; min-height: 80px; font-family: inherit; margin-bottom: 10px; }
+      .submit-comment-btn { background: var(--primary-red); color: white; border: none; padding: 10px 16px; border-radius: 6px; font-weight: bold; cursor: pointer; transition: 0.2s; }
+      .submit-comment-btn:hover { background: #96161b; }
+      .comment-list { margin-top: 25px; }
+      .comment-item { background: #f8f9fa; padding: 15px; border-radius: 8px; margin-bottom: 15px; border-left: 3px solid var(--primary-red); }
+      .comment-author { font-weight: bold; color: #333; margin-bottom: 5px; font-size: 0.9rem; }
+      .comment-text { color: #555; font-size: 0.95rem; margin: 0; line-height: 1.4; }
+
+      .comment-image { width: 100%; max-width: 100%; height: auto; border-radius: 6px; margin-top: 0.75rem; display: block; }
+      .comment-video { position: relative; width: 100%; padding-bottom: 56.25%; margin-top: 0.75rem; }
+      .comment-video iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: 0; border-radius: 6px; }
+      .comment-meta { color:#888; font-size:0.8em; font-weight:normal; margin-left:10px; }
     </style>
 </head>
 <body>
@@ -79,6 +56,7 @@
         <span class="category-badge" id="categoryBadge">General</span>
         <h1 id="title">Loading...</h1>
         <img id="mainImg" class="art-img" src="" alt="Article Image">
+        <div id="articleVideo" class="art-video"></div>
         <div id="body" style="line-height: 1.6; white-space: pre-line; color: #333;"></div>
 
         <div style="margin-top:25px;">
@@ -111,13 +89,13 @@
         const COL_ID = 'articles';
         const COMMENTS_COL_ID = 'comments';
         const LIKES_COL_ID = 'likes';
-        const BUCKET_ID = 'post-images'; // NEW: for comment images
+        const BUCKET_ID = 'post-images';
 
-        const { Client, Databases, Query, ID, Account, Storage } = Appwrite; // ADDED Storage
+        const { Client, Databases, Query, ID, Account, Storage } = Appwrite;
         const client = new Client().setProject(PROJECT_ID).setEndpoint(ENDPOINT);
         const db = new Databases(client);
         const account = new Account(client);
-        const storage = new Storage(client); // NEW
+        const storage = new Storage(client);
 
         let currentArticleId = null;
 
@@ -143,8 +121,8 @@
                 }
 
                 const imageId = art.imageFileId || art.imageUrl;
+                const imgElement = document.getElementById('mainImg');
                 if (imageId && imageId!== 'Text' && imageId!== 'null' && imageId!== 'undefined') {
-                    const imgElement = document.getElementById('mainImg');
                     if (imageId.startsWith('http')) {
                         imgElement.src = imageId;
                     } else {
@@ -153,7 +131,26 @@
                     imgElement.style.display = 'block';
                     imgElement.style.border = `3px solid ${theme.color}`;
                 } else {
-                    document.getElementById('mainImg').style.display = 'none';
+                    imgElement.style.display = 'none';
+                }
+
+                // --- ARTICLE YOUTUBE (NEW) ---
+                const videoContainer = document.getElementById('articleVideo');
+                if (art.youtube_id && art.youtube_id.length === 11) {
+                    videoContainer.style.display = 'block';
+                    videoContainer.style.border = `3px solid ${theme.color}`;
+                    videoContainer.innerHTML = `
+                        <iframe
+                            src="https://www.youtube-nocookie.com/embed/${encodeURIComponent(art.youtube_id)}"
+                            title="YouTube video"
+                            loading="lazy"
+                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                            allowfullscreen
+                            referrerpolicy="strict-origin-when-cross-origin">
+                        </iframe>`;
+                } else {
+                    videoContainer.style.display = 'none';
+                    videoContainer.innerHTML = '';
                 }
 
                 loadComments(currentArticleId);
@@ -166,7 +163,7 @@
             }
         }
 
-        // --- LIKES & UNLIKES LOGIC ---
+        // --- LIKES ---
         async function loadLikes(articleId) {
             try {
                 const response = await db.listDocuments(DB_ID, LIKES_COL_ID, [
@@ -177,7 +174,6 @@
                 const totalLikes = response.total;
                 const btn = document.getElementById('likeBtn');
 
-                // If local storage has the Document ID for the like, they liked it
                 if (localStorage.getItem(`liked_${articleId}`)) {
                     btn.classList.add('liked');
                     btn.innerHTML = `❤️ Liked (${totalLikes})`;
@@ -195,8 +191,6 @@
 
             const btn = document.getElementById('likeBtn');
             const originalText = btn.innerHTML;
-
-            // Check if they already liked it (it will hold the specific Appwrite Document ID)
             const likeDocId = localStorage.getItem(`liked_${currentArticleId}`);
 
             btn.innerHTML = '...';
@@ -204,24 +198,14 @@
 
             try {
                 if (likeDocId) {
-                    // 🔴 UNLIKE SCENARIO: Delete the document from Appwrite
-                    try {
-                        await db.deleteDocument(DB_ID, LIKES_COL_ID, likeDocId);
-                    } catch(e) {
-                        console.warn("Could not delete from server. It might already be gone.", e);
-                    }
-                    // Remove from local storage and update button
+                    try { await db.deleteDocument(DB_ID, LIKES_COL_ID, likeDocId); } catch(e) {}
                     localStorage.removeItem(`liked_${currentArticleId}`);
                     btn.classList.remove('liked');
                 } else {
-                    // 🟢 LIKE SCENARIO: Create the document in Appwrite
                     let emailToSave = "anonymous@khabardarjeeling.com";
-
                     try {
                         const user = await account.get();
-                        if (user && user.email) {
-                            emailToSave = user.email;
-                        }
+                        if (user && user.email) emailToSave = user.email;
                     } catch (e) {}
 
                     const newLike = await db.createDocument(DB_ID, LIKES_COL_ID, ID.unique(), {
@@ -229,24 +213,22 @@
                         userEmail: emailToSave
                     });
 
-                    // Save the actual Document ID to local storage so we can delete it later
                     localStorage.setItem(`liked_${currentArticleId}`, newLike.$id);
                     btn.classList.add('liked');
                 }
 
-                // Refresh the number counter
                 await loadLikes(currentArticleId);
 
             } catch (error) {
                 console.error("Failed to toggle like:", error);
-                alert("Could not update your like. Check database permissions (Make sure 'Delete' is enabled).");
+                alert("Could not update your like. Check database permissions.");
                 btn.innerHTML = originalText;
             } finally {
                 btn.disabled = false;
             }
         });
 
-        // --- COMMENTS LOGIC UPDATED WITH MEDIA ---
+        // --- COMMENTS WITH MEDIA ---
         function createCommentElement(comment) {
             const commentEl = document.createElement('div');
             commentEl.className = 'comment-item';
@@ -254,47 +236,33 @@
             const dateObj = new Date(comment.createdAt);
             const dateString = dateObj.toLocaleDateString() + ' ' + dateObj.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
 
-            // Author + date
             const authorDiv = document.createElement('div');
             authorDiv.className = 'comment-author';
             authorDiv.innerHTML = `${escapeHtml(comment.authorName)}<span class="comment-meta">${dateString}</span>`;
 
-            // Text
             const textP = document.createElement('p');
             textP.className = 'comment-text';
-            textP.textContent = comment.commentText; // auto-escapes
+            textP.textContent = comment.commentText;
 
             commentEl.append(authorDiv, textP);
 
-            // Image: only if image_id exists and not empty
             if (comment.image_id && comment.image_id.trim()) {
                 try {
-                    const imgUrl = storage.getFilePreview(
-                        BUCKET_ID,
-                        comment.image_id,
-                        600, // mobile-friendly width
-                        0,
-                        'center',
-                        75 // quality for perf
-                    );
+                    const imgUrl = storage.getFilePreview(BUCKET_ID, comment.image_id, 600, 0, 'center', 75);
                     const img = document.createElement('img');
                     img.src = imgUrl.href;
                     img.alt = 'Comment attachment';
                     img.loading = 'lazy';
                     img.decoding = 'async';
                     img.className = 'comment-image';
-                    img.onerror = () => img.remove(); // no broken image icon
+                    img.onerror = () => img.remove();
                     commentEl.appendChild(img);
-                } catch (e) {
-                    console.warn('Image preview failed:', e);
-                }
+                } catch (e) {}
             }
 
-            // YouTube: only if youtube_id exists and is 11 chars
             if (comment.youtube_id && comment.youtube_id.length === 11) {
                 const videoWrapper = document.createElement('div');
                 videoWrapper.className = 'comment-video';
-
                 const iframe = document.createElement('iframe');
                 iframe.src = `https://www.youtube-nocookie.com/embed/${encodeURIComponent(comment.youtube_id)}`;
                 iframe.title = 'YouTube video';
@@ -302,7 +270,6 @@
                 iframe.allow = 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture';
                 iframe.allowFullscreen = true;
                 iframe.referrerPolicy = 'strict-origin-when-cross-origin';
-
                 videoWrapper.appendChild(iframe);
                 commentEl.appendChild(videoWrapper);
             }
@@ -326,7 +293,6 @@
                     return;
                 }
 
-                // Use DocumentFragment for perf
                 const fragment = document.createDocumentFragment();
                 response.documents.forEach(comment => {
                     fragment.appendChild(createCommentElement(comment));
@@ -351,7 +317,6 @@
 
             try {
                 let authorName = "Anonymous Reader";
-
                 try {
                     const user = await account.get();
                     authorName = user.name || "Reader";
@@ -362,7 +327,6 @@
                     authorName: authorName,
                     commentText: text,
                     createdAt: new Date().toISOString()
-                    // image_id and youtube_id will be null by default
                 });
 
                 input.value = '';
@@ -370,7 +334,7 @@
 
             } catch (error) {
                 console.error("Failed to post comment:", error);
-                alert("Could not post your comment. Please check your connection and database permissions.");
+                alert("Could not post your comment.");
             } finally {
                 btn.disabled = false;
                 btn.textContent = 'Post Comment';
