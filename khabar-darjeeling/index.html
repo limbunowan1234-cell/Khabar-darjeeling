@@ -61,7 +61,7 @@
                 <div class="nav-menu" id="navMenu">
                     <ul class="nav-links">
                         <li><a href="index.html" id="homeLink" class="active">Home</a></li>
-                        <li><a href="#breaking">Breaking</a></li>
+                        <!-- ✅ REMOVED THE BREAKING LINK FROM HERE -->
                         <li><a href="#latest">Latest</a></li>
                         <li class="dropdown">
                             <a href="#">Categories</a>
@@ -92,13 +92,13 @@
         </div>
     </nav>
 
-    <!-- Breaking News Container -->
+    <!-- ✅ UPDATED: Breaking News Container with Scrolling Marquee -->
     <section class="breaking-ticker" id="breaking">
-        <div class="container">
-            <span class="breaking-label">BREAKING NEWS</span>
-            <div class="ticker-content" id="breakingTicker">
+        <div class="container" style="display: flex; align-items: center;">
+            <span class="breaking-label" style="white-space: nowrap; margin-right: 15px; z-index: 2;">BREAKING NEWS</span>
+            <marquee class="ticker-content" id="breakingTicker" scrollamount="6" onmouseover="this.stop();" onmouseout="this.start();" style="flex-grow: 1;">
                 Loading breaking news...
-            </div>
+            </marquee>
         </div>
     </section>
 
@@ -180,7 +180,6 @@
                 return;
             }
 
-            // ⚡ FIXED: Smart Failsafe to block 'Text', 'null', and empty data
             function getAppwriteImageUrl(article) {
                 const imageId = article.imageFileId || article.imageUrl;
                 
@@ -265,18 +264,16 @@
 
                 showHomepageSections();
                 
-                // ⚡ DYNAMIC FEATURED MULTI-SELECT: Grab up to 3 featured articles
                 let featuredArticles = articles.filter(a => a.isFeatured === true);
                 if (featuredArticles.length === 0) {
-                    featuredArticles = [articles[0]]; // Fallback to newest if none selected
+                    featuredArticles = [articles[0]];
                 } else {
-                    featuredArticles = featuredArticles.slice(0, 3); // Enforce max 3 on the frontend
+                    featuredArticles = featuredArticles.slice(0, 3);
                 }
                 
                 const topNewsArticles = articles.filter(a => a.isTopNews === true);
                 const breakingArticle = topNewsArticles.length > 0 ? topNewsArticles[0] : articles[0];
                 
-                // Exclude the featured ones from the general Latest grid so they don't show twice
                 const featuredIds = featuredArticles.map(a => a.$id);
                 const gridArticles = articles.filter(a => !featuredIds.includes(a.$id)).slice(0, 10);
 
@@ -305,17 +302,16 @@
             function renderBreakingTicker(article) {
                 const tickerEl = document.getElementById('breakingTicker');
                 if (!tickerEl) return;
-                tickerEl.innerHTML = `<a href="article.html?id=${article.$id}" style="color: inherit; text-decoration: none; display: block; padding: 10px 0;">${escapeHtml(article.title)}</a>`;
+                // Formats the output for the marquee scroll
+                tickerEl.innerHTML = `<a href="article.html?id=${article.$id}" style="color: inherit; text-decoration: none; display: inline-block; padding: 10px 15px;">${escapeHtml(article.title)}</a>`;
             }
 
-            // ⚡ UPDATED: Dynamically adapts layout for 1, 2, or 3 articles!
             function renderFeaturedStory(featuredArray) {
                 const featuredEl = document.getElementById('featuredStory');
                 if (!featuredEl) return;
 
-                // SINGLE ARTICLE: Use the traditional large hero card
                 if (featuredArray.length === 1) {
-                    featuredEl.style = ''; // Reset custom styles
+                    featuredEl.style = '';
                     const article = featuredArray[0];
                     const optimizedSrc = getAppwriteImageUrl(article);
                     const imageHtml = optimizedSrc ? `<img src="${optimizedSrc}" alt="${escapeHtml(article.title)}" loading="lazy">` : '';
@@ -339,7 +335,6 @@
                     return;
                 }
 
-                // MULTIPLE ARTICLES: Morph the container into a clean grid
                 featuredEl.style.display = 'grid';
                 featuredEl.style.gridTemplateColumns = 'repeat(auto-fit, minmax(280px, 1fr))';
                 featuredEl.style.gap = '20px';
@@ -349,7 +344,6 @@
 
                 featuredEl.innerHTML = featuredArray.map(article => {
                     const optimizedSrc = getAppwriteImageUrl(article);
-                    // Force the image height so grid items match perfectly
                     const imageHtml = optimizedSrc ? `<img src="${optimizedSrc}" alt="${escapeHtml(article.title)}" loading="lazy" style="width: 100%; height: 200px; object-fit: cover; border-radius: 8px 8px 0 0;">` : '';
                     const content = article.content ? truncateText(article.content, 120) : '';
 
