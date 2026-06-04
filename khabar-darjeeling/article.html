@@ -3,85 +3,70 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-    <!-- 🛑 FORCE BROWSER TO LOAD NEWEST VERSION (ANTI-CACHE) -->
     <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
     <meta http-equiv="Pragma" content="no-cache">
     <meta http-equiv="Expires" content="0">
-
     <title>Khabar Darjeeling - Article</title>
     <style>
         :root { --primary-red: #b81d24; --bg-color: #f0f2f5; }
         body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; background: var(--bg-color); margin: 0; }
-
-      .header-link { text-decoration: none; display: block; }
-      .header { background: #fff; padding: 15px; text-align: center; border-bottom: 2px solid var(--primary-red); font-weight: bold; color: var(--primary-red); font-size: 1.2rem; transition: background 0.2s; }
-      .header:hover { background: #f9f9f9; }
-
-      .article-container { max-width: 600px; margin: 20px auto; background: #fff; padding: 20px; border-radius: 8px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
-      .category-badge { background: var(--primary-red); color: white; padding: 4px 8px; border-radius: 4px; font-size: 11px; text-transform: uppercase; }
-      .art-img { width: 100%; border-radius: 8px; margin: 15px 0; object-fit: cover; display: none; box-sizing: border-box; }
-
-       /* NEW: Article video */
-      .art-video { position: relative; width: 100%; padding-bottom: 56.25%; margin: 15px 0; border-radius: 8px; overflow: hidden; display: none; box-sizing: border-box; }
-      .art-video iframe { position: absolute; top:0; left:0; width:100%; height:100%; border:0; border-radius:8px; }
-
-      .like-btn { background: #e4e6eb; border: none; padding: 10px 20px; border-radius: 20px; font-weight: 600; cursor: pointer; transition: 0.3s; display: inline-flex; align-items: center; gap: 5px; }
-      .like-btn:hover:not(:disabled) { background: #d8dadf; }
-      .like-btn.liked { background: var(--primary-red); color: white; }
-
-      .comments-section { margin-top: 40px; border-top: 1px solid #eee; padding-top: 20px; }
-      .comments-section h3 { margin-bottom: 15px; font-size: 1.1rem; }
-      .comment-input { width: 100%; padding: 12px; border: 1px solid #ccc; border-radius: 6px; box-sizing: border-box; resize: vertical; min-height: 80px; font-family: inherit; margin-bottom: 10px; }
-      .submit-comment-btn { background: var(--primary-red); color: white; border: none; padding: 10px 16px; border-radius: 6px; font-weight: bold; cursor: pointer; transition: 0.2s; }
-      .submit-comment-btn:hover { background: #96161b; }
-      .comment-list { margin-top: 25px; }
-      .comment-item { background: #f8f9fa; padding: 15px; border-radius: 8px; margin-bottom: 15px; border-left: 3px solid var(--primary-red); }
-      .comment-author { font-weight: bold; color: #333; margin-bottom: 5px; font-size: 0.9rem; }
-      .comment-text { color: #555; font-size: 0.95rem; margin: 0; line-height: 1.4; }
-
-      .comment-image { width: 100%; max-width: 100%; height: auto; border-radius: 6px; margin-top: 0.75rem; display: block; }
-      .comment-video { position: relative; width: 100%; padding-bottom: 56.25%; margin-top: 0.75rem; }
-      .comment-video iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: 0; border-radius: 6px; }
-      .comment-meta { color:#888; font-size:0.8em; font-weight:normal; margin-left:10px; }
+     .header-link { text-decoration: none; display: block; }
+     .header { background: #fff; padding: 15px; text-align: center; border-bottom: 2px solid var(--primary-red); font-weight: bold; color: var(--primary-red); font-size: 1.2rem; }
+     .header:hover { background: #f9f9f9; }
+     .article-container { max-width: 600px; margin: 20px auto; background: #fff; padding: 20px; border-radius: 8px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
+     .category-badge { background: var(--primary-red); color: white; padding: 4px 8px; border-radius: 4px; font-size: 11px; text-transform: uppercase; }
+     .art-img { width: 100%; border-radius: 8px; margin: 15px 0; object-fit: cover; display: none; box-sizing: border-box; }
+     .art-video { position: relative; width: 100%; padding-bottom: 56.25%; margin: 15px 0; border-radius: 8px; overflow: hidden; display: none; box-sizing: border-box; }
+     .art-video iframe { position: absolute; top:0; left:0; width:100%; height:100%; border:0; border-radius:8px; }
+     .like-btn { background: #e4e6eb; border: none; padding: 10px 20px; border-radius: 20px; font-weight: 600; cursor: pointer; transition: 0.3s; display: inline-flex; align-items: center; gap: 5px; }
+     .like-btn:hover:not(:disabled) { background: #d8dadf; }
+     .like-btn.liked { background: var(--primary-red); color: white; }
+     .comments-section { margin-top: 40px; border-top: 1px solid #eee; padding-top: 20px; }
+     .comment-input { width: 100%; padding: 12px; border: 1px solid #ccc; border-radius: 6px; box-sizing: border-box; resize: vertical; min-height: 80px; font-family: inherit; margin-bottom: 10px; }
+     .submit-comment-btn { background: var(--primary-red); color: white; border: none; padding: 10px 16px; border-radius: 6px; font-weight: bold; cursor: pointer; }
+     .comment-list { margin-top: 25px; }
+     .comment-item { background: #f8f9fa; padding: 15px; border-radius: 8px; margin-bottom: 15px; border-left: 3px solid var(--primary-red); }
+     .comment-author { font-weight: bold; color: #333; margin-bottom: 5px; font-size: 0.9rem; }
+     .comment-text { color: #555; font-size: 0.95rem; margin: 0; line-height: 1.4; }
+     .comment-image { width: 100%; max-width: 100%; height: auto; border-radius: 6px; margin-top: 0.75rem; display: block; }
+     .comment-video { position: relative; width: 100%; padding-bottom: 56.25%; margin-top: 0.75rem; }
+     .comment-video iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: 0; border-radius: 6px; }
+     .comment-meta { color:#888; font-size:0.8em; font-weight:normal; margin-left:10px; }
     </style>
 </head>
 <body>
-
-    <a href="index.html" class="header-link">
-        <div class="header">खबर दार्जिलिंग</div>
-    </a>
-
+    <a href="index.html" class="header-link"><div class="header">खबर दार्जिलिंग</div></a>
     <main class="article-container">
         <span class="category-badge" id="categoryBadge">General</span>
         <h1 id="title">Loading...</h1>
         <img id="mainImg" class="art-img" src="" alt="Article Image">
         <div id="articleVideo" class="art-video"></div>
         <div id="body" style="line-height: 1.6; white-space: pre-line; color: #333;"></div>
-
-        <div style="margin-top:25px;">
-            <button id="likeBtn" class="like-btn">❤️ Like</button>
-        </div>
-
+        <div style="margin-top:25px;"><button id="likeBtn" class="like-btn">❤️ Like</button></div>
         <div class="comments-section">
             <h3>Discussion</h3>
             <div class="comment-form">
                 <textarea id="commentInput" class="comment-input" placeholder="What are your thoughts on this?"></textarea>
                 <button id="submitComment" class="submit-comment-btn">Post Comment</button>
             </div>
-
-            <div id="commentsList" class="comment-list">
-                <p style="color: #888; font-size: 0.9rem; font-style: italic;">Loading comments...</p>
-            </div>
+            <div id="commentsList" class="comment-list"><p style="color: #888; font-style: italic;">Loading comments...</p></div>
         </div>
     </main>
 
     <script src="https://cdn.jsdelivr.net/npm/eruda"></script>
     <script>eruda.init();</script>
-    <script src="https://cdn.jsdelivr.net/npm/appwrite@14.0.1/dist/iife/sdk.min.js"></script>
+    <!-- FIXED: SDK with fallback -->
+    <script src="https://cdn.jsdelivr.net/npm/appwrite@14.0.1/dist/iife/sdk.min.js" onerror="this.src='https://unpkg.com/appwrite@14.0.1/dist/iife/sdk.min.js'"></script>
 
     <script type="module">
         import { categoryThemes } from './js/categoryConfig.js';
+
+        // WAIT for SDK
+        if (!window.Appwrite) {
+            document.getElementById('title').textContent = 'Loading error';
+            document.getElementById('body').textContent = 'Appwrite SDK failed to load. Check your connection.';
+            throw new Error('Appwrite missing');
+        }
 
         const PROJECT_ID = 'khabardarjeeling';
         const ENDPOINT = 'https://nyc.cloud.appwrite.io/v1';
@@ -91,23 +76,20 @@
         const LIKES_COL_ID = 'likes';
         const BUCKET_ID = 'post-images';
 
-        const { Client, Databases, Query, ID, Account, Storage } = Appwrite;
+        const { Client, Databases, Query, ID, Account, Storage } = window.Appwrite;
         const client = new Client().setProject(PROJECT_ID).setEndpoint(ENDPOINT);
         const db = new Databases(client);
         const account = new Account(client);
         const storage = new Storage(client);
-
         let currentArticleId = null;
 
         async function loadData() {
             try {
                 const params = new URLSearchParams(window.location.search);
                 currentArticleId = params.get('id');
-
-                if (!currentArticleId) throw new Error("No Article ID found");
+                if (!currentArticleId) throw new Error("No Article ID");
 
                 const art = await db.getDocument(DB_ID, COL_ID, currentArticleId);
-
                 document.getElementById('title').textContent = art.title;
                 document.getElementById('body').textContent = art.content;
 
@@ -122,58 +104,34 @@
 
                 const imageId = art.imageFileId || art.imageUrl;
                 const imgElement = document.getElementById('mainImg');
-                if (imageId && imageId!== 'Text' && imageId!== 'null' && imageId!== 'undefined') {
-                    if (imageId.startsWith('http')) {
-                        imgElement.src = imageId;
-                    } else {
-                        imgElement.src = `${ENDPOINT}/storage/buckets/article-image/files/${imageId}/view?project=${PROJECT_ID}`;
-                    }
+                if (imageId &&!['Text','null','undefined'].includes(imageId)) {
+                    imgElement.src = imageId.startsWith('http')? imageId : `${ENDPOINT}/storage/buckets/article-image/files/${imageId}/view?project=${PROJECT_ID}`;
                     imgElement.style.display = 'block';
                     imgElement.style.border = `3px solid ${theme.color}`;
-                } else {
-                    imgElement.style.display = 'none';
                 }
 
-                // --- ARTICLE YOUTUBE (NEW) ---
+                // PATCHED: playsinline video
                 const videoContainer = document.getElementById('articleVideo');
                 if (art.youtube_id && art.youtube_id.length === 11) {
                     videoContainer.style.display = 'block';
                     videoContainer.style.border = `3px solid ${theme.color}`;
-                    videoContainer.innerHTML = `
-                        <iframe
-                            src="https://www.youtube-nocookie.com/embed/${encodeURIComponent(art.youtube_id)}"
-                            title="YouTube video"
-                            loading="lazy"
-                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                            allowfullscreen
-                            referrerpolicy="strict-origin-when-cross-origin">
-                        </iframe>`;
-                } else {
-                    videoContainer.style.display = 'none';
-                    videoContainer.innerHTML = '';
+                    videoContainer.innerHTML = `<iframe src="https://www.youtube-nocookie.com/embed/${encodeURIComponent(art.youtube_id)}?playsinline=1&modestbranding=1&rel=0" title="YouTube video" loading="lazy" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen referrerpolicy="strict-origin-when-cross-origin"></iframe>`;
                 }
 
                 loadComments(currentArticleId);
                 loadLikes(currentArticleId);
-
             } catch(e) {
                 console.error("Load failed:", e);
                 document.getElementById('title').textContent = "Article loading error.";
-                document.getElementById('body').textContent = "We couldn't find the article you were looking for. It may have been removed.";
+                document.getElementById('body').textContent = e.message;
             }
         }
 
-        // --- LIKES ---
         async function loadLikes(articleId) {
             try {
-                const response = await db.listDocuments(DB_ID, LIKES_COL_ID, [
-                    Query.equal('articleId', articleId),
-                    Query.limit(1)
-                ]);
-
+                const response = await db.listDocuments(DB_ID, LIKES_COL_ID, [Query.equal('articleId', articleId), Query.limit(1)]);
                 const totalLikes = response.total;
                 const btn = document.getElementById('likeBtn');
-
                 if (localStorage.getItem(`liked_${articleId}`)) {
                     btn.classList.add('liked');
                     btn.innerHTML = `❤️ Liked (${totalLikes})`;
@@ -181,172 +139,75 @@
                     btn.classList.remove('liked');
                     btn.innerHTML = `❤️ Like (${totalLikes})`;
                 }
-            } catch (error) {
-                console.error("Error loading likes:", error);
-            }
+            } catch (error) { console.error(error); }
         }
 
         document.getElementById('likeBtn').addEventListener('click', async () => {
             if (!currentArticleId) return;
-
             const btn = document.getElementById('likeBtn');
-            const originalText = btn.innerHTML;
             const likeDocId = localStorage.getItem(`liked_${currentArticleId}`);
-
-            btn.innerHTML = '...';
-            btn.disabled = true;
-
+            btn.disabled = true; btn.innerHTML = '...';
             try {
                 if (likeDocId) {
                     try { await db.deleteDocument(DB_ID, LIKES_COL_ID, likeDocId); } catch(e) {}
                     localStorage.removeItem(`liked_${currentArticleId}`);
-                    btn.classList.remove('liked');
                 } else {
-                    let emailToSave = "anonymous@khabardarjeeling.com";
-                    try {
-                        const user = await account.get();
-                        if (user && user.email) emailToSave = user.email;
-                    } catch (e) {}
-
-                    const newLike = await db.createDocument(DB_ID, LIKES_COL_ID, ID.unique(), {
-                        articleId: currentArticleId,
-                        userEmail: emailToSave
-                    });
-
+                    let email = "anonymous@khabardarjeeling.com";
+                    try { const u = await account.get(); if (u?.email) email = u.email; } catch(e){}
+                    const newLike = await db.createDocument(DB_ID, LIKES_COL_ID, ID.unique(), { articleId: currentArticleId, userEmail: email });
                     localStorage.setItem(`liked_${currentArticleId}`, newLike.$id);
-                    btn.classList.add('liked');
                 }
-
                 await loadLikes(currentArticleId);
-
-            } catch (error) {
-                console.error("Failed to toggle like:", error);
-                alert("Could not update your like. Check database permissions.");
-                btn.innerHTML = originalText;
-            } finally {
-                btn.disabled = false;
-            }
+            } catch(e){ alert("Could not update like"); } finally { btn.disabled = false; }
         });
 
-        // --- COMMENTS WITH MEDIA ---
         function createCommentElement(comment) {
-            const commentEl = document.createElement('div');
-            commentEl.className = 'comment-item';
+            const el = document.createElement('div'); el.className = 'comment-item';
+            const date = new Date(comment.createdAt);
+            const dateStr = date.toLocaleDateString() + ' ' + date.toLocaleTimeString([], {hour:'2-digit',minute:'2-digit'});
+            el.innerHTML = `<div class="comment-author">${escapeHtml(comment.authorName)}<span class="comment-meta">${dateStr}</span></div><p class="comment-text"></p>`;
+            el.querySelector('.comment-text').textContent = comment.commentText;
 
-            const dateObj = new Date(comment.createdAt);
-            const dateString = dateObj.toLocaleDateString() + ' ' + dateObj.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
-
-            const authorDiv = document.createElement('div');
-            authorDiv.className = 'comment-author';
-            authorDiv.innerHTML = `${escapeHtml(comment.authorName)}<span class="comment-meta">${dateString}</span>`;
-
-            const textP = document.createElement('p');
-            textP.className = 'comment-text';
-            textP.textContent = comment.commentText;
-
-            commentEl.append(authorDiv, textP);
-
-            if (comment.image_id && comment.image_id.trim()) {
+            if (comment.image_id?.trim()) {
                 try {
-                    const imgUrl = storage.getFilePreview(BUCKET_ID, comment.image_id, 600, 0, 'center', 75);
-                    const img = document.createElement('img');
-                    img.src = imgUrl.href;
-                    img.alt = 'Comment attachment';
-                    img.loading = 'lazy';
-                    img.decoding = 'async';
-                    img.className = 'comment-image';
-                    img.onerror = () => img.remove();
-                    commentEl.appendChild(img);
-                } catch (e) {}
+                    const url = storage.getFilePreview(BUCKET_ID, comment.image_id, 600, 0, 'center', 75);
+                    const img = document.createElement('img'); img.src = url.href; img.className='comment-image'; img.loading='lazy'; img.onerror=()=>img.remove();
+                    el.appendChild(img);
+                } catch(e){}
             }
-
-            if (comment.youtube_id && comment.youtube_id.length === 11) {
-                const videoWrapper = document.createElement('div');
-                videoWrapper.className = 'comment-video';
-                const iframe = document.createElement('iframe');
-                iframe.src = `https://www.youtube-nocookie.com/embed/${encodeURIComponent(comment.youtube_id)}`;
-                iframe.title = 'YouTube video';
-                iframe.loading = 'lazy';
-                iframe.allow = 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture';
-                iframe.allowFullscreen = true;
-                iframe.referrerPolicy = 'strict-origin-when-cross-origin';
-                videoWrapper.appendChild(iframe);
-                commentEl.appendChild(videoWrapper);
+            if (comment.youtube_id?.length === 11) {
+                const wrap = document.createElement('div'); wrap.className='comment-video';
+                // PATCHED: playsinline
+                wrap.innerHTML = `<iframe src="https://www.youtube-nocookie.com/embed/${encodeURIComponent(comment.youtube_id)}?playsinline=1&modestbranding=1&rel=0" title="YouTube" loading="lazy" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen referrerpolicy="strict-origin-when-cross-origin"></iframe>`;
+                el.appendChild(wrap);
             }
-
-            return commentEl;
+            return el;
         }
 
         async function loadComments(articleId) {
-            const commentsList = document.getElementById('commentsList');
+            const list = document.getElementById('commentsList');
             try {
-                const response = await db.listDocuments(DB_ID, COMMENTS_COL_ID, [
-                    Query.equal('articleId', articleId),
-                    Query.orderDesc('createdAt'),
-                    Query.limit(50)
-                ]);
-
-                commentsList.innerHTML = '';
-
-                if (response.documents.length === 0) {
-                    commentsList.innerHTML = '<p style="color: #888; font-size: 0.9rem; font-style: italic;">No comments yet. Be the first to share your thoughts!</p>';
-                    return;
-                }
-
-                const fragment = document.createDocumentFragment();
-                response.documents.forEach(comment => {
-                    fragment.appendChild(createCommentElement(comment));
-                });
-                commentsList.appendChild(fragment);
-
-            } catch (error) {
-                console.error("Error loading comments:", error);
-                commentsList.innerHTML = '<p style="color: red; font-size: 0.9rem;">Could not load comments.</p>';
-            }
+                const res = await db.listDocuments(DB_ID, COMMENTS_COL_ID, [Query.equal('articleId', articleId), Query.orderDesc('createdAt'), Query.limit(50)]);
+                list.innerHTML = '';
+                if (!res.documents.length) { list.innerHTML = '<p style="color:#888;font-style:italic;">No comments yet. Be the first!</p>'; return; }
+                const frag = document.createDocumentFragment();
+                res.documents.forEach(c => frag.appendChild(createCommentElement(c)));
+                list.appendChild(frag);
+            } catch(e){ list.innerHTML = '<p style="color:red;">Could not load comments.</p>'; }
         }
 
         document.getElementById('submitComment').addEventListener('click', async () => {
             const input = document.getElementById('commentInput');
-            const text = input.value.trim();
-            const btn = document.getElementById('submitComment');
-
-            if(text === '' ||!currentArticleId) return;
-
-            btn.disabled = true;
-            btn.textContent = 'Posting...';
-
+            const text = input.value.trim(); if (!text ||!currentArticleId) return;
+            const btn = document.getElementById('submitComment'); btn.disabled=true; btn.textContent='Posting...';
             try {
-                let authorName = "Anonymous Reader";
-                try {
-                    const user = await account.get();
-                    authorName = user.name || "Reader";
-                } catch (e) {}
-
-                await db.createDocument(DB_ID, COMMENTS_COL_ID, ID.unique(), {
-                    articleId: currentArticleId,
-                    authorName: authorName,
-                    commentText: text,
-                    createdAt: new Date().toISOString()
-                });
-
-                input.value = '';
-                await loadComments(currentArticleId);
-
-            } catch (error) {
-                console.error("Failed to post comment:", error);
-                alert("Could not post your comment.");
-            } finally {
-                btn.disabled = false;
-                btn.textContent = 'Post Comment';
-            }
+                let name = "Anonymous Reader"; try { const u = await account.get(); name = u.name || "Reader"; } catch(e){}
+                await db.createDocument(DB_ID, COMMENTS_COL_ID, ID.unique(), { articleId: currentArticleId, authorName: name, commentText: text, createdAt: new Date().toISOString() });
+                input.value=''; await loadComments(currentArticleId);
+            } catch(e){ alert("Could not post"); } finally { btn.disabled=false; btn.textContent='Post Comment'; }
         });
 
-        function escapeHtml(text) {
-            const div = document.createElement('div');
-            div.textContent = text;
-            return div.innerHTML;
-        }
-
+        function escapeHtml(t){ const d=document.createElement('div'); d.textContent=t; return d.innerHTML; }
         loadData();
     </script>
 </body>
