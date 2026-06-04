@@ -1,180 +1,122 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Submit news to Khabar Darjeeling">
-    <meta name="robots" content="noindex, follow">
-    <title>Submit News - Khabar Darjeeling</title>
-    
-    <script src="https://cdn.jsdelivr.net/npm/eruda"></script>
-    <script>eruda.init();</script>
+<script src="js/appwrite.js?v=1000"></script>
 
-    <link rel="stylesheet" href="css/style.css?v=1000">
-    <link rel="stylesheet" href="css/responsive.css?v=1000">
-    <style>
-        .upload-area { display: block; border: 2px dashed #ccc; border-radius: 8px; padding: 30px; text-align: center; cursor: pointer; background: #fafafa; transition: all 0.3s; }
-        .upload-area:hover { border-color: #c41e3a; background: #fff5f5; }
-        .image-preview { margin-top: 15px; }
-        .image-preview img { max-width: 300px; max-height: 200px; border-radius: 8px; border: 1px solid #ddd; display: block; margin-bottom: 10px; }
-        .remove-btn { padding: 6px 12px; background: #dc3545; color: white; border: none; border-radius: 4px; cursor: pointer; }
-        .user-lock-banner { display: flex; align-items: center; gap: 12px; background: #f0f2f5; padding: 14px; border-radius: 6px; border-left: 4px solid #1877f2; margin-bottom: 20px; }
-        body.dark-theme .user-lock-banner { background: #242526; border-left-color: #c41e3a; }
-        .user-lock-avatar { width: 40px; height: 40px; background: #c41e3a; color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 16px; }
-    </style>
-</head>
-<body>
-    <nav class="navbar">
-        <div class="container">
-            <div class="navbar-content">
-                <div class="logo">
-                    <a href="index.html" style="text-decoration: none; color: inherit;">
-                        <h1>खबर दार्जिलिंग</h1>
-                        <p class="tagline">Your Trusted News Source</p>
-                    </a>
-                </div>
-                <div class="nav-toggle" id="navToggle"><span></span><span></span><span></span></div>
-                <div class="nav-menu" id="navMenu">
-                    <ul class="nav-links">
-                        <li><a href="index.html">Home</a></li>
-                        <li><a href="submit.html" class="active">Submit News</a></li>
-                    </ul>
-                </div>
-                <div class="nav-right">
-                    <button class="theme-toggle" id="themeToggle">🌙</button>
-                    <a href="admin.html" class="admin-link">Admin</a>
-                </div>
-            </div>
-        </div>
-    </nav>
+<script>
+    // --- Use your existing appwrite.js setup ---
+    // expects: window.databases, window.ID, window.APPWRITE_DB_ID,
+    // window.APPWRITE_COLLECTION_ID, submitStorage, verifiedUserSession
 
-    <section class="submit-section">
-        <div class="container">
-            <div class="submit-container">
-                <h2>Submit News</h2>
-                <div class="user-lock-banner">
-                    <div class="user-lock-avatar" id="authorAvatar">...</div>
-                    <div>
-                        <p style="margin:0; font-weight:600; font-size:14px;" id="authorDisplayLabel">Loading profile...</p>
-                    </div>
-                </div>
+    // Better YouTube extractor (handles shorts, youtu.be, embed)
+    function extractVideoID(url) {
+        if (!url) return null;
+        const match = url.match(/(?:youtu\.be\/|youtube\.com\/(?:watch\?v=|embed\/|shorts\/|v\/))([a-zA-Z0-9_-]{11})/);
+        return match? match[1] : (url.length === 11? url : null);
+    }
 
-                <form id="newsForm" class="news-form">
-                    <div class="form-group">
-                        <label for="title">News Title *</label>
-                        <input type="text" id="title" name="title" required placeholder="Enter news headline" maxlength="200">
-                    </div>
+    // --- Auth banner (uses your verifiedUserSession from appwrite.js) ---
+    async function updateAuthorBanner() {
+        // your appwrite.js already checks login, we just display it
+        const check = setInterval(() => {
+            if (typeof verifiedUserSession!== 'undefined' && verifiedUserSession) {
+                document.getElementById('authorDisplayLabel').textContent = `Posting as ${verifiedUserSession.name}`;
+                document.getElementById('authorAvatar').textContent = verifiedUserSession.name.charAt(0).toUpperCase();
+                clearInterval(check);
+            }
+        }, 100);
 
-                    <div class="form-group">
-                        <label for="category">Category *</label>
-                        <select id="category" name="category" required>
-                            <option value="">Select a category</option>
-                            <option value="darjeeling">Darjeeling</option>
-                            <option value="kalimpong">Kalimpong</option>
-                            <option value="kurseong">Kurseong</option>
-                            <option value="mirik">Mirik</option>
-                            <option value="siliguri">Siliguri</option>
-                            <option value="west-bengal">West Bengal</option>
-                            <option value="national">National</option>
-                            <option value="entertainment">Entertainment</option>
-                            <option value="sports">Sports</option>
-                        </select>
-                    </div>
+        // fallback after 2s if not logged in
+        setTimeout(() => {
+            if (document.getElementById('authorDisplayLabel').textContent.includes('Loading')) {
+                document.getElementById('authorDisplayLabel').textContent = 'Posting as Guest';
+                document.getElementById('authorAvatar').textContent = 'G';
+            }
+        }, 2000);
+    }
 
-                    <div class="form-group">
-                        <label for="location">Location *</label>
-                        <input type="text" id="location" name="location" required placeholder="Where is this news from?">
-                    </div>
+    // --- Image Preview ---
+    const imageInput = document.getElementById('imageInput');
+    const imagePreview = document.getElementById('imagePreview');
+    const previewImg = document.getElementById('previewImg');
+    const removeBtn = document.getElementById('removeImageBtn');
 
-                    <!-- YouTube Link (New) -->
-                    <div class="form-group">
-                        <label for="ytLink">YouTube Video Link <span style="color:#888; font-weight:normal;">(Optional)</span></label>
-                        <input type="text" id="ytLink" name="ytLink" placeholder="Paste YouTube link here...">
-                    </div>
-
-                    <div class="form-group">
-                        <label for="imageInput">Featured Image <span style="color:#888; font-weight:normal;">(Optional)</span></label>
-                        <input type="file" id="imageInput" name="image" accept="image/*" style="display: none;">
-                        <label for="imageInput" class="upload-area">
-                            <div class="upload-info"><p>📷 Click to select an image</p></div>
-                        </label>
-                        <div id="imagePreview" class="image-preview" style="display:none;">
-                            <img id="previewImg" src="" alt="Preview">
-                            <button type="button" class="remove-btn" id="removeImageBtn">Remove Image</button>
-                        </div>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="content">News Content *</label>
-                        <textarea id="content" name="content" required placeholder="Write your news story here..." rows="10"></textarea>
-                    </div>
-
-                    <div class="form-buttons">
-                        <button type="submit" class="btn btn-primary" id="submitBtn">Submit News</button>
-                    </div>
-                </form>
-
-                <div id="successMessage" class="alert alert-success" style="display:none;">
-                    <h4>✓ News Submitted Successfully!</h4>
-                </div>
-
-                <div id="errorMessage" class="alert alert-error" style="display:none;">
-                    <h4>✗ Error Submitting News</h4>
-                    <p id="errorText"></p>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <script src="https://cdn.jsdelivr.net/npm/appwrite@14.0.1/dist/iife/sdk.min.js"></script>
-    <script src="js/appwrite.js?v=1000"></script>
-    
-    <script>
-        // Helper to extract clean YouTube ID
-        function extractVideoID(url) {
-            if (!url) return null;
-            const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/;
-            const match = url.match(regExp);
-            return (match && match[2].length === 11) ? match[2] : null;
+    imageInput.addEventListener('change', () => {
+        const file = imageInput.files[0];
+        if (file) {
+            if (file.size > 5 * 1024 * 1024) {
+                alert('Image must be under 5MB for mobile');
+                imageInput.value = '';
+                return;
+            }
+            previewImg.src = URL.createObjectURL(file);
+            imagePreview.style.display = 'block';
         }
+    });
 
-        // ... [Keep your existing auth check and setup logic here] ...
+    removeBtn.addEventListener('click', () => {
+        imageInput.value = '';
+        imagePreview.style.display = 'none';
+        previewImg.src = '';
+    });
 
-        // Updated Submission Logic
-        newsForm.addEventListener('submit', async function(e) {
-            e.preventDefault();
-            
-            // ... [Keep your loading states here] ...
+    // --- Submit ---
+    const newsForm = document.getElementById('newsForm');
+    const submitBtn = document.getElementById('submitBtn');
 
-            try {
-                const imageFile = document.getElementById('imageInput').files[0];
-                let uploadedImageId = null;
+    newsForm.addEventListener('submit', async function(e) {
+        e.preventDefault();
 
-                if (imageFile) {
-                    const uploadResponse = await submitStorage.createFile('article-image', Appwrite.ID.unique(), imageFile);
-                    uploadedImageId = uploadResponse.$id;
-                }
+        submitBtn.disabled = true;
+        submitBtn.textContent = 'Submitting...';
+        document.getElementById('successMessage').style.display = 'none';
+        document.getElementById('errorMessage').style.display = 'none';
 
-                const ytLinkInput = document.getElementById('ytLink');
-                
-                const articlePayload = {
-                    title: document.getElementById('title').value,
-                    category: document.getElementById('category').value,
-                    content: document.getElementById('content').value,
-                    location: document.getElementById('location').value,
-                    status: "pending", 
-                    authorName: verifiedUserSession.name,  
-                    authorEmail: verifiedUserSession.email, 
-                    submittedAt: new Date().toISOString(),
-                    imageFileId: uploadedImageId || null,
-                    youtube_id: extractVideoID(ytLinkInput ? ytLinkInput.value : '') 
-                };
+        try {
+            const imageFile = imageInput.files[0];
+            let uploadedImageId = null;
 
-                await window.databases.createDocument(window.APPWRITE_DB_ID, window.APPWRITE_COLLECTION_ID, window.ID.unique(), articlePayload);
-                
-                // ... [Keep your success/error handling here] ...
-            } catch (error) { /* Handle error */ }
-        });
-    </script>
-</body>
-</html>
+            if (imageFile) {
+                submitBtn.textContent = 'Uploading image...';
+                // using your submitStorage from appwrite.js
+                const uploadResponse = await submitStorage.createFile('article-image', Appwrite.ID.unique(), imageFile);
+                uploadedImageId = uploadResponse.$id;
+            }
+
+            const ytLink = document.getElementById('ytLink').value.trim();
+
+            const articlePayload = {
+                title: document.getElementById('title').value.trim(),
+                category: document.getElementById('category').value,
+                content: document.getElementById('content').value.trim(),
+                location: document.getElementById('location').value.trim(),
+                status: "pending",
+                authorName: verifiedUserSession?.name || "Guest",
+                authorEmail: verifiedUserSession?.email || "guest@khabardarjeeling.com",
+                submittedAt: new Date().toISOString(),
+                imageFileId: uploadedImageId,
+                youtube_id: extractVideoID(ytLink) // now saves clean 11-char ID
+            };
+
+            submitBtn.textContent = 'Saving...';
+            await window.databases.createDocument(
+                window.APPWRITE_DB_ID,
+                window.APPWRITE_COLLECTION_ID,
+                window.ID.unique(),
+                articlePayload
+            );
+
+            document.getElementById('successMessage').style.display = 'block';
+            newsForm.reset();
+            imagePreview.style.display = 'none';
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+
+        } catch (error) {
+            console.error("Submit failed:", error);
+            document.getElementById('errorText').textContent = error.message;
+            document.getElementById('errorMessage').style.display = 'block';
+        } finally {
+            submitBtn.disabled = false;
+            submitBtn.textContent = 'Submit News';
+        }
+    });
+
+    updateAuthorBanner();
+</script>
