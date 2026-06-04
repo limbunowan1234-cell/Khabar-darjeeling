@@ -1,4 +1,5 @@
 // js/index.js
+import { categoryThemes } from './categoryConfig.js'; // 1. Import your themes
 
 async function loadArticles() {
     try {
@@ -22,10 +23,15 @@ async function loadArticles() {
         // Featured story - first article
         if (articles.length > 0) {
             const featured = articles[0];
+            
+            // 2. Calculate theme for Featured Story
+            const featCategoryKey = featured.category ? featured.category.toLowerCase() : 'default';
+            const featTheme = categoryThemes[featCategoryKey] || categoryThemes['default'] || { color: '#b81d24' };
+
             document.getElementById('featuredStory').innerHTML = `
-                ${featured.imageFileId? `<img src="${featured.imageFileId}" alt="${featured.title}" style="width:100%;height:400px;object-fit:cover;">` : ''}
+                ${featured.imageFileId? `<img src="${featured.imageFileId}" alt="${featured.title}" style="width:100%;height:400px;object-fit:cover; border-bottom: 4px solid ${featTheme.color};">` : ''}
                 <div style="padding: 30px;">
-                    <span class="category-badge">${featured.category}</span>
+                    <span class="category-badge" style="background-color: ${featTheme.color}; color: white;">${featured.category}</span>
                     <h2>${featured.title}</h2>
                     <p class="meta">${featured.location} • ${new Date(featured.submittedAt).toLocaleDateString()}</p>
                     <p>${featured.content.substring(0, 200)}...</p>
@@ -35,17 +41,24 @@ async function loadArticles() {
 
         // Latest news grid
         const newsGrid = document.getElementById('newsGrid');
-        newsGrid.innerHTML = articles.map(article => `
-            <div class="news-card">
+        newsGrid.innerHTML = articles.map(article => {
+            
+            // 3. Calculate theme for each Grid Card
+            const categoryKey = article.category ? article.category.toLowerCase() : 'default';
+            const theme = categoryThemes[categoryKey] || categoryThemes['default'] || { color: '#b81d24' };
+
+            return `
+            <div class="news-card" style="border-top: 4px solid ${theme.color};">
                 ${article.imageFileId? `<img src="${article.imageFileId}" alt="${article.title}">` : ''}
                 <div class="news-card-content">
-                    <span class="category-badge">${article.category}</span>
+                    <span class="category-badge" style="background-color: ${theme.color}; color: white;">${article.category}</span>
                     <h4>${article.title}</h4>
                     <p class="meta">${article.location} • ${new Date(article.submittedAt).toLocaleDateString()}</p>
                     <p>${article.content.substring(0, 100)}...</p>
                 </div>
             </div>
-        `).join('');
+            `;
+        }).join('');
 
     } catch (error) {
         console.error('Error loading articles:', error);
