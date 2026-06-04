@@ -1,46 +1,44 @@
-<script src="js/appwrite.js?v=1000"></script>
-
 <script>
-    // --- Use your existing appwrite.js setup ---
-    // expects: window.databases, window.ID, window.APPWRITE_DB_ID,
-    // window.APPWRITE_COLLECTION_ID, submitStorage, verifiedUserSession
-
-    // Better YouTube extractor (handles shorts, youtu.be, embed)
+document.addEventListener('DOMContentLoaded', () => {
+    // --- Safe YouTube extractor ---
     function extractVideoID(url) {
         if (!url) return null;
         const match = url.match(/(?:youtu\.be\/|youtube\.com\/(?:watch\?v=|embed\/|shorts\/|v\/))([a-zA-Z0-9_-]{11})/);
         return match? match[1] : (url.length === 11? url : null);
     }
 
-    // --- Auth banner (uses your verifiedUserSession from appwrite.js) ---
+    // --- Auth banner ---
     async function updateAuthorBanner() {
-        // your appwrite.js already checks login, we just display it
+        const label = document.getElementById('authorDisplayLabel');
+        const avatar = document.getElementById('authorAvatar');
+        if (!label ||!avatar) return;
+
         const check = setInterval(() => {
-            if (typeof verifiedUserSession!== 'undefined' && verifiedUserSession) {
-                document.getElementById('authorDisplayLabel').textContent = `Posting as ${verifiedUserSession.name}`;
-                document.getElementById('authorAvatar').textContent = verifiedUserSession.name.charAt(0).toUpperCase();
+            if (typeof verifiedUserSession!== 'undefined' && verifiedUserSession?.name) {
+                label.textContent = `Posting as ${verifiedUserSession.name}`;
+                avatar.textContent = verifiedUserSession.name.charAt(0).toUpperCase();
                 clearInterval(check);
             }
         }, 100);
 
-        // fallback after 2s if not logged in
         setTimeout(() => {
-            if (document.getElementById('authorDisplayLabel').textContent.includes('Loading')) {
-                document.getElementById('authorDisplayLabel').textContent = 'Posting as Guest';
-                document.getElementById('authorAvatar').textContent = 'G';
+            if (label.textContent.includes('Loading')) {
+                label.textContent = 'Posting as Guest';
+                avatar.textContent = 'G';
             }
         }, 2000);
     }
 
-    // --- Image Preview ---
+    // --- Image Preview (GUARDED) ---
     const imageInput = document.getElementById('imageInput');
     const imagePreview = document.getElementById('imagePreview');
     const previewImg = document.getElementById('previewImg');
     const removeBtn = document.getElementById('removeImageBtn');
 
-    imageInput.addEventListener('change', () => {
-        const file = imageInput.files[0];
-        if (file) {
+    if (imageInput && imagePreview && previewImg) {
+        imageInput.addEventListener('change', () => {
+            const file = imageInput.files[0];
+            if (!file) return;
             if (file.size > 5 * 1024 * 1024) {
                 alert('Image must be under 5MB for mobile');
                 imageInput.value = '';
@@ -48,75 +46,87 @@
             }
             previewImg.src = URL.createObjectURL(file);
             imagePreview.style.display = 'block';
-        }
-    });
+        });
+    }
 
-    removeBtn.addEventListener('click', () => {
-        imageInput.value = '';
-        imagePreview.style.display = 'none';
-        previewImg.src = '';
-    });
+    if (removeBtn && imageInput && imagePreview && previewImg) {
+        removeBtn.addEventListener('click', () => {
+            imageInput.value = '';
+            imagePreview.style.display = 'none';
+            previewImg.src = '';
+        });
+    }
 
-    // --- Submit ---
+    // --- Submit (GUARDED) ---
     const newsForm = document.getElementById('newsForm');
     const submitBtn = document.getElementById('submitBtn');
 
-    newsForm.addEventListener('submit', async function(e) {
-        e.preventDefault();
+    if (newsForm && submitBtn) {
+        newsForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            submitBtn.disabled = true;
+            submitBtn.textContent = 'Submitting...';
+            document.getElementById('successMessage').style.display = 'none';
+            document.getElementById('errorMessage').style.display = 'none';
 
-        submitBtn.disabled = true;
-        submitBtn.textContent = 'Submitting...';
-        document.getElementById('successMessage').style.display = 'none';
-        document.getElementById('errorMessage').style.display = 'none';
+            try {
+                // Check SDK is ready
+                if (!window.Appwrite ||!window.databases ||!window.submitStorage) {
+                    throw new Error('Appwrite not loaded. Refresh page.');
+                }
 
-        try {
-            const imageFile = imageInput.files[0];
-            let uploadedImageId = null;
+                const imageFile = imageInput?.files[0];
+                let uploadedImageId = null;
 
-            if (imageFile) {
-                submitBtn.textContent = 'Uploading image...';
-                // using your submitStorage from appwrite.js
-                const uploadResponse = await submitStorage.createFile('article-image', Appwrite.ID.unique(), imageFile);
-                uploadedImageId = uploadResponse.$id;
+                if (imageFile) {
+                    submitBtn.textContent = 'Uploading image...';
+                    const uploadResponse = await window.submitStorage.createFile(
+                        'article-image',
+                        window.Appwrite.ID.unique(),
+                        imageFile
+                    );
+                    uploadedImageId = uploadResponse.$id;
+                }
+
+                const ytLink = document.getElementById('ytLink')?.value.trim() || '';
+
+                const articlePayload = {
+                    title: document.getElementById('title').value.trim(),
+                    category: document.getElementById('category').value,
+                    content: document.getElementById('content').value.trim(),
+                    location: document.getElementById('location').value.trim(),
+                    status: "pending",
+                    authorName: window.verifiedUserSession?.name || "Guest",
+                    authorEmail: window.verifiedUserSession?.email || "guest@khabardarjeeling.com",
+                    submittedAt: new Date().toISOString(),
+                    imageFileId: uploadedImageId,
+                    youtube_id: extractVideoID(ytLink)
+                };
+
+                submitBtn.textContent = 'Saving...';
+                await window.databases.createDocument(
+                    window.APPWRITE_DB_ID,
+                    window.APPWRITE_COLLECTION_ID,
+                    window.ID.unique(),
+                    articlePayload
+                );
+
+                document.getElementById('successMessage').style.display = 'block';
+                newsForm.reset();
+                if (imagePreview) imagePreview.style.display = 'none';
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+
+            } catch (error) {
+                console.error("Submit failed:", error);
+                document.getElementById('errorText').textContent = error.message;
+                document.getElementById('errorMessage').style.display = 'block';
+            } finally {
+                submitBtn.disabled = false;
+                submitBtn.textContent = 'Submit News';
             }
-
-            const ytLink = document.getElementById('ytLink').value.trim();
-
-            const articlePayload = {
-                title: document.getElementById('title').value.trim(),
-                category: document.getElementById('category').value,
-                content: document.getElementById('content').value.trim(),
-                location: document.getElementById('location').value.trim(),
-                status: "pending",
-                authorName: verifiedUserSession?.name || "Guest",
-                authorEmail: verifiedUserSession?.email || "guest@khabardarjeeling.com",
-                submittedAt: new Date().toISOString(),
-                imageFileId: uploadedImageId,
-                youtube_id: extractVideoID(ytLink) // now saves clean 11-char ID
-            };
-
-            submitBtn.textContent = 'Saving...';
-            await window.databases.createDocument(
-                window.APPWRITE_DB_ID,
-                window.APPWRITE_COLLECTION_ID,
-                window.ID.unique(),
-                articlePayload
-            );
-
-            document.getElementById('successMessage').style.display = 'block';
-            newsForm.reset();
-            imagePreview.style.display = 'none';
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-
-        } catch (error) {
-            console.error("Submit failed:", error);
-            document.getElementById('errorText').textContent = error.message;
-            document.getElementById('errorMessage').style.display = 'block';
-        } finally {
-            submitBtn.disabled = false;
-            submitBtn.textContent = 'Submit News';
-        }
-    });
+        });
+    }
 
     updateAuthorBanner();
+});
 </script>
