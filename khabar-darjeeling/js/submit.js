@@ -10,6 +10,14 @@ document.addEventListener('DOMContentLoaded', () => {
 
     if (!newsForm) return;
 
+    // Helper function to extract YouTube ID
+    function extractVideoID(url) {
+        if (!url) return null;
+        const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/;
+        const match = url.match(regExp);
+        return (match && match[2].length === 11) ? match[2] : null;
+    }
+
     newsForm.addEventListener('submit', async (e) => {
         e.preventDefault();
 
@@ -22,25 +30,27 @@ document.addEventListener('DOMContentLoaded', () => {
         const title = document.getElementById('title').value;
         const category = document.getElementById('category').value;
         const location = document.getElementById('location').value;
+        const content = document.getElementById('content').value;
         
-        // Failsafe in case authorName input isn't present
+        // New optional field capture
+        const ytLinkInput = document.getElementById('ytLink');
+        const ytLink = ytLinkInput ? ytLinkInput.value : '';
+        
         const authorNameElement = document.getElementById('authorName');
         const authorName = authorNameElement ? authorNameElement.value : 'Anonymous'; 
         
-        const content = document.getElementById('content').value;
-        const imageFile = imageInput.files[0];
+        const imageFile = imageInput ? imageInput.files[0] : null;
 
-        let uploadedImageId = null; // Start as pure null to avoid "Text" or empty string glitches
+        let uploadedImageId = null; 
 
         try {
-            // 3. Validation & Appwrite Service Check
+            // 3. Validation
             if (imageFile && imageFile.size > 5 * 1024 * 1024) {
                 throw new Error('Image too large. Max 5MB allowed.');
             }
 
-            // Verify global Appwrite objects exist
             if (!window.storage || (!window.databases && !window.database) || !window.ID) {
-                throw new Error('Appwrite services not initialized. Check appwrite.js.');
+                throw new Error('Appwrite services not initialized.');
             }
 
             // 4. Image Upload Logic
@@ -48,17 +58,11 @@ document.addEventListener('DOMContentLoaded', () => {
                 submitBtn.textContent = 'Uploading image...';
                 
                 const file = await window.storage.createFile(
-                    window.APPWRITE_BUCKET_ID, // ensure this is defined in appwrite.js as 'article-image'
+                    window.APPWRITE_BUCKET_ID, 
                     window.ID.unique(),
                     imageFile
-                ).catch(err => {
-                    console.error('Storage Error:', err);
-                    throw new Error('Image upload failed: ' + (err.message || 'Unknown error'));
-                });
-                
-                // ONLY grab the ID, not the full URL. The frontend will build the URL!
+                );
                 uploadedImageId = file.$id;
-                console.log('Image uploaded successfully. File ID:', uploadedImageId);
             }
 
             // 5. Save Document to Database
@@ -73,25 +77,17 @@ document.addEventListener('DOMContentLoaded', () => {
                 location: location,
                 authorName: authorName,
                 status: 'pending',
-                submittedAt: new Date().toISOString()
+                submittedAt: new Date().toISOString(),
+                imageFileId: uploadedImageId || null,
+                youtube_id: extractVideoID(ytLink) // Extracts ID or returns null
             };
-
-            // SMART FAILSAFE: Explicitly set pure null if no image was uploaded
-            if (uploadedImageId) {
-                articlePayload.imageFileId = uploadedImageId;
-            } else {
-                articlePayload.imageFileId = null;
-            }
 
             await activeDatabase.createDocument(
                 window.APPWRITE_DB_ID,
                 window.APPWRITE_COLLECTION_ID,
                 window.ID.unique(),
                 articlePayload
-            ).catch(err => {
-                console.error('Database Error:', err);
-                throw new Error('Could not save article: ' + (err.message || 'Database error'));
-            });
+            );
 
             // 6. Success Handling
             newsForm.reset();
@@ -101,12 +97,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
         } catch (error) {
             console.error('Submission failed:', error);
-            
-            // UI Error Update
             errorText.textContent = error.message || 'An unexpected error occurred.';
             errorMessage.style.display = 'block';
-            
-            // Reset Button
             submitBtn.disabled = false;
             submitBtn.textContent = 'Submit News';
             window.scrollTo({ top: 0, behavior: 'smooth' });
