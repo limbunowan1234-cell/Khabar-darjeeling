@@ -21,7 +21,7 @@
 
         .article-container { max-width: 600px; margin: 20px auto; background: #fff; padding: 20px; border-radius: 8px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
         .category-badge { background: var(--primary-red); color: white; padding: 4px 8px; border-radius: 4px; font-size: 11px; text-transform: uppercase; }
-        .art-img { width: 100%; border-radius: 8px; margin: 15px 0; object-fit: cover; display: none; /* Hidden by default */ }
+        .art-img { width: 100%; border-radius: 8px; margin: 15px 0; object-fit: cover; display: none; /* Hidden by default */ box-sizing: border-box; }
         .like-btn { background: #e4e6eb; border: none; padding: 10px 20px; border-radius: 20px; font-weight: 600; cursor: pointer; transition: 0.3s; }
         .like-btn.liked { background: var(--primary-red); color: white; }
 
@@ -74,7 +74,11 @@
     <script>eruda.init();</script>
     <script src="https://cdn.jsdelivr.net/npm/appwrite@14.0.1/dist/iife/sdk.min.js"></script>
     
-    <script>
+    <!-- UPDATED SCRIPT TAG: Added type="module" -->
+    <script type="module">
+        // 1. IMPORT YOUR THEMES (Make sure the path matches where your js folder is)
+        import { categoryThemes } from './js/categoryConfig.js'; 
+
         // Configuration
         const PROJECT_ID = 'khabardarjeeling';
         const ENDPOINT = 'https://nyc.cloud.appwrite.io/v1';
@@ -96,7 +100,17 @@
                 
                 document.getElementById('title').textContent = art.title;
                 document.getElementById('body').textContent = art.content;
-                if(art.category) document.getElementById('categoryBadge').textContent = art.category;
+                
+                // 2. APPLY CATEGORY THEME COLOR
+                // We make the category string lowercase to match your config file keys safely
+                const categoryKey = art.category ? art.category.toLowerCase() : 'default';
+                const theme = categoryThemes[categoryKey] || categoryThemes['default'] || { color: '#b81d24' };
+
+                if(art.category) {
+                    const badge = document.getElementById('categoryBadge');
+                    badge.textContent = art.category;
+                    badge.style.backgroundColor = theme.color; // Dynamically change badge color
+                }
                 
                 // Fetch ID and apply SMART FAILSAFE
                 const imageId = art.imageFileId || art.imageUrl;
@@ -110,6 +124,7 @@
                         imgElement.src = `${ENDPOINT}/storage/buckets/article-image/files/${imageId}/view?project=${PROJECT_ID}`;
                     }
                     imgElement.style.display = 'block'; // Unhide the image
+                    imgElement.style.border = `3px solid ${theme.color}`; // Apply matching color border to image
                 } else {
                     // Force image to stay hidden if no valid photo exists
                     document.getElementById('mainImg').style.display = 'none';
