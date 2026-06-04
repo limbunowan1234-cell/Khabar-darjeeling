@@ -1,4 +1,5 @@
 /* ==================== ARTICLE PAGE JAVASCRIPT ==================== */
+import { categoryThemes } from './categoryConfig.js';
 
 let currentArticle = null;
 
@@ -80,15 +81,21 @@ async function loadArticleFromURL() {
 
 // Display Article
 function displayArticle(article) {
+    // 1. Get the theme for this category (fallback to default if not found)
+    const theme = categoryThemes[article.category] || categoryThemes['default'] || { color: '#666666' };
+
     // Header
     const articleHeader = document.getElementById('articleHeader');
     if (articleHeader) {
         const pubDate = formatDate(article.publishedAt);
-        const categoryObj = CATEGORIES.find(c => c.id === article.category);
+        const categoryObj = typeof CATEGORIES !== 'undefined' ? CATEGORIES.find(c => c.id === article.category) : null;
         
+        // Apply theme color to category span
         articleHeader.innerHTML = `
             <div class="article-meta">
-                <span class="article-category">${categoryObj?.name || article.category}</span>
+                <span class="article-category" style="background-color: ${theme.color}; color: white; padding: 2px 8px; border-radius: 4px; font-weight: 500;">
+                    ${categoryObj?.name || article.category}
+                </span>
                 <span>📅 ${pubDate}</span>
                 <span>📍 ${article.location}</span>
                 <span>👤 ${article.authorName}</span>
@@ -101,7 +108,8 @@ function displayArticle(article) {
     const featuredImage = document.getElementById('featuredImage');
     if (featuredImage) {
         const imageUrl = getImagePreviewUrl(article.imageFileId);
-        featuredImage.innerHTML = `<img src="${imageUrl}" alt="${article.title}" style="width: 100%; height: 100%; object-fit: cover; border-radius: 0.5rem;">`;
+        // Apply theme color as a border
+        featuredImage.innerHTML = `<img src="${imageUrl}" alt="${article.title}" style="width: 100%; height: 100%; object-fit: cover; border-radius: 0.5rem; border: 3px solid ${theme.color};">`;
     }
     
     // Body
@@ -123,7 +131,7 @@ function displayArticle(article) {
             <dt>Published</dt>
             <dd>${pubDate}</dd>
             <dt>Category</dt>
-            <dd>${CATEGORIES.find(c => c.id === article.category)?.name}</dd>
+            <dd>${typeof CATEGORIES !== 'undefined' ? CATEGORIES.find(c => c.id === article.category)?.name : article.category}</dd>
             <dt>Location</dt>
             <dd>${article.location}</dd>
             <dt>Author</dt>
