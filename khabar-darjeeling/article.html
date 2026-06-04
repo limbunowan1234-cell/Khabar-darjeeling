@@ -3,6 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <!-- 🛑 FORCE BROWSER TO LOAD NEWEST VERSION (ANTI-CACHE) -->
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+    
     <title>Khabar Darjeeling - Article</title>
     <style>
         :root { --primary-red: #b81d24; --bg-color: #f0f2f5; }
@@ -15,7 +21,7 @@
 
         .article-container { max-width: 600px; margin: 20px auto; background: #fff; padding: 20px; border-radius: 8px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
         .category-badge { background: var(--primary-red); color: white; padding: 4px 8px; border-radius: 4px; font-size: 11px; text-transform: uppercase; }
-        .art-img { width: 100%; border-radius: 8px; margin: 15px 0; object-fit: cover; }
+        .art-img { width: 100%; border-radius: 8px; margin: 15px 0; object-fit: cover; display: none; /* Hidden by default */ }
         .like-btn { background: #e4e6eb; border: none; padding: 10px 20px; border-radius: 20px; font-weight: 600; cursor: pointer; transition: 0.3s; }
         .like-btn.liked { background: var(--primary-red); color: white; }
 
@@ -41,7 +47,7 @@
     <main class="article-container">
         <span class="category-badge" id="categoryBadge">General</span>
         <h1 id="title">Loading...</h1>
-        <img id="mainImg" class="art-img" src="" alt="Article Image" style="display: none;">
+        <img id="mainImg" class="art-img" src="" alt="Article Image">
         <div id="body" style="line-height: 1.6; white-space: pre-line; color: #333;"></div>
         
         <div style="margin-top:25px;">
@@ -92,12 +98,21 @@
                 document.getElementById('body').textContent = art.content;
                 if(art.category) document.getElementById('categoryBadge').textContent = art.category;
                 
-                // Fetch ID from either database field and use /view to avoid Appwrite free-tier block
+                // Fetch ID and apply SMART FAILSAFE
                 const imageId = art.imageFileId || art.imageUrl;
-                if (imageId) {
+                
+                // Only load if it exists AND isn't junk text
+                if (imageId && imageId !== 'Text' && imageId !== 'null' && imageId !== 'undefined') {
                     const imgElement = document.getElementById('mainImg');
-                    imgElement.src = `${ENDPOINT}/storage/buckets/article-image/files/${imageId}/view?project=${PROJECT_ID}`;
-                    imgElement.style.display = 'block'; // Show image only if it exists
+                    if (imageId.startsWith('http')) {
+                        imgElement.src = imageId;
+                    } else {
+                        imgElement.src = `${ENDPOINT}/storage/buckets/article-image/files/${imageId}/view?project=${PROJECT_ID}`;
+                    }
+                    imgElement.style.display = 'block'; // Unhide the image
+                } else {
+                    // Force image to stay hidden if no valid photo exists
+                    document.getElementById('mainImg').style.display = 'none';
                 }
             } catch(e) {
                 console.error("Load failed:", e);
