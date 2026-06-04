@@ -54,8 +54,9 @@
                 document.getElementById('title').textContent = art.title;
                 document.getElementById('body').textContent = art.content;
                 
-                // Construct the image URL correctly
-                document.getElementById('mainImg').src = `${ENDPOINT}/storage/buckets/article-image/files/${art.imageUrl}/view?project=${PROJECT_ID}`;
+                // Fetch ID from either database field and use /preview for fast loading
+                const imageId = art.imageFileId || art.imageUrl;
+                document.getElementById('mainImg').src = `${ENDPOINT}/storage/buckets/article-image/files/${imageId}/preview?project=${PROJECT_ID}&width=600&quality=80&output=webp`;
             } catch(e) {
                 console.error("Load failed:", e);
                 document.getElementById('title').textContent = "Article loading error.";
