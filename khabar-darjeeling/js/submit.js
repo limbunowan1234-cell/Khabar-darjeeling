@@ -22,11 +22,15 @@ document.addEventListener('DOMContentLoaded', () => {
         const title = document.getElementById('title').value;
         const category = document.getElementById('category').value;
         const location = document.getElementById('location').value;
-        const authorName = document.getElementById('authorName').value;
+        
+        // Failsafe in case authorName input isn't present
+        const authorNameElement = document.getElementById('authorName');
+        const authorName = authorNameElement ? authorNameElement.value : 'Anonymous'; 
+        
         const content = document.getElementById('content').value;
         const imageFile = imageInput.files[0];
 
-        let imageUrl = '';
+        let uploadedImageId = null; // Start as pure null to avoid "Text" or empty string glitches
 
         try {
             // 3. Validation & Appwrite Service Check
@@ -44,7 +48,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 submitBtn.textContent = 'Uploading image...';
                 
                 const file = await window.storage.createFile(
-                    window.APPWRITE_BUCKET_ID,
+                    window.APPWRITE_BUCKET_ID, // ensure this is defined in appwrite.js as 'article-image'
                     window.ID.unique(),
                     imageFile
                 ).catch(err => {
@@ -52,9 +56,9 @@ document.addEventListener('DOMContentLoaded', () => {
                     throw new Error('Image upload failed: ' + (err.message || 'Unknown error'));
                 });
                 
-                // Get the file view URL
-                imageUrl = window.storage.getFileView(window.APPWRITE_BUCKET_ID, file.$id);
-                console.log('Image uploaded successfully:', imageUrl);
+                // ONLY grab the ID, not the full URL. The frontend will build the URL!
+                uploadedImageId = file.$id;
+                console.log('Image uploaded successfully. File ID:', uploadedImageId);
             }
 
             // 5. Save Document to Database
@@ -62,20 +66,28 @@ document.addEventListener('DOMContentLoaded', () => {
             
             const activeDatabase = window.databases || window.database;
 
+            const articlePayload = {
+                title: title,
+                content: content,
+                category: category,
+                location: location,
+                authorName: authorName,
+                status: 'pending',
+                submittedAt: new Date().toISOString()
+            };
+
+            // SMART FAILSAFE: Explicitly set pure null if no image was uploaded
+            if (uploadedImageId) {
+                articlePayload.imageFileId = uploadedImageId;
+            } else {
+                articlePayload.imageFileId = null;
+            }
+
             await activeDatabase.createDocument(
                 window.APPWRITE_DB_ID,
                 window.APPWRITE_COLLECTION_ID,
                 window.ID.unique(),
-                {
-                    title: title,
-                    content: content,
-                    category: category,
-                    location: location,
-                    authorName: authorName,
-                    imageUrl: imageUrl || '', 
-                    status: 'pending',
-                    submittedAt: new Date().toISOString()
-                }
+                articlePayload
             ).catch(err => {
                 console.error('Database Error:', err);
                 throw new Error('Could not save article: ' + (err.message || 'Database error'));
