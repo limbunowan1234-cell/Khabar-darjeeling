@@ -27,7 +27,6 @@ document.getElementById('loginForm').addEventListener('submit', async (e) => {
     errorMsg.style.display = 'none';
     
     try {
-        // FIXED: createEmailPasswordSession for SDK v14
         await window.account.createEmailPasswordSession(email, password);
         const user = await window.account.get();
         showAdminPanel(user);
@@ -84,7 +83,6 @@ function showTab(tabName) {
 
 async function loadDashboard() {
     try {
-        // ✅ FIXED: Changed window.database to window.databases
         const allArticles = await window.databases.listDocuments(
             window.APPWRITE_DB_ID,
             window.APPWRITE_COLLECTION_ID,
@@ -110,13 +108,12 @@ async function loadPendingArticles() {
     list.innerHTML = 'Loading...';
     
     try {
-        // ✅ FIXED: Changed window.database to window.databases
         const response = await window.databases.listDocuments(
             window.APPWRITE_DB_ID,
             window.APPWRITE_COLLECTION_ID,
             [
                 window.Query.equal('status', 'pending'),
-                window.Query.orderDesc('$createdAt') // Fallback to system createdAt if submittedAt is empty
+                window.Query.orderDesc('$createdAt') 
             ]
         );
         
@@ -155,7 +152,6 @@ async function loadPublishedArticles() {
     list.innerHTML = 'Loading...';
     
     try {
-        // ✅ FIXED: Changed window.database to window.databases
         const response = await window.databases.listDocuments(
             window.APPWRITE_DB_ID,
             window.APPWRITE_COLLECTION_ID,
@@ -173,6 +169,21 @@ async function loadPublishedArticles() {
                     <h3>${article.title}</h3>
                     <p style="margin:5px 0; font-size:13px; color:#666;"><strong>Category:</strong> ${article.category} | <strong>Location:</strong> ${article.location}</p>
                     <p style="font-size:14px; color:#333;">${article.content ? article.content.substring(0, 150) : ''}...</p>
+                    
+                    <!-- NEW ADMIN CONTROLS: Featured, Top News, Delete -->
+                    <div style="margin-top: 15px; padding-top: 10px; border-top: 1px solid #eee; display: flex; gap: 15px; align-items: center; flex-wrap: wrap;">
+                        <label style="font-size: 13px; cursor: pointer; color: #333; font-weight: 500;">
+                            <input type="checkbox" onchange="toggleFeatured('${article.$id}', this.checked)" ${article.isFeatured ? 'checked' : ''}>
+                            ⭐ Featured Story
+                        </label>
+                        <label style="font-size: 13px; cursor: pointer; color: #333; font-weight: 500;">
+                            <input type="checkbox" onchange="toggleTopNews('${article.$id}', this.checked)" ${article.isTopNews ? 'checked' : ''}>
+                            🔥 Top News
+                        </label>
+                        
+                        <button style="margin-left: auto; padding: 6px 12px; font-size: 12px; background: #dc3545; color: white; border: none; border-radius: 4px; cursor: pointer; font-weight: bold;" onclick="deleteArticle('${article.$id}')">🗑️ Delete</button>
+                    </div>
+
                 </div>
             </div>
         `).join('') || '<p style="padding:15px; color:#666;">No published articles found.</p>';
@@ -187,7 +198,6 @@ async function loadRejectedArticles() {
     list.innerHTML = 'Loading...';
     
     try {
-        // ✅ FIXED: Changed window.database to window.databases
         const response = await window.databases.listDocuments(
             window.APPWRITE_DB_ID,
             window.APPWRITE_COLLECTION_ID,
@@ -212,10 +222,12 @@ async function loadRejectedArticles() {
     }
 }
 
-// Global scope attachment so inline HTML onClick triggers can hit these endpoints smoothly
+// ==========================================
+// ADMIN DATABASE ACTIONS
+// ==========================================
+
 window.approveArticle = async function(id) {
     try {
-        // ✅ FIXED: Changed window.database to window.databases
         await window.databases.updateDocument(
             window.APPWRITE_DB_ID,
             window.APPWRITE_COLLECTION_ID,
@@ -233,7 +245,6 @@ window.approveArticle = async function(id) {
 window.rejectArticle = async function(id) {
     if (!confirm('Are you sure you want to reject this article submission?')) return;
     try {
-        // ✅ FIXED: Changed window.database to window.databases
         await window.databases.updateDocument(
             window.APPWRITE_DB_ID,
             window.APPWRITE_COLLECTION_ID,
@@ -242,8 +253,56 @@ window.rejectArticle = async function(id) {
         );
         loadPendingArticles();
         loadDashboard();
-        alert('Article rejected.');
     } catch (error) {
         alert('Rejection failed: ' + error.message);
+    }
+};
+
+// NEW: Toggle Featured Status
+window.toggleFeatured = async function(id, isChecked) {
+    try {
+        await window.databases.updateDocument(
+            window.APPWRITE_DB_ID,
+            window.APPWRITE_COLLECTION_ID,
+            id,
+            { isFeatured: isChecked }
+        );
+        console.log(`Article ${id} Featured status set to: ${isChecked}`);
+    } catch (error) {
+        alert('Failed to update Featured status: ' + error.message);
+        loadPublishedArticles(); // Reloads to reset the checkbox to its actual state if it failed
+    }
+};
+
+// NEW: Toggle Top News Status
+window.toggleTopNews = async function(id, isChecked) {
+    try {
+        await window.databases.updateDocument(
+            window.APPWRITE_DB_ID,
+            window.APPWRITE_COLLECTION_ID,
+            id,
+            { isTopNews: isChecked }
+        );
+        console.log(`Article ${id} Top News status set to: ${isChecked}`);
+    } catch (error) {
+        alert('Failed to update Top News status: ' + error.message);
+        loadPublishedArticles(); // Reloads to reset the checkbox if it failed
+    }
+};
+
+// NEW: Delete Article Permanently
+window.deleteArticle = async function(id) {
+    if (!confirm('🛑 WARNING: Are you sure you want to permanently delete this article? This action cannot be undone.')) return;
+    
+    try {
+        await window.databases.deleteDocument(
+            window.APPWRITE_DB_ID,
+            window.APPWRITE_COLLECTION_ID,
+            id
+        );
+        loadPublishedArticles();
+        loadDashboard(); // Update the article count at the top
+    } catch (error) {
+        alert('Delete failed: ' + error.message);
     }
 };
