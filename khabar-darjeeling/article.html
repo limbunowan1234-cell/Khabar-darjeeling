@@ -53,20 +53,17 @@
         </div>
     </main>
 
-    <script src="https://cdn.jsdelivr.net/npm/eruda"></script>
-    <script>eruda.init();</script>
-    <!-- FIXED: SDK with fallback -->
+    <!-- REMOVED ERUDA - was causing crashes -->
     <script src="https://cdn.jsdelivr.net/npm/appwrite@14.0.1/dist/iife/sdk.min.js" onerror="this.src='https://unpkg.com/appwrite@14.0.1/dist/iife/sdk.min.js'"></script>
 
-    <script type="module">
-        import { categoryThemes } from './js/categoryConfig.js';
-
-        // WAIT for SDK
-        if (!window.Appwrite) {
-            document.getElementById('title').textContent = 'Loading error';
-            document.getElementById('body').textContent = 'Appwrite SDK failed to load. Check your connection.';
-            throw new Error('Appwrite missing');
-        }
+    <script>
+        // INLINED - no more broken import
+        const categoryThemes = { 
+            default: { color: '#b81d24' }, 
+            darjeeling: { color: '#b81d24' },
+            politics: { color: '#1a56db' },
+            sports: { color: '#0e9f6e' }
+        };
 
         const PROJECT_ID = 'khabardarjeeling';
         const ENDPOINT = 'https://nyc.cloud.appwrite.io/v1';
@@ -76,139 +73,104 @@
         const LIKES_COL_ID = 'likes';
         const BUCKET_ID = 'post-images';
 
-        const { Client, Databases, Query, ID, Account, Storage } = window.Appwrite;
-        const client = new Client().setProject(PROJECT_ID).setEndpoint(ENDPOINT);
-        const db = new Databases(client);
-        const account = new Account(client);
-        const storage = new Storage(client);
-        let currentArticleId = null;
+        // Wait for SDK to load
+        function startApp() {
+            if (!window.Appwrite) { setTimeout(startApp, 50); return; }
+            
+            const { Client, Databases, Query, ID, Account, Storage } = window.Appwrite;
+            const client = new Client().setProject(PROJECT_ID).setEndpoint(ENDPOINT);
+            const db = new Databases(client);
+            const account = new Account(client);
+            const storage = new Storage(client);
+            let currentArticleId = null;
 
-        async function loadData() {
-            try {
-                const params = new URLSearchParams(window.location.search);
-                currentArticleId = params.get('id');
-                if (!currentArticleId) throw new Error("No Article ID");
-
-                const art = await db.getDocument(DB_ID, COL_ID, currentArticleId);
-                document.getElementById('title').textContent = art.title;
-                document.getElementById('body').textContent = art.content;
-
-                const categoryKey = art.category? art.category.toLowerCase() : 'default';
-                const theme = categoryThemes[categoryKey] || categoryThemes['default'] || { color: '#b81d24' };
-
-                if(art.category) {
-                    const badge = document.getElementById('categoryBadge');
-                    badge.textContent = art.category;
-                    badge.style.backgroundColor = theme.color;
-                }
-
-                const imageId = art.imageFileId || art.imageUrl;
-                const imgElement = document.getElementById('mainImg');
-                if (imageId &&!['Text','null','undefined'].includes(imageId)) {
-                    imgElement.src = imageId.startsWith('http')? imageId : `${ENDPOINT}/storage/buckets/article-image/files/${imageId}/view?project=${PROJECT_ID}`;
-                    imgElement.style.display = 'block';
-                    imgElement.style.border = `3px solid ${theme.color}`;
-                }
-
-                // PATCHED: playsinline video
-                const videoContainer = document.getElementById('articleVideo');
-                if (art.youtube_id && art.youtube_id.length === 11) {
-                    videoContainer.style.display = 'block';
-                    videoContainer.style.border = `3px solid ${theme.color}`;
-                    videoContainer.innerHTML = `<iframe src="https://www.youtube-nocookie.com/embed/${encodeURIComponent(art.youtube_id)}?playsinline=1&modestbranding=1&rel=0" title="YouTube video" loading="lazy" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen referrerpolicy="strict-origin-when-cross-origin"></iframe>`;
-                }
-
-                loadComments(currentArticleId);
-                loadLikes(currentArticleId);
-            } catch(e) {
-                console.error("Load failed:", e);
-                document.getElementById('title').textContent = "Article loading error.";
-                document.getElementById('body').textContent = e.message;
-            }
-        }
-
-        async function loadLikes(articleId) {
-            try {
-                const response = await db.listDocuments(DB_ID, LIKES_COL_ID, [Query.equal('articleId', articleId), Query.limit(1)]);
-                const totalLikes = response.total;
-                const btn = document.getElementById('likeBtn');
-                if (localStorage.getItem(`liked_${articleId}`)) {
-                    btn.classList.add('liked');
-                    btn.innerHTML = `❤️ Liked (${totalLikes})`;
-                } else {
-                    btn.classList.remove('liked');
-                    btn.innerHTML = `❤️ Like (${totalLikes})`;
-                }
-            } catch (error) { console.error(error); }
-        }
-
-        document.getElementById('likeBtn').addEventListener('click', async () => {
-            if (!currentArticleId) return;
-            const btn = document.getElementById('likeBtn');
-            const likeDocId = localStorage.getItem(`liked_${currentArticleId}`);
-            btn.disabled = true; btn.innerHTML = '...';
-            try {
-                if (likeDocId) {
-                    try { await db.deleteDocument(DB_ID, LIKES_COL_ID, likeDocId); } catch(e) {}
-                    localStorage.removeItem(`liked_${currentArticleId}`);
-                } else {
-                    let email = "anonymous@khabardarjeeling.com";
-                    try { const u = await account.get(); if (u?.email) email = u.email; } catch(e){}
-                    const newLike = await db.createDocument(DB_ID, LIKES_COL_ID, ID.unique(), { articleId: currentArticleId, userEmail: email });
-                    localStorage.setItem(`liked_${currentArticleId}`, newLike.$id);
-                }
-                await loadLikes(currentArticleId);
-            } catch(e){ alert("Could not update like"); } finally { btn.disabled = false; }
-        });
-
-        function createCommentElement(comment) {
-            const el = document.createElement('div'); el.className = 'comment-item';
-            const date = new Date(comment.createdAt);
-            const dateStr = date.toLocaleDateString() + ' ' + date.toLocaleTimeString([], {hour:'2-digit',minute:'2-digit'});
-            el.innerHTML = `<div class="comment-author">${escapeHtml(comment.authorName)}<span class="comment-meta">${dateStr}</span></div><p class="comment-text"></p>`;
-            el.querySelector('.comment-text').textContent = comment.commentText;
-
-            if (comment.image_id?.trim()) {
+            async function loadData() {
                 try {
-                    const url = storage.getFilePreview(BUCKET_ID, comment.image_id, 600, 0, 'center', 75);
-                    const img = document.createElement('img'); img.src = url.href; img.className='comment-image'; img.loading='lazy'; img.onerror=()=>img.remove();
-                    el.appendChild(img);
+                    const params = new URLSearchParams(window.location.search);
+                    currentArticleId = params.get('id');
+                    if (!currentArticleId) throw new Error("No Article ID");
+                    const art = await db.getDocument(DB_ID, COL_ID, currentArticleId);
+                    
+                    document.getElementById('title').textContent = art.title;
+                    document.getElementById('body').textContent = art.content;
+                    const theme = categoryThemes[art.category?.toLowerCase()] || categoryThemes.default;
+                    
+                    if(art.category) {
+                        const badge = document.getElementById('categoryBadge');
+                        badge.textContent = art.category;
+                        badge.style.backgroundColor = theme.color;
+                    }
+
+                    const imgEl = document.getElementById('mainImg');
+                    const imageId = art.imageFileId || art.imageUrl;
+                    if (imageId && !['Text','null','undefined'].includes(imageId)) {
+                        imgEl.src = imageId.startsWith('http') ? imageId : `${ENDPOINT}/storage/buckets/article-image/files/${imageId}/view?project=${PROJECT_ID}`;
+                        imgEl.style.display = 'block';
+                        imgEl.style.border = `3px solid ${theme.color}`;
+                    }
+
+                    const videoContainer = document.getElementById('articleVideo');
+                    if (art.youtube_id?.length === 11) {
+                        videoContainer.style.display = 'block';
+                        videoContainer.style.border = `3px solid ${theme.color}`;
+                        videoContainer.innerHTML = `<iframe src="https://www.youtube-nocookie.com/embed/${art.youtube_id}?playsinline=1&modestbranding=1&rel=0" loading="lazy" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen referrerpolicy="strict-origin-when-cross-origin"></iframe>`;
+                    }
+
+                    loadComments(currentArticleId);
+                    loadLikes(currentArticleId);
+                } catch(e) {
+                    document.getElementById('title').textContent = "Error";
+                    document.getElementById('body').textContent = e.message;
+                }
+            }
+
+            async function loadLikes(id) {
+                try {
+                    const res = await db.listDocuments(DB_ID, LIKES_COL_ID, [Query.equal('articleId', id), Query.limit(1)]);
+                    const btn = document.getElementById('likeBtn');
+                    const liked = localStorage.getItem(`liked_${id}`);
+                    btn.className = liked ? 'like-btn liked' : 'like-btn';
+                    btn.innerHTML = liked ? `❤️ Liked (${res.total})` : `❤️ Like (${res.total})`;
                 } catch(e){}
             }
-            if (comment.youtube_id?.length === 11) {
-                const wrap = document.createElement('div'); wrap.className='comment-video';
-                // PATCHED: playsinline
-                wrap.innerHTML = `<iframe src="https://www.youtube-nocookie.com/embed/${encodeURIComponent(comment.youtube_id)}?playsinline=1&modestbranding=1&rel=0" title="YouTube" loading="lazy" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen referrerpolicy="strict-origin-when-cross-origin"></iframe>`;
-                el.appendChild(wrap);
+
+            document.getElementById('likeBtn').addEventListener('click', async () => {
+                if (!currentArticleId) return;
+                const btn = document.getElementById('likeBtn'); btn.disabled = true;
+                const likeId = localStorage.getItem(`liked_${currentArticleId}`);
+                try {
+                    if (likeId) { await db.deleteDocument(DB_ID, LIKES_COL_ID, likeId); localStorage.removeItem(`liked_${currentArticleId}`); }
+                    else { let email = "anon@khabardarjeeling.com"; try { const u = await account.get(); email = u.email; } catch(e){} const doc = await db.createDocument(DB_ID, LIKES_COL_ID, ID.unique(), {articleId: currentArticleId, userEmail: email}); localStorage.setItem(`liked_${currentArticleId}`, doc.$id); }
+                    await loadLikes(currentArticleId);
+                } finally { btn.disabled = false; }
+            });
+
+            function createComment(c) {
+                const el = document.createElement('div'); el.className = 'comment-item';
+                const d = new Date(c.createdAt); el.innerHTML = `<div class="comment-author">${c.authorName}<span class="comment-meta">${d.toLocaleString()}</span></div><p class="comment-text">${c.commentText}</p>`;
+                if (c.image_id) { const img = document.createElement('img'); img.src = storage.getFilePreview(BUCKET_ID, c.image_id, 600).href; img.className='comment-image'; img.loading='lazy'; el.appendChild(img); }
+                if (c.youtube_id?.length===11) { const v = document.createElement('div'); v.className='comment-video'; v.innerHTML = `<iframe src="https://www.youtube-nocookie.com/embed/${c.youtube_id}?playsinline=1&modestbranding=1&rel=0" loading="lazy" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>`; el.appendChild(v); }
+                return el;
             }
-            return el;
+
+            async function loadComments(id) {
+                const list = document.getElementById('commentsList');
+                try {
+                    const res = await db.listDocuments(DB_ID, COMMENTS_COL_ID, [Query.equal('articleId', id), Query.orderDesc('$createdAt'), Query.limit(50)]);
+                    list.innerHTML = res.documents.length ? '' : '<p style="color:#888;font-style:italic;">No comments yet</p>';
+                    res.documents.forEach(c => list.appendChild(createComment(c)));
+                } catch(e){ list.innerHTML = '<p style="color:red;">Failed to load</p>'; }
+            }
+
+            document.getElementById('submitComment').addEventListener('click', async () => {
+                const input = document.getElementById('commentInput'); const txt = input.value.trim(); if (!txt) return;
+                const btn = document.getElementById('submitComment'); btn.disabled = true;
+                try { let name='Anonymous'; try{ name=(await account.get()).name; }catch(e){} await db.createDocument(DB_ID, COMMENTS_COL_ID, ID.unique(), {articleId: currentArticleId, authorName: name, commentText: txt, createdAt: new Date().toISOString()}); input.value=''; loadComments(currentArticleId); } finally { btn.disabled=false; }
+            });
+
+            loadData();
         }
-
-        async function loadComments(articleId) {
-            const list = document.getElementById('commentsList');
-            try {
-                const res = await db.listDocuments(DB_ID, COMMENTS_COL_ID, [Query.equal('articleId', articleId), Query.orderDesc('createdAt'), Query.limit(50)]);
-                list.innerHTML = '';
-                if (!res.documents.length) { list.innerHTML = '<p style="color:#888;font-style:italic;">No comments yet. Be the first!</p>'; return; }
-                const frag = document.createDocumentFragment();
-                res.documents.forEach(c => frag.appendChild(createCommentElement(c)));
-                list.appendChild(frag);
-            } catch(e){ list.innerHTML = '<p style="color:red;">Could not load comments.</p>'; }
-        }
-
-        document.getElementById('submitComment').addEventListener('click', async () => {
-            const input = document.getElementById('commentInput');
-            const text = input.value.trim(); if (!text ||!currentArticleId) return;
-            const btn = document.getElementById('submitComment'); btn.disabled=true; btn.textContent='Posting...';
-            try {
-                let name = "Anonymous Reader"; try { const u = await account.get(); name = u.name || "Reader"; } catch(e){}
-                await db.createDocument(DB_ID, COMMENTS_COL_ID, ID.unique(), { articleId: currentArticleId, authorName: name, commentText: text, createdAt: new Date().toISOString() });
-                input.value=''; await loadComments(currentArticleId);
-            } catch(e){ alert("Could not post"); } finally { btn.disabled=false; btn.textContent='Post Comment'; }
-        });
-
-        function escapeHtml(t){ const d=document.createElement('div'); d.textContent=t; return d.innerHTML; }
-        loadData();
+        startApp();
     </script>
 </body>
 </html>
