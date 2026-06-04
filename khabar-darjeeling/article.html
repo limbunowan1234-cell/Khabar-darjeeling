@@ -3,27 +3,63 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Khabar Darjeeling</title>
+    <title>Khabar Darjeeling - Article</title>
     <style>
         :root { --primary-red: #b81d24; --bg-color: #f0f2f5; }
         body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; background: var(--bg-color); margin: 0; }
-        .header { background: #fff; padding: 15px; text-align: center; border-bottom: 2px solid var(--primary-red); font-weight: bold; color: var(--primary-red); font-size: 1.2rem; }
+        
+        /* Header styling - now clickable */
+        .header-link { text-decoration: none; display: block; }
+        .header { background: #fff; padding: 15px; text-align: center; border-bottom: 2px solid var(--primary-red); font-weight: bold; color: var(--primary-red); font-size: 1.2rem; transition: background 0.2s; }
+        .header:hover { background: #f9f9f9; }
+
         .article-container { max-width: 600px; margin: 20px auto; background: #fff; padding: 20px; border-radius: 8px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
         .category-badge { background: var(--primary-red); color: white; padding: 4px 8px; border-radius: 4px; font-size: 11px; text-transform: uppercase; }
         .art-img { width: 100%; border-radius: 8px; margin: 15px 0; object-fit: cover; }
         .like-btn { background: #e4e6eb; border: none; padding: 10px 20px; border-radius: 20px; font-weight: 600; cursor: pointer; transition: 0.3s; }
         .like-btn.liked { background: var(--primary-red); color: white; }
+
+        /* Comments Section Styling */
+        .comments-section { margin-top: 40px; border-top: 1px solid #eee; padding-top: 20px; }
+        .comments-section h3 { margin-bottom: 15px; font-size: 1.1rem; }
+        .comment-input { width: 100%; padding: 12px; border: 1px solid #ccc; border-radius: 6px; box-sizing: border-box; resize: vertical; min-height: 80px; font-family: inherit; margin-bottom: 10px; }
+        .submit-comment-btn { background: var(--primary-red); color: white; border: none; padding: 10px 16px; border-radius: 6px; font-weight: bold; cursor: pointer; transition: 0.2s; }
+        .submit-comment-btn:hover { background: #96161b; }
+        .comment-list { margin-top: 25px; }
+        .comment-item { background: #f8f9fa; padding: 15px; border-radius: 8px; margin-bottom: 15px; border-left: 3px solid var(--primary-red); }
+        .comment-author { font-weight: bold; color: #333; margin-bottom: 5px; font-size: 0.9rem; }
+        .comment-text { color: #555; font-size: 0.95rem; margin: 0; line-height: 1.4; }
     </style>
 </head>
 <body>
-    <div class="header">खबर दार्जिलिंग</div>
+    
+    <!-- Clickable Header redirecting to Home -->
+    <a href="index.html" class="header-link">
+        <div class="header">खबर दार्जिलिंग</div>
+    </a>
+
     <main class="article-container">
-        <span class="category-badge">General</span>
+        <span class="category-badge" id="categoryBadge">General</span>
         <h1 id="title">Loading...</h1>
-        <img id="mainImg" class="art-img" src="" alt="Article Image">
-        <div id="body" style="line-height: 1.6; white-space: pre-line;"></div>
-        <div style="margin-top:20px;">
+        <img id="mainImg" class="art-img" src="" alt="Article Image" style="display: none;">
+        <div id="body" style="line-height: 1.6; white-space: pre-line; color: #333;"></div>
+        
+        <div style="margin-top:25px;">
             <button id="likeBtn" class="like-btn">❤️ Like</button>
+        </div>
+
+        <!-- NEW: Comments Section UI -->
+        <div class="comments-section">
+            <h3>Discussion</h3>
+            <div class="comment-form">
+                <textarea id="commentInput" class="comment-input" placeholder="What are your thoughts on this?"></textarea>
+                <button id="submitComment" class="submit-comment-btn">Post Comment</button>
+            </div>
+            
+            <div id="commentsList" class="comment-list">
+                <!-- Placeholder for when there are no comments -->
+                <p style="color: #888; font-size: 0.9rem; font-style: italic;">No comments yet. Be the first to share your thoughts!</p>
+            </div>
         </div>
     </main>
 
@@ -31,6 +67,7 @@
     <script src="https://cdn.jsdelivr.net/npm/eruda"></script>
     <script>eruda.init();</script>
     <script src="https://cdn.jsdelivr.net/npm/appwrite@14.0.1/dist/iife/sdk.min.js"></script>
+    
     <script>
         // Configuration
         const PROJECT_ID = 'khabardarjeeling';
@@ -53,16 +90,32 @@
                 
                 document.getElementById('title').textContent = art.title;
                 document.getElementById('body').textContent = art.content;
+                if(art.category) document.getElementById('categoryBadge').textContent = art.category;
                 
                 // Fetch ID from either database field and use /view to avoid Appwrite free-tier block
                 const imageId = art.imageFileId || art.imageUrl;
-                document.getElementById('mainImg').src = `${ENDPOINT}/storage/buckets/article-image/files/${imageId}/view?project=${PROJECT_ID}`;
+                if (imageId) {
+                    const imgElement = document.getElementById('mainImg');
+                    imgElement.src = `${ENDPOINT}/storage/buckets/article-image/files/${imageId}/view?project=${PROJECT_ID}`;
+                    imgElement.style.display = 'block'; // Show image only if it exists
+                }
             } catch(e) {
                 console.error("Load failed:", e);
                 document.getElementById('title').textContent = "Article loading error.";
+                document.getElementById('body').textContent = "We couldn't find the article you were looking for. It may have been removed.";
             }
         }
+        
         loadData();
+
+        // Basic front-end interaction for the new comment button
+        document.getElementById('submitComment').addEventListener('click', () => {
+            const input = document.getElementById('commentInput');
+            if(input.value.trim() === '') return;
+            
+            alert("To save this comment, we will need to create a 'Comments' collection in Appwrite next!");
+            // input.value = ''; // Clears the box after saving
+        });
     </script>
 </body>
 </html>
