@@ -1,5 +1,28 @@
-/* Main homepage JavaScript */
+/* Main homepage JavaScript - with Safari service worker fix */
 document.addEventListener('DOMContentLoaded', async () => {
+    // --- SAFARI FIX: remove broken SW that causes "Response served by service worker has redirections" ---
+    if ('serviceWorker' in navigator) {
+        try {
+            // 1. Unregister all old service workers
+            const registrations = await navigator.serviceWorker.getRegistrations();
+            await Promise.all(registrations.map(reg => reg.unregister()));
+
+            // 2. Delete old caches (they contain the redirect)
+            const cacheKeys = await caches.keys();
+            await Promise.all(cacheKeys.map(key => caches.delete(key)));
+
+            // 3. Register the new Safari-safe worker after page load
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('/sw.js', { scope: '/' })
+                   .then(() => console.log('SW registered'))
+                   .catch(err => console.error('SW register failed:', err));
+            });
+        } catch (e) {
+            console.warn('Service worker cleanup error:', e);
+        }
+    }
+    // --- end Safari fix ---
+
     setupEventListeners();
     setupThemeToggle();
     await loadBreakingNews();
@@ -48,18 +71,18 @@ function setupEventListeners() {
 function setupThemeToggle() {
     const themeToggle = document.getElementById('themeToggle');
     const savedTheme = localStorage.getItem('theme') || 'light';
-    
+
     if (savedTheme === 'dark') {
         document.body.classList.add('dark-mode');
         themeToggle.textContent = '☀️';
     }
-    
+
     if (themeToggle) {
         themeToggle.addEventListener('click', () => {
             document.body.classList.toggle('dark-mode');
             const isDark = document.body.classList.contains('dark-mode');
-            localStorage.setItem('theme', isDark ? 'dark' : 'light');
-            themeToggle.textContent = isDark ? '☀️' : '🌙';
+            localStorage.setItem('theme', isDark? 'dark' : 'light');
+            themeToggle.textContent = isDark? '☀️' : '🌙';
         });
     }
 }
@@ -75,7 +98,7 @@ async function loadBreakingNews() {
             1,
             0
         );
-        
+
         if (breakingResponse.documents && breakingResponse.documents.length > 0) {
             const article = breakingResponse.documents[0];
             const breakingContent = document.getElementById('breakingContent');
@@ -103,7 +126,7 @@ async function loadFeaturedArticle() {
             1,
             0
         );
-        
+
         if (featuredResponse.documents && featuredResponse.documents.length > 0) {
             const article = featuredResponse.documents[0];
             const featuredArticle = document.getElementById('featuredArticle');
@@ -111,7 +134,7 @@ async function loadFeaturedArticle() {
                 const imageUrl = getImagePreviewUrl(article.imageFileId);
                 const excerpt = article.content.substring(0, 200) + '...';
                 const pubDate = new Date(article.publishedAt).toLocaleDateString();
-                
+
                 featuredArticle.innerHTML = `
                     <img src="${imageUrl}" alt="${article.title}" class="featured-image">
                     <div class="featured-info">
@@ -136,16 +159,16 @@ async function loadArticles(page = 1, category = null) {
     try {
         const offset = (page - 1) * 9;
         let response;
-        
+
         if (category) {
             response = await getArticlesByCategory(category, 9, offset);
         } else {
             response = await getApprovedArticles(9, offset);
         }
-        
+
         const container = document.getElementById('articlesContainer');
         if (!container) return;
-        
+
         if (!response.documents || response.documents.length === 0) {
             container.innerHTML = '<p style="grid-column: 1/-1; text-align: center;">No articles found.</p>';
         } else {
@@ -154,7 +177,7 @@ async function loadArticles(page = 1, category = null) {
                 const pubDate = new Date(article.publishedAt).toLocaleDateString();
                 const excerpt = article.content.substring(0, 100) + '...';
                 const categoryObj = CATEGORIES.find(c => c.id === article.category);
-                
+
                 return `
                     <div class="article-card" onclick="window.location.href='article.html?id=${article.$id}'">
                         <img src="${imageUrl}" alt="${article.title}" class="article-card-image" loading="lazy">
@@ -179,12 +202,12 @@ async function loadArticles(page = 1, category = null) {
 function performSearch() {
     const searchInput = document.getElementById('searchInput');
     const query = searchInput.value.trim();
-    
+
     if (query.length < 2) {
         alert('Please enter at least 2 characters');
         return;
     }
-    
+
     // Implementation for search functionality
     console.log('Search for:', query);
 }
@@ -194,14 +217,14 @@ async function loadPopularNews() {
         const response = await getTrendingArticles(5);
         const container = document.getElementById('popularNews');
         if (!container) return;
-        
+
         if (!response.documents || response.documents.length === 0) {
             container.innerHTML = '<p>No popular news available.</p>';
         } else {
             container.innerHTML = response.documents.map(article => {
                 const imageUrl = getImagePreviewUrl(article.imageFileId);
                 const pubDate = new Date(article.publishedAt).toLocaleDateString();
-                
+
                 return `
                     <div class="popular-item" onclick="window.location.href='article.html?id=${article.$id}'">
                         <img src="${imageUrl}" alt="${article.title}" class="popular-item-image" loading="lazy">
