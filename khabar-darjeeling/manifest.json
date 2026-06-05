@@ -1,0 +1,21 @@
+{
+  "name": "Khabar Darjeeling News",
+  "short_name": "Khabar",
+  "description": "Your Trusted News Source for Darjeeling and Beyond",
+  "start_url": "/index.html",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#b81d24",
+  "icons": [
+    {
+      "src": "/assets/Icon192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "/assets/Icon512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
