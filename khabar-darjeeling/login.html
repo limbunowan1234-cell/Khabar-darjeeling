@@ -16,37 +16,37 @@
 
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Poppins', sans-serif; }
         body { background-color: var(--bg-gray); display: flex; flex-direction: column; justify-content: center; align-items: center; min-height: 100vh; color: var(--text-dark); }
-        .login-wrapper { width: 100%; max-width: 396px; padding: 16px; }
+       .login-wrapper { width: 100%; max-width: 396px; padding: 16px; }
         
-        .brand-header { text-align: center; margin-bottom: 24px; display: flex; flex-direction: column; align-items: center; }
-        .brand-logo { height: 75px; width: 75px; object-fit: cover; border-radius: 50%; margin-bottom: 12px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); border: 2px solid #ffffff; }
-        .brand-header h1 { color: var(--brand-red); font-size: 34px; font-weight: 700; letter-spacing: -0.5px; margin-bottom: 2px; }
-        .brand-header p { color: #606770; font-size: 14px; font-weight: 600; letter-spacing: 0.5px; }
+       .brand-header { text-align: center; margin-bottom: 24px; display: flex; flex-direction: column; align-items: center; }
+       .brand-logo { height: 75px; width: 75px; object-fit: cover; border-radius: 50%; margin-bottom: 12px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); border: 2px solid #ffffff; }
+       .brand-header h1 { color: var(--brand-red); font-size: 34px; font-weight: 700; letter-spacing: -0.5px; margin-bottom: 2px; }
+       .brand-header p { color: #606770; font-size: 14px; font-weight: 600; letter-spacing: 0.5px; }
 
-        .card { background: #ffffff; border-radius: 8px; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1), 0 8px 16px rgba(0, 0, 0, 0.1); padding: 24px; width: 100%; }
-        .instruction-text { color: #606770; font-size: 13px; line-height: 1.4; text-align: center; margin-bottom: 16px; }
-        .form-control { width: 100%; margin-bottom: 14px; }
-        .form-control input { width: 100%; padding: 14px 12px; font-size: 14px; border: 1px solid var(--border-color); border-radius: 6px; background: #f5f6f7; color: var(--text-dark); outline: none; transition: all 0.2s; }
-        .form-control input:focus { border-color: var(--brand-red); background: #ffffff; box-shadow: 0 0 0 2px rgba(196, 30, 58, 0.2); }
+       .card { background: #ffffff; border-radius: 8px; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1), 0 8px 16px rgba(0, 0, 0, 0.1); padding: 24px; width: 100%; }
+       .instruction-text { color: #606770; font-size: 13px; line-height: 1.4; text-align: center; margin-bottom: 16px; }
+       .form-control { width: 100%; margin-bottom: 14px; }
+       .form-control input { width: 100%; padding: 14px 12px; font-size: 14px; border: 1px solid var(--border-color); border-radius: 6px; background: #f5f6f7; color: var(--text-dark); outline: none; transition: all 0.2s; }
+       .form-control input:focus { border-color: var(--brand-red); background: #ffffff; box-shadow: 0 0 0 2px rgba(196, 30, 58, 0.2); }
         
-        .form-control input.otp-style { font-size: 26px; letter-spacing: 6px; text-align: center; font-weight: 700; padding: 8px; }
+       .form-control input.otp-style { font-size: 26px; letter-spacing: 6px; text-align: center; font-weight: 700; padding: 8px; }
 
-        .btn-submit { width: 100%; padding: 12px; font-size: 16px; font-weight: 600; color: #ffffff; background-color: var(--brand-red); border: none; border-radius: 6px; cursor: pointer; margin-top: 6px; transition: background-color 0.2s; }
-        .btn-submit:hover { background-color: var(--brand-red-dark); }
-        .btn-submit:disabled { opacity: 0.5; cursor: not-allowed; }
+       .btn-submit { width: 100%; padding: 12px; font-size: 16px; font-weight: 600; color: #ffffff; background-color: var(--brand-red); border: none; border-radius: 6px; cursor: pointer; margin-top: 6px; transition: background-color 0.2s; }
+       .btn-submit:hover { background-color: var(--brand-red-dark); }
+       .btn-submit:disabled { opacity: 0.5; cursor: not-allowed; }
         
-        .forgot-link { display: block; text-align: center; margin-top: 14px; font-size: 13px; color: var(--brand-red); text-decoration: none; cursor: pointer; font-weight: 500; }
-        .toggle-box { text-align: center; margin-top: 20px; padding-top: 20px; border-top: 1px solid var(--border-color); font-size: 14px; color: #606770; }
-        .toggle-link { color: var(--brand-red); font-weight: 600; text-decoration: none; cursor: pointer; }
-        .status-feedback { margin-top: 16px; text-align: center; font-size: 13px; font-weight: 500; min-height: 20px; }
-        .hidden { display: none !important; }
+       .forgot-link { display: block; text-align: center; margin-top: 14px; font-size: 13px; color: var(--brand-red); text-decoration: none; cursor: pointer; font-weight: 500; }
+       .toggle-box { text-align: center; margin-top: 20px; padding-top: 20px; border-top: 1px solid var(--border-color); font-size: 14px; color: #606770; }
+       .toggle-link { color: var(--brand-red); font-weight: 600; text-decoration: none; cursor: pointer; }
+       .status-feedback { margin-top: 16px; text-align: center; font-size: 13px; font-weight: 500; min-height: 20px; }
+       .hidden { display: none!important; }
 
         body.dark-mode { background-color: #121212; color: #f5f6f7; }
-        body.dark-mode .card { background: #242526; box-shadow: 0 4px 12px rgba(0,0,0,0.3); border-top: 1px solid #3a3b3c;}
-        body.dark-mode .form-control input { background: #3a3b3c; border-color: #4e4f50; color: #ffffff; }
-        body.dark-mode .form-control input:focus { border-color: var(--brand-red); background: #242526; }
-        body.dark-mode .toggle-box { border-top-color: #3a3b3c; }
-        body.dark-mode .brand-logo { border-color: #242526; }
+        body.dark-mode.card { background: #242526; box-shadow: 0 4px 12px rgba(0,0,0,0.3); border-top: 1px solid #3a3b3c;}
+        body.dark-mode.form-control input { background: #3a3b3c; border-color: #4e4f50; color: #ffffff; }
+        body.dark-mode.form-control input:focus { border-color: var(--brand-red); background: #242526; }
+        body.dark-mode.toggle-box { border-top-color: #3a3b3c; }
+        body.dark-mode.brand-logo { border-color: #242526; }
     </style>
 </head>
 <body>
@@ -99,7 +99,7 @@
                 <div class="form-control">
                     <input type="email" id="forgotEmail" placeholder="Account email address" required>
                 </div>
-                <button type="submit" id="forgotBtn" class="btn-submit">Send Reset OTP</button>
+                <button type="submit" id="forgotBtn" class="btn-submit">Send Reset Code</button>
                 <div class="toggle-box">
                     Remembered credentials? <span class="toggle-link" onclick="switchMode('login')">Back to Log In</span>
                 </div>
@@ -124,11 +124,35 @@
     <script src="js/appwrite.js"></script>
 
     <script>
+        // Wait for appwrite.js to load before doing anything
+        document.addEventListener('DOMContentLoaded', async () => {
+            // Wait for window.account to exist
+            let retries = 0;
+            while (!window.account && retries < 50) {
+                await new Promise(r => setTimeout(r, 100));
+                retries++;
+            }
+            
+            if (!window.account) {
+                document.getElementById('feedback').textContent = 'Failed to load. Please refresh.';
+                document.getElementById('feedback').style.color = 'var(--brand-red)';
+                return;
+            }
+
+            // Check if already logged in
+            try {
+                await window.account.get();
+                window.location.href = 'index.html'; // Already logged in
+            } catch (e) {
+                // Not logged in, show login form
+            }
+        });
+
         let currentFlowType = "";
         let cachedEmail = "";
         let cachedPassword = "";
         let cachedName = "";
-        let signupUserId = "";
+        let tempUserId = ""; // For OTP flows
 
         function switchMode(mode) {
             const forms = ['loginForm', 'signupForm', 'forgotForm', 'otpVerificationView'];
@@ -143,16 +167,18 @@
 
         async function handleSignup(e) {
             e.preventDefault();
+            if (!window.account) return;
+            
             cachedName = document.getElementById('signupName').value.trim();
             cachedEmail = document.getElementById('signupEmail').value.trim();
             const password = document.getElementById('signupPassword').value;
             const passwordConfirm = document.getElementById('signupPasswordConfirm').value;
             const feedback = document.getElementById('feedback');
+            const btn = document.getElementById('signupBtn');
 
-            // Validate passwords match
-            if (password !== passwordConfirm) {
+            if (password!== passwordConfirm) {
                 feedback.style.color = "var(--brand-red)";
-                feedback.textContent = "Passwords do not match. Please check.";
+                feedback.textContent = "Passwords do not match.";
                 return;
             }
             if (password.length < 8) {
@@ -162,13 +188,14 @@
             }
             
             cachedPassword = password;
-
+            btn.disabled = true;
             feedback.style.color = "var(--brand-red)";
             feedback.textContent = "Sending verification code...";
 
             try {
-                const tokenResponse = await window.account.createEmailToken(window.ID.unique(), cachedEmail);
-                signupUserId = tokenResponse.userId;
+                // Create a temp user ID for OTP
+                tempUserId = window.ID.unique();
+                await window.account.createEmailToken(tempUserId, cachedEmail);
                 
                 currentFlowType = "signup_verify";
                 
@@ -179,89 +206,100 @@
             } catch (error) {
                 feedback.style.color = "var(--brand-red)";
                 feedback.textContent = error.message || "Could not send verification code.";
+            } finally {
+                btn.disabled = false;
             }
         }
 
         async function handleForgotRequest(e) {
             e.preventDefault();
+            if (!window.account) return;
+            
             cachedEmail = document.getElementById('forgotEmail').value.trim();
             const feedback = document.getElementById('feedback');
-
+            const btn = document.getElementById('forgotBtn');
+            
+            btn.disabled = true;
             feedback.style.color = "var(--brand-red)";
             feedback.textContent = "Sending reset code...";
 
             try {
-                await window.account.createRecovery(cachedEmail, window.location.href);
+                // For password reset via OTP, we use createEmailToken too
+                // We need the userId first - Appwrite doesn't expose get user by email
+                // So we create a session with magic URL instead, or use custom backend
+                // For now, we'll use Magic URL which sends a link, not OTP
                 
-                currentFlowType = "password_reset";
+                await window.account.createMagicURLToken(
+                    window.ID.unique(), 
+                    cachedEmail,
+                    window.location.origin + '/reset-password.html' // You need this page
+                );
                 
-                document.getElementById('forgotForm').classList.add('hidden');
-                document.getElementById('otpInstructions').innerHTML = `📨 Reset code sent to <b>${cachedEmail}</b>.`;
-                document.getElementById('newPasswordGroup').classList.remove('hidden');
-                document.getElementById('otpVerificationView').classList.remove('hidden');
-                feedback.textContent = "";
+                feedback.style.color = "var(--brand-red)";
+                feedback.textContent = "✓ Reset link sent! Check your email.";
+                btn.disabled = false;
+                
             } catch (error) {
                 feedback.style.color = "var(--brand-red)";
-                feedback.textContent = error.message || "Failed to send reset code.";
+                feedback.textContent = error.message || "Failed to send reset link.";
+                btn.disabled = false;
             }
         }
 
         async function submitOtpAction() {
+            if (!window.account) return;
+            
             const code = document.getElementById('otpInputCode').value.trim();
             const feedback = document.getElementById('feedback');
+            const btn = document.getElementById('otpVerifyActionButton');
             
-            if(code.length !== 6) {
+            if(code.length!== 6) {
                 feedback.style.color = "var(--brand-red)";
                 feedback.textContent = "Please enter the complete 6-digit code.";
                 return;
             }
 
+            btn.disabled = true;
             feedback.style.color = "var(--brand-red)";
             feedback.textContent = "Verifying...";
 
             if (currentFlowType === "signup_verify") {
                 try {
-                    await window.account.createSession(signupUserId, code);
+                    // 1. Create session with OTP
+                    await window.account.createSession(tempUserId, code);
+                    
+                    // 2. Set password and name for the new account
                     await window.account.updatePassword(cachedPassword);
                     await window.account.updateName(cachedName);
+
+                    // 3. Create profile document
+                    await window.databases.createDocument(
+                        window.APPWRITE_DB_ID,
+                        'profiles',
+                        window.ID.unique(),
+                        {
+                            userId: tempUserId,
+                            displayName: cachedName,
+                            userName: cachedEmail.split('@')[0],
+                            joinedAT: new Date().toISOString()
+                        }
+                    );
 
                     feedback.style.color = "var(--brand-red)";
                     feedback.textContent = "✓ Account created! Redirecting...";
                     setTimeout(() => { window.location.href = "index.html"; }, 1500);
                 } catch (error) {
+                    btn.disabled = false;
                     feedback.style.color = "var(--brand-red)";
                     feedback.textContent = "Invalid code. Please try again.";
-                }
-            } 
-            
-            else if (currentFlowType === "password_reset") {
-                const newPassword = document.getElementById('newPasswordInput').value;
-                if(newPassword.length < 8) {
-                    feedback.style.color = "var(--brand-red)";
-                    feedback.textContent = "Password must be at least 8 characters.";
-                    return;
-                }
-
-                try {
-                    const urlParams = new URLSearchParams(window.location.search);
-                    const recoverySecret = urlParams.get('secret') || code;
-
-                    await window.account.updateRecovery(signupUserId || window.ID.unique(), recoverySecret, newPassword, newPassword);
-                    
-                    feedback.style.color = "var(--brand-red)";
-                    feedback.textContent = "✓ Password updated! Logging in...";
-                    
-                    await window.account.createEmailPasswordSession(cachedEmail, newPassword);
-                    setTimeout(() => { window.location.href = "index.html"; }, 1500);
-                } catch (error) {
-                    feedback.style.color = "var(--brand-red)";
-                    feedback.textContent = "Failed to reset password. Check the code.";
                 }
             }
         }
 
         async function handleLogin(e) {
             e.preventDefault();
+            if (!window.account) return;
+            
             const email = document.getElementById('loginEmail').value.trim();
             const password = document.getElementById('loginPassword').value;
             const feedback = document.getElementById('feedback');
