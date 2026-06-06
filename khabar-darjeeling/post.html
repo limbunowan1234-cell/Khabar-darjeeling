@@ -1,0 +1,458 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Create a new post - Khabar Darjeeling">
+    <meta name="theme-color" content="#c41e3a">
+    <title>Create Post - खबर दार्जिलिंग</title>
+    
+    <link rel="stylesheet" href="css/style.css?v=118">
+    <link rel="stylesheet" href="css/responsive.css?v=118">
+
+    <style>
+        /* Gatekeeper Loader */
+        #gatekeeperLoader {
+            position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
+            background: #ffffff; z-index: 99999; display: flex;
+            flex-direction: column; justify-content: center; align-items: center;
+            font-family: sans-serif; transition: opacity 0.3s ease;
+        }
+        body.dark-mode #gatekeeperLoader { background: #1a1a1a; color: #ffffff; }
+
+        .spinner {
+            width: 40px; height: 40px; border: 4px solid rgba(196, 30, 58, 0.1);
+            border-left-color: #c41e3a; border-radius: 50%; animation: spin 1s linear infinite;
+            margin-bottom: 15px;
+        }
+        @keyframes spin { to { transform: rotate(360deg); } }
+
+        /* Main Container */
+        .post-wrapper {
+            max-width: 750px;
+            margin: 30px auto;
+            padding: 0 15px;
+        }
+        
+        .post-card {
+            background: #fff;
+            border-radius: 12px;
+            box-shadow: 0 2px 15px rgba(0,0,0,0.05);
+            padding: 30px;
+            border: 1px solid #eee;
+        }
+        body.dark-mode .post-card { background: #222; border-color: #333; }
+
+        .post-header {
+            margin-bottom: 25px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid #eee;
+        }
+        body.dark-mode .post-header { border-color: #444; }
+
+        /* Form Elements */
+        .form-row {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        .form-row .form-group {
+            flex: 1;
+            margin-bottom: 0;
+        }
+        @media(max-width: 600px) {
+            .form-row { flex-direction: column; }
+        }
+
+        .form-group { margin-bottom: 20px; }
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #333;
+            font-size: 14px;
+        }
+        body.dark-mode .form-group label { color: #ccc; }
+
+        .form-control {
+            width: 100%;
+            padding: 12px 15px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 15px;
+            font-family: inherit;
+            transition: all 0.3s ease;
+            background: #fafafa;
+        }
+        body.dark-mode .form-control {
+            background: #1a1a1a;
+            border-color: #444;
+            color: #fff;
+        }
+        .form-control:focus {
+            outline: none;
+            border-color: #c41e3a;
+            background: #fff;
+            box-shadow: 0 0 0 3px rgba(196, 30, 58, 0.1);
+        }
+        body.dark-mode .form-control:focus { background: #111; }
+
+        textarea.form-control { min-height: 250px; resize: vertical; line-height: 1.6; }
+
+        /* Media Attachments */
+        .media-upload-section {
+            background: #fcfcfc;
+            border: 1px dashed #ccc;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+        body.dark-mode .media-upload-section { background: #1e1e1e; border-color: #555; }
+        
+        .image-preview {
+            margin-top: 15px;
+            max-width: 100%;
+            max-height: 300px;
+            border-radius: 8px;
+            display: none;
+            object-fit: cover;
+        }
+
+        /* Submit Button */
+        .submit-btn {
+            background: #c41e3a;
+            color: white;
+            padding: 15px 40px;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.3s;
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+        }
+        .submit-btn:hover { background: #a01729; }
+        .submit-btn:disabled { background: #e09ba5; cursor: not-allowed; }
+
+        /* Alerts & Info */
+        .author-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            background: #f5f5f5;
+            padding: 8px 15px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: 500;
+            margin-bottom: 20px;
+        }
+        body.dark-mode .author-badge { background: #333; color: #fff; }
+        .author-badge span { color: #c41e3a; font-weight: 700; }
+
+        .alert { padding: 15px; border-radius: 8px; margin-bottom: 20px; display: none; font-size: 14px; }
+        .alert.success { background: #d4edda; color: #155724; border: 1px solid #c3e6cb; }
+        .alert.error   { background: #f8d7da; color: #721c24; border: 1px solid #f5c6cb; }
+
+        /* Custom Nav adjustments */
+        .nav-links { display: flex; gap: 15px; align-items: center; }
+        .nav-links a { color: #333; text-decoration: none; font-weight: 500; font-size: 14px; transition: color 0.2s; }
+        .nav-links a:hover { color: #c41e3a; }
+        body.dark-mode .nav-links a { color: #ddd; }
+        body.dark-mode .nav-links a:hover { color: #ff6b81; }
+    </style>
+</head>
+<body>
+
+    <!-- Authentication Gatekeeper -->
+    <div id="gatekeeperLoader">
+        <div class="spinner"></div>
+        <p style="font-weight: 600; letter-spacing: 0.5px;">Authenticating...</p>
+    </div>
+
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="container">
+            <div class="navbar-content" style="display:flex; justify-content:space-between; align-items:center;">
+                <div class="logo">
+                    <a href="index.html" style="display:flex;align-items:center;text-decoration:none;gap:12px;">
+                        <img src="assets/logo.png" alt="Khabar Darjeeling Logo" style="height:45px;width:45px;object-fit:cover;border-radius:50%;">
+                        <div>
+                            <h1 style="font-size:20px;color:var(--primary-color);margin:0;line-height:1.2;">खबर दार्जिलिंग</h1>
+                        </div>
+                    </a>
+                </div>
+
+                <div class="nav-links">
+                    <a href="index.html">Home</a>
+                    <a href="profile.html">My Profile</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="post-wrapper">
+        <div class="post-card">
+            <div class="post-header">
+                <h2 style="margin:0; color:#c41e3a; font-size: 24px;">Create a New Post</h2>
+                <p style="color:#666; margin-top:5px; font-size:14px;">Share updates, news, and stories directly with the community.</p>
+            </div>
+
+            <div class="author-badge">
+                Posting as: <span id="displayAuthorName">Loading...</span>
+            </div>
+
+            <div id="alertBox" class="alert"></div>
+
+            <form id="postForm">
+                <div class="form-group">
+                    <label for="title">Headline / Title *</label>
+                    <input type="text" id="title" class="form-control" required maxlength="200" placeholder="What is the story about?">
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="category">Category *</label>
+                        <select id="category" class="form-control" required>
+                            <option value="">Select a category</option>
+                            <option value="darjeeling">Darjeeling</option>
+                            <option value="kalimpong">Kalimpong</option>
+                            <option value="kurseong">Kurseong</option>
+                            <option value="mirik">Mirik</option>
+                            <option value="siliguri">Siliguri</option>
+                            <option value="west-bengal">West Bengal</option>
+                            <option value="national">National</option>
+                            <option value="entertainment">Entertainment</option>
+                            <option value="sports">Sports</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="location">Location *</label>
+                        <input type="text" id="location" class="form-control" required maxlength="100" placeholder="e.g., Darjeeling Chowrasta">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="content">Article Content *</label>
+                    <textarea id="content" class="form-control" required minlength="100" placeholder="Write your full story here. Please provide as much detail as possible (Minimum 100 characters)."></textarea>
+                </div>
+
+                <div class="media-upload-section">
+                    <div class="form-group" style="margin-bottom:0;">
+                        <label for="image">Featured Image</label>
+                        <input type="file" id="image" class="form-control" accept="image/jpeg, image/png, image/webp" style="background:transparent; border:none; padding:0;">
+                        <small style="color:#666; display:block; margin-top:8px;">Max 5MB. Highly recommended to increase engagement.</small>
+                        <img id="imagePreview" class="image-preview" alt="Image Preview">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="youtubeUrl">Attach YouTube Video (Optional)</label>
+                    <input type="url" id="youtubeUrl" class="form-control" placeholder="https://www.youtube.com/watch?v=...">
+                </div>
+
+                <button type="submit" class="submit-btn" id="submitBtn">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>
+                    Publish Post
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Appwrite SDK -->
+    <script src="https://cdn.jsdelivr.net/npm/appwrite@14.0.1/dist/iife/sdk.min.js"></script>
+    <script src="js/appwrite.js?v=118"></script>
+
+    <script>
+        (() => {
+            // Verify global Appwrite objects exist
+            if (!window.account || !window.databases || !window.storage || !window.ID || !window.Query) {
+                alert('Appwrite connection failed. Please check your configuration.');
+                window.location.href = 'login.html';
+                return;
+            }
+
+            const { account, databases, storage, ID, Query } = window;
+            const DB_ID = window.APPWRITE_DB_ID;
+            const COLLECTION_ID = window.APPWRITE_COLLECTION_ID;
+            const BUCKET_ID = window.APPWRITE_BUCKET_ID;
+            const PROFILES_COLLECTION = 'profiles';
+
+            let currentUser = null;
+            let uploadedImageId = null;
+
+            // Initialize Gatekeeper
+            async function initGatekeeper() {
+                try {
+                    currentUser = await account.get();
+                    await ensureProfileExists(currentUser);
+                    
+                    const safeName = currentUser.name || (currentUser.email ? currentUser.email.split('@')[0] : 'Reporter');
+                    document.getElementById('displayAuthorName').textContent = safeName;
+                    
+                    hideLoader();
+                } catch (error) {
+                    console.error("Not logged in:", error);
+                    window.location.href = 'login.html';
+                }
+            }
+
+            // Sync user profile data silently
+            async function ensureProfileExists(user) {
+                try {
+                    const existing = await databases.listDocuments(DB_ID, PROFILES_COLLECTION, [
+                        Query.equal('userId', user.$id),
+                        Query.limit(1)
+                    ]);
+
+                    if (existing.documents.length === 0) {
+                        const safeName = (user.name || (user.email ? user.email.split('@')[0] : 'Reporter')).trim();
+                        const safeUserName = safeName.toLowerCase().replace(/[^a-z0-9]/g, '').slice(0, 20) + Math.floor(Math.random() * 1000);
+
+                        await databases.createDocument(DB_ID, PROFILES_COLLECTION, ID.unique(), {
+                            userId: user.$id,
+                            displayName: safeName,
+                            userName: safeUserName,
+                            bio: 'Reporter at Khabar Darjeeling',
+                            avatarUrl: null,
+                            coverUrl: null,
+                            joinedAT: new Date().toISOString()
+                        });
+                    }
+                } catch (e) {
+                    console.warn('Profile sync warning:', e);
+                }
+            }
+
+            // UI Helpers
+            function hideLoader() {
+                const loader = document.getElementById('gatekeeperLoader');
+                if (loader) {
+                    loader.style.opacity = '0';
+                    setTimeout(() => loader.style.display = 'none', 300);
+                }
+            }
+
+            function showAlert(message, type = 'success') {
+                const alertBox = document.getElementById('alertBox');
+                alertBox.textContent = message;
+                alertBox.className = `alert ${type}`;
+                alertBox.style.display = 'block';
+                setTimeout(() => alertBox.style.display = 'none', 6000);
+            }
+
+            function extractYouTubeID(url) {
+                if (!url) return null;
+                const regex = /(?:youtube\.com\/(?:[^\/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([^"&?\/\s]{11})/;
+                const match = url.match(regex);
+                return match ? match[1] : null;
+            }
+
+            // Handle Image Preview & Validation
+            document.getElementById('image').addEventListener('change', function (e) {
+                const file = e.target.files[0];
+                const preview = document.getElementById('imagePreview');
+
+                if (file) {
+                    if (file.size > 5 * 1024 * 1024) {
+                        showAlert('Image exceeds the 5MB limit. Please compress it and try again.', 'error');
+                        e.target.value = '';
+                        preview.style.display = 'none';
+                        return;
+                    }
+                    const reader = new FileReader();
+                    reader.onload = ev => {
+                        preview.src = ev.target.result;
+                        preview.style.display = 'block';
+                    };
+                    reader.readAsDataURL(file);
+                } else {
+                    preview.style.display = 'none';
+                }
+            });
+
+            // Handle Form Submission
+            document.getElementById('postForm').addEventListener('submit', async (e) => {
+                e.preventDefault();
+
+                const submitBtn = document.getElementById('submitBtn');
+                submitBtn.disabled = true;
+                submitBtn.innerHTML = '<div class="spinner" style="width:20px;height:20px;border-width:2px;margin:0;"></div> Publishing...';
+
+                try {
+                    const title = document.getElementById('title').value.trim();
+                    const category = document.getElementById('category').value;
+                    const content = document.getElementById('content').value.trim();
+                    const location = document.getElementById('location').value.trim();
+                    const youtubeUrl = document.getElementById('youtubeUrl').value.trim();
+                    const imageFile = document.getElementById('image').files[0];
+
+                    if (content.length < 100) throw new Error('Story content must be at least 100 characters.');
+
+                    // Upload Image if present
+                    if (imageFile) {
+                        const fileUpload = await storage.createFile(BUCKET_ID, ID.unique(), imageFile);
+                        uploadedImageId = fileUpload.$id;
+                    }
+
+                    // Fetch Avatar (Optional enhancement for feed display)
+                    let userAvatar = null;
+                    try {
+                        const profile = await databases.listDocuments(DB_ID, PROFILES_COLLECTION, [
+                            Query.equal('userId', currentUser.$id),
+                            Query.limit(1)
+                        ]);
+                        if (profile.documents.length > 0) userAvatar = profile.documents[0].avatarUrl || null;
+                    } catch (e) {
+                        console.warn('Avatar fetch warning:', e);
+                    }
+
+                    // Create Article Document
+                    await databases.createDocument(DB_ID, COLLECTION_ID, ID.unique(), {
+                        title,
+                        category,
+                        content,
+                        location,
+                        status: 'pending', // Keeps the admin review requirement
+                        submitterId: currentUser.$id,
+                        submitterName: currentUser.name || 'Reporter',
+                        submitterAvatar: userAvatar,
+                        submitterEmail: currentUser.email || '',
+                        authorName: currentUser.name || 'Reporter',
+                        authorEmail: currentUser.email || '',
+                        submittedAt: new Date().toISOString(),
+                        imageFileId: uploadedImageId,
+                        youtube_id: extractYouTubeID(youtubeUrl)
+                    });
+
+                    showAlert('Post successfully submitted! It will appear on the feed shortly after review.', 'success');
+                    
+                    // Reset Form
+                    document.getElementById('postForm').reset();
+                    document.getElementById('imagePreview').style.display = 'none';
+                    uploadedImageId = null;
+
+                } catch (error) {
+                    console.error('Post Error:', error);
+                    showAlert(error.message || 'Failed to publish post. Please check your connection.', 'error');
+                } finally {
+                    // Restore Button State
+                    submitBtn.disabled = false;
+                    submitBtn.innerHTML = '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg> Publish Post';
+                }
+            });
+
+            // Trigger initialization
+            if (document.readyState === 'loading') {
+                document.addEventListener('DOMContentLoaded', initGatekeeper);
+            } else {
+                initGatekeeper();
+            }
+        })();
+    </script>
+</body>
+</html>
