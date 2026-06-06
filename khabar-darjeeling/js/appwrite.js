@@ -31,3 +31,4 @@ if (!window.Appwrite) {
     console.log('✅ Appwrite successfully initialized');
     console.log('Current Bucket ID:', window.APPWRITE_BUCKET_ID);
 }
+ 
