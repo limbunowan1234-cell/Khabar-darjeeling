@@ -36,12 +36,12 @@
             color: var(--text-main);
         }
 
-        .header-link {
+       .header-link {
             text-decoration: none;
             display: block;
         }
 
-        .header {
+       .header {
             background: var(--card-bg);
             padding: 15px;
             text-align: center;
@@ -51,11 +51,11 @@
             font-size: 1.2rem;
         }
 
-        .header:hover {
+       .header:hover {
             background: rgba(184, 29, 36, 0.04);
         }
 
-        .article-container {
+       .article-container {
             max-width: 760px;
             margin: 20px auto;
             background: var(--card-bg);
@@ -64,7 +64,7 @@
             box-shadow: 0 1px 3px rgba(0,0,0,0.1);
         }
 
-        .category-badge {
+       .category-badge {
             background: var(--primary-red);
             color: white;
             padding: 4px 8px;
@@ -74,7 +74,7 @@
             letter-spacing: 0.4px;
         }
 
-        .art-img {
+       .art-img {
             width: 100%;
             border-radius: 8px;
             margin: 15px 0;
@@ -84,7 +84,7 @@
             max-height: 460px;
         }
 
-        .art-video {
+       .art-video {
             position: relative;
             width: 100%;
             padding-bottom: 56.25%;
@@ -95,7 +95,7 @@
             box-sizing: border-box;
         }
 
-        .art-video iframe {
+       .art-video iframe {
             position: absolute;
             top: 0;
             left: 0;
@@ -105,7 +105,7 @@
             border-radius: 8px;
         }
 
-        .meta-row {
+       .meta-row {
             display: flex;
             flex-wrap: wrap;
             gap: 10px;
@@ -115,17 +115,17 @@
             font-size: 13px;
         }
 
-        .author-link {
+       .author-link {
             color: inherit;
             text-decoration: none;
             font-weight: 700;
         }
 
-        .author-link:hover {
+       .author-link:hover {
             text-decoration: underline;
         }
 
-        .article-author {
+       .article-author {
             display: flex;
             align-items: center;
             gap: 10px;
@@ -134,20 +134,20 @@
             border-top: 1px solid var(--border);
         }
 
-        .author-avatar,
-        .author-initials {
+       .author-avatar,
+       .author-initials {
             width: 36px;
             height: 36px;
             border-radius: 50%;
             flex-shrink: 0;
         }
 
-        .author-avatar {
+       .author-avatar {
             object-fit: cover;
             border: 1px solid var(--border);
         }
 
-        .author-initials {
+       .author-initials {
             background: var(--primary-red);
             color: #fff;
             display: flex;
@@ -157,7 +157,7 @@
             font-size: 13px;
         }
 
-        .article-content {
+       .article-content {
             line-height: 1.7;
             white-space: pre-line;
             color: var(--text-main);
@@ -165,14 +165,15 @@
             margin-top: 10px;
         }
 
-        .actions {
+       .actions {
             margin-top: 25px;
             display: flex;
             gap: 10px;
             flex-wrap: wrap;
+            align-items: center;
         }
 
-        .like-btn {
+       .like-btn {
             background: #e4e6eb;
             border: none;
             padding: 10px 20px;
@@ -185,16 +186,24 @@
             gap: 5px;
         }
 
-        .like-btn:hover:not(:disabled) {
+       .like-btn:hover:not(:disabled) {
             background: #d8dadf;
         }
 
-        .like-btn.liked {
+       .like-btn.liked {
             background: var(--primary-red);
             color: white;
         }
 
-        .top-links {
+       .stats-badge {
+            color: var(--text-muted);
+            font-size: 14px;
+            display: flex;
+            gap: 15px;
+            align-items: center;
+        }
+
+       .top-links {
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -203,20 +212,20 @@
             flex-wrap: wrap;
         }
 
-        .small-link {
+       .small-link {
             text-decoration: none;
             color: var(--primary-red);
             font-weight: 700;
             font-size: 14px;
         }
 
-        .comments-section {
+       .comments-section {
             margin-top: 40px;
             border-top: 1px solid var(--border);
             padding-top: 20px;
         }
 
-        .comment-input {
+       .comment-input {
             width: 100%;
             padding: 12px;
             border: 1px solid #ccc;
@@ -230,7 +239,7 @@
             color: var(--text-main);
         }
 
-        .submit-comment-btn {
+       .submit-comment-btn {
             background: var(--primary-red);
             color: white;
             border: none;
@@ -240,53 +249,90 @@
             cursor: pointer;
         }
 
-        .comment-list {
+       .submit-comment-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+       .comment-list {
             margin-top: 25px;
         }
 
-        .comment-item {
-            background: rgba(184, 29, 36, 0.04);
-            padding: 15px;
-            border-radius: 8px;
-            margin-bottom: 15px;
-            border-left: 3px solid var(--primary-red);
+       .comment-item {
+            display: flex;
+            gap: 12px;
+            padding: 15px 0;
+            border-bottom: 1px solid var(--border);
         }
 
-        body.dark-mode .comment-item {
-            background: rgba(184, 29, 36, 0.12);
+       .comment-item:last-child {
+            border-bottom: none;
         }
 
-        .comment-author {
+       .comment-avatar,
+       .comment-initials {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            flex-shrink: 0;
+        }
+
+       .comment-avatar {
+            object-fit: cover;
+            border: 1px solid var(--border);
+        }
+
+       .comment-initials {
+            background: var(--primary-red);
+            color: #fff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 12px;
+        }
+
+       .comment-body {
+            flex: 1;
+        }
+
+       .comment-author {
             font-weight: bold;
             color: var(--text-main);
-            margin-bottom: 5px;
+            margin-bottom: 4px;
             font-size: 0.9rem;
+            text-decoration: none;
         }
 
-        .comment-text {
+       .comment-author:hover {
+            text-decoration: underline;
+        }
+
+       .comment-text {
             color: var(--text-main);
             font-size: 0.95rem;
             margin: 0;
             line-height: 1.5;
         }
 
-        .comment-image {
+       .comment-image {
             width: 100%;
-            max-width: 100%;
+            max-width: 300px;
             height: auto;
             border-radius: 6px;
             margin-top: 0.75rem;
             display: block;
         }
 
-        .comment-video {
+       .comment-video {
             position: relative;
             width: 100%;
+            max-width: 400px;
             padding-bottom: 56.25%;
             margin-top: 0.75rem;
         }
 
-        .comment-video iframe {
+       .comment-video iframe {
             position: absolute;
             top: 0;
             left: 0;
@@ -296,31 +342,30 @@
             border-radius: 6px;
         }
 
-        .comment-meta {
+       .comment-meta {
             color: var(--text-muted);
             font-size: 0.8em;
-            font-weight: normal;
-            margin-left: 10px;
+            margin-top: 6px;
         }
 
-        .state-box {
+       .state-box {
             padding: 18px;
             border-radius: 10px;
             background: rgba(0,0,0,0.03);
             color: var(--text-muted);
         }
 
-        body.dark-mode .state-box {
-            background: rgba(255,255,255,0.04);
+        body.dark-mode.state-box {
+            background: rgba(255,255,0.04);
         }
 
         @media (max-width: 768px) {
-            .article-container {
+           .article-container {
                 margin: 10px;
                 padding: 16px;
             }
 
-            .header {
+           .header {
                 font-size: 1rem;
                 padding: 13px;
             }
@@ -348,15 +393,32 @@
 
         <div class="actions">
             <button id="likeBtn" class="like-btn">❤️ Like</button>
-            <a href="index.html" class="small-link" style="align-self:center;">← Back to Home</a>
+            <div class="stats-badge">
+                <span>👁️ <span id="viewCount">0</span> views</span>
+                <span>💬 <span id="commentCountTop">0</span> comments</span>
+            </div>
+            <a href="index.html" class="small-link" style="margin-left:auto;">← Back to Home</a>
         </div>
 
         <div class="comments-section">
-            <h3>Discussion</h3>
+            <h3>Discussion (<span id="commentCount">0</span>)</h3>
 
-            <div class="comment-form">
-                <textarea id="commentInput" class="comment-input" placeholder="What are your thoughts on this?"></textarea>
-                <button id="submitComment" class="submit-comment-btn">Post Comment</button>
+            <div id="commentFormWrap" style="display:none;margin-bottom:30px;background:rgba(184,29,36,0.04);padding:20px;border-radius:8px;">
+                <form id="commentForm">
+                    <textarea id="commentText" class="comment-input" placeholder="What are your thoughts on this?" required></textarea>
+                    
+                    <div style="display:flex;gap:10px;margin-bottom:10px;flex-wrap:wrap;">
+                        <input type="file" id="commentImage" accept="image/*" style="flex:1;">
+                        <input type="url" id="commentYoutube" placeholder="YouTube URL (optional)" 
+                            style="flex:1;padding:8px;border:1px solid #ddd;border-radius:6px;">
+                    </div>
+                    
+                    <button type="submit" id="commentSubmitBtn" class="submit-comment-btn">Post Comment</button>
+                </form>
+            </div>
+            
+            <div id="loginToComment" style="text-align:center;padding:20px;background:rgba(0,0,0,0.03);border-radius:8px;margin-bottom:20px;">
+                <a href="login.html" style="color:var(--primary-red);font-weight:600;">Log in</a> to post a comment
             </div>
 
             <div id="commentsList" class="comment-list">
@@ -383,11 +445,12 @@
             const COL_ID = 'articles';
             const COMMENTS_COL_ID = 'comments';
             const LIKES_COL_ID = 'likes';
+            const PROFILES_COL_ID = 'profiles';
             const BUCKET_ID = 'post-images';
 
             const client = new Client()
-                .setProject(PROJECT_ID)
-                .setEndpoint(ENDPOINT);
+               .setProject(PROJECT_ID)
+               .setEndpoint(ENDPOINT);
 
             const db = new Databases(client);
             const account = new Account(client);
@@ -403,6 +466,8 @@
             };
 
             let currentArticleId = null;
+            let currentUser = null;
+            let article = null;
 
             function escapeHtml(text) {
                 const div = document.createElement('div');
@@ -435,22 +500,22 @@
                 return (parts[0].charAt(0) + parts[parts.length - 1].charAt(0)).toUpperCase();
             }
 
-            function getImageUrl(article) {
-                const imageId = article.imageFileId || article.imageUrl;
+            function getImageUrl(art) {
+                const imageId = art.imageFileId || art.imageUrl;
                 if (!imageId || imageId === 'Text' || imageId === 'null' || imageId === 'undefined') return '';
                 if (imageId.startsWith('http')) return imageId;
                 return `${ENDPOINT}/storage/buckets/post-images/files/${imageId}/view?project=${PROJECT_ID}`;
             }
 
-            function renderAuthor(article) {
-                const authorName = article.submitterName || article.authorName || 'Staff Reporter';
-                const authorId = article.submitterId || '';
-                const profileLink = authorId ? `profile.html?userId=${encodeURIComponent(authorId)}` : '#';
-                const authorAvatar = article.submitterAvatar || '';
+            function renderAuthor(art) {
+                const authorName = art.submitterName || art.authorName || 'Staff Reporter';
+                const authorId = art.submitterId || '';
+                const profileLink = authorId? `profile.html?userId=${encodeURIComponent(authorId)}` : '#';
+                const authorAvatar = art.submitterAvatar || '';
 
                 const authorWrap = document.getElementById('articleAuthorWrap');
 
-                if (authorAvatar && authorAvatar !== 'null') {
+                if (authorAvatar && authorAvatar!== 'null') {
                     authorWrap.innerHTML = `
                         <span class="article-author" style="display:inline-flex;border-top:none;padding-top:0;margin-top:0;">
                             <img src="${authorAvatar}" alt="${escapeHtml(authorName)}" class="author-avatar" onerror="this.style.display='none'">
@@ -467,28 +532,40 @@
                 }
             }
 
+            async function incrementViews() {
+                try {
+                    await db.updateDocument(DB_ID, COL_ID, currentArticleId, {
+                        views: (article.views || 0) + 1
+                    });
+                    document.getElementById('viewCount').textContent = (article.views || 0) + 1;
+                } catch (e) {
+                    console.log('View increment failed:', e);
+                }
+            }
+
             async function loadArticle() {
                 try {
                     const params = new URLSearchParams(window.location.search);
                     currentArticleId = params.get('id');
                     if (!currentArticleId) throw new Error('No Article ID provided.');
 
-                    const art = await db.getDocument(DB_ID, COL_ID, currentArticleId);
+                    article = await db.getDocument(DB_ID, COL_ID, currentArticleId);
 
-                    document.title = `${art.title || 'Article'} - खबर दार्जिलिंग`;
-                    document.getElementById('title').textContent = art.title || 'Untitled';
-                    document.getElementById('body').textContent = art.content || '';
+                    document.title = `${article.title || 'Article'} - खबर दार्जिलिंग`;
+                    document.getElementById('title').textContent = article.title || 'Untitled';
+                    document.getElementById('body').textContent = article.content || '';
 
-                    const theme = categoryThemes[(art.category || '').toLowerCase()] || categoryThemes.default;
+                    const theme = categoryThemes[(article.category || '').toLowerCase()] || categoryThemes.default;
                     const badge = document.getElementById('categoryBadge');
-                    badge.textContent = art.category || 'General';
+                    badge.textContent = article.category || 'General';
                     badge.style.backgroundColor = theme.color;
 
-                    document.getElementById('articleDate').textContent = formatDate(art.$createdAt);
-                    renderAuthor(art);
+                    document.getElementById('articleDate').textContent = formatDate(article.$createdAt);
+                    document.getElementById('viewCount').textContent = article.views || 0;
+                    renderAuthor(article);
 
                     const imgEl = document.getElementById('mainImg');
-                    const imageUrl = getImageUrl(art);
+                    const imageUrl = getImageUrl(article);
                     if (imageUrl) {
                         imgEl.src = imageUrl;
                         imgEl.style.display = 'block';
@@ -496,12 +573,12 @@
                     }
 
                     const videoContainer = document.getElementById('articleVideo');
-                    if (art.youtube_id && art.youtube_id.length === 11) {
+                    if (article.youtube_id && article.youtube_id.length === 11) {
                         videoContainer.style.display = 'block';
                         videoContainer.style.border = `3px solid ${theme.color}`;
                         videoContainer.innerHTML = `
                             <iframe
-                                src="https://www.youtube-nocookie.com/embed/${art.youtube_id}?playsinline=1&modestbranding=1&rel=0"
+                                src="https://www.youtube-nocookie.com/embed/${article.youtube_id}?playsinline=1&modestbranding=1&rel=0"
                                 loading="lazy"
                                 allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                                 allowfullscreen
@@ -509,31 +586,36 @@
                         `;
                     }
 
-                    await loadComments(currentArticleId);
-                    await loadLikes(currentArticleId);
+                    await incrementViews();
+                    await loadComments();
+                    await loadLikes();
                 } catch (e) {
                     document.getElementById('title').textContent = 'Error';
                     document.getElementById('body').innerHTML = `<div class="state-box">${escapeHtml(e.message || 'Failed to load article.')}</div>`;
                 }
             }
 
-            async function loadLikes(id) {
+            async function loadLikes() {
                 try {
                     const res = await db.listDocuments(DB_ID, LIKES_COL_ID, [
-                        Query.equal('articleId', id),
+                        Query.equal('articleId', currentArticleId),
                         Query.limit(100)
                     ]);
 
                     const btn = document.getElementById('likeBtn');
-                    const liked = localStorage.getItem(`liked_${id}`);
-                    btn.className = liked ? 'like-btn liked' : 'like-btn';
-                    btn.innerHTML = liked ? `❤️ Liked (${res.total})` : `❤️ Like (${res.total})`;
+                    const liked = localStorage.getItem(`liked_${currentArticleId}`);
+                    btn.className = liked? 'like-btn liked' : 'like-btn';
+                    btn.innerHTML = liked? `❤️ Liked (${res.total})` : `❤️ Like (${res.total})`;
                 } catch (e) {
                     document.getElementById('likeBtn').innerHTML = '❤️ Like';
                 }
             }
 
             document.getElementById('likeBtn').addEventListener('click', async () => {
+                if (!currentUser) {
+                    window.location.href = 'login.html';
+                    return;
+                }
                 if (!currentArticleId) return;
                 const btn = document.getElementById('likeBtn');
                 btn.disabled = true;
@@ -544,87 +626,100 @@
                         await db.deleteDocument(DB_ID, LIKES_COL_ID, existingLikeId);
                         localStorage.removeItem(`liked_${currentArticleId}`);
                     } else {
-                        let email = 'anon@khabardarjeeling.com';
-                        try {
-                            const u = await account.get();
-                            email = u.email || email;
-                        } catch (e) {}
-
                         const doc = await db.createDocument(DB_ID, LIKES_COL_ID, ID.unique(), {
                             articleId: currentArticleId,
-                            userEmail: email,
+                            userId: currentUser.$id,
                             createdAt: new Date().toISOString()
                         });
-
                         localStorage.setItem(`liked_${currentArticleId}`, doc.$id);
                     }
-
-                    await loadLikes(currentArticleId);
+                    await loadLikes();
                 } finally {
                     btn.disabled = false;
                 }
             });
 
-            function createCommentCard(c) {
-                const el = document.createElement('div');
-                el.className = 'comment-item';
-
-                const d = new Date(c.createdAt || c.$createdAt || Date.now());
-                const author = escapeHtml(c.authorName || 'Anonymous');
-                const text = escapeHtml(c.commentText || '');
-
-                el.innerHTML = `
-                    <div class="comment-author">
-                        ${author}
-                        <span class="comment-meta">${d.toLocaleString()}</span>
-                    </div>
-                    <p class="comment-text">${text}</p>
-                `;
-
-                if (c.image_id) {
-                    const img = document.createElement('img');
-                    img.className = 'comment-image';
-                    img.loading = 'lazy';
-                    img.src = storage.getFilePreview(BUCKET_ID, c.image_id, 600).href;
-                    el.appendChild(img);
-                }
-
-                if (c.youtube_id && c.youtube_id.length === 11) {
-                    const v = document.createElement('div');
-                    v.className = 'comment-video';
-                    v.innerHTML = `
-                        <iframe
-                            src="https://www.youtube-nocookie.com/embed/${c.youtube_id}?playsinline=1&modestbranding=1&rel=0"
-                            loading="lazy"
-                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                            allowfullscreen></iframe>
-                    `;
-                    el.appendChild(v);
-                }
-
-                return el;
-            }
-
-            async function loadComments(id) {
+            async function loadComments() {
                 const list = document.getElementById('commentsList');
+                const countEls = [document.getElementById('commentCount'), document.getElementById('commentCountTop')];
+                
                 try {
                     const res = await db.listDocuments(DB_ID, COMMENTS_COL_ID, [
-                        Query.equal('articleId', id),
+                        Query.equal('articleId', currentArticleId),
                         Query.orderDesc('$createdAt'),
-                        Query.limit(50)
+                        Query.limit(100)
                     ]);
 
-                    list.innerHTML = res.documents.length
-                        ? ''
-                        : '<p class="state-box">No comments yet.</p>';
+                    countEls.forEach(el => { if (el) el.textContent = res.total; });
 
-                    res.documents.forEach(c => list.appendChild(createCommentCard(c)));
+                    if (!res.documents.length) {
+                        list.innerHTML = '<p class="state-box">No comments yet.</p>';
+                        return;
+                    }
+
+                    // Fetch profile data for each comment
+                    const commentsWithProfiles = await Promise.all(res.documents.map(async (c) => {
+                        let avatarUrl = null;
+                        let displayName = c.authorName;
+                        
+                        if (c.userId) {
+                            try {
+                                const profile = await db.listDocuments(
+                                    DB_ID,
+                                    PROFILES_COL_ID,
+                                    [Query.equal('userId', c.userId), Query.limit(1)]
+                                );
+                                if (profile.documents.length) {
+                                    avatarUrl = profile.documents[0].avatarUrl;
+                                    displayName = profile.documents[0].displayName || displayName;
+                                }
+                            } catch (e) {}
+                        }
+                        return {...c, avatarUrl, displayName };
+                    }));
+
+                    list.innerHTML = commentsWithProfiles.map(c => {
+                        const avatarHtml = c.avatarUrl 
+                          ? `<img src="${c.avatarUrl}" class="comment-avatar" onerror="this.style.display='none'">`
+                            : `<div class="comment-initials">${getInitials(c.displayName)}</div>`;
+                        
+                        const authorLink = c.userId 
+                          ? `<a href="profile.html?userId=${c.userId}" class="comment-author">${escapeHtml(c.displayName)}</a>`
+                            : `<span class="comment-author">${escapeHtml(c.displayName)}</span>`;
+                        
+                        const imgHtml = c.image_id? `<img src="${storage.getFilePreview(BUCKET_ID, c.image_id, 600).href}" class="comment-image">` : '';
+                        const ytHtml = c.youtube_id? `
+                            <div class="comment-video">
+                                <iframe src="https://www.youtube-nocookie.com/embed/${c.youtube_id}" 
+                                    loading="lazy" allowfullscreen></iframe>
+                            </div>` : '';
+                        
+                        return `
+                            <div class="comment-item">
+                                ${avatarHtml}
+                                <div class="comment-body">
+                                    <div>
+                                        ${authorLink}
+                                        <span class="comment-meta">${formatDate(c.createdAt)}</span>
+                                    </div>
+                                    <p class="comment-text">${escapeHtml(c.commentText)}</p>
+                                    ${imgHtml}
+                                    ${ytHtml}
+                                </div>
+                            </div>
+                        `;
+                    }).join('');
                 } catch (e) {
                     list.innerHTML = '<p class="state-box" style="color:red;">Failed to load comments.</p>';
                 }
             }
 
             document.getElementById('submitComment').addEventListener('click', async () => {
+                if (!currentUser) {
+                    window.location.href = 'login.html';
+                    return;
+                }
+                
                 const input = document.getElementById('commentInput');
                 const txt = input.value.trim();
                 if (!txt) return;
@@ -633,26 +728,52 @@
                 btn.disabled = true;
 
                 try {
-                    let name = 'Anonymous';
-                    try {
-                        name = (await account.get()).name || name;
-                    } catch (e) {}
-
+                    const imageFile = document.getElementById('commentImage').files[0];
+                    const ytUrl = document.getElementById('commentYoutube').value.trim();
+                    
+                    let imageId = null;
+                    if (imageFile) {
+                        const uploaded = await storage.createFile(BUCKET_ID, ID.unique(), imageFile);
+                        imageId = uploaded.$id;
+                    }
+                    
                     await db.createDocument(DB_ID, COMMENTS_COL_ID, ID.unique(), {
                         articleId: currentArticleId,
-                        authorName: name,
+                        userId: currentUser.$id,
+                        authorName: currentUser.name || currentUser.email.split('@')[0],
                         commentText: txt,
-                        createdAt: new Date().toISOString()
+                        createdAt: new Date().toISOString(),
+                        image_id: imageId,
+                        youtube_id: extractYouTubeID(ytUrl)
                     });
 
                     input.value = '';
-                    await loadComments(currentArticleId);
+                    document.getElementById('commentImage').value = '';
+                    document.getElementById('commentYoutube').value = '';
+                    await loadComments();
                 } catch (e) {
-                    alert('Failed to post comment.');
+                    alert('Failed to post comment: ' + e.message);
                 } finally {
                     btn.disabled = false;
                 }
             });
+
+            function extractYouTubeID(url) {
+                if (!url) return null;
+                const match = url.match(/(?:youtube\.com\/(?:[^\/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([^"&?\/\s]{11})/);
+                return match? match[1] : null;
+            }
+
+            // Check login status
+            (async () => {
+                try {
+                    currentUser = await account.get();
+                    document.getElementById('commentFormWrap').style.display = 'block';
+                    document.getElementById('loginToComment').style.display = 'none';
+                } catch (e) {
+                    // Not logged in
+                }
+            })();
 
             if (localStorage.getItem('theme') === 'dark') {
                 document.body.classList.add('dark-mode');
