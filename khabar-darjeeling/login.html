@@ -7,8 +7,8 @@
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
         :root {
-            --fb-blue: #1877f2;
             --brand-red: #c41e3a;
+            --brand-red-dark: #a01830;
             --text-dark: #1c1e21;
             --bg-gray: #f0f2f5;
             --border-color: #dddfe2;
@@ -21,23 +21,23 @@
         .brand-header { text-align: center; margin-bottom: 24px; display: flex; flex-direction: column; align-items: center; }
         .brand-logo { height: 75px; width: 75px; object-fit: cover; border-radius: 50%; margin-bottom: 12px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); border: 2px solid #ffffff; }
         .brand-header h1 { color: var(--brand-red); font-size: 34px; font-weight: 700; letter-spacing: -0.5px; margin-bottom: 2px; }
-        .brand-header p { color: #606770; font-size: 14px; font-weight: 600; letter-spacing: 0.5px; text-transform: uppercase; }
+        .brand-header p { color: #606770; font-size: 14px; font-weight: 600; letter-spacing: 0.5px; }
 
         .card { background: #ffffff; border-radius: 8px; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1), 0 8px 16px rgba(0, 0, 0, 0.1); padding: 24px; width: 100%; }
         .instruction-text { color: #606770; font-size: 13px; line-height: 1.4; text-align: center; margin-bottom: 16px; }
         .form-control { width: 100%; margin-bottom: 14px; }
         .form-control input { width: 100%; padding: 14px 12px; font-size: 14px; border: 1px solid var(--border-color); border-radius: 6px; background: #f5f6f7; color: var(--text-dark); outline: none; transition: all 0.2s; }
-        .form-control input:focus { border-color: var(--fb-blue); background: #ffffff; box-shadow: 0 0 0 2px rgba(24, 119, 242, 0.2); }
+        .form-control input:focus { border-color: var(--brand-red); background: #ffffff; box-shadow: 0 0 0 2px rgba(196, 30, 58, 0.2); }
         
         .form-control input.otp-style { font-size: 26px; letter-spacing: 6px; text-align: center; font-weight: 700; padding: 8px; }
 
-        .btn-submit { width: 100%; padding: 12px; font-size: 16px; font-weight: 600; color: #ffffff; background-color: var(--fb-blue); border: none; border-radius: 6px; cursor: pointer; margin-top: 6px; transition: background-color 0.2s; }
-        .btn-submit:hover { background-color: #166fe5; }
+        .btn-submit { width: 100%; padding: 12px; font-size: 16px; font-weight: 600; color: #ffffff; background-color: var(--brand-red); border: none; border-radius: 6px; cursor: pointer; margin-top: 6px; transition: background-color 0.2s; }
+        .btn-submit:hover { background-color: var(--brand-red-dark); }
         .btn-submit:disabled { opacity: 0.5; cursor: not-allowed; }
         
-        .forgot-link { display: block; text-align: center; margin-top: 14px; font-size: 13px; color: var(--fb-blue); text-decoration: none; cursor: pointer; font-weight: 500; }
+        .forgot-link { display: block; text-align: center; margin-top: 14px; font-size: 13px; color: var(--brand-red); text-decoration: none; cursor: pointer; font-weight: 500; }
         .toggle-box { text-align: center; margin-top: 20px; padding-top: 20px; border-top: 1px solid var(--border-color); font-size: 14px; color: #606770; }
-        .toggle-link { color: var(--fb-blue); font-weight: 600; text-decoration: none; cursor: pointer; }
+        .toggle-link { color: var(--brand-red); font-weight: 600; text-decoration: none; cursor: pointer; }
         .status-feedback { margin-top: 16px; text-align: center; font-size: 13px; font-weight: 500; min-height: 20px; }
         .hidden { display: none !important; }
 
@@ -45,7 +45,7 @@
         body.dark-mode { background-color: #121212; color: #f5f6f7; }
         body.dark-mode .card { background: #242526; box-shadow: 0 4px 12px rgba(0,0,0,0.3); border-top: 1px solid #3a3b3c;}
         body.dark-mode .form-control input { background: #3a3b3c; border-color: #4e4f50; color: #ffffff; }
-        body.dark-mode .form-control input:focus { border-color: var(--fb-blue); background: #242526; }
+        body.dark-mode .form-control input:focus { border-color: var(--brand-red); background: #242526; }
         body.dark-mode .toggle-box { border-top-color: #3a3b3c; }
         body.dark-mode .brand-logo { border-color: #242526; }
     </style>
@@ -56,7 +56,7 @@
         <div class="brand-header">
             <img src="assets/logo.png" alt="Khabar Darjeeling Logo" class="brand-logo">
             <h1>खबर दार्जिलिंग</h1>
-            <p>WE WRITE, WE READ</p>
+            <p>Hamro Khabar, Hami Lekhaw</p>
         </div>
 
         <div class="card">
@@ -87,7 +87,7 @@
                 <div class="form-control">
                     <input type="password" id="signupPassword" placeholder="Create password (min 8 chars)" minlength="8" required>
                 </div>
-                <button type="submit" id="signupBtn" class="btn-submit" style="background-color: #42b72a;">Verify Email via OTP</button>
+                <button type="submit" id="signupBtn" class="btn-submit">Verify Email via OTP</button>
                 
                 <div class="toggle-box">
                     Already have an account? <span class="toggle-link" onclick="switchMode('login')">Log In</span>
@@ -96,27 +96,26 @@
 
             <!-- 3. FORGOT PASSWORD REQUEST VIEW -->
             <form id="forgotForm" class="hidden" onsubmit="handleForgotRequest(event)">
-                <p class="instruction-text">Enter your account email. We'll transmit a security OTP code to reset your access password safely.</p>
+                <p class="instruction-text">Enter your account email. We'll send a security code to reset your password.</p>
                 <div class="form-control">
                     <input type="email" id="forgotEmail" placeholder="Account email address" required>
                 </div>
-                <button type="submit" id="forgotBtn" class="btn-submit" style="background-color: #008080;">Send Reset OTP</button>
+                <button type="submit" id="forgotBtn" class="btn-submit">Send Reset OTP</button>
                 <div class="toggle-box">
                     Remembered credentials? <span class="toggle-link" onclick="switchMode('login')">Back to Log In</span>
                 </div>
             </form>
 
-            <!-- 4. OTP VERIFICATION BOX (SHARED VIEW FOR CREATION & RESET) -->
+            <!-- 4. OTP VERIFICATION BOX -->
             <div id="otpVerificationView" class="hidden">
                 <p id="otpInstructions" class="instruction-text">Processing status...</p>
                 <div class="form-control">
                     <input type="text" id="otpInputCode" class="otp-style" maxlength="6" placeholder="000000" inputmode="numeric">
                 </div>
-                <!-- This field only unhides during password reset execution -->
                 <div id="newPasswordGroup" class="form-control hidden">
                     <input type="password" id="newPasswordInput" placeholder="Enter new password (min 8 chars)" minlength="8">
                 </div>
-                <button onclick="submitOtpAction()" id="otpVerifyActionButton" class="btn-submit" style="background-color: #42b72a;">Verify Code</button>
+                <button onclick="submitOtpAction()" id="otpVerifyActionButton" class="btn-submit">Verify Code</button>
             </div>
 
             <p id="feedback" class="status-feedback"></p>
@@ -127,7 +126,7 @@
     <script src="js/appwrite.js"></script>
 
     <script>
-        let currentFlowType = ""; // Keeps track of 'signup_verify' or 'password_reset'
+        let currentFlowType = "";
         let cachedEmail = "";
         let cachedPassword = "";
         let cachedName = "";
@@ -144,7 +143,6 @@
             if(mode === 'forgot') document.getElementById('forgotForm').classList.remove('hidden');
         }
 
-        // --- 1. SIGN UP WITH MANDATORY EMAIL OTP ---
         async function handleSignup(e) {
             e.preventDefault();
             cachedName = document.getElementById('signupName').value.trim();
@@ -152,83 +150,74 @@
             cachedPassword = document.getElementById('signupPassword').value;
             const feedback = document.getElementById('feedback');
 
-            feedback.style.color = "var(--fb-blue)";
-            feedback.textContent = "Sending verification OTP token...";
+            feedback.style.color = "var(--brand-red)";
+            feedback.textContent = "Sending verification code...";
 
             try {
-                // Generate a verification OTP token for account creation directly
                 const tokenResponse = await window.account.createEmailToken(window.ID.unique(), cachedEmail);
                 signupUserId = tokenResponse.userId;
                 
                 currentFlowType = "signup_verify";
                 
                 document.getElementById('signupForm').classList.add('hidden');
-                document.getElementById('otpInstructions').innerHTML = `📨 Registration code sent to <b>${cachedEmail}</b>. Provide the 6-digit pin to create your password profile.`;
+                document.getElementById('otpInstructions').innerHTML = `📨 Code sent to <b>${cachedEmail}</b>. Enter the 6-digit code.`;
                 document.getElementById('otpVerificationView').classList.remove('hidden');
                 feedback.textContent = "";
             } catch (error) {
                 feedback.style.color = "var(--brand-red)";
-                feedback.textContent = error.message || "Could not dispatch verification token.";
+                feedback.textContent = error.message || "Could not send verification code.";
             }
         }
 
-        // --- 2. FORGOT PASSWORD REQUEST ---
         async function handleForgotRequest(e) {
             e.preventDefault();
             cachedEmail = document.getElementById('forgotEmail').value.trim();
             const feedback = document.getElementById('feedback');
 
-            feedback.style.color = "var(--fb-blue)";
-            feedback.textContent = "Transmitting recovery ticket...";
+            feedback.style.color = "var(--brand-red)";
+            feedback.textContent = "Sending reset code...";
 
             try {
-                // Sends recovery code template to the user email link cluster
-                // For direct web apps, the domain redirect points directly back to this workspace index
                 await window.account.createRecovery(cachedEmail, window.location.href);
                 
                 currentFlowType = "password_reset";
                 
                 document.getElementById('forgotForm').classList.add('hidden');
-                document.getElementById('otpInstructions').innerHTML = `📨 Password reset link/token dispatched to <b>${cachedEmail}</b>. Paste your 6-digit verification code below to authorize recovery.`;
-                document.getElementById('newPasswordGroup').classList.remove('hidden'); // Show new password box
+                document.getElementById('otpInstructions').innerHTML = `📨 Reset code sent to <b>${cachedEmail}</b>.`;
+                document.getElementById('newPasswordGroup').classList.remove('hidden');
                 document.getElementById('otpVerificationView').classList.remove('hidden');
                 feedback.textContent = "";
             } catch (error) {
                 feedback.style.color = "var(--brand-red)";
-                feedback.textContent = error.message || "Failed to trigger recovery loop.";
+                feedback.textContent = error.message || "Failed to send reset code.";
             }
         }
 
-        // --- 3. UNIVERSAL CODE SUBMISSION GATEWAY ---
         async function submitOtpAction() {
             const code = document.getElementById('otpInputCode').value.trim();
             const feedback = document.getElementById('feedback');
             
             if(code.length !== 6) {
                 feedback.style.color = "var(--brand-red)";
-                feedback.textContent = "Please insert your complete 6-digit pin.";
+                feedback.textContent = "Please enter the complete 6-digit code.";
                 return;
             }
 
-            feedback.style.color = "var(--fb-blue)";
-            feedback.textContent = "Processing security validation token...";
+            feedback.style.color = "var(--brand-red)";
+            feedback.textContent = "Verifying...";
 
             if (currentFlowType === "signup_verify") {
                 try {
-                    // Step A: Finalize the new session using the verification OTP
                     await window.account.createSession(signupUserId, code);
-                    
-                    // Step B: Now that session is alive, create the permanent email/password link block
-                    // Appwrite needs an authenticated account context initialization structure to execute profile upgrades
                     await window.account.updatePassword(cachedPassword);
                     await window.account.updateName(cachedName);
 
-                    feedback.style.color = "#42b72a";
-                    feedback.textContent = "✓ Account setup complete! Launching news workspace...";
+                    feedback.style.color = "var(--brand-red)";
+                    feedback.textContent = "✓ Account created! Redirecting...";
                     setTimeout(() => { window.location.href = "index.html"; }, 1500);
                 } catch (error) {
                     feedback.style.color = "var(--brand-red)";
-                    feedback.textContent = "Invalid setup token pin code. Try again.";
+                    feedback.textContent = "Invalid code. Please try again.";
                 }
             } 
             
@@ -236,32 +225,28 @@
                 const newPassword = document.getElementById('newPasswordInput').value;
                 if(newPassword.length < 8) {
                     feedback.style.color = "var(--brand-red)";
-                    feedback.textContent = "New password must hit at least 8 characters.";
+                    feedback.textContent = "Password must be at least 8 characters.";
                     return;
                 }
 
                 try {
-                    // Extract token values embedded inside redirected URL search metrics or fallback manually
-                    // In simple setups, Appwrite maps recovery OTP values directly as the 'secret/token' metric
                     const urlParams = new URLSearchParams(window.location.search);
-                    const recoverySecret = urlParams.get('secret') || code; // Captures direct input text pin or URL fallback
+                    const recoverySecret = urlParams.get('secret') || code;
 
                     await window.account.updateRecovery(signupUserId || window.ID.unique(), recoverySecret, newPassword, newPassword);
                     
-                    feedback.style.color = "#42b72a";
-                    feedback.textContent = "✓ Password revised successfully! Logging in...";
+                    feedback.style.color = "var(--brand-red)";
+                    feedback.textContent = "✓ Password updated! Logging in...";
                     
-                    // Direct log-in with the fresh credentials safely
                     await window.account.createEmailPasswordSession(cachedEmail, newPassword);
                     setTimeout(() => { window.location.href = "index.html"; }, 1500);
                 } catch (error) {
                     feedback.style.color = "var(--brand-red)";
-                    feedback.textContent = "Failed to update recovery settings. Verify input code token validity.";
+                    feedback.textContent = "Failed to reset password. Check the code.";
                 }
             }
         }
 
-        // --- 4. TRADITIONAL LOGIN FOR RE-ENTRY ---
         async function handleLogin(e) {
             e.preventDefault();
             const email = document.getElementById('loginEmail').value.trim();
@@ -269,19 +254,19 @@
             const feedback = document.getElementById('feedback');
             const btn = document.getElementById('loginBtn');
 
-            feedback.style.color = "var(--fb-blue)";
-            feedback.textContent = "Verifying access credentials...";
+            feedback.style.color = "var(--brand-red)";
+            feedback.textContent = "Verifying...";
             btn.disabled = true;
 
             try {
                 await window.account.createEmailPasswordSession(email, password);
-                feedback.style.color = "#42b72a";
-                feedback.textContent = "✓ Access granted! Loading workspace...";
+                feedback.style.color = "var(--brand-red)";
+                feedback.textContent = "✓ Success! Loading...";
                 setTimeout(() => { window.location.href = "index.html"; }, 1200);
             } catch (error) {
                 btn.disabled = false;
                 feedback.style.color = "var(--brand-red)";
-                feedback.textContent = "Invalid email or password combination.";
+                feedback.textContent = "Invalid email or password.";
             }
         }
 
