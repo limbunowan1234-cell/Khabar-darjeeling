@@ -25,10 +25,9 @@
      crossorigin="anonymous"></script>
 
     <title>खबर दार्जिलिंग - Your Trusted News Source</title>
-    <link rel="stylesheet" href="css/style.css?v=115">
-    <link rel="stylesheet" href="css/responsive.css?v=115">
+    <link rel="stylesheet" href="css/style.css?v=116">
+    <link rel="stylesheet" href="css/responsive.css?v=116">
 
-    <!-- 🔒 PRE-LOAD OVERLAY + TICKER + AUTHOR STYLES -->
     <style>
         #gatekeeperLoader {
             position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
@@ -37,7 +36,7 @@
             font-family: sans-serif; transition: opacity 0.3s ease;
         }
         body.dark-mode #gatekeeperLoader { background: #1a1a1a; color: #ffffff; }
-   .spinner {
+        .spinner {
             width: 40px; height: 40px; border: 4px solid rgba(196, 30, 58, 0.1);
             border-left-color: #c41e3a; border-radius: 50%; animation: spin 1s linear infinite;
             margin-bottom: 15px;
@@ -45,25 +44,21 @@
         @keyframes spin { to { transform: rotate(360deg); } }
 
         /* 🎬 VIDEO CARD STYLES */
-   .media-container {
+        .media-container {
             position: relative;
             width: 100%;
             overflow: hidden;
             background: #000;
         }
-
-   .media-container img {
+        .media-container img {
             width: 100%;
             height: auto;
             display: block;
         }
-
-   .play-button-overlay {
+        .play-button-overlay {
             position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -72,16 +67,12 @@
             transition: opacity 0.3s ease, background 0.3s ease;
             cursor: pointer;
         }
-
-      /* ✅ FIXED: Added space for descendant selector */
-   .news-card:hover.play-button-overlay {
+        .news-card:hover .play-button-overlay {
             opacity: 1;
             background: rgba(0, 0, 0, 0.5);
         }
-
-   .play-button {
-            width: 70px;
-            height: 70px;
+        .play-button {
+            width: 70px; height: 70px;
             border-radius: 50%;
             background: rgba(255, 255, 255, 0.95);
             display: flex;
@@ -91,27 +82,21 @@
             transition: transform 0.3s ease, box-shadow 0.3s ease;
             z-index: 10;
         }
-
-      /* ✅ FIXED: Added space for descendant selector */
-   .news-card:hover.play-button {
+        .news-card:hover .play-button {
             transform: scale(1.15);
             box-shadow: 0 12px 32px rgba(0, 0, 0, 0.4);
         }
-
-   .play-button::after {
+        .play-button::after {
             content: '';
-            width: 0;
-            height: 0;
+            width: 0; height: 0;
             border-left: 18px solid #c41e3a;
             border-top: 12px solid transparent;
             border-bottom: 12px solid transparent;
             margin-left: 4px;
         }
-
-   .video-badge {
+        .video-badge {
             position: absolute;
-            top: 10px;
-            right: 10px;
+            top: 10px; right: 10px;
             background: rgba(196, 30, 58, 0.95);
             color: white;
             padding: 4px 10px;
@@ -123,11 +108,9 @@
             z-index: 5;
             backdrop-filter: blur(4px);
         }
-
-   .video-duration {
+        .video-duration {
             position: absolute;
-            bottom: 10px;
-            right: 10px;
+            bottom: 10px; right: 10px;
             background: rgba(0, 0, 0, 0.8);
             color: white;
             padding: 4px 8px;
@@ -136,46 +119,33 @@
             font-weight: 600;
             z-index: 5;
         }
+        .featured-content { position: relative; }
+        .featured-content .media-container { border-radius: 8px 8px 0 0; }
 
-   .featured-content {
-            position: relative;
-        }
-
-   .featured-content.media-container {
-            border-radius: 8px 8px 0 0;
-        }
-
-        /* 🔥 BREAKING TICKER STYLES */
-   .breaking-ticker {
-            background: #c41e3a;
-            color: #fff;
-            padding: 8px 0;
-        }
-   .breaking-label {
+        /* 🔥 BREAKING TICKER */
+        .breaking-ticker { background: #c41e3a; color: #fff; padding: 8px 0; }
+        .breaking-label {
             background: #900;
             padding: 8px 15px;
             font-weight: 700;
             font-size: 14px;
             white-space: nowrap;
-            margin-right: 0;
         }
-   .ticker-content a {
+        .ticker-content a {
             color: #fff;
             text-decoration: none;
             display: inline-block;
             padding: 0 40px;
             font-weight: 500;
         }
-   .ticker-content a:hover {
-            text-decoration: underline;
-        }
+        .ticker-content a:hover { text-decoration: underline; }
         @media (max-width: 600px) {
-       .breaking-label { font-size: 12px; padding: 8px 10px; }
-       .ticker-content a { padding: 0 25px; font-size: 14px; }
+            .breaking-label { font-size: 12px; padding: 8px 10px; }
+            .ticker-content a { padding: 0 25px; font-size: 14px; }
         }
 
-        /* ✅ NEW: AUTHOR BLOCK STYLES - PIC OPTIONAL */
-    .article-author {
+        /* ✅ FIXED: Author block — correct descendant selectors with space */
+        .article-author {
             display: flex;
             align-items: center;
             gap: 8px;
@@ -185,22 +155,20 @@
             font-size: 13px;
             color: #666;
         }
-        body.dark-mode.article-author { border-top-color: #333; color: #aaa; }
+        body.dark-mode .article-author { border-top-color: #333; color: #aaa; }
 
-    .author-avatar,.author-initials {
-            width: 28px;
-            height: 28px;
+        .author-avatar, .author-initials {
+            width: 28px; height: 28px;
             border-radius: 50%;
             flex-shrink: 0;
         }
-
-    .author-avatar {
+        .author-avatar {
             object-fit: cover;
             border: 1px solid #ddd;
         }
-        body.dark-mode.author-avatar { border-color: #444; }
+        body.dark-mode .author-avatar { border-color: #444; }
 
-    .author-initials {
+        .author-initials {
             background: #c41e3a;
             color: #fff;
             display: flex;
@@ -210,14 +178,10 @@
             font-size: 12px;
             text-transform: uppercase;
         }
+        .author-name { font-weight: 600; color: #333; }
+        body.dark-mode .author-name { color: #ddd; }
 
-    .author-name {
-            font-weight: 600;
-            color: #333;
-        }
-        body.dark-mode.author-name { color: #ddd; }
-
-    .featured-text.article-author {
+        .featured-text .article-author {
             margin-top: 15px;
             border-top: none;
             padding-top: 0;
@@ -226,7 +190,7 @@
 </head>
 <body>
 
-    <!-- 🔒 SECURITY BLOCKER VIEW SCREEN -->
+    <!-- 🔒 SECURITY LOADER -->
     <div id="gatekeeperLoader">
         <div class="spinner"></div>
         <p style="font-weight: 600; letter-spacing: 0.5px;">Securing Portal Session...</p>
@@ -283,7 +247,7 @@
         </div>
     </nav>
 
-    <!-- ✅ BREAKING NEWS TICKER - ALL LATEST CLICKABLE -->
+    <!-- ✅ BREAKING NEWS TICKER -->
     <section class="breaking-ticker" id="breaking">
         <div class="container" style="display: flex; align-items: center;">
             <span class="breaking-label">BREAKING NEWS</span>
@@ -341,41 +305,32 @@
 
     <footer class="footer">
         <div class="container">
-            <p>&copy; 2026 Khabar Darjeeling. All rights reserved.</p>
+            <div class="footer-bottom">
+                <p>&copy; 2026 Khabar Darjeeling. All rights reserved.</p>
+            </div>
         </div>
     </footer>
 
-    <!-- 📱 SERVICE WORKER REGISTRATION -->
+    <!-- 📱 SERVICE WORKER -->
     <script>
         if ('serviceWorker' in navigator) {
             window.addEventListener('load', () => {
                 navigator.serviceWorker.register('sw.js')
-              .then(registration => {
-                        console.log('✅ Service Worker registered:', registration);
-                    })
-              .catch(error => {
-                        console.error('❌ Service Worker registration failed:', error);
-                    });
+                    .then(r => console.log('✅ SW registered:', r))
+                    .catch(e => console.error('❌ SW failed:', e));
             });
         }
     </script>
 
-    <!-- ✅ 1. LOAD APPWRITE SDK FIRST -->
+    <!-- ✅ APPWRITE SDK -->
     <script src="https://cdn.jsdelivr.net/npm/appwrite@14.0.1/dist/iife/sdk.min.js"></script>
+    <script src="js/appwrite.js?v=116"></script>
 
-    <!-- ✅ 2. LOAD YOUR APPWRITE INIT AFTER SDK -->
-    <script src="js/appwrite.js?v=115"></script>
-
-    <!-- ✅ 3. LOAD ERUDA LAST + WRAP IN TRY/CATCH -->
+    <!-- ERUDA (dev console) -->
     <script src="https://cdn.jsdelivr.net/npm/eruda"></script>
     <script>
-        try {
-            if (typeof eruda!== 'undefined') {
-                eruda.init();
-            }
-        } catch (e) {
-            console.log('Eruda failed to load, skipping');
-        }
+        try { if (typeof eruda !== 'undefined') eruda.init(); }
+        catch (e) { console.log('Eruda skipped'); }
     </script>
 
     <script>
@@ -388,13 +343,15 @@
             const ENDPOINT = 'https://nyc.cloud.appwrite.io/v1';
             const PROJECT_ID = 'khabardarjeeling';
 
+            // Apply saved theme immediately
             if (localStorage.getItem('theme') === 'dark') {
                 document.body.classList.add('dark-mode');
             }
 
-            if (!appwriteDatabase ||!QueryAPI ||!dbId ||!collectionId) {
+            if (!appwriteDatabase || !QueryAPI || !dbId || !collectionId) {
                 console.error('❌ Appwrite not initialized.');
-                document.getElementById('newsGrid').innerHTML = '<p style="color: red; padding: 20px;">Configuration Error: Appwrite SDK not initialized.</p>';
+                document.getElementById('newsGrid').innerHTML =
+                    '<p style="color:red;padding:20px;">Configuration Error: Appwrite SDK not initialized.</p>';
                 return;
             }
 
@@ -405,61 +362,53 @@
 
             function getAppwriteImageUrl(article) {
                 const imageId = article.imageFileId || article.imageUrl;
-                if (!imageId || imageId === 'Text' || imageId === 'null' || imageId === 'undefined') {
-                    return '';
-                }
+                if (!imageId || imageId === 'Text' || imageId === 'null' || imageId === 'undefined') return '';
                 if (imageId.startsWith('http')) return imageId;
                 return `${ENDPOINT}/storage/buckets/article-image/files/${imageId}/view?project=${PROJECT_ID}`;
             }
 
             function getMediaSource(article) {
                 if (article.youtube_id) {
-                    return {
-                        type: 'video',
-                        url: getYouTubeThumbnail(article.youtube_id),
-                        youtubeId: article.youtube_id
-                    };
+                    return { type: 'video', url: getYouTubeThumbnail(article.youtube_id), youtubeId: article.youtube_id };
                 }
                 const imageUrl = getAppwriteImageUrl(article);
-                if (imageUrl) {
-                    return {
-                        type: 'image',
-                        url: imageUrl
-                    };
-                }
+                if (imageUrl) return { type: 'image', url: imageUrl };
                 return null;
             }
 
-            // ✅ NEW: Get initials from name
             function getInitials(name) {
                 if (!name) return 'KD';
                 const parts = name.trim().split(' ');
-                if (parts.length === 1) return parts[0].charAt(0);
+                if (parts.length === 1) return parts[0].charAt(0).toUpperCase();
                 return (parts[0].charAt(0) + parts[parts.length - 1].charAt(0)).toUpperCase();
             }
 
-            // ✅ NEW: Generate author HTML - pic if exists, initials if not
+            // ✅ FIXED: Author links to profile.html?userId=...
             function generateAuthorHtml(article) {
                 const authorName = article.submitterName || article.authorName || 'Staff Reporter';
                 const authorAvatar = article.submitterAvatar;
+                const authorId = article.userId || '';
+                const profileLink = authorId ? `profile.html?userId=${authorId}` : '#';
 
-                if (authorAvatar && authorAvatar!== '' && authorAvatar!== 'null') {
+                const nameHtml = `By <a href="${profileLink}" style="text-decoration:none;color:inherit;">
+                    <span class="author-name">${escapeHtml(authorName)}</span>
+                </a>`;
+
+                if (authorAvatar && authorAvatar !== '' && authorAvatar !== 'null') {
                     return `
                         <div class="article-author">
                             <img src="${authorAvatar}"
                                  alt="${escapeHtml(authorName)}"
                                  class="author-avatar"
-                                 onerror="this.parentElement.innerHTML='<div class=\\'author-initials\\'>${getInitials(authorName)}</div><span>By <span class=\\'author-name\\'>${escapeHtml(authorName)}</span></span>'">
-                            <span>By <span class="author-name">${escapeHtml(authorName)}</span></span>
-                        </div>
-                    `;
+                                 onerror="this.outerHTML='<div class=\\'author-initials\\'>${getInitials(authorName)}</div>'">
+                            <span>${nameHtml}</span>
+                        </div>`;
                 } else {
                     return `
                         <div class="article-author">
                             <div class="author-initials">${getInitials(authorName)}</div>
-                            <span>By <span class="author-name">${escapeHtml(authorName)}</span></span>
-                        </div>
-                    `;
+                            <span>${nameHtml}</span>
+                        </div>`;
                 }
             }
 
@@ -469,13 +418,14 @@
                 } else if (retries < 30) {
                     setTimeout(() => waitForAppwrite(callback, retries + 1), 100);
                 } else {
-                    document.getElementById('gatekeeperLoader').innerHTML = '<p style="color:red; font-weight:bold; padding:20px; text-align:center;">Authentication Engine Timeout.</p>';
+                    document.getElementById('gatekeeperLoader').innerHTML =
+                        '<p style="color:red;font-weight:bold;padding:20px;text-align:center;">Authentication Engine Timeout.</p>';
                 }
             }
 
             async function checkAuthGate() {
                 try {
-                    const activeUser = await window.account.get();
+                    await window.account.get();
                     const loader = document.getElementById('gatekeeperLoader');
                     if (loader) {
                         loader.style.opacity = '0';
@@ -497,10 +447,7 @@
                         QueryAPI.orderDesc('$createdAt'),
                         QueryAPI.limit(30)
                     ];
-
-                    if (currentCategory) {
-                        queries.push(QueryAPI.equal('category', currentCategory));
-                    }
+                    if (currentCategory) queries.push(QueryAPI.equal('category', currentCategory));
 
                     const response = await appwriteDatabase.listDocuments(dbId, collectionId, queries);
 
@@ -514,7 +461,6 @@
                     } else {
                         renderHomepageView(response.documents);
                     }
-
                 } catch (error) {
                     console.error('❌ Error loading articles:', error);
                     handleError();
@@ -522,10 +468,9 @@
             }
 
             function renderCategoryView(articles, category) {
-                const categoryFormatted = category.split('-').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
-                document.getElementById('mainSectionTitle').textContent = categoryFormatted + ' Updates';
-                document.title = `${categoryFormatted} News - खबर दार्जिलिंग`;
-
+                const formatted = category.split('-').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ');
+                document.getElementById('mainSectionTitle').textContent = formatted + ' Updates';
+                document.title = `${formatted} News - खबर दार्जिलिंग`;
                 hideHomepageSections();
                 renderNewsGrid(articles, 'newsGrid');
             }
@@ -533,18 +478,14 @@
             function renderHomepageView(articles) {
                 document.title = 'खबर दार्जिलिंग - Your Trusted News Source';
                 document.getElementById('mainSectionTitle').textContent = 'Latest News';
-
                 showHomepageSections();
 
                 let featuredArticles = articles.filter(a => a.isFeatured === true);
-                if (featuredArticles.length === 0) {
-                    featuredArticles = [articles[0]];
-                } else {
-                    featuredArticles = featuredArticles.slice(0, 3);
-                }
+                if (featuredArticles.length === 0) featuredArticles = [articles[0]];
+                else featuredArticles = featuredArticles.slice(0, 3);
 
                 const featuredIds = featuredArticles.map(a => a.$id);
-                const gridArticles = articles.filter(a =>!featuredIds.includes(a.$id)).slice(0, 10);
+                const gridArticles = articles.filter(a => !featuredIds.includes(a.$id)).slice(0, 10);
 
                 renderBreakingTicker(articles);
                 renderFeaturedStory(featuredArticles);
@@ -552,8 +493,7 @@
             }
 
             function hideHomepageSections() {
-                const sections = ['breaking', 'heroSection', 'featuredSection', 'categoriesSection'];
-                sections.forEach(id => {
+                ['breaking', 'heroSection', 'featuredSection', 'categoriesSection'].forEach(id => {
                     const el = document.getElementById(id);
                     if (el) el.style.display = 'none';
                 });
@@ -561,20 +501,16 @@
             }
 
             function showHomepageSections() {
-                const sections = ['breaking', 'heroSection', 'featuredSection', 'categoriesSection'];
-                sections.forEach(id => {
+                ['breaking', 'heroSection', 'featuredSection', 'categoriesSection'].forEach(id => {
                     const el = document.getElementById(id);
                     if (el) el.style.display = '';
                 });
             }
 
-            // ✅ UPDATED: Shows ALL latest news, clickable
             function renderBreakingTicker(articles) {
                 const tickerEl = document.getElementById('breakingTicker');
-                if (!tickerEl ||!articles.length) return;
-
-                const tickerArticles = articles.slice(0, 8);
-                tickerEl.innerHTML = tickerArticles.map(article =>
+                if (!tickerEl || !articles.length) return;
+                tickerEl.innerHTML = articles.slice(0, 8).map(article =>
                     `<a href="article.html?id=${article.$id}">🔴 ${escapeHtml(article.title)}</a>`
                 ).join('');
             }
@@ -587,130 +523,111 @@
                     featuredEl.style = '';
                     const article = featuredArray[0];
                     const media = getMediaSource(article);
-                    const mediaHtml = media? generateMediaHtml(media, article) : '';
-                    const content = article.content? truncateText(article.content, 250) : '';
-                    const textStyle = media? '' : 'width: 100%;';
+                    const mediaHtml = media ? generateMediaHtml(media, article) : '';
+                    const content = article.content ? truncateText(article.content, 250) : '';
+                    const textStyle = media ? '' : 'width: 100%;';
                     const authorHtml = generateAuthorHtml(article);
 
                     featuredEl.innerHTML = `
-                        <a href="article.html?id=${article.$id}" class="featured-content" style="text-decoration: none; color: inherit;">
+                        <a href="article.html?id=${article.$id}" class="featured-content" style="text-decoration:none;color:inherit;">
                             ${mediaHtml}
                             <div class="featured-text" style="${textStyle}">
                                 <span class="category-badge">${escapeHtml(article.category || 'General')}</span>
                                 <h2>${escapeHtml(article.title)}</h2>
                                 <p>${content}</p>
                                 ${authorHtml}
-                                <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 15px;">
+                                <div style="display:flex;justify-content:space-between;align-items:center;margin-top:15px;">
                                     <span class="date">${formatDate(article.$createdAt)}</span>
-                                    <span style="color: #c41e3a; font-weight: 600;">Read full story &rarr;</span>
+                                    <span style="color:#c41e3a;font-weight:600;">Read full story &rarr;</span>
                                 </div>
                             </div>
-                        </a>
-                    `;
+                        </a>`;
                     return;
                 }
 
-                featuredEl.style.display = 'grid';
-                featuredEl.style.gridTemplateColumns = 'repeat(auto-fit, minmax(280px, 1fr))';
-                featuredEl.style.gap = '20px';
-                featuredEl.style.background = 'transparent';
-                featuredEl.style.boxShadow = 'none';
-                featuredEl.style.padding = '0';
-
+                featuredEl.style.cssText = 'display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:20px;background:transparent;box-shadow:none;padding:0;';
                 featuredEl.innerHTML = featuredArray.map(article => {
                     const media = getMediaSource(article);
-                    const mediaHtml = media? generateMediaHtml(media, article) : '';
-                    const content = article.content? truncateText(article.content, 120) : '';
+                    const mediaHtml = media ? generateMediaHtml(media, article) : '';
+                    const content = article.content ? truncateText(article.content, 120) : '';
                     const authorHtml = generateAuthorHtml(article);
 
                     return `
-                        <a href="article.html?id=${article.$id}" style="text-decoration: none; color: inherit; background: #fff; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.05); display: flex; flex-direction: column; overflow: hidden;">
+                        <a href="article.html?id=${article.$id}" style="text-decoration:none;color:inherit;background:#fff;border-radius:8px;box-shadow:0 2px 10px rgba(0,0,0,0.05);display:flex;flex-direction:column;overflow:hidden;">
                             ${mediaHtml}
-                            <div style="padding: 20px; display: flex; flex-direction: column; flex-grow: 1;">
-                                <span class="category-badge" style="align-self: flex-start; margin-bottom: 10px;">${escapeHtml(article.category || 'General')}</span>
-                                <h3 style="margin-top: 0; margin-bottom: 10px; font-size: 1.2rem;">${escapeHtml(article.title)}</h3>
-                                <p style="color: #555; flex-grow: 1; font-size: 0.95rem;">${content}</p>
+                            <div style="padding:20px;display:flex;flex-direction:column;flex-grow:1;">
+                                <span class="category-badge" style="align-self:flex-start;margin-bottom:10px;">${escapeHtml(article.category || 'General')}</span>
+                                <h3 style="margin:0 0 10px;font-size:1.2rem;">${escapeHtml(article.title)}</h3>
+                                <p style="color:#555;flex-grow:1;font-size:0.95rem;">${content}</p>
                                 ${authorHtml}
-                                <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 15px; border-top: 1px solid #eee; padding-top: 15px;">
-                                    <span class="date" style="font-size: 0.85rem; color: #888;">${formatDate(article.$createdAt)}</span>
-                                    <span style="color: #c41e3a; font-weight: 600; font-size: 0.9rem;">Read &rarr;</span>
+                                <div style="display:flex;justify-content:space-between;align-items:center;margin-top:15px;border-top:1px solid #eee;padding-top:15px;">
+                                    <span class="date">${formatDate(article.$createdAt)}</span>
+                                    <span style="color:#c41e3a;font-weight:600;font-size:0.9rem;">Read &rarr;</span>
                                 </div>
                             </div>
-                        </a>
-                    `;
+                        </a>`;
                 }).join('');
             }
 
             function generateMediaHtml(media, article) {
-                if (!media ||!media.url) return '';
-
+                if (!media || !media.url) return '';
                 if (media.type === 'video') {
                     return `
-                        <div class="media-container" style="border-radius: 8px 8px 0 0;">
-                            <img src="${media.url}" alt="${escapeHtml(article.title)}" loading="lazy" style="width: 100%; height: 200px; object-fit: cover;">
-                            <div class="play-button-overlay">
-                                <div class="play-button"></div>
-                            </div>
+                        <div class="media-container" style="border-radius:8px 8px 0 0;">
+                            <img src="${media.url}" alt="${escapeHtml(article.title)}" loading="lazy" style="width:100%;height:200px;object-fit:cover;">
+                            <div class="play-button-overlay"><div class="play-button"></div></div>
                             <div class="video-badge">🎬 VIDEO</div>
-                        </div>
-                    `;
-                } else {
-                    return `<img src="${media.url}" alt="${escapeHtml(article.title)}" loading="lazy" style="width: 100%; height: 200px; object-fit: cover; border-radius: 8px 8px 0 0;">`;
+                        </div>`;
                 }
+                return `<img src="${media.url}" alt="${escapeHtml(article.title)}" loading="lazy" style="width:100%;height:200px;object-fit:cover;border-radius:8px 8px 0 0;">`;
             }
 
             function renderNewsGrid(articles, elementId) {
                 const gridEl = document.getElementById(elementId);
                 if (!gridEl) return;
-
                 gridEl.innerHTML = articles.map(article => {
                     const media = getMediaSource(article);
-                    const mediaHtml = media? generateMediaHtml(media, article) : '';
-                    const content = article.content? truncateText(article.content, 150) : '';
+                    const mediaHtml = media ? generateMediaHtml(media, article) : '';
+                    const content = article.content ? truncateText(article.content, 150) : '';
                     const authorHtml = generateAuthorHtml(article);
 
                     return `
-                        <a href="article.html?id=${article.$id}" class="news-card" style="text-decoration: none; color: inherit; display: flex; flex-direction: column;">
+                        <a href="article.html?id=${article.$id}" class="news-card" style="text-decoration:none;color:inherit;display:flex;flex-direction:column;">
                             ${mediaHtml}
-                            <div class="news-card-content" style="display: flex; flex-direction: column; flex-grow: 1;">
+                            <div class="news-card-content" style="display:flex;flex-direction:column;flex-grow:1;">
                                 <span class="category-badge">${escapeHtml(article.category || 'General')}</span>
                                 <h3>${escapeHtml(article.title)}</h3>
-                                <p style="flex-grow: 1;">${content}</p>
+                                <p style="flex-grow:1;">${content}</p>
                                 ${authorHtml}
-                                <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 8px;">
+                                <div style="display:flex;justify-content:space-between;align-items:center;margin-top:8px;">
                                     <span class="date">${formatDate(article.$createdAt)}</span>
-                                    <span style="color: #c41e3a; font-weight: 600; font-size: 0.9rem;">Read more &rarr;</span>
+                                    <span style="color:#c41e3a;font-weight:600;font-size:0.9rem;">Read more &rarr;</span>
                                 </div>
                             </div>
-                        </a>
-                    `;
+                        </a>`;
                 }).join('');
             }
 
             function handleEmptyState(category) {
-                const message = category? 'No articles published in this category yet.' : 'No articles published yet.';
+                const message = category ? 'No articles published in this category yet.' : 'No articles published yet.';
                 if (category) hideHomepageSections();
                 if (!category) {
                     document.getElementById('featuredStory').innerHTML = '<p>No articles published yet.</p>';
                     document.getElementById('breakingTicker').innerHTML = 'No breaking news at the moment.';
                 }
-                document.getElementById('newsGrid').innerHTML = `<p>${message}</p>`;
+                document.getElementById('newsGrid').innerHTML = `<p style="padding:20px;color:#666;">${message}</p>`;
             }
 
             function handleError() {
-                const errorHtml = '<p style="color: #d32f2f; padding: 20px;">Failed to load articles. Please try refreshing.</p>';
-                const newsGridEl = document.getElementById('newsGrid');
-                if (newsGridEl) newsGridEl.innerHTML = errorHtml;
+                const el = document.getElementById('newsGrid');
+                if (el) el.innerHTML = '<p style="color:#d32f2f;padding:20px;">Failed to load articles. Please refresh.</p>';
             }
 
             function truncateText(htmlStr, maxLength) {
                 const div = document.createElement('div');
                 div.innerHTML = htmlStr;
-                let text = div.textContent || div.innerText || '';
-                if (text.length > maxLength) {
-                    return text.substring(0, maxLength) + '...';
-                }
-                return text;
+                const text = div.textContent || div.innerText || '';
+                return text.length > maxLength ? text.substring(0, maxLength) + '...' : text;
             }
 
             function formatDate(dateString) {
@@ -725,37 +642,34 @@
                 return div.innerHTML;
             }
 
+            // ✅ FIXED: toggle 'open' (matches style.css .nav-menu.open)
             const navToggle = document.getElementById('navToggle');
             const navMenu = document.getElementById('navMenu');
             if (navToggle) {
-                navToggle.addEventListener('click', () => { navMenu.classList.toggle('active'); });
+                navToggle.addEventListener('click', () => navMenu.classList.toggle('open'));
             }
 
-            // ✅ FIXED: Changed dark-theme to dark-mode for consistency
+            // ✅ FIXED: uses dark-mode consistently
             const themeToggle = document.getElementById('themeToggle');
             if (themeToggle) {
                 themeToggle.addEventListener('click', () => {
                     document.body.classList.toggle('dark-mode');
-                    const isDarkMode = document.body.classList.contains('dark-mode');
-                    themeToggle.textContent = isDarkMode? '☀' : '🌙';
-                    localStorage.setItem('theme', isDarkMode? 'dark' : 'light');
+                    const isDark = document.body.classList.contains('dark-mode');
+                    themeToggle.textContent = isDark ? '☀' : '🌙';
+                    localStorage.setItem('theme', isDark ? 'dark' : 'light');
                 });
-                if (localStorage.getItem('theme') === 'dark') {
-                    themeToggle.textContent = '☀';
-                }
+                if (localStorage.getItem('theme') === 'dark') themeToggle.textContent = '☀';
             }
 
             const logoutBtn = document.getElementById('logoutBtn');
             if (logoutBtn) {
                 logoutBtn.addEventListener('click', async () => {
-                    const confirmLogout = confirm("Are you sure you want to sign out of Khabar Darjeeling?");
-                    if (!confirmLogout) return;
-
+                    if (!confirm('Are you sure you want to sign out of Khabar Darjeeling?')) return;
                     try {
                         await window.account.deleteSession('current');
                         window.location.href = 'login.html';
                     } catch (error) {
-                        alert("Failed to sign out safely. Please refresh and try again.");
+                        alert('Failed to sign out safely. Please refresh and try again.');
                     }
                 });
             }
