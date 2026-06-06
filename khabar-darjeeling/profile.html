@@ -13,289 +13,71 @@
     <link rel="stylesheet" href="css/responsive.css?v=117">
 
     <style>
-        body {
-            background: #f5f5f5;
-        }
+        body { background: #f5f5f5; }
 
-        .profile-shell {
-            max-width: 1100px;
-            margin: 0 auto;
-            padding: 30px 15px 60px;
-        }
+        .profile-shell { max-width: 1100px; margin: 0 auto; padding: 30px 15px 60px; }
 
-        .profile-card {
-            background: #fff;
-            border-radius: 16px;
-            overflow: hidden;
-            box-shadow: 0 8px 24px rgba(0,0,0,0.08);
-            margin-bottom: 30px;
-        }
+        .profile-card { background: #fff; border-radius: 16px; overflow: hidden; box-shadow: 0 8px 24px rgba(0,0,0,0.08); margin-bottom: 30px; }
+        body.dark-mode .profile-card { background: #222; color: #eee; }
 
-        body.dark-mode .profile-card {
-            background: #222;
-            color: #eee;
-        }
+        .profile-cover { height: 220px; background: linear-gradient(135deg, #c41e3a, #900); position: relative; }
+        .profile-cover img { width: 100%; height: 100%; object-fit: cover; display: block; }
 
-        .profile-cover {
-            height: 220px;
-            background: linear-gradient(135deg, #c41e3a, #900);
-            position: relative;
-        }
+        .profile-header { padding: 0 24px 24px; margin-top: -54px; position: relative; }
 
-        .profile-cover img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            display: block;
-        }
+        .profile-avatar { width: 108px; height: 108px; border-radius: 50%; border: 5px solid #fff; background: #c41e3a; color: #fff; display: flex; align-items: center; justify-content: center; font-size: 34px; font-weight: 800; overflow: hidden; }
+        body.dark-mode .profile-avatar { border-color: #222; }
+        .profile-avatar img { width: 100%; height: 100%; object-fit: cover; }
 
-        .profile-header {
-            padding: 0 24px 24px;
-            margin-top: -54px;
-            position: relative;
-        }
+        .profile-meta { margin-top: 16px; display: flex; flex-direction: column; gap: 8px; }
+        .profile-meta h1 { font-size: 30px; line-height: 1.2; color: #1a1a1a; }
+        body.dark-mode .profile-meta h1 { color: #fff; }
 
-        .profile-avatar {
-            width: 108px;
-            height: 108px;
-            border-radius: 50%;
-            border: 5px solid #fff;
-            background: #c41e3a;
-            color: #fff;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 34px;
-            font-weight: 800;
-            overflow: hidden;
-        }
+        .profile-bio { color: #666; font-size: 15px; line-height: 1.7; max-width: 760px; }
+        body.dark-mode .profile-bio { color: #bbb; }
 
-        body.dark-mode .profile-avatar {
-            border-color: #222;
-        }
+        .profile-stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 14px; margin-top: 18px; }
+        .stat-box { background: #f8f8f8; border-radius: 12px; padding: 16px; text-align: center; }
+        body.dark-mode .stat-box { background: #2b2b2b; }
+        .stat-box .label { display: block; font-size: 12px; color: #777; margin-bottom: 6px; text-transform: uppercase; letter-spacing: 0.4px; }
+        .stat-box .value { font-size: 24px; font-weight: 800; color: #c41e3a; }
 
-        .profile-avatar img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
+        .section-title { margin: 0 0 16px; font-size: 22px; color: #1a1a1a; }
+        body.dark-mode .section-title { color: #fff; }
 
-        .profile-meta {
-            margin-top: 16px;
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
-        }
+        .news-list { display: grid; gap: 18px; }
 
-        .profile-meta h1 {
-            font-size: 30px;
-            line-height: 1.2;
-            color: #1a1a1a;
-        }
+        .news-item { background: #fff; border-radius: 14px; overflow: hidden; box-shadow: 0 4px 16px rgba(0,0,0,0.06); display: grid; grid-template-columns: 180px 1fr; min-height: 170px; }
+        body.dark-mode .news-item { background: #222; }
 
-        body.dark-mode .profile-meta h1 {
-            color: #fff;
-        }
+        .news-thumb { width: 100%; height: 100%; min-height: 170px; object-fit: cover; background: #eee; }
 
-        .profile-bio {
-            color: #666;
-            font-size: 15px;
-            line-height: 1.7;
-            max-width: 760px;
-        }
+        .news-body { padding: 18px; display: flex; flex-direction: column; justify-content: space-between; gap: 12px; }
+        .news-body h3 { font-size: 20px; line-height: 1.3; color: #1a1a1a; }
+        body.dark-mode .news-body h3 { color: #fff; }
+        .news-body p { color: #666; line-height: 1.6; font-size: 14px; margin: 0; }
+        body.dark-mode .news-body p { color: #bbb; }
 
-        body.dark-mode .profile-bio {
-            color: #bbb;
-        }
+        .news-meta { display: flex; gap: 12px; flex-wrap: wrap; align-items: center; font-size: 13px; color: #777; margin-bottom: 8px; }
 
-        .profile-stats {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
-            gap: 14px;
-            margin-top: 18px;
-        }
+        .news-link { color: #c41e3a; font-weight: 700; text-decoration: none; }
+        .news-link:hover { text-decoration: underline; }
 
-        .stat-box {
-            background: #f8f8f8;
-            border-radius: 12px;
-            padding: 16px;
-            text-align: center;
-        }
+        .profile-actions { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 16px; }
+        .btn-profile { display: inline-block; padding: 10px 16px; border-radius: 8px; text-decoration: none; font-weight: 700; border: none; cursor: pointer; }
+        .btn-primary { background: #c41e3a; color: #fff; }
+        .btn-secondary { background: #eee; color: #222; }
+        body.dark-mode .btn-secondary { background: #333; color: #fff; }
 
-        body.dark-mode .stat-box {
-            background: #2b2b2b;
-        }
-
-        .stat-box .label {
-            display: block;
-            font-size: 12px;
-            color: #777;
-            margin-bottom: 6px;
-            text-transform: uppercase;
-            letter-spacing: 0.4px;
-        }
-
-        .stat-box .value {
-            font-size: 24px;
-            font-weight: 800;
-            color: #c41e3a;
-        }
-
-        .section-title {
-            margin: 0 0 16px;
-            font-size: 22px;
-            color: #1a1a1a;
-        }
-
-        body.dark-mode .section-title {
-            color: #fff;
-        }
-
-        .news-list {
-            display: grid;
-            gap: 18px;
-        }
-
-        .news-item {
-            background: #fff;
-            border-radius: 14px;
-            overflow: hidden;
-            box-shadow: 0 4px 16px rgba(0,0,0,0.06);
-            display: grid;
-            grid-template-columns: 180px 1fr;
-            min-height: 170px;
-        }
-
-        body.dark-mode .news-item {
-            background: #222;
-        }
-
-        .news-thumb {
-            width: 100%;
-            height: 100%;
-            min-height: 170px;
-            object-fit: cover;
-            background: #eee;
-        }
-
-        .news-body {
-            padding: 18px;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-            gap: 12px;
-        }
-
-        .news-body h3 {
-            font-size: 20px;
-            line-height: 1.3;
-            color: #1a1a1a;
-        }
-
-        body.dark-mode .news-body h3 {
-            color: #fff;
-        }
-
-        .news-body p {
-            color: #666;
-            line-height: 1.6;
-            font-size: 14px;
-        }
-
-        body.dark-mode .news-body p {
-            color: #bbb;
-        }
-
-        .news-meta {
-            display: flex;
-            gap: 12px;
-            flex-wrap: wrap;
-            align-items: center;
-            font-size: 13px;
-            color: #777;
-        }
-
-        .news-link {
-            color: #c41e3a;
-            font-weight: 700;
-            text-decoration: none;
-        }
-
-        .news-link:hover {
-            text-decoration: underline;
-        }
-
-        .profile-actions {
-            display: flex;
-            gap: 10px;
-            flex-wrap: wrap;
-            margin-top: 16px;
-        }
-
-        .btn-profile {
-            display: inline-block;
-            padding: 10px 16px;
-            border-radius: 8px;
-            text-decoration: none;
-            font-weight: 700;
-            border: none;
-            cursor: pointer;
-        }
-
-        .btn-primary {
-            background: #c41e3a;
-            color: #fff;
-        }
-
-        .btn-secondary {
-            background: #eee;
-            color: #222;
-        }
-
-        body.dark-mode .btn-secondary {
-            background: #333;
-            color: #fff;
-        }
-
-        .empty-state,
-        .error-state,
-        .loading-state {
-            background: #fff;
-            border-radius: 14px;
-            padding: 24px;
-            text-align: center;
-            box-shadow: 0 4px 16px rgba(0,0,0,0.06);
-        }
-
-        body.dark-mode .empty-state,
-        body.dark-mode .error-state,
-        body.dark-mode .loading-state {
-            background: #222;
-            color: #eee;
-        }
+        .empty-state, .error-state, .loading-state { background: #fff; border-radius: 14px; padding: 24px; text-align: center; box-shadow: 0 4px 16px rgba(0,0,0,0.06); }
+        body.dark-mode .empty-state, body.dark-mode .error-state, body.dark-mode .loading-state { background: #222; color: #eee; }
 
         @media (max-width: 768px) {
-            .profile-cover {
-                height: 170px;
-            }
-
-            .profile-avatar {
-                width: 88px;
-                height: 88px;
-                font-size: 28px;
-            }
-
-            .profile-meta h1 {
-                font-size: 24px;
-            }
-
-            .news-item {
-                grid-template-columns: 1fr;
-            }
-
-            .news-thumb {
-                min-height: 210px;
-            }
+            .profile-cover { height: 170px; }
+            .profile-avatar { width: 88px; height: 88px; font-size: 28px; }
+            .profile-meta h1 { font-size: 24px; }
+            .news-item { grid-template-columns: 1fr; }
+            .news-thumb { min-height: 210px; }
         }
     </style>
 </head>
@@ -313,7 +95,6 @@
                         </div>
                     </a>
                 </div>
-
                 <div class="nav-right">
                     <a href="index.html" class="admin-link" style="text-decoration:none;">Home</a>
                     <a href="submit.html" class="admin-link" style="text-decoration:none;margin-left:12px;">Submit News</a>
@@ -340,15 +121,17 @@
 
     <script>
         (() => {
-            if (!window.databases || !window.Query) {
+            if (!window.databases || !window.Query || !window.storage) {
                 document.getElementById('profileRoot').innerHTML =
-                    '<div class="error-state">Appwrite not initialized.</div>';
+                    '<div class="error-state">Appwrite not initialized properly. Make sure storage is exported in appwrite.js</div>';
                 return;
             }
 
             const db = window.databases;
             const QueryAPI = window.Query;
+            const storage = window.storage;
             const DB_ID = window.APPWRITE_DB_ID;
+            const BUCKET_ID = window.APPWRITE_BUCKET_ID;
             const PROFILES_COLLECTION = 'profiles';
             const ARTICLES_COLLECTION = window.APPWRITE_COLLECTION_ID;
 
@@ -390,7 +173,7 @@
             async function loadProfile() {
                 if (!userId) {
                     document.getElementById('profileRoot').innerHTML =
-                        '<div class="error-state">No profile selected.</div>';
+                        '<div class="error-state">No profile selected. Ensure the URL has ?userId=...</div>';
                     document.getElementById('userNewsList').innerHTML = '';
                     return;
                 }
@@ -412,7 +195,7 @@
                     renderProfile(profile);
                     await loadUserNews(userId, profile.displayName || profile.userName || 'Reporter');
                 } catch (error) {
-                    console.error(error);
+                    console.error("Profile load error:", error);
                     document.getElementById('profileRoot').innerHTML =
                         '<div class="error-state">Failed to load profile.</div>';
                     document.getElementById('userNewsList').innerHTML = '';
@@ -481,17 +264,31 @@
                         return;
                     }
 
-                    newsList.innerHTML = res.documents.map(article => {
-                        const img = article.imageUrl || article.imageFileId;
-                        const imageHtml = img ? `<img class="news-thumb" src="${img.startsWith('http') ? img : `https://nyc.cloud.appwrite.io/v1/storage/buckets/article-image/files/${img}/view?project=khabardarjeeling`}" alt="${escapeHtml(article.title)}">` : '';
-                        return `
+                    let html = '';
+                    for (const article of res.documents) {
+                        let finalImageUrl = 'assets/logo.png'; // Fallback if no image exists
+                        const imgId = article.imageUrl || article.imageFileId;
+
+                        if (imgId) {
+                            if (imgId.startsWith('http')) {
+                                finalImageUrl = imgId;
+                            } else {
+                                // Safely fetch the image preview using the Appwrite SDK
+                                const preview = storage.getFilePreview(BUCKET_ID, imgId);
+                                finalImageUrl = preview.href;
+                            }
+                        }
+
+                        html += `
                             <article class="news-item">
-                                ${imageHtml}
+                                <img class="news-thumb" src="${finalImageUrl}" alt="${escapeHtml(article.title)}" loading="lazy">
                                 <div class="news-body">
                                     <div>
                                         <h3>${escapeHtml(article.title || 'Untitled')}</h3>
                                         <div class="news-meta">
-                                            <span>${escapeHtml(article.category || 'General')}</span>
+                                            <span style="background:#f8e8ea; color:#c41e3a; padding:3px 8px; border-radius:4px; font-weight:600; text-transform:uppercase; font-size:11px;">
+                                                ${escapeHtml(article.category || 'General')}
+                                            </span>
                                             <span>${formatDate(article.$createdAt)}</span>
                                         </div>
                                         <p>${escapeHtml(truncateText(article.content, 180))}</p>
@@ -502,9 +299,11 @@
                                 </div>
                             </article>
                         `;
-                    }).join('');
+                    }
+                    newsList.innerHTML = html;
+
                 } catch (error) {
-                    console.error(error);
+                    console.error("News load error:", error);
                     newsList.innerHTML = '<div class="error-state">Failed to load news.</div>';
                 }
             }
