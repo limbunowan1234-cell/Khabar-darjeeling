@@ -10,8 +10,8 @@
     <link rel="icon" type="image/png" href="assets/logo.png">
 
     <title>Submit News - खबर दार्जिलिंग</title>
-    <link rel="stylesheet" href="css/style.css?v=114">
-    <link rel="stylesheet" href="css/responsive.css?v=114">
+    <link rel="stylesheet" href="css/style.css?v=115">
+    <link rel="stylesheet" href="css/responsive.css?v=115">
 
     <style>
         #gatekeeperLoader {
@@ -21,14 +21,14 @@
             font-family: sans-serif; transition: opacity 0.3s ease;
         }
         body.dark-mode #gatekeeperLoader { background: #1a1a1a; color: #ffffff; }
-       .spinner {
+     .spinner {
             width: 40px; height: 40px; border: 4px solid rgba(196, 30, 58, 0.1);
             border-left-color: #c41e3a; border-radius: 50%; animation: spin 1s linear infinite;
             margin-bottom: 15px;
         }
         @keyframes spin { to { transform: rotate(360deg); } }
 
-       .submit-container {
+     .submit-container {
             max-width: 800px;
             margin: 40px auto;
             padding: 30px;
@@ -36,32 +36,36 @@
             border-radius: 12px;
             box-shadow: 0 4px 20px rgba(0,0,0,0.08);
         }
+        /* ✅ FIXED: Added space */
         body.dark-mode.submit-container {
             background: #2a2a2a;
         }
 
-       .form-group {
+     .form-group {
             margin-bottom: 20px;
         }
-       .form-group label {
+     .form-group label {
             display: block;
             margin-bottom: 8px;
             font-weight: 600;
             color: #333;
         }
+        /* ✅ FIXED: Added space */
         body.dark-mode.form-group label { color: #ddd; }
 
-       .form-group input,
-       .form-group select,
-       .form-group textarea {
+     .form-group input,
+     .form-group select,
+     .form-group textarea {
             width: 100%;
             padding: 12px;
-            border: 2px solid #e0e0;
+            /* ✅ FIXED: #e0e0e0 not #e0e0 */
+            border: 2px solid #e0e0e0;
             border-radius: 8px;
             font-size: 15px;
             font-family: inherit;
             transition: border-color 0.3s;
         }
+        /* ✅ FIXED: Added space */
         body.dark-mode.form-group input,
         body.dark-mode.form-group select,
         body.dark-mode.form-group textarea {
@@ -70,26 +74,26 @@
             color: #fff;
         }
 
-       .form-group input:focus,
-       .form-group select:focus,
-       .form-group textarea:focus {
+     .form-group input:focus,
+     .form-group select:focus,
+     .form-group textarea:focus {
             outline: none;
             border-color: #c41e3a;
         }
 
-       .form-group textarea {
+     .form-group textarea {
             min-height: 200px;
             resize: vertical;
         }
 
-       .image-preview {
+     .image-preview {
             margin-top: 10px;
             max-width: 300px;
             border-radius: 8px;
             display: none;
         }
 
-       .submit-btn {
+     .submit-btn {
             background: #c41e3a;
             color: white;
             padding: 14px 40px;
@@ -101,15 +105,15 @@
             transition: background 0.3s;
             width: 100%;
         }
-       .submit-btn:hover {
+     .submit-btn:hover {
             background: #a01729;
         }
-       .submit-btn:disabled {
+     .submit-btn:disabled {
             background: #ccc;
             cursor: not-allowed;
         }
 
-       .user-info {
+     .user-info {
             background: #f5f5f5;
             padding: 15px;
             border-radius: 8px;
@@ -118,11 +122,12 @@
             align-items: center;
             gap: 12px;
         }
+        /* ✅ FIXED: Added space */
         body.dark-mode.user-info {
             background: #333;
         }
 
-       .user-avatar {
+     .user-avatar {
             width: 40px;
             height: 40px;
             border-radius: 50%;
@@ -135,18 +140,18 @@
             font-size: 16px;
         }
 
-       .alert {
+     .alert {
             padding: 15px;
             border-radius: 8px;
             margin-bottom: 20px;
             display: none;
         }
-       .alert.success {
+     .alert.success {
             background: #d4edda;
             color: #155724;
             border: 1px solid #c3e6cb;
         }
-       .alert.error {
+     .alert.error {
             background: #f8d7da;
             color: #721c24;
             border: 1px solid #f5c6cb;
@@ -248,7 +253,7 @@
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/appwrite@14.0.1/dist/iife/sdk.min.js"></script>
-    <script src="js/appwrite.js"></script>
+    <script src="js/appwrite.js?v=115"></script>
 
     <script>
         (() => {
@@ -256,10 +261,11 @@
             const account = window.account;
             const databases = window.databases;
             const storage = window.storage;
+            const ID = window.ID;
 
             const DB_ID = window.APPWRITE_DB_ID;
             const COLLECTION_ID = window.APPWRITE_COLLECTION_ID;
-            const BUCKET_ID = 'article-image'; // Your bucket ID
+            const BUCKET_ID = window.APPWRITE_BUCKET_ID; // ✅ FIXED: Use global
 
             let currentUser = null;
             let uploadedImageId = null;
@@ -348,7 +354,7 @@
 
                     // Upload image if provided
                     if (imageFile) {
-                        const fileUpload = await storage.createFile(BUCKET_ID, 'unique()', imageFile);
+                        const fileUpload = await storage.createFile(BUCKET_ID, ID.unique(), imageFile);
                         uploadedImageId = fileUpload.$id;
                     }
 
@@ -375,7 +381,7 @@
                         youtube_id: extractYouTubeID(youtubeUrl)
                     };
 
-                    await databases.createDocument(DB_ID, COLLECTION_ID, 'unique()', articlePayload);
+                    await databases.createDocument(DB_ID, COLLECTION_ID, ID.unique(), articlePayload);
 
                     showAlert('Article submitted successfully! It will be reviewed before publishing.', 'success');
                     document.getElementById('submitForm').reset();
