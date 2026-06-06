@@ -1,6 +1,8 @@
 // js/admin.js
 
 (function () {
+    const ADMIN_EMAIL = 'your-admin@email.com'; // <-- CHANGE THIS TO YOUR EMAIL
+    
     const loginForm = document.getElementById('loginForm');
     const logoutBtn = document.getElementById('logoutBtn');
     const loginScreen = document.getElementById('loginScreen');
@@ -47,9 +49,7 @@
         }
 
         if (tabName === 'dashboard') loadDashboard();
-        if (tabName === 'pending') loadPendingArticles();
         if (tabName === 'published') loadPublishedArticles();
-        if (tabName === 'rejected') loadRejectedArticles();
     };
 
     async function checkExistingSession() {
@@ -96,6 +96,13 @@
     }
 
     function showAdminPanel(user) {
+        // ADMIN EMAIL GUARD - Only allow specific email
+        if (user.email !== ADMIN_EMAIL) {
+            alert('Access denied. Admins only.');
+            window.location.href = 'index.html';
+            return;
+        }
+        
         if (loginScreen) loginScreen.style.display = 'none';
         if (adminPanel) adminPanel.style.display = 'block';
         if (logoutBtn) logoutBtn.style.display = 'inline-block';
@@ -114,66 +121,15 @@
                 [window.Query.limit(100)]
             );
 
-            const pending = allArticles.documents.filter(a => a.status === 'pending').length;
             const published = allArticles.documents.filter(a => a.status === 'published').length;
-            const rejected = allArticles.documents.filter(a => a.status === 'rejected').length;
 
             const totalArticles = document.getElementById('totalArticles');
-            const pendingCount = document.getElementById('pendingCount');
             const publishedCount = document.getElementById('publishedCount');
-            const rejectedCount = document.getElementById('rejectedCount');
 
             if (totalArticles) totalArticles.textContent = allArticles.total ?? allArticles.documents.length;
-            if (pendingCount) pendingCount.textContent = pending;
             if (publishedCount) publishedCount.textContent = published;
-            if (rejectedCount) rejectedCount.textContent = rejected;
         } catch (error) {
             console.error('Dashboard loading error:', error);
-        }
-    }
-
-    async function loadPendingArticles() {
-        const list = document.getElementById('pendingArticlesList');
-        if (!list) return;
-        list.innerHTML = 'Loading...';
-
-        try {
-            const response = await window.databases.listDocuments(
-                window.APPWRITE_DB_ID,
-                window.APPWRITE_COLLECTION_ID,
-                [
-                    window.Query.equal('status', 'pending'),
-                    window.Query.orderDesc('$createdAt')
-                ]
-            );
-
-            if (!response.documents.length) {
-                list.innerHTML = '<p style="padding:15px; color:#666;">No pending articles waiting for moderation.</p>';
-                return;
-            }
-
-            list.innerHTML = response.documents.map(article => `
-                <div class="article-card">
-                    ${article.imageUrl ? `<img src="${article.imageUrl}" alt="${escapeHtml(article.title)}">` : ''}
-                    <div class="article-content">
-                        <h3>${escapeHtml(article.title || 'Untitled')}</h3>
-                        <p style="margin: 5px 0; font-size:13px; color:#666;">
-                            <strong>Category:</strong> ${escapeHtml((article.category || 'general').toUpperCase())} |
-                            <strong>Location:</strong> ${escapeHtml(article.location || 'Not Specified')}
-                        </p>
-                        <p style="margin-bottom:8px; font-size:13px; color:#666;">
-                            <strong>Author:</strong> ${escapeHtml(article.authorName || article.submitterName || 'Anonymous')}
-                        </p>
-                        <p style="font-size:14px; color:#333;">${escapeHtml((article.content || '').substring(0, 200))}...</p>
-                        <div style="margin-top:15px;">
-                            <button class="btn-approve" onclick="approveArticle('${article.$id}')">✓ Approve</button>
-                            <button class="btn-reject" onclick="rejectArticle('${article.$id}')">✗ Reject</button>
-                        </div>
-                    </div>
-                </div>
-            `).join('');
-        } catch (error) {
-            list.innerHTML = '<p style="color:red; padding:15px;">Error: ' + error.message + '</p>';
         }
     }
 
@@ -200,7 +156,8 @@
                         <h3>${escapeHtml(article.title || 'Untitled')}</h3>
                         <p style="margin:5px 0; font-size:13px; color:#666;">
                             <strong>Category:</strong> ${escapeHtml(article.category || 'general')} |
-                            <strong>Location:</strong> ${escapeHtml(article.location || 'Not Specified')}
+                            <strong>Location:</strong> ${escapeHtml(article.location || 'Not Specified')} |
+                            <strong>Author:</strong> ${escapeHtml(article.authorName || article.submitterName || 'Anonymous')}
                         </p>
                         <p style="font-size:14px; color:#333;">${escapeHtml((article.content || '').substring(0, 150))}...</p>
 
@@ -223,71 +180,6 @@
             list.innerHTML = '<p style="color:red; padding:15px;">Error: ' + error.message + '</p>';
         }
     }
-
-    async function loadRejectedArticles() {
-        const list = document.getElementById('rejectedArticlesList');
-        if (!list) return;
-        list.innerHTML = 'Loading...';
-
-        try {
-            const response = await window.databases.listDocuments(
-                window.APPWRITE_DB_ID,
-                window.APPWRITE_COLLECTION_ID,
-                [
-                    window.Query.equal('status', 'rejected'),
-                    window.Query.orderDesc('$createdAt')
-                ]
-            );
-
-            list.innerHTML = response.documents.map(article => `
-                <div class="article-card">
-                    ${article.imageUrl ? `<img src="${article.imageUrl}" alt="${escapeHtml(article.title)}">` : ''}
-                    <div class="article-content">
-                        <h3>${escapeHtml(article.title || 'Untitled')}</h3>
-                        <p style="margin:5px 0; font-size:13px; color:#666;">
-                            <strong>Category:</strong> ${escapeHtml(article.category || 'general')} |
-                            <strong>Author:</strong> ${escapeHtml(article.authorName || article.submitterName || 'Anonymous')}
-                        </p>
-                        <p style="font-size:14px; color:#333;">${escapeHtml((article.content || '').substring(0, 150))}...</p>
-                    </div>
-                </div>
-            `).join('') || '<p style="padding:15px; color:#666;">No rejected articles found.</p>';
-        } catch (error) {
-            list.innerHTML = '<p style="color:red; padding:15px;">Error: ' + error.message + '</p>';
-        }
-    }
-
-    window.approveArticle = async function (id) {
-        try {
-            await window.databases.updateDocument(
-                window.APPWRITE_DB_ID,
-                window.APPWRITE_COLLECTION_ID,
-                id,
-                { status: 'published' }
-            );
-            loadPendingArticles();
-            loadDashboard();
-            alert('Article approved and published live!');
-        } catch (error) {
-            alert('Approval failed: ' + error.message);
-        }
-    };
-
-    window.rejectArticle = async function (id) {
-        if (!confirm('Are you sure you want to reject this article submission?')) return;
-        try {
-            await window.databases.updateDocument(
-                window.APPWRITE_DB_ID,
-                window.APPWRITE_COLLECTION_ID,
-                id,
-                { status: 'rejected' }
-            );
-            loadPendingArticles();
-            loadDashboard();
-        } catch (error) {
-            alert('Rejection failed: ' + error.message);
-        }
-    };
 
     window.toggleFeatured = async function (id, isChecked, checkboxElement) {
         if (isChecked) {
