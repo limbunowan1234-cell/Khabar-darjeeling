@@ -1,786 +1,556 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
-    <meta http-equiv="Pragma" content="no-cache">
-    <meta http-equiv="Expires" content="0">
-    <meta name="theme-color" content="#b81d24">
-    <link rel="icon" type="image/png" href="assets/logo.png">
-    <link rel="manifest" href="manifest.json">
-    <title>Khabar Darjeeling - Article</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+  <meta http-equiv="Pragma" content="no-cache">
+  <meta http-equiv="Expires" content="0">
+  <meta name="theme-color" content="#b81d24">
+  <link rel="icon" type="image/png" href="assets/logo.png">
+  <link rel="manifest" href="manifest.json">
+  <title>My Profile - खबर दार्जिलिंग</title>
 
-    <style>
-        :root {
-            --primary-red: #b81d24;
-            --bg-color: #f0f2f5;
-            --card-bg: #ffffff;
-            --text-main: #222;
-            --text-muted: #666;
-            --border: #e5e7eb;
-        }
-
-        body.dark-mode {
-            --bg-color: #121212;
-            --card-bg: #1e1e1e;
-            --text-main: #f5f5f5;
-            --text-muted: #b5b5b5;
-            --border: #333;
-        }
-
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-            background: var(--bg-color);
-            margin: 0;
-            color: var(--text-main);
-        }
-
-      .header-link {
-            text-decoration: none;
-            display: block;
-        }
-
-      .header {
-            background: var(--card-bg);
-            padding: 15px;
-            text-align: center;
-            border-bottom: 2px solid var(--primary-red);
-            font-weight: bold;
-            color: var(--primary-red);
-            font-size: 1.2rem;
-        }
-
-      .header:hover {
-            background: rgba(184, 29, 36, 0.04);
-        }
-
-      .article-container {
-            max-width: 760px;
-            margin: 20px auto;
-            background: var(--card-bg);
-            padding: 22px;
-            border-radius: 10px;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
-        }
-
-      .category-badge {
-            background: var(--primary-red);
-            color: white;
-            padding: 4px 8px;
-            border-radius: 4px;
-            font-size: 11px;
-            text-transform: uppercase;
-            letter-spacing: 0.4px;
-        }
-
-      .art-img {
-            width: 100%;
-            border-radius: 8px;
-            margin: 15px 0;
-            object-fit: cover;
-            display: none;
-            box-sizing: border-box;
-            max-height: 460px;
-        }
-
-      .art-video {
-            position: relative;
-            width: 100%;
-            padding-bottom: 56.25%;
-            margin: 15px 0;
-            border-radius: 8px;
-            overflow: hidden;
-            display: none;
-            box-sizing: border-box;
-        }
-
-      .art-video iframe {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            border: 0;
-            border-radius: 8px;
-        }
-
-      .meta-row {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 10px;
-            align-items: center;
-            margin: 12px 0 6px;
-            color: var(--text-muted);
-            font-size: 13px;
-        }
-
-      .author-link {
-            color: inherit;
-            text-decoration: none;
-            font-weight: 700;
-        }
-
-      .author-link:hover {
-            text-decoration: underline;
-        }
-
-      .article-author {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            margin-top: 18px;
-            padding-top: 14px;
-            border-top: 1px solid var(--border);
-        }
-
-      .author-avatar,
-      .author-initials {
-            width: 36px;
-            height: 36px;
-            border-radius: 50%;
-            flex-shrink: 0;
-        }
-
-      .author-avatar {
-            object-fit: cover;
-            border: 1px solid var(--border);
-        }
-
-      .author-initials {
-            background: var(--primary-red);
-            color: #fff;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: 800;
-            font-size: 13px;
-        }
-
-      .article-content {
-            line-height: 1.7;
-            white-space: pre-line;
-            color: var(--text-main);
-            font-size: 1.02rem;
-            margin-top: 10px;
-        }
-
-      .actions {
-            margin-top: 25px;
-            display: flex;
-            gap: 10px;
-            flex-wrap: wrap;
-            align-items: center;
-        }
-
-      .like-btn {
-            background: #e4e6eb;
-            border: none;
-            padding: 10px 20px;
-            border-radius: 20px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: 0.3s;
-            display: inline-flex;
-            align-items: center;
-            gap: 5px;
-        }
-
-      .like-btn:hover:not(:disabled) {
-            background: #d8dadf;
-        }
-
-      .like-btn.liked {
-            background: var(--primary-red);
-            color: white;
-        }
-
-      .stats-badge {
-            color: var(--text-muted);
-            font-size: 14px;
-            display: flex;
-            gap: 15px;
-            align-items: center;
-        }
-
-      .top-links {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            gap: 10px;
-            margin-top: 10px;
-            flex-wrap: wrap;
-        }
-
-      .small-link {
-            text-decoration: none;
-            color: var(--primary-red);
-            font-weight: 700;
-            font-size: 14px;
-        }
-
-      .comments-section {
-            margin-top: 40px;
-            border-top: 1px solid var(--border);
-            padding-top: 20px;
-        }
-
-      .comment-input {
-            width: 100%;
-            padding: 12px;
-            border: 1px solid #ccc;
-            border-radius: 6px;
-            box-sizing: border-box;
-            resize: vertical;
-            min-height: 80px;
-            font-family: inherit;
-            margin-bottom: 10px;
-            background: var(--card-bg);
-            color: var(--text-main);
-        }
-
-      .submit-comment-btn {
-            background: var(--primary-red);
-            color: white;
-            border: none;
-            padding: 10px 16px;
-            border-radius: 6px;
-            font-weight: bold;
-            cursor: pointer;
-        }
-
-      .submit-comment-btn:disabled {
-            opacity: 0.6;
-            cursor: not-allowed;
-        }
-
-      .comment-list {
-            margin-top: 25px;
-        }
-
-      .comment-item {
-            display: flex;
-            gap: 12px;
-            padding: 15px 0;
-            border-bottom: 1px solid var(--border);
-        }
-
-      .comment-item:last-child {
-            border-bottom: none;
-        }
-
-      .comment-avatar,
-      .comment-initials {
-            width: 32px;
-            height: 32px;
-            border-radius: 50%;
-            flex-shrink: 0;
-        }
-
-      .comment-avatar {
-            object-fit: cover;
-            border: 1px solid var(--border);
-        }
-
-      .comment-initials {
-            background: var(--primary-red);
-            color: #fff;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: 700;
-            font-size: 12px;
-        }
-
-      .comment-body {
-            flex: 1;
-        }
-
-      .comment-author {
-            font-weight: bold;
-            color: var(--text-main);
-            margin-bottom: 4px;
-            font-size: 0.9rem;
-            text-decoration: none;
-        }
-
-      .comment-author:hover {
-            text-decoration: underline;
-        }
-
-      .comment-text {
-            color: var(--text-main);
-            font-size: 0.95rem;
-            margin: 0;
-            line-height: 1.5;
-        }
-
-      .comment-image {
-            width: 100%;
-            max-width: 300px;
-            height: auto;
-            border-radius: 6px;
-            margin-top: 0.75rem;
-            display: block;
-        }
-
-      .comment-video {
-            position: relative;
-            width: 100%;
-            max-width: 400px;
-            padding-bottom: 56.25%;
-            margin-top: 0.75rem;
-        }
-
-      .comment-video iframe {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            border: 0;
-            border-radius: 6px;
-        }
-
-      .comment-meta {
-            color: var(--text-muted);
-            font-size: 0.8em;
-            margin-top: 6px;
-        }
-
-      .state-box {
-            padding: 18px;
-            border-radius: 10px;
-            background: rgba(0,0,0,0.03);
-            color: var(--text-muted);
-        }
-
-        body.dark-mode.state-box {
-            background: rgba(255,255,0.04);
-        }
-
-        @media (max-width: 768px) {
-          .article-container {
-                margin: 10px;
-                padding: 16px;
-            }
-
-          .header {
-                font-size: 1rem;
-                padding: 13px;
-            }
-        }
-    </style>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css?v=117" />
+  <style>
+    :root {
+      --primary: #c41e3a;
+      --bg: #f6f6f6;
+      --card: #ffffff;
+      --text: #222;
+      --muted: #666;
+      --border: #e7;
+    }
+    body.dark-mode {
+      --bg: #121212;
+      --card: #1d1d1d;
+      --text: #f4f4f4;
+      --muted: #b4b4b4;
+      --border: #2c2c;
+      background: var(--bg);
+      color: var(--text);
+    }
+    body {
+      margin: 0;
+      font-family: 'Poppins', Arial, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+    }
+ .wrap {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 16px;
+    }
+ .topbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 14px 16px;
+      background: var(--card);
+      border-bottom: 1px solid var(--border);
+      position: sticky;
+      top: 0;
+      z-index: 10;
+    }
+ .brand {
+      font-weight: 700;
+      color: var(--primary);
+      font-size: 20px;
+    }
+ .btn {
+      border: none;
+      background: var(--primary);
+      color: #fff;
+      padding: 10px 14px;
+      border-radius: 8px;
+      cursor: pointer;
+      text-decoration: none;
+      display: inline-block;
+      font-size: 14px;
+      font-family: inherit;
+    }
+ .btn.secondary {
+      background: #666;
+    }
+ .card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      overflow: hidden;
+      box-shadow: 0 4px 18px rgba(0,0,0,0.05);
+      margin-top: 18px;
+    }
+ .cover {
+      height: 180px;
+      background: linear-gradient(135deg, #c41e3a, #8b1025);
+      background-size: cover;
+      background-position: center;
+      position: relative;
+    }
+ .avatar {
+      width: 120px;
+      height: 120px;
+      border-radius: 50%;
+      border: 5px solid var(--card);
+      background: #ddd;
+      background-size: cover;
+      background-position: center;
+      position: absolute;
+      left: 24px;
+      bottom: -60px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 34px;
+      font-weight: 700;
+      color: #fff;
+      background-color: var(--primary);
+    }
+ .content {
+      padding: 76px 24px 24px;
+    }
+ .name {
+      font-size: 30px;
+      font-weight: 800;
+      margin: 0 0 6px;
+    }
+ .username {
+      color: var(--muted);
+      margin: 0 0 12px;
+      font-size: 16px;
+    }
+ .joined {
+      color: var(--muted);
+      font-size: 14px;
+      margin-bottom: 18px;
+    }
+ .bio {
+      line-height: 1.6;
+      font-size: 16px;
+      white-space: pre-wrap;
+      margin-bottom: 20px;
+    }
+ .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+      gap: 12px;
+      margin: 20px 0;
+    }
+ .stat-box {
+      padding: 16px;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      background: rgba(196, 30, 58, 0.04);
+      text-align: center;
+    }
+    body.dark-mode.stat-box {
+      background: rgba(255,255,0.03);
+    }
+ .stat-number {
+      font-size: 26px;
+      font-weight: 800;
+      color: var(--primary);
+      margin-bottom: 4px;
+    }
+ .stat-label {
+      font-size: 12px;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing:.04em;
+    }
+ .section-title {
+      font-size: 20px;
+      font-weight: 700;
+      margin: 30px 0 15px;
+    }
+ .article-item {
+      padding: 15px;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      margin-bottom: 12px;
+      background: rgba(0,0,0,0.01);
+    }
+    body.dark-mode.article-item {
+      background: rgba(255,255,255,0.02);
+    }
+ .article-info a {
+      text-decoration: none;
+      color: var(--primary);
+      font-weight: 600;
+      font-size: 16px;
+    }
+ .article-info a:hover {
+      text-decoration: underline;
+    }
+ .article-stats {
+      font-size: 13px;
+      color: var(--muted);
+      margin-top: 5px;
+      display: flex;
+      gap: 15px;
+      flex-wrap: wrap;
+    }
+ .share-buttons {
+      display: flex;
+      gap: 8px;
+      margin-top: 10px;
+      flex-wrap: wrap;
+    }
+ .share-btn {
+      padding: 6px 12px;
+      border: 1px solid var(--border);
+      background: var(--card);
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 12px;
+      font-weight: 600;
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      transition: all 0.2s;
+    }
+ .share-btn:hover {
+      background: var(--primary);
+      color: #fff;
+      border-color: var(--primary);
+    }
+ .meta {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin-top: 20px;
+    }
+ .box {
+      padding: 14px;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      background: rgba(0,0,0,0.02);
+    }
+    body.dark-mode.box {
+      background: rgba(255,255,0.03);
+    }
+ .label {
+      font-size: 12px;
+      color: var(--muted);
+      margin-bottom: 4px;
+      text-transform: uppercase;
+      letter-spacing:.04em;
+    }
+ .value {
+      font-size: 15px;
+      word-break: break-word;
+    }
+ .alert {
+      padding: 14px 16px;
+      border-radius: 10px;
+      margin-top: 18px;
+      display: none;
+    }
+ .alert.error {
+      background: #ffe1e5;
+      color: #8b1025;
+      border: 1px solid #ffb9c5;
+    }
+ .alert.info {
+      background: #e7f3ff;
+      color: #0b4f8a;
+      border: 1px solid #b8dcff;
+    }
+    body.dark-mode.alert.error {
+      background: #3a151c;
+      color: #ffb9c5;
+      border-color: #5a1d29;
+    }
+    body.dark-mode.alert.info {
+      background: #132739;
+      color: #b8dcff;
+      border-color: #224966;
+    }
+ .loader {
+      padding: 60px 20px;
+      text-align: center;
+      color: var(--muted);
+    }
+    @media (max-width: 640px) {
+    .meta { grid-template-columns: 1fr; }
+    .avatar { width: 96px; height: 96px; bottom: -48px; }
+    .content { padding-top: 62px; }
+    .name { font-size: 24px; }
+    .stats-grid { grid-template-columns: 1fr 1fr; }
+    }
+  </style>
 </head>
 <body>
-    <a href="index.html" class="header-link">
-        <div class="header">खबर दार्जिलिंग</div>
-    </a>
+  <div class="topbar">
+    <div class="brand">खबर दार्जिलिंग</div>
+    <div>
+      <a class="btn secondary" href="index.html">Home</a>
+      <a class="btn" href="post.html">Create Post</a>
+    </div>
+  </div>
 
-    <main class="article-container">
-        <span class="category-badge" id="categoryBadge">General</span>
-        <h1 id="title" style="margin-bottom: 8px;">Loading...</h1>
+  <div class="wrap">
+    <div id="alertBox" class="alert"></div>
 
-        <div class="meta-row">
-            <span id="articleDate">—</span>
-            <span id="articleAuthorWrap"></span>
+    <div class="card">
+      <div id="cover" class="cover">
+        <div id="avatar" class="avatar">?</div>
+      </div>
+
+      <div class="content">
+        <div id="loader" class="loader">Loading profile...</div>
+
+        <div id="profileBody" style="display:none;">
+          <h1 id="displayName" class="name">Name</h1>
+          <p id="userName" class="username">@username</p>
+          <p id="joinedAT" class="joined">Joined date</p>
+
+          <div id="bio" class="bio"></div>
+
+          <div class="stats-grid">
+            <div class="stat-box">
+              <div class="stat-number" id="totalPosts">0</div>
+              <div class="stat-label">Total Posts</div>
+            </div>
+            <div class="stat-box">
+              <div class="stat-number" id="totalViews">0</div>
+              <div class="stat-label">Total Views</div>
+            </div>
+            <div class="stat-box">
+              <div class="stat-number" id="totalLikes">0</div>
+              <div class="stat-label">Total Likes</div>
+            </div>
+            <div class="stat-box">
+              <div class="stat-number" id="totalComments">0</div>
+              <div class="stat-label">Comments Made</div>
+            </div>
+          </div>
+
+          <h3 class="section-title">Your Articles</h3>
+          <div id="userArticles">
+            <div class="loader">Loading articles...</div>
+          </div>
+
+          <div class="meta" style="margin-top:30px;">
+            <div class="box">
+              <div class="label">User ID</div>
+              <div id="userId" class="value"></div>
+            </div>
+            <div class="box">
+              <div class="label">Profile Document</div>
+              <div id="docId" class="value"></div>
+            </div>
+          </div>
         </div>
+      </div>
+    </div>
+  </div>
 
-        <img id="mainImg" class="art-img" src="" alt="Article Image">
-        <div id="articleVideo" class="art-video"></div>
+  <script src="https://cdn.jsdelivr.net/npm/appwrite@14.0.1/dist/iife/sdk.min.js"></script>
+  <script src="js/appwrite.js?v=117"></script>
+  <script>
+    (() => {
+      if (!window.Appwrite) {
+        document.getElementById('alertBox').textContent = 'Appwrite failed to load.';
+        document.getElementById('alertBox').className = 'alert error';
+        document.getElementById('alertBox').style.display = 'block';
+        return;
+      }
 
-        <div id="body" class="article-content"></div>
+      const { Client, Account, Databases, Query } = window.Appwrite;
+      const PROJECT_ID = 'khabardarjeeling'; // Change only if your project ID is different
+      const ENDPOINT = 'https://nyc.cloud.appwrite.io/v1';
+      const DB_ID = 'Khabar_db';
+      const PROFILES_COLLECTION = 'profiles';
+      const ARTICLES_COLLECTION = 'articles';
+      const LIKES_COLLECTION = 'likes';
+      const COMMENTS_COLLECTION = 'comments';
 
-        <div class="actions">
-            <button id="likeBtn" class="like-btn">❤️ Like</button>
-            <div class="stats-badge">
-                <span>👁️ <span id="viewCount">0</span> views</span>
-                <span>💬 <span id="commentCountTop">0</span> comments</span>
-            </div>
-            <a href="index.html" class="small-link" style="margin-left:auto;">← Back to Home</a>
-        </div>
+      const client = new Client()
+      .setProject(PROJECT_ID)
+      .setEndpoint(ENDPOINT);
 
-        <div class="comments-section">
-            <h3>Discussion (<span id="commentCount">0</span>)</h3>
+      const account = new Account(client);
+      const databases = new Databases(client);
 
-            <div id="commentFormWrap" style="display:none;margin-bottom:30px;background:rgba(184,29,36,0.04);padding:20px;border-radius:8px;">
-                <form id="commentForm">
-                    <textarea id="commentText" class="comment-input" placeholder="What are your thoughts on this?" required></textarea>
-                    
-                    <div style="display:flex;gap:10px;margin-bottom:10px;flex-wrap:wrap;">
-                        <input type="file" id="commentImage" accept="image/*" style="flex:1;">
-                        <input type="url" id="commentYoutube" placeholder="YouTube URL (optional)" 
-                            style="flex:1;padding:8px;border:1px solid #ddd;border-radius:6px;">
-                    </div>
-                    
-                    <button type="submit" id="commentSubmitBtn" class="submit-comment-btn">Post Comment</button>
-                </form>
-            </div>
-            
-            <div id="loginToComment" style="text-align:center;padding:20px;background:rgba(0,0,0,0.03);border-radius:8px;margin-bottom:20px;">
-                <a href="login.html" style="color:var(--primary-red);font-weight:600;">Log in</a> to post a comment
-            </div>
+      const els = {
+        alertBox: document.getElementById('alertBox'),
+        loader: document.getElementById('loader'),
+        profileBody: document.getElementById('profileBody'),
+        displayName: document.getElementById('displayName'),
+        userName: document.getElementById('userName'),
+        joinedAT: document.getElementById('joinedAT'),
+        bio: document.getElementById('bio'),
+        userId: document.getElementById('userId'),
+        docId: document.getElementById('docId'),
+        avatar: document.getElementById('avatar'),
+        cover: document.getElementById('cover'),
+        totalPosts: document.getElementById('totalPosts'),
+        totalViews: document.getElementById('totalViews'),
+        totalLikes: document.getElementById('totalLikes'),
+        totalComments: document.getElementById('totalComments'),
+        userArticles: document.getElementById('userArticles')
+      };
 
-            <div id="commentsList" class="comment-list">
-                <p class="state-box">Loading comments...</p>
-            </div>
-        </div>
-    </main>
+      function showAlert(message, type = 'info') {
+        els.alertBox.textContent = message;
+        els.alertBox.className = `alert ${type}`;
+        els.alertBox.style.display = 'block';
+      }
 
-    <script src="https://cdn.jsdelivr.net/npm/appwrite@14.0.1/dist/iife/sdk.min.js"></script>
-    <script src="js/appwrite.js?v=117"></script>
+      function initials(name) {
+        return (name || '?')
+        .split(' ')
+        .filter(Boolean)
+        .map(x => x[0])
+        .join('')
+        .toUpperCase()
+        .slice(0, 2) || '?';
+      }
 
-    <script>
-        (() => {
-            if (!window.Appwrite) {
-                document.getElementById('title').textContent = 'Error';
-                document.getElementById('body').innerHTML = '<div class="state-box">Appwrite SDK failed to load.</div>';
-                return;
-            }
+      function safeText(v) {
+        return v && String(v).trim()? String(v) : '—';
+      }
 
-            const { Client, Databases, Query, ID, Account, Storage } = window.Appwrite;
-            const PROJECT_ID = 'khabardarjeeling';
-            const ENDPOINT = 'https://nyc.cloud.appwrite.io/v1';
-            const DB_ID = 'Khabar_db';
-            const COL_ID = 'articles';
-            const COMMENTS_COL_ID = 'comments';
-            const LIKES_COL_ID = 'likes';
-            const PROFILES_COL_ID = 'profiles';
-            const BUCKET_ID = 'post-images';
+      function formatDate(v) {
+        if (!v) return '—';
+        const d = new Date(v);
+        if (Number.isNaN(d.getTime())) return String(v);
+        return d.toLocaleDateString(undefined, { year: 'numeric', month: 'short', day: 'numeric' });
+      }
 
-            const client = new Client()
-              .setProject(PROJECT_ID)
-              .setEndpoint(ENDPOINT);
+      function shareArticle(articleId, title, platform) {
+        const url = `${window.location.origin}/article.html?id=${articleId}`;
+        const text = `Check out: ${title}`;
 
-            const db = new Databases(client);
-            const account = new Account(client);
-            const storage = new Storage(client);
+        if (platform === 'whatsapp') {
+          window.open(`https://wa.me/?text=${encodeURIComponent(text + ' ' + url)}`, '_blank');
+        } else if (platform === 'facebook') {
+          window.open(`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(url)}`, '_blank');
+        } else if (platform === 'twitter') {
+          window.open(`https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}&url=${encodeURIComponent(url)}`, '_blank');
+        } else if (platform === 'native' && navigator.share) {
+          navigator.share({ title, text, url }).catch(() => {});
+        } else {
+          navigator.clipboard.writeText(url);
+          alert('Link copied to clipboard!');
+        }
+      }
 
-            const categoryThemes = {
-                default: { color: '#b81d24' },
-                darjeeling: { color: '#b81d24' },
-                politics: { color: '#1a56db' },
-                sports: { color: '#0e9f6e' },
-                entertainment: { color: '#8b5cf6' },
-                national: { color: '#d97706' }
-            };
+      async function loadProfile() {
+        // CRITICAL: Wait for Appwrite to restore session from cookies
+        await new Promise(r => setTimeout(r, 150));
 
-            let currentArticleId = null;
-            let currentUser = null;
-            let article = null;
+        try {
+          const user = await account.get();
+          const result = await databases.listDocuments(DB_ID, PROFILES_COLLECTION, [
+            Query.equal('userId', user.$id),
+            Query.limit(1)
+          ]);
 
-            function escapeHtml(text) {
-                const div = document.createElement('div');
-                div.textContent = text || '';
-                return div.innerHTML;
-            }
+          if (!result.documents.length) {
+            els.loader.style.display = 'none';
+            showAlert('No profile found for this account yet. Open post.html once to auto-create it.', 'info');
+            return;
+          }
 
-            function stripText(htmlStr) {
-                const div = document.createElement('div');
-                div.innerHTML = htmlStr || '';
-                return div.textContent || div.innerText || '';
-            }
+          const profile = result.documents[0];
 
-            function formatDate(dateString) {
-                try {
-                    return new Date(dateString).toLocaleDateString('en-US', {
-                        year: 'numeric',
-                        month: 'short',
-                        day: 'numeric'
-                    });
-                } catch {
-                    return 'Date unknown';
-                }
-            }
+          els.displayName.textContent = safeText(profile.displayName);
+          els.userName.textContent = '@' + safeText(profile.userName);
+          els.joinedAT.textContent = 'Joined ' + formatDate(profile.joinedAT);
+          els.bio.textContent = safeText(profile.bio);
+          els.userId.textContent = safeText(profile.userId);
+          els.docId.textContent = safeText(profile.$id);
 
-            function getInitials(name) {
-                if (!name) return 'KD';
-                const parts = name.trim().split(' ');
-                if (parts.length === 1) return parts[0].charAt(0).toUpperCase();
-                return (parts[0].charAt(0) + parts[parts.length - 1].charAt(0)).toUpperCase();
-            }
+          const nameForInitials = profile.displayName || user.name || 'User';
+          els.avatar.textContent = initials(nameForInitials);
 
-            function getImageUrl(art) {
-                const imageId = art.imageFileId || art.imageUrl;
-                if (!imageId || imageId === 'Text' || imageId === 'null' || imageId === 'undefined') return '';
-                if (imageId.startsWith('http')) return imageId;
-                return `${ENDPOINT}/storage/buckets/post-images/files/${imageId}/view?project=${PROJECT_ID}`;
-            }
+          if (profile.avatarUrl) {
+            els.avatar.style.backgroundImage = `url('${profile.avatarUrl}')`;
+            els.avatar.textContent = '';
+          }
 
-            function renderAuthor(art) {
-                const authorName = art.submitterName || art.authorName || 'Staff Reporter';
-                const authorId = art.submitterId || '';
-                const profileLink = authorId? `profile.html?userId=${encodeURIComponent(authorId)}` : '#';
-                const authorAvatar = art.submitterAvatar || '';
+          if (profile.coverUrl) {
+            els.cover.style.backgroundImage = `url('${profile.coverUrl}')`;
+          }
 
-                const authorWrap = document.getElementById('articleAuthorWrap');
+          // Load user's articles
+          const articles = await databases.listDocuments(DB_ID, ARTICLES_COLLECTION, [
+            Query.equal('submitterId', user.$id),
+            Query.equal('status', 'published'),
+            Query.orderDesc('$createdAt'),
+            Query.limit(100)
+          ]);
 
-                if (authorAvatar && authorAvatar!== 'null') {
-                    authorWrap.innerHTML = `
-                        <span class="article-author" style="display:inline-flex;border-top:none;padding-top:0;margin-top:0;">
-                            <img src="${authorAvatar}" alt="${escapeHtml(authorName)}" class="author-avatar" onerror="this.style.display='none'">
-                            <span>By <a class="author-link" href="${profileLink}">${escapeHtml(authorName)}</a></span>
-                        </span>
-                    `;
-                } else {
-                    authorWrap.innerHTML = `
-                        <span style="display:inline-flex;align-items:center;gap:8px;">
-                            <span class="author-initials">${getInitials(authorName)}</span>
-                            <span>By <a class="author-link" href="${profileLink}">${escapeHtml(authorName)}</a></span>
-                        </span>
-                    `;
-                }
-            }
+          // Calculate total views
+          let totalViews = 0;
+          articles.documents.forEach(a => totalViews += (a.views || 0));
 
-            async function incrementViews() {
-                try {
-                    await db.updateDocument(DB_ID, COL_ID, currentArticleId, {
-                        views: (article.views || 0) + 1
-                    });
-                    document.getElementById('viewCount').textContent = (article.views || 0) + 1;
-                } catch (e) {
-                    console.log('View increment failed:', e);
-                }
-            }
+          els.totalPosts.textContent = articles.total;
+          els.totalViews.textContent = totalViews;
 
-            async function loadArticle() {
-                try {
-                    const params = new URLSearchParams(window.location.search);
-                    currentArticleId = params.get('id');
-                    if (!currentArticleId) throw new Error('No Article ID provided.');
+          // Get total likes across all articles
+          let totalLikes = 0;
+          for (const article of articles.documents) {
+            try {
+              const likes = await databases.listDocuments(DB_ID, LIKES_COLLECTION, [
+                Query.equal('articleId', article.$id),
+                Query.limit(1)
+              ]);
+              totalLikes += likes.total;
+            } catch (e) {}
+          }
+          els.totalLikes.textContent = totalLikes;
 
-                    article = await db.getDocument(DB_ID, COL_ID, currentArticleId);
+          // Get total comments made by user
+          const userComments = await databases.listDocuments(DB_ID, COMMENTS_COLLECTION, [
+            Query.equal('userId', user.$id),
+            Query.limit(1)
+          ]);
+          els.totalComments.textContent = userComments.total;
 
-                    document.title = `${article.title || 'Article'} - खबर दार्जिलिंग`;
-                    document.getElementById('title').textContent = article.title || 'Untitled';
-                    document.getElementById('body').textContent = article.content || '';
+          // Render articles with share buttons
+          if (articles.documents.length === 0) {
+            els.userArticles.innerHTML = '<p style="color:var(--muted);padding:20px;text-align:center;">No articles published yet.</p>';
+          } else {
+            els.userArticles.innerHTML = articles.documents.map(a => `
+              <div class="article-item">
+                <div class="article-info">
+                  <a href="article.html?id=${a.$id}">${a.title}</a>
+                  <div class="article-stats">
+                    ${formatDate(a.$createdAt)} • ${a.views || 0} views • ${a.category || 'General'}
+                  </div>
+                  <div class="share-buttons">
+                    <button class="share-btn" onclick="shareArticle('${a.$id}', '${a.title.replace(/'/g, "\\'")}', 'whatsapp')">📱 WhatsApp</button>
+                    <button class="share-btn" onclick="shareArticle('${a.$id}', '${a.title.replace(/'/g, "\\'")}', 'facebook')">📘 Facebook</button>
+                    <button class="share-btn" onclick="shareArticle('${a.$id}', '${a.title.replace(/'/g, "\\'")}', 'twitter')">🐦 Twitter</button>
+                    <button class="share-btn" onclick="shareArticle('${a.$id}', '${a.title.replace(/'/g, "\\'")}', 'native')">🔗 Share</button>
+                  </div>
+                </div>
+              </div>
+            `).join('');
+          }
 
-                    const theme = categoryThemes[(article.category || '').toLowerCase()] || categoryThemes.default;
-                    const badge = document.getElementById('categoryBadge');
-                    badge.textContent = article.category || 'General';
-                    badge.style.backgroundColor = theme.color;
+          els.loader.style.display = 'none';
+          els.profileBody.style.display = 'block';
+        } catch (error) {
+          els.loader.style.display = 'none';
+          showAlert(error?.message || 'Failed to load profile. Please log in again.', 'error');
+          setTimeout(() => window.location.href = 'login.html', 2000);
+        }
+      }
 
-                    document.getElementById('articleDate').textContent = formatDate(article.$createdAt);
-                    document.getElementById('viewCount').textContent = article.views || 0;
-                    renderAuthor(article);
+      // Make shareArticle globally available
+      window.shareArticle = shareArticle;
 
-                    const imgEl = document.getElementById('mainImg');
-                    const imageUrl = getImageUrl(article);
-                    if (imageUrl) {
-                        imgEl.src = imageUrl;
-                        imgEl.style.display = 'block';
-                        imgEl.style.border = `3px solid ${theme.color}`;
-                    }
-
-                    const videoContainer = document.getElementById('articleVideo');
-                    if (article.youtube_id && article.youtube_id.length === 11) {
-                        videoContainer.style.display = 'block';
-                        videoContainer.style.border = `3px solid ${theme.color}`;
-                        videoContainer.innerHTML = `
-                            <iframe
-                                src="https://www.youtube-nocookie.com/embed/${article.youtube_id}?playsinline=1&modestbranding=1&rel=0"
-                                loading="lazy"
-                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                                allowfullscreen
-                                referrerpolicy="strict-origin-when-cross-origin"></iframe>
-                        `;
-                    }
-
-                    await incrementViews();
-                    await loadComments();
-                    await loadLikes();
-                } catch (e) {
-                    document.getElementById('title').textContent = 'Error';
-                    document.getElementById('body').innerHTML = `<div class="state-box">${escapeHtml(e.message || 'Failed to load article.')}</div>`;
-                }
-            }
-
-            async function loadLikes() {
-                try {
-                    const res = await db.listDocuments(DB_ID, LIKES_COL_ID, [
-                        Query.equal('articleId', currentArticleId),
-                        Query.limit(100)
-                    ]);
-
-                    const btn = document.getElementById('likeBtn');
-                    const liked = localStorage.getItem(`liked_${currentArticleId}`);
-                    btn.className = liked? 'like-btn liked' : 'like-btn';
-                    btn.innerHTML = liked? `❤️ Liked (${res.total})` : `❤️ Like (${res.total})`;
-                } catch (e) {
-                    document.getElementById('likeBtn').innerHTML = '❤️ Like';
-                }
-            }
-
-            document.getElementById('likeBtn').addEventListener('click', async () => {
-                if (!currentUser) {
-                    window.location.href = 'login.html';
-                    return;
-                }
-                if (!currentArticleId) return;
-                const btn = document.getElementById('likeBtn');
-                btn.disabled = true;
-
-                try {
-                    const existingLikeId = localStorage.getItem(`liked_${currentArticleId}`);
-                    if (existingLikeId) {
-                        await db.deleteDocument(DB_ID, LIKES_COL_ID, existingLikeId);
-                        localStorage.removeItem(`liked_${currentArticleId}`);
-                    } else {
-                        const doc = await db.createDocument(DB_ID, LIKES_COL_ID, ID.unique(), {
-                            articleId: currentArticleId,
-                            userId: currentUser.$id,
-                            createdAt: new Date().toISOString()
-                        });
-                        localStorage.setItem(`liked_${currentArticleId}`, doc.$id);
-                    }
-                    await loadLikes();
-                } finally {
-                    btn.disabled = false;
-                }
-            });
-
-            async function loadComments() {
-                const list = document.getElementById('commentsList');
-                const countEls = [document.getElementById('commentCount'), document.getElementById('commentCountTop')];
-                
-                try {
-                    const res = await db.listDocuments(DB_ID, COMMENTS_COL_ID, [
-                        Query.equal('articleId', currentArticleId),
-                        Query.orderDesc('$createdAt'),
-                        Query.limit(100)
-                    ]);
-
-                    countEls.forEach(el => { if (el) el.textContent = res.total; });
-
-                    if (!res.documents.length) {
-                        list.innerHTML = '<p class="state-box">No comments yet.</p>';
-                        return;
-                    }
-
-                    // Fetch profile data for each comment
-                    const commentsWithProfiles = await Promise.all(res.documents.map(async (c) => {
-                        let avatarUrl = null;
-                        let displayName = c.authorName;
-                        
-                        if (c.userId) {
-                            try {
-                                const profile = await db.listDocuments(
-                                    DB_ID,
-                                    PROFILES_COL_ID,
-                                    [Query.equal('userId', c.userId), Query.limit(1)]
-                                );
-                                if (profile.documents.length) {
-                                    avatarUrl = profile.documents[0].avatarUrl;
-                                    displayName = profile.documents[0].displayName || displayName;
-                                }
-                            } catch (e) {}
-                        }
-                        return {...c, avatarUrl, displayName };
-                    }));
-
-                    list.innerHTML = commentsWithProfiles.map(c => {
-                        const avatarHtml = c.avatarUrl 
-                         ? `<img src="${c.avatarUrl}" class="comment-avatar" onerror="this.style.display='none'">`
-                            : `<div class="comment-initials">${getInitials(c.displayName)}</div>`;
-                        
-                        const authorLink = c.userId 
-                         ? `<a href="profile.html?userId=${c.userId}" class="comment-author">${escapeHtml(c.displayName)}</a>`
-                            : `<span class="comment-author">${escapeHtml(c.displayName)}</span>`;
-                        
-                        const imgHtml = c.image_id? `<img src="${storage.getFilePreview(BUCKET_ID, c.image_id, 600).href}" class="comment-image">` : '';
-                        const ytHtml = c.youtube_id? `
-                            <div class="comment-video">
-                                <iframe src="https://www.youtube-nocookie.com/embed/${c.youtube_id}" 
-                                    loading="lazy" allowfullscreen></iframe>
-                            </div>` : '';
-                        
-                        return `
-                            <div class="comment-item">
-                                ${avatarHtml}
-                                <div class="comment-body">
-                                    <div>
-                                        ${authorLink}
-                                        <span class="comment-meta">${formatDate(c.createdAt)}</span>
-                                    </div>
-                                    <p class="comment-text">${escapeHtml(c.commentText)}</p>
-                                    ${imgHtml}
-                                    ${ytHtml}
-                                </div>
-                            </div>
-                        `;
-                    }).join('');
-                } catch (e) {
-                    list.innerHTML = '<p class="state-box" style="color:red;">Failed to load comments.</p>';
-                }
-            }
-
-            document.getElementById('submitComment').addEventListener('click', async () => {
-                if (!currentUser) {
-                    window.location.href = 'login.html';
-                    return;
-                }
-                
-                const input = document.getElementById('commentInput');
-                const txt = input.value.trim();
-                if (!txt) return;
-
-                const btn = document.getElementById('submitComment');
-                btn.disabled = true;
-
-                try {
-                    const imageFile = document.getElementById('commentImage').files[0];
-                    const ytUrl = document.getElementById('commentYoutube').value.trim();
-                    
-                    let imageId = null;
-                    if (imageFile) {
-                        const uploaded = await storage.createFile(BUCKET_ID, ID.unique(), imageFile);
-                        imageId = uploaded.$id;
-                    }
-                    
-                    await db.createDocument(DB_ID, COMMENTS_COL_ID, ID.unique(), {
-                        articleId: currentArticleId,
-                        userId: currentUser.$id,
-                        authorName: currentUser.name || currentUser.email.split('@')[0],
-                        commentText: txt,
-                        createdAt: new Date().toISOString(),
-                        image_id: imageId,
-                        youtube_id: extractYouTubeID(ytUrl)
-                    });
-
-                    input.value = '';
-                    document.getElementById('commentImage').value = '';
-                    document.getElementById('commentYoutube').value = '';
-                    await loadComments();
-                } catch (e) {
-                    alert('Failed to post comment: ' + e.message);
-                } finally {
-                    btn.disabled = false;
-                }
-            });
-
-            function extractYouTubeID(url) {
-                if (!url) return null;
-                const match = url.match(/(?:youtube\.com\/(?:[^\/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([^"&?\/\s]{11})/);
-                return match? match[1] : null;
-            }
-
-            // Check login status
-            (async () => {
-                try {
-                    currentUser = await account.get();
-                    document.getElementById('commentFormWrap').style.display = 'block';
-                    document.getElementById('loginToComment').style.display = 'none';
-                } catch (e) {
-                    // Not logged in
-                }
-            })();
-
-            if (localStorage.getItem('theme') === 'dark') {
-                document.body.classList.add('dark-mode');
-            }
-
-            loadArticle();
-        })();
-    </script>
+      if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', loadProfile);
+      } else {
+        loadProfile();
+      }
+    })();
+  </script>
 </body>
 </html>
