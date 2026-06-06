@@ -4,27 +4,27 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="Khabar Darjeeling - Latest news from Darjeeling, Kalimpong, Kurseong, Mirik, Siliguri and West Bengal">
-    
+
     <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
     <meta http-equiv="Pragma" content="no-cache">
     <meta http-equiv="Expires" content="0">
-    
+
     <!-- 📱 PWA MANIFEST & META TAGS -->
     <link rel="manifest" href="manifest.json">
     <meta name="theme-color" content="#c41e3a">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="apple-mobile-web-app-title" content="खबर दार्जिलिंग">
-    
+
     <!-- Google AdSense -->
     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8402633423386929"
      crossorigin="anonymous"></script>
-    
+
     <title>खबर दार्जिलिंग - Your Trusted News Source</title>
-    <link rel="stylesheet" href="css/style.css?v=110">
-    <link rel="stylesheet" href="css/responsive.css?v=110">
-    
-    <!-- 🔒 PRE-LOAD OVERLAY STYLE -->
+    <link rel="stylesheet" href="css/style.css?v=111">
+    <link rel="stylesheet" href="css/responsive.css?v=111">
+
+    <!-- 🔒 PRE-LOAD OVERLAY STYLE + BREAKING TICKER STYLE -->
     <style>
         #gatekeeperLoader {
             position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
@@ -33,7 +33,7 @@
             font-family: sans-serif; transition: opacity 0.3s ease;
         }
         body.dark-mode #gatekeeperLoader { background: #1a1a1a; color: #ffffff; }
-        .spinner {
+       .spinner {
             width: 40px; height: 40px; border: 4px solid rgba(196, 30, 58, 0.1);
             border-left-color: #c41e3a; border-radius: 50%; animation: spin 1s linear infinite;
             margin-bottom: 15px;
@@ -41,20 +41,20 @@
         @keyframes spin { to { transform: rotate(360deg); } }
 
         /* 🎬 VIDEO CARD STYLES */
-        .media-container {
+       .media-container {
             position: relative;
             width: 100%;
             overflow: hidden;
             background: #000;
         }
 
-        .media-container img {
+       .media-container img {
             width: 100%;
             height: auto;
             display: block;
         }
 
-        .play-button-overlay {
+       .play-button-overlay {
             position: absolute;
             top: 0;
             left: 0;
@@ -69,12 +69,12 @@
             cursor: pointer;
         }
 
-        .news-card:hover .play-button-overlay {
+       .news-card:hover.play-button-overlay {
             opacity: 1;
             background: rgba(0, 0, 0, 0.5);
         }
 
-        .play-button {
+       .play-button {
             width: 70px;
             height: 70px;
             border-radius: 50%;
@@ -87,12 +87,12 @@
             z-index: 10;
         }
 
-        .news-card:hover .play-button {
+       .news-card:hover.play-button {
             transform: scale(1.15);
             box-shadow: 0 12px 32px rgba(0, 0, 0, 0.4);
         }
 
-        .play-button::after {
+       .play-button::after {
             content: '';
             width: 0;
             height: 0;
@@ -102,7 +102,7 @@
             margin-left: 4px;
         }
 
-        .video-badge {
+       .video-badge {
             position: absolute;
             top: 10px;
             right: 10px;
@@ -118,8 +118,7 @@
             backdrop-filter: blur(4px);
         }
 
-        /* Optional: Add a subtle duration badge */
-        .video-duration {
+       .video-duration {
             position: absolute;
             bottom: 10px;
             right: 10px;
@@ -132,13 +131,41 @@
             z-index: 5;
         }
 
-        /* Ensure featured stories also support videos */
-        .featured-content {
+       .featured-content {
             position: relative;
         }
 
-        .featured-content .media-container {
+       .featured-content.media-container {
             border-radius: 8px 8px 0 0;
+        }
+
+        /* 🔥 UPDATED BREAKING TICKER STYLES */
+       .breaking-ticker {
+            background: #c41e3a;
+            color: #fff;
+            padding: 8px 0;
+        }
+       .breaking-label {
+            background: #900;
+            padding: 8px 15px;
+            font-weight: 700;
+            font-size: 14px;
+            white-space: nowrap;
+            margin-right: 0;
+        }
+       .ticker-content a {
+            color: #fff;
+            text-decoration: none;
+            display: inline-block;
+            padding: 0 40px;
+            font-weight: 500;
+        }
+       .ticker-content a:hover {
+            text-decoration: underline;
+        }
+        @media (max-width: 600px) {
+           .breaking-label { font-size: 12px; padding: 8px 10px; }
+           .ticker-content a { padding: 0 25px; font-size: 14px; }
         }
     </style>
 </head>
@@ -162,7 +189,7 @@
                         </div>
                     </a>
                 </div>
-                
+
                 <div class="nav-toggle" id="navToggle">
                     <span></span>
                     <span></span>
@@ -201,11 +228,11 @@
         </div>
     </nav>
 
-    <!-- ✅ UPDATED: Breaking News Container with Scrolling Marquee -->
+    <!-- ✅ UPDATED: Breaking News with Multiple Clickable Headlines -->
     <section class="breaking-ticker" id="breaking">
         <div class="container" style="display: flex; align-items: center;">
-            <span class="breaking-label" style="white-space: nowrap; margin-right: 15px; z-index: 2;">BREAKING NEWS</span>
-            <marquee class="ticker-content" id="breakingTicker" scrollamount="6" onmouseover="this.stop();" onmouseout="this.start();" style="flex-grow: 1;">
+            <span class="breaking-label">BREAKING NEWS</span>
+            <marquee class="ticker-content" id="breakingTicker" scrollamount="5" onmouseover="this.stop();" onmouseout="this.start();" style="flex-grow: 1;">
                 Loading breaking news...
             </marquee>
         </div>
@@ -265,14 +292,13 @@
 
     <!-- 📱 SERVICE WORKER REGISTRATION -->
     <script>
-        // Register service worker for offline functionality
         if ('serviceWorker' in navigator) {
             window.addEventListener('load', () => {
                 navigator.serviceWorker.register('sw.js')
-                    .then(registration => {
+                   .then(registration => {
                         console.log('✅ Service Worker registered:', registration);
                     })
-                    .catch(error => {
+                   .catch(error => {
                         console.error('❌ Service Worker registration failed:', error);
                     });
             });
@@ -299,32 +325,28 @@
                 document.body.classList.add('dark-mode');
             }
 
-            if (!appwriteDatabase || !QueryAPI || !dbId || !collectionId) {
+            if (!appwriteDatabase ||!QueryAPI ||!dbId ||!collectionId) {
                 console.error('❌ Appwrite not initialized.');
                 document.getElementById('newsGrid').innerHTML = '<p style="color: red; padding: 20px;">Configuration Error: Appwrite SDK not initialized.</p>';
                 return;
             }
 
-            // 🎬 Get YouTube thumbnail URL from youtube_id
             function getYouTubeThumbnail(youtubeId) {
                 if (!youtubeId) return null;
-                // Use maxresdefault first, fallback to hqdefault
                 return `https://img.youtube.com/vi/${youtubeId}/maxresdefault.jpg`;
             }
 
-            // 🖼 Get image URL (either Appwrite file or direct URL)
             function getAppwriteImageUrl(article) {
                 const imageId = article.imageFileId || article.imageUrl;
-                
+
                 if (!imageId || imageId === 'Text' || imageId === 'null' || imageId === 'undefined') {
-                    return ''; 
+                    return '';
                 }
-                
+
                 if (imageId.startsWith('http')) return imageId;
                 return `${ENDPOINT}/storage/buckets/article-image/files/${imageId}/view?project=${PROJECT_ID}`;
             }
 
-            // 🎯 Determine media source: video or image
             function getMediaSource(article) {
                 if (article.youtube_id) {
                     return {
@@ -333,7 +355,7 @@
                         youtubeId: article.youtube_id
                     };
                 }
-                
+
                 const imageUrl = getAppwriteImageUrl(article);
                 if (imageUrl) {
                     return {
@@ -341,7 +363,7 @@
                         url: imageUrl
                     };
                 }
-                
+
                 return null;
             }
 
@@ -377,7 +399,7 @@
                     const queries = [
                         QueryAPI.equal('status', 'published'),
                         QueryAPI.orderDesc('$createdAt'),
-                        QueryAPI.limit(30) 
+                        QueryAPI.limit(30)
                     ];
 
                     if (currentCategory) {
@@ -417,21 +439,18 @@
                 document.getElementById('mainSectionTitle').textContent = 'Latest News';
 
                 showHomepageSections();
-                
+
                 let featuredArticles = articles.filter(a => a.isFeatured === true);
                 if (featuredArticles.length === 0) {
                     featuredArticles = [articles[0]];
                 } else {
                     featuredArticles = featuredArticles.slice(0, 3);
                 }
-                
-                const topNewsArticles = articles.filter(a => a.isTopNews === true);
-                const breakingArticle = topNewsArticles.length > 0 ? topNewsArticles[0] : articles[0];
-                
-                const featuredIds = featuredArticles.map(a => a.$id);
-                const gridArticles = articles.filter(a => !featuredIds.includes(a.$id)).slice(0, 10);
 
-                renderBreakingTicker(breakingArticle);
+                const featuredIds = featuredArticles.map(a => a.$id);
+                const gridArticles = articles.filter(a =>!featuredIds.includes(a.$id)).slice(0, 10);
+
+                renderBreakingTicker(articles); // ✅ UPDATED: Send all articles
                 renderFeaturedStory(featuredArticles);
                 renderNewsGrid(gridArticles, 'newsGrid');
             }
@@ -453,10 +472,17 @@
                 });
             }
 
-            function renderBreakingTicker(article) {
+            // 🔥 UPDATED FUNCTION: Now shows ALL latest news, clickable
+            function renderBreakingTicker(articles) {
                 const tickerEl = document.getElementById('breakingTicker');
-                if (!tickerEl) return;
-                tickerEl.innerHTML = `<a href="article.html?id=${article.$id}" style="color: inherit; text-decoration: none; display: inline-block; padding: 10px 15px;">${escapeHtml(article.title)}</a>`;
+                if (!tickerEl ||!articles.length) return;
+
+                // Take latest 8 articles for ticker
+                const tickerArticles = articles.slice(0, 8);
+
+                tickerEl.innerHTML = tickerArticles.map(article =>
+                    `<a href="article.html?id=${article.$id}">🔴 ${escapeHtml(article.title)}</a>`
+                ).join('');
             }
 
             function renderFeaturedStory(featuredArray) {
@@ -467,9 +493,9 @@
                     featuredEl.style = '';
                     const article = featuredArray[0];
                     const media = getMediaSource(article);
-                    const mediaHtml = media ? generateMediaHtml(media, article) : '';
-                    const content = article.content ? truncateText(article.content, 250) : '';
-                    const textStyle = media ? '' : 'width: 100%;';
+                    const mediaHtml = media? generateMediaHtml(media, article) : '';
+                    const content = article.content? truncateText(article.content, 250) : '';
+                    const textStyle = media? '' : 'width: 100%;';
 
                     featuredEl.innerHTML = `
                         <a href="article.html?id=${article.$id}" class="featured-content" style="text-decoration: none; color: inherit;">
@@ -497,8 +523,8 @@
 
                 featuredEl.innerHTML = featuredArray.map(article => {
                     const media = getMediaSource(article);
-                    const mediaHtml = media ? generateMediaHtml(media, article) : '';
-                    const content = article.content ? truncateText(article.content, 120) : '';
+                    const mediaHtml = media? generateMediaHtml(media, article) : '';
+                    const content = article.content? truncateText(article.content, 120) : '';
 
                     return `
                         <a href="article.html?id=${article.$id}" style="text-decoration: none; color: inherit; background: #fff; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.05); display: flex; flex-direction: column; overflow: hidden;">
@@ -517,9 +543,8 @@
                 }).join('');
             }
 
-            // 🎬 Generate media HTML (video thumbnail with play button or image)
             function generateMediaHtml(media, article) {
-                if (!media || !media.url) return '';
+                if (!media ||!media.url) return '';
 
                 if (media.type === 'video') {
                     return `
@@ -542,8 +567,8 @@
 
                 gridEl.innerHTML = articles.map(article => {
                     const media = getMediaSource(article);
-                    const mediaHtml = media ? generateMediaHtml(media, article) : '';
-                    const content = article.content ? truncateText(article.content, 150) : '';
+                    const mediaHtml = media? generateMediaHtml(media, article) : '';
+                    const content = article.content? truncateText(article.content, 150) : '';
 
                     return `
                         <a href="article.html?id=${article.$id}" class="news-card" style="text-decoration: none; color: inherit; display: flex; flex-direction: column;">
@@ -563,7 +588,7 @@
             }
 
             function handleEmptyState(category) {
-                const message = category ? 'No articles published in this category yet.' : 'No articles published yet.';
+                const message = category? 'No articles published in this category yet.' : 'No articles published yet.';
                 if (category) hideHomepageSections();
                 if (!category) {
                     document.getElementById('featuredStory').innerHTML = '<p>No articles published yet.</p>';
@@ -611,8 +636,8 @@
                 themeToggle.addEventListener('click', () => {
                     document.body.classList.toggle('dark-mode');
                     const isDarkMode = document.body.classList.contains('dark-mode');
-                    themeToggle.textContent = isDarkMode ? '☀' : '🌙';
-                    localStorage.setItem('theme', isDarkMode ? 'dark' : 'light');
+                    themeToggle.textContent = isDarkMode? '☀' : '🌙';
+                    localStorage.setItem('theme', isDarkMode? 'dark' : 'light');
                 });
                 if (localStorage.getItem('theme') === 'dark') {
                     themeToggle.textContent = '☀';
