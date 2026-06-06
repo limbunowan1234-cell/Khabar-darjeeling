@@ -9,24 +9,20 @@
     <meta http-equiv="Pragma" content="no-cache">
     <meta http-equiv="Expires" content="0">
 
-    <!-- 📱 PWA MANIFEST & META TAGS -->
     <link rel="manifest" href="manifest.json">
     <meta name="theme-color" content="#c41e3a">
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="apple-mobile-web-app-title" content="खबर दार्जिलिंग">
 
-    <!-- ✅ FAVICON -->
     <link rel="icon" type="image/png" href="assets/logo.png">
     <link rel="apple-touch-icon" href="assets/logo.png">
 
-    <!-- Google AdSense -->
-    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8402633423386929"
-     crossorigin="anonymous"></script>
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8402633423386929" crossorigin="anonymous"></script>
 
     <title>खबर दार्जिलिंग - Your Trusted News Source</title>
-    <link rel="stylesheet" href="css/style.css?v=116">
-    <link rel="stylesheet" href="css/responsive.css?v=116">
+    <link rel="stylesheet" href="css/style.css?v=117">
+    <link rel="stylesheet" href="css/responsive.css?v=117">
 
     <style>
         #gatekeeperLoader {
@@ -43,7 +39,6 @@
         }
         @keyframes spin { to { transform: rotate(360deg); } }
 
-        /* 🎬 VIDEO CARD STYLES */
         .media-container {
             position: relative;
             width: 100%;
@@ -108,21 +103,9 @@
             z-index: 5;
             backdrop-filter: blur(4px);
         }
-        .video-duration {
-            position: absolute;
-            bottom: 10px; right: 10px;
-            background: rgba(0, 0, 0, 0.8);
-            color: white;
-            padding: 4px 8px;
-            border-radius: 3px;
-            font-size: 12px;
-            font-weight: 600;
-            z-index: 5;
-        }
         .featured-content { position: relative; }
         .featured-content .media-container { border-radius: 8px 8px 0 0; }
 
-        /* 🔥 BREAKING TICKER */
         .breaking-ticker { background: #c41e3a; color: #fff; padding: 8px 0; }
         .breaking-label {
             background: #900;
@@ -144,7 +127,6 @@
             .ticker-content a { padding: 0 25px; font-size: 14px; }
         }
 
-        /* ✅ FIXED: Author block — correct descendant selectors with space */
         .article-author {
             display: flex;
             align-items: center;
@@ -190,7 +172,6 @@
 </head>
 <body>
 
-    <!-- 🔒 SECURITY LOADER -->
     <div id="gatekeeperLoader">
         <div class="spinner"></div>
         <p style="font-weight: 600; letter-spacing: 0.5px;">Securing Portal Session...</p>
@@ -247,7 +228,6 @@
         </div>
     </nav>
 
-    <!-- ✅ BREAKING NEWS TICKER -->
     <section class="breaking-ticker" id="breaking">
         <div class="container" style="display: flex; align-items: center;">
             <span class="breaking-label">BREAKING NEWS</span>
@@ -271,18 +251,14 @@
     <section class="featured-section" id="featuredSection">
         <div class="container">
             <h3 class="section-title">Featured Story</h3>
-            <div id="featuredStory" class="featured-card">
-                Loading featured article...
-            </div>
+            <div id="featuredStory" class="featured-card">Loading featured article...</div>
         </div>
     </section>
 
     <section class="news-section" id="latest">
         <div class="container">
             <h3 class="section-title" id="mainSectionTitle">Latest News</h3>
-            <div id="newsGrid" class="news-grid">
-                Loading articles...
-            </div>
+            <div id="newsGrid" class="news-grid">Loading articles...</div>
         </div>
     </section>
 
@@ -311,7 +287,6 @@
         </div>
     </footer>
 
-    <!-- 📱 SERVICE WORKER -->
     <script>
         if ('serviceWorker' in navigator) {
             window.addEventListener('load', () => {
@@ -322,15 +297,11 @@
         }
     </script>
 
-    <!-- ✅ APPWRITE SDK -->
     <script src="https://cdn.jsdelivr.net/npm/appwrite@14.0.1/dist/iife/sdk.min.js"></script>
     <script src="js/appwrite.js?v=116"></script>
-
-    <!-- ERUDA (dev console) -->
     <script src="https://cdn.jsdelivr.net/npm/eruda"></script>
     <script>
-        try { if (typeof eruda !== 'undefined') eruda.init(); }
-        catch (e) { console.log('Eruda skipped'); }
+        try { if (typeof eruda !== 'undefined') eruda.init(); } catch (e) {}
     </script>
 
     <script>
@@ -339,25 +310,21 @@
             const QueryAPI = window.Query;
             const dbId = window.APPWRITE_DB_ID;
             const collectionId = window.APPWRITE_COLLECTION_ID;
-
             const ENDPOINT = 'https://nyc.cloud.appwrite.io/v1';
             const PROJECT_ID = 'khabardarjeeling';
 
-            // Apply saved theme immediately
             if (localStorage.getItem('theme') === 'dark') {
                 document.body.classList.add('dark-mode');
             }
 
             if (!appwriteDatabase || !QueryAPI || !dbId || !collectionId) {
-                console.error('❌ Appwrite not initialized.');
                 document.getElementById('newsGrid').innerHTML =
                     '<p style="color:red;padding:20px;">Configuration Error: Appwrite SDK not initialized.</p>';
                 return;
             }
 
             function getYouTubeThumbnail(youtubeId) {
-                if (!youtubeId) return null;
-                return `https://img.youtube.com/vi/${youtubeId}/maxresdefault.jpg`;
+                return youtubeId ? `https://img.youtube.com/vi/${youtubeId}/maxresdefault.jpg` : null;
             }
 
             function getAppwriteImageUrl(article) {
@@ -383,58 +350,44 @@
                 return (parts[0].charAt(0) + parts[parts.length - 1].charAt(0)).toUpperCase();
             }
 
-            // ✅ FIXED: Author links to profile.html?userId=...
             function generateAuthorHtml(article) {
                 const authorName = article.submitterName || article.authorName || 'Staff Reporter';
                 const authorAvatar = article.submitterAvatar;
-                const authorId = article.userId || '';
+                const authorId = article.submitterId || article.userId || '';
                 const profileLink = authorId ? `profile.html?userId=${authorId}` : '#';
 
-                const nameHtml = `By <a href="${profileLink}" style="text-decoration:none;color:inherit;">
-                    <span class="author-name">${escapeHtml(authorName)}</span>
-                </a>`;
+                const nameHtml = `By <a href="${profileLink}" style="text-decoration:none;color:inherit;"><span class="author-name">${escapeHtml(authorName)}</span></a>`;
 
                 if (authorAvatar && authorAvatar !== '' && authorAvatar !== 'null') {
                     return `
                         <div class="article-author">
-                            <img src="${authorAvatar}"
-                                 alt="${escapeHtml(authorName)}"
-                                 class="author-avatar"
-                                 onerror="this.outerHTML='<div class=\\'author-initials\\'>${getInitials(authorName)}</div>'">
-                            <span>${nameHtml}</span>
-                        </div>`;
-                } else {
-                    return `
-                        <div class="article-author">
-                            <div class="author-initials">${getInitials(authorName)}</div>
+                            <img src="${authorAvatar}" alt="${escapeHtml(authorName)}" class="author-avatar" onerror="this.outerHTML='<div class=\\'author-initials\\'>${getInitials(authorName)}</div>'">
                             <span>${nameHtml}</span>
                         </div>`;
                 }
+                return `
+                    <div class="article-author">
+                        <div class="author-initials">${getInitials(authorName)}</div>
+                        <span>${nameHtml}</span>
+                    </div>`;
             }
 
             function waitForAppwrite(callback, retries = 0) {
-                if (window.account) {
-                    callback();
-                } else if (retries < 30) {
-                    setTimeout(() => waitForAppwrite(callback, retries + 1), 100);
-                } else {
-                    document.getElementById('gatekeeperLoader').innerHTML =
-                        '<p style="color:red;font-weight:bold;padding:20px;text-align:center;">Authentication Engine Timeout.</p>';
-                }
+                if (window.account) callback();
+                else if (retries < 30) setTimeout(() => waitForAppwrite(callback, retries + 1), 100);
+                else document.getElementById('gatekeeperLoader').innerHTML = '<p style="color:red;font-weight:bold;padding:20px;text-align:center;">Authentication Engine Timeout.</p>';
             }
 
             async function checkAuthGate() {
                 try {
                     await window.account.get();
-                    const loader = document.getElementById('gatekeeperLoader');
-                    if (loader) {
-                        loader.style.opacity = '0';
-                        setTimeout(() => loader.style.display = 'none', 300);
-                    }
-                    loadHomepage();
-                } catch (error) {
-                    window.location.href = 'login.html';
+                } catch (error) {}
+                const loader = document.getElementById('gatekeeperLoader');
+                if (loader) {
+                    loader.style.opacity = '0';
+                    setTimeout(() => loader.style.display = 'none', 300);
                 }
+                loadHomepage();
             }
 
             async function loadHomepage() {
@@ -456,13 +409,9 @@
                         return;
                     }
 
-                    if (currentCategory) {
-                        renderCategoryView(response.documents, currentCategory);
-                    } else {
-                        renderHomepageView(response.documents);
-                    }
+                    if (currentCategory) renderCategoryView(response.documents, currentCategory);
+                    else renderHomepageView(response.documents);
                 } catch (error) {
-                    console.error('❌ Error loading articles:', error);
                     handleError();
                 }
             }
@@ -497,7 +446,6 @@
                     const el = document.getElementById(id);
                     if (el) el.style.display = 'none';
                 });
-                document.getElementById('homeLink')?.classList.remove('active');
             }
 
             function showHomepageSections() {
@@ -520,7 +468,6 @@
                 if (!featuredEl) return;
 
                 if (featuredArray.length === 1) {
-                    featuredEl.style = '';
                     const article = featuredArray[0];
                     const media = getMediaSource(article);
                     const mediaHtml = media ? generateMediaHtml(media, article) : '';
@@ -528,6 +475,7 @@
                     const textStyle = media ? '' : 'width: 100%;';
                     const authorHtml = generateAuthorHtml(article);
 
+                    featuredEl.style = '';
                     featuredEl.innerHTML = `
                         <a href="article.html?id=${article.$id}" class="featured-content" style="text-decoration:none;color:inherit;">
                             ${mediaHtml}
@@ -633,23 +581,23 @@
             function formatDate(dateString) {
                 try {
                     return new Date(dateString).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' });
-                } catch { return 'Date unknown'; }
+                } catch {
+                    return 'Date unknown';
+                }
             }
 
             function escapeHtml(text) {
                 const div = document.createElement('div');
-                div.textContent = text;
+                div.textContent = text || '';
                 return div.innerHTML;
             }
 
-            // ✅ FIXED: toggle 'open' (matches style.css .nav-menu.open)
             const navToggle = document.getElementById('navToggle');
             const navMenu = document.getElementById('navMenu');
             if (navToggle) {
                 navToggle.addEventListener('click', () => navMenu.classList.toggle('open'));
             }
 
-            // ✅ FIXED: uses dark-mode consistently
             const themeToggle = document.getElementById('themeToggle');
             if (themeToggle) {
                 themeToggle.addEventListener('click', () => {
@@ -679,7 +627,6 @@
             } else {
                 waitForAppwrite(checkAuthGate);
             }
-
         })();
     </script>
 </body>
