@@ -6,171 +6,660 @@
     <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
     <meta http-equiv="Pragma" content="no-cache">
     <meta http-equiv="Expires" content="0">
+    <meta name="theme-color" content="#b81d24">
+    <link rel="icon" type="image/png" href="assets/logo.png">
+    <link rel="manifest" href="manifest.json">
     <title>Khabar Darjeeling - Article</title>
+
     <style>
-        :root { --primary-red: #b81d24; --bg-color: #f0f2f5; }
-        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; background: var(--bg-color); margin: 0; }
-     .header-link { text-decoration: none; display: block; }
-     .header { background: #fff; padding: 15px; text-align: center; border-bottom: 2px solid var(--primary-red); font-weight: bold; color: var(--primary-red); font-size: 1.2rem; }
-     .header:hover { background: #f9f9f9; }
-     .article-container { max-width: 600px; margin: 20px auto; background: #fff; padding: 20px; border-radius: 8px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
-     .category-badge { background: var(--primary-red); color: white; padding: 4px 8px; border-radius: 4px; font-size: 11px; text-transform: uppercase; }
-     .art-img { width: 100%; border-radius: 8px; margin: 15px 0; object-fit: cover; display: none; box-sizing: border-box; }
-     .art-video { position: relative; width: 100%; padding-bottom: 56.25%; margin: 15px 0; border-radius: 8px; overflow: hidden; display: none; box-sizing: border-box; }
-     .art-video iframe { position: absolute; top:0; left:0; width:100%; height:100%; border:0; border-radius:8px; }
-     .like-btn { background: #e4e6eb; border: none; padding: 10px 20px; border-radius: 20px; font-weight: 600; cursor: pointer; transition: 0.3s; display: inline-flex; align-items: center; gap: 5px; }
-     .like-btn:hover:not(:disabled) { background: #d8dadf; }
-     .like-btn.liked { background: var(--primary-red); color: white; }
-     .comments-section { margin-top: 40px; border-top: 1px solid #eee; padding-top: 20px; }
-     .comment-input { width: 100%; padding: 12px; border: 1px solid #ccc; border-radius: 6px; box-sizing: border-box; resize: vertical; min-height: 80px; font-family: inherit; margin-bottom: 10px; }
-     .submit-comment-btn { background: var(--primary-red); color: white; border: none; padding: 10px 16px; border-radius: 6px; font-weight: bold; cursor: pointer; }
-     .comment-list { margin-top: 25px; }
-     .comment-item { background: #f8f9fa; padding: 15px; border-radius: 8px; margin-bottom: 15px; border-left: 3px solid var(--primary-red); }
-     .comment-author { font-weight: bold; color: #333; margin-bottom: 5px; font-size: 0.9rem; }
-     .comment-text { color: #555; font-size: 0.95rem; margin: 0; line-height: 1.4; }
-     .comment-image { width: 100%; max-width: 100%; height: auto; border-radius: 6px; margin-top: 0.75rem; display: block; }
-     .comment-video { position: relative; width: 100%; padding-bottom: 56.25%; margin-top: 0.75rem; }
-     .comment-video iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: 0; border-radius: 6px; }
-     .comment-meta { color:#888; font-size:0.8em; font-weight:normal; margin-left:10px; }
+        :root {
+            --primary-red: #b81d24;
+            --bg-color: #f0f2f5;
+            --card-bg: #ffffff;
+            --text-main: #222;
+            --text-muted: #666;
+            --border: #e5e7eb;
+        }
+
+        body.dark-mode {
+            --bg-color: #121212;
+            --card-bg: #1e1e1e;
+            --text-main: #f5f5f5;
+            --text-muted: #b5b5b5;
+            --border: #333;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            background: var(--bg-color);
+            margin: 0;
+            color: var(--text-main);
+        }
+
+        .header-link {
+            text-decoration: none;
+            display: block;
+        }
+
+        .header {
+            background: var(--card-bg);
+            padding: 15px;
+            text-align: center;
+            border-bottom: 2px solid var(--primary-red);
+            font-weight: bold;
+            color: var(--primary-red);
+            font-size: 1.2rem;
+        }
+
+        .header:hover {
+            background: rgba(184, 29, 36, 0.04);
+        }
+
+        .article-container {
+            max-width: 760px;
+            margin: 20px auto;
+            background: var(--card-bg);
+            padding: 22px;
+            border-radius: 10px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+
+        .category-badge {
+            background: var(--primary-red);
+            color: white;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 0.4px;
+        }
+
+        .art-img {
+            width: 100%;
+            border-radius: 8px;
+            margin: 15px 0;
+            object-fit: cover;
+            display: none;
+            box-sizing: border-box;
+            max-height: 460px;
+        }
+
+        .art-video {
+            position: relative;
+            width: 100%;
+            padding-bottom: 56.25%;
+            margin: 15px 0;
+            border-radius: 8px;
+            overflow: hidden;
+            display: none;
+            box-sizing: border-box;
+        }
+
+        .art-video iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border: 0;
+            border-radius: 8px;
+        }
+
+        .meta-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            align-items: center;
+            margin: 12px 0 6px;
+            color: var(--text-muted);
+            font-size: 13px;
+        }
+
+        .author-link {
+            color: inherit;
+            text-decoration: none;
+            font-weight: 700;
+        }
+
+        .author-link:hover {
+            text-decoration: underline;
+        }
+
+        .article-author {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-top: 18px;
+            padding-top: 14px;
+            border-top: 1px solid var(--border);
+        }
+
+        .author-avatar,
+        .author-initials {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            flex-shrink: 0;
+        }
+
+        .author-avatar {
+            object-fit: cover;
+            border: 1px solid var(--border);
+        }
+
+        .author-initials {
+            background: var(--primary-red);
+            color: #fff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 800;
+            font-size: 13px;
+        }
+
+        .article-content {
+            line-height: 1.7;
+            white-space: pre-line;
+            color: var(--text-main);
+            font-size: 1.02rem;
+            margin-top: 10px;
+        }
+
+        .actions {
+            margin-top: 25px;
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .like-btn {
+            background: #e4e6eb;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 20px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: 0.3s;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .like-btn:hover:not(:disabled) {
+            background: #d8dadf;
+        }
+
+        .like-btn.liked {
+            background: var(--primary-red);
+            color: white;
+        }
+
+        .top-links {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 10px;
+            margin-top: 10px;
+            flex-wrap: wrap;
+        }
+
+        .small-link {
+            text-decoration: none;
+            color: var(--primary-red);
+            font-weight: 700;
+            font-size: 14px;
+        }
+
+        .comments-section {
+            margin-top: 40px;
+            border-top: 1px solid var(--border);
+            padding-top: 20px;
+        }
+
+        .comment-input {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            box-sizing: border-box;
+            resize: vertical;
+            min-height: 80px;
+            font-family: inherit;
+            margin-bottom: 10px;
+            background: var(--card-bg);
+            color: var(--text-main);
+        }
+
+        .submit-comment-btn {
+            background: var(--primary-red);
+            color: white;
+            border: none;
+            padding: 10px 16px;
+            border-radius: 6px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .comment-list {
+            margin-top: 25px;
+        }
+
+        .comment-item {
+            background: rgba(184, 29, 36, 0.04);
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            border-left: 3px solid var(--primary-red);
+        }
+
+        body.dark-mode .comment-item {
+            background: rgba(184, 29, 36, 0.12);
+        }
+
+        .comment-author {
+            font-weight: bold;
+            color: var(--text-main);
+            margin-bottom: 5px;
+            font-size: 0.9rem;
+        }
+
+        .comment-text {
+            color: var(--text-main);
+            font-size: 0.95rem;
+            margin: 0;
+            line-height: 1.5;
+        }
+
+        .comment-image {
+            width: 100%;
+            max-width: 100%;
+            height: auto;
+            border-radius: 6px;
+            margin-top: 0.75rem;
+            display: block;
+        }
+
+        .comment-video {
+            position: relative;
+            width: 100%;
+            padding-bottom: 56.25%;
+            margin-top: 0.75rem;
+        }
+
+        .comment-video iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border: 0;
+            border-radius: 6px;
+        }
+
+        .comment-meta {
+            color: var(--text-muted);
+            font-size: 0.8em;
+            font-weight: normal;
+            margin-left: 10px;
+        }
+
+        .state-box {
+            padding: 18px;
+            border-radius: 10px;
+            background: rgba(0,0,0,0.03);
+            color: var(--text-muted);
+        }
+
+        body.dark-mode .state-box {
+            background: rgba(255,255,255,0.04);
+        }
+
+        @media (max-width: 768px) {
+            .article-container {
+                margin: 10px;
+                padding: 16px;
+            }
+
+            .header {
+                font-size: 1rem;
+                padding: 13px;
+            }
+        }
     </style>
 </head>
 <body>
-    <a href="index.html" class="header-link"><div class="header">खबर दार्जिलिंग</div></a>
+    <a href="index.html" class="header-link">
+        <div class="header">खबर दार्जिलिंग</div>
+    </a>
+
     <main class="article-container">
         <span class="category-badge" id="categoryBadge">General</span>
-        <h1 id="title">Loading...</h1>
+        <h1 id="title" style="margin-bottom: 8px;">Loading...</h1>
+
+        <div class="meta-row">
+            <span id="articleDate">—</span>
+            <span id="articleAuthorWrap"></span>
+        </div>
+
         <img id="mainImg" class="art-img" src="" alt="Article Image">
         <div id="articleVideo" class="art-video"></div>
-        <div id="body" style="line-height: 1.6; white-space: pre-line; color: #333;"></div>
-        <div style="margin-top:25px;"><button id="likeBtn" class="like-btn">❤️ Like</button></div>
+
+        <div id="body" class="article-content"></div>
+
+        <div class="actions">
+            <button id="likeBtn" class="like-btn">❤️ Like</button>
+            <a href="index.html" class="small-link" style="align-self:center;">← Back to Home</a>
+        </div>
+
         <div class="comments-section">
             <h3>Discussion</h3>
+
             <div class="comment-form">
                 <textarea id="commentInput" class="comment-input" placeholder="What are your thoughts on this?"></textarea>
                 <button id="submitComment" class="submit-comment-btn">Post Comment</button>
             </div>
-            <div id="commentsList" class="comment-list"><p style="color: #888; font-style: italic;">Loading comments...</p></div>
+
+            <div id="commentsList" class="comment-list">
+                <p class="state-box">Loading comments...</p>
+            </div>
         </div>
     </main>
 
-    <!-- REMOVED ERUDA - was causing crashes -->
-    <script src="https://cdn.jsdelivr.net/npm/appwrite@14.0.1/dist/iife/sdk.min.js" onerror="this.src='https://unpkg.com/appwrite@14.0.1/dist/iife/sdk.min.js'"></script>
+    <script src="https://cdn.jsdelivr.net/npm/appwrite@14.0.1/dist/iife/sdk.min.js"></script>
+    <script src="js/appwrite.js?v=117"></script>
 
     <script>
-        // INLINED - no more broken import
-        const categoryThemes = { 
-            default: { color: '#b81d24' }, 
-            darjeeling: { color: '#b81d24' },
-            politics: { color: '#1a56db' },
-            sports: { color: '#0e9f6e' }
-        };
+        (() => {
+            if (!window.Appwrite) {
+                document.getElementById('title').textContent = 'Error';
+                document.getElementById('body').innerHTML = '<div class="state-box">Appwrite SDK failed to load.</div>';
+                return;
+            }
 
-        const PROJECT_ID = 'khabardarjeeling';
-        const ENDPOINT = 'https://nyc.cloud.appwrite.io/v1';
-        const DB_ID = 'Khabar_db';
-        const COL_ID = 'articles';
-        const COMMENTS_COL_ID = 'comments';
-        const LIKES_COL_ID = 'likes';
-        const BUCKET_ID = 'post-images';
-
-        // Wait for SDK to load
-        function startApp() {
-            if (!window.Appwrite) { setTimeout(startApp, 50); return; }
-            
             const { Client, Databases, Query, ID, Account, Storage } = window.Appwrite;
-            const client = new Client().setProject(PROJECT_ID).setEndpoint(ENDPOINT);
+            const PROJECT_ID = 'khabardarjeeling';
+            const ENDPOINT = 'https://nyc.cloud.appwrite.io/v1';
+            const DB_ID = 'Khabar_db';
+            const COL_ID = 'articles';
+            const COMMENTS_COL_ID = 'comments';
+            const LIKES_COL_ID = 'likes';
+            const BUCKET_ID = 'post-images';
+
+            const client = new Client()
+                .setProject(PROJECT_ID)
+                .setEndpoint(ENDPOINT);
+
             const db = new Databases(client);
             const account = new Account(client);
             const storage = new Storage(client);
+
+            const categoryThemes = {
+                default: { color: '#b81d24' },
+                darjeeling: { color: '#b81d24' },
+                politics: { color: '#1a56db' },
+                sports: { color: '#0e9f6e' },
+                entertainment: { color: '#8b5cf6' },
+                national: { color: '#d97706' }
+            };
+
             let currentArticleId = null;
 
-            async function loadData() {
+            function escapeHtml(text) {
+                const div = document.createElement('div');
+                div.textContent = text || '';
+                return div.innerHTML;
+            }
+
+            function stripText(htmlStr) {
+                const div = document.createElement('div');
+                div.innerHTML = htmlStr || '';
+                return div.textContent || div.innerText || '';
+            }
+
+            function formatDate(dateString) {
+                try {
+                    return new Date(dateString).toLocaleDateString('en-US', {
+                        year: 'numeric',
+                        month: 'short',
+                        day: 'numeric'
+                    });
+                } catch {
+                    return 'Date unknown';
+                }
+            }
+
+            function getInitials(name) {
+                if (!name) return 'KD';
+                const parts = name.trim().split(' ');
+                if (parts.length === 1) return parts[0].charAt(0).toUpperCase();
+                return (parts[0].charAt(0) + parts[parts.length - 1].charAt(0)).toUpperCase();
+            }
+
+            function getImageUrl(article) {
+                const imageId = article.imageFileId || article.imageUrl;
+                if (!imageId || imageId === 'Text' || imageId === 'null' || imageId === 'undefined') return '';
+                if (imageId.startsWith('http')) return imageId;
+                return `${ENDPOINT}/storage/buckets/post-images/files/${imageId}/view?project=${PROJECT_ID}`;
+            }
+
+            function renderAuthor(article) {
+                const authorName = article.submitterName || article.authorName || 'Staff Reporter';
+                const authorId = article.submitterId || '';
+                const profileLink = authorId ? `profile.html?userId=${encodeURIComponent(authorId)}` : '#';
+                const authorAvatar = article.submitterAvatar || '';
+
+                const authorWrap = document.getElementById('articleAuthorWrap');
+
+                if (authorAvatar && authorAvatar !== 'null') {
+                    authorWrap.innerHTML = `
+                        <span class="article-author" style="display:inline-flex;border-top:none;padding-top:0;margin-top:0;">
+                            <img src="${authorAvatar}" alt="${escapeHtml(authorName)}" class="author-avatar" onerror="this.style.display='none'">
+                            <span>By <a class="author-link" href="${profileLink}">${escapeHtml(authorName)}</a></span>
+                        </span>
+                    `;
+                } else {
+                    authorWrap.innerHTML = `
+                        <span style="display:inline-flex;align-items:center;gap:8px;">
+                            <span class="author-initials">${getInitials(authorName)}</span>
+                            <span>By <a class="author-link" href="${profileLink}">${escapeHtml(authorName)}</a></span>
+                        </span>
+                    `;
+                }
+            }
+
+            async function loadArticle() {
                 try {
                     const params = new URLSearchParams(window.location.search);
                     currentArticleId = params.get('id');
-                    if (!currentArticleId) throw new Error("No Article ID");
+                    if (!currentArticleId) throw new Error('No Article ID provided.');
+
                     const art = await db.getDocument(DB_ID, COL_ID, currentArticleId);
-                    
-                    document.getElementById('title').textContent = art.title;
-                    document.getElementById('body').textContent = art.content;
-                    const theme = categoryThemes[art.category?.toLowerCase()] || categoryThemes.default;
-                    
-                    if(art.category) {
-                        const badge = document.getElementById('categoryBadge');
-                        badge.textContent = art.category;
-                        badge.style.backgroundColor = theme.color;
-                    }
+
+                    document.title = `${art.title || 'Article'} - खबर दार्जिलिंग`;
+                    document.getElementById('title').textContent = art.title || 'Untitled';
+                    document.getElementById('body').textContent = art.content || '';
+
+                    const theme = categoryThemes[(art.category || '').toLowerCase()] || categoryThemes.default;
+                    const badge = document.getElementById('categoryBadge');
+                    badge.textContent = art.category || 'General';
+                    badge.style.backgroundColor = theme.color;
+
+                    document.getElementById('articleDate').textContent = formatDate(art.$createdAt);
+                    renderAuthor(art);
 
                     const imgEl = document.getElementById('mainImg');
-                    const imageId = art.imageFileId || art.imageUrl;
-                    if (imageId && !['Text','null','undefined'].includes(imageId)) {
-                        imgEl.src = imageId.startsWith('http') ? imageId : `${ENDPOINT}/storage/buckets/article-image/files/${imageId}/view?project=${PROJECT_ID}`;
+                    const imageUrl = getImageUrl(art);
+                    if (imageUrl) {
+                        imgEl.src = imageUrl;
                         imgEl.style.display = 'block';
                         imgEl.style.border = `3px solid ${theme.color}`;
                     }
 
                     const videoContainer = document.getElementById('articleVideo');
-                    if (art.youtube_id?.length === 11) {
+                    if (art.youtube_id && art.youtube_id.length === 11) {
                         videoContainer.style.display = 'block';
                         videoContainer.style.border = `3px solid ${theme.color}`;
-                        videoContainer.innerHTML = `<iframe src="https://www.youtube-nocookie.com/embed/${art.youtube_id}?playsinline=1&modestbranding=1&rel=0" loading="lazy" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen referrerpolicy="strict-origin-when-cross-origin"></iframe>`;
+                        videoContainer.innerHTML = `
+                            <iframe
+                                src="https://www.youtube-nocookie.com/embed/${art.youtube_id}?playsinline=1&modestbranding=1&rel=0"
+                                loading="lazy"
+                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                                allowfullscreen
+                                referrerpolicy="strict-origin-when-cross-origin"></iframe>
+                        `;
                     }
 
-                    loadComments(currentArticleId);
-                    loadLikes(currentArticleId);
-                } catch(e) {
-                    document.getElementById('title').textContent = "Error";
-                    document.getElementById('body').textContent = e.message;
+                    await loadComments(currentArticleId);
+                    await loadLikes(currentArticleId);
+                } catch (e) {
+                    document.getElementById('title').textContent = 'Error';
+                    document.getElementById('body').innerHTML = `<div class="state-box">${escapeHtml(e.message || 'Failed to load article.')}</div>`;
                 }
             }
 
             async function loadLikes(id) {
                 try {
-                    const res = await db.listDocuments(DB_ID, LIKES_COL_ID, [Query.equal('articleId', id), Query.limit(1)]);
+                    const res = await db.listDocuments(DB_ID, LIKES_COL_ID, [
+                        Query.equal('articleId', id),
+                        Query.limit(100)
+                    ]);
+
                     const btn = document.getElementById('likeBtn');
                     const liked = localStorage.getItem(`liked_${id}`);
                     btn.className = liked ? 'like-btn liked' : 'like-btn';
                     btn.innerHTML = liked ? `❤️ Liked (${res.total})` : `❤️ Like (${res.total})`;
-                } catch(e){}
+                } catch (e) {
+                    document.getElementById('likeBtn').innerHTML = '❤️ Like';
+                }
             }
 
             document.getElementById('likeBtn').addEventListener('click', async () => {
                 if (!currentArticleId) return;
-                const btn = document.getElementById('likeBtn'); btn.disabled = true;
-                const likeId = localStorage.getItem(`liked_${currentArticleId}`);
+                const btn = document.getElementById('likeBtn');
+                btn.disabled = true;
+
                 try {
-                    if (likeId) { await db.deleteDocument(DB_ID, LIKES_COL_ID, likeId); localStorage.removeItem(`liked_${currentArticleId}`); }
-                    else { let email = "anon@khabardarjeeling.com"; try { const u = await account.get(); email = u.email; } catch(e){} const doc = await db.createDocument(DB_ID, LIKES_COL_ID, ID.unique(), {articleId: currentArticleId, userEmail: email}); localStorage.setItem(`liked_${currentArticleId}`, doc.$id); }
+                    const existingLikeId = localStorage.getItem(`liked_${currentArticleId}`);
+                    if (existingLikeId) {
+                        await db.deleteDocument(DB_ID, LIKES_COL_ID, existingLikeId);
+                        localStorage.removeItem(`liked_${currentArticleId}`);
+                    } else {
+                        let email = 'anon@khabardarjeeling.com';
+                        try {
+                            const u = await account.get();
+                            email = u.email || email;
+                        } catch (e) {}
+
+                        const doc = await db.createDocument(DB_ID, LIKES_COL_ID, ID.unique(), {
+                            articleId: currentArticleId,
+                            userEmail: email,
+                            createdAt: new Date().toISOString()
+                        });
+
+                        localStorage.setItem(`liked_${currentArticleId}`, doc.$id);
+                    }
+
                     await loadLikes(currentArticleId);
-                } finally { btn.disabled = false; }
+                } finally {
+                    btn.disabled = false;
+                }
             });
 
-            function createComment(c) {
-                const el = document.createElement('div'); el.className = 'comment-item';
-                const d = new Date(c.createdAt); el.innerHTML = `<div class="comment-author">${c.authorName}<span class="comment-meta">${d.toLocaleString()}</span></div><p class="comment-text">${c.commentText}</p>`;
-                if (c.image_id) { const img = document.createElement('img'); img.src = storage.getFilePreview(BUCKET_ID, c.image_id, 600).href; img.className='comment-image'; img.loading='lazy'; el.appendChild(img); }
-                if (c.youtube_id?.length===11) { const v = document.createElement('div'); v.className='comment-video'; v.innerHTML = `<iframe src="https://www.youtube-nocookie.com/embed/${c.youtube_id}?playsinline=1&modestbranding=1&rel=0" loading="lazy" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>`; el.appendChild(v); }
+            function createCommentCard(c) {
+                const el = document.createElement('div');
+                el.className = 'comment-item';
+
+                const d = new Date(c.createdAt || c.$createdAt || Date.now());
+                const author = escapeHtml(c.authorName || 'Anonymous');
+                const text = escapeHtml(c.commentText || '');
+
+                el.innerHTML = `
+                    <div class="comment-author">
+                        ${author}
+                        <span class="comment-meta">${d.toLocaleString()}</span>
+                    </div>
+                    <p class="comment-text">${text}</p>
+                `;
+
+                if (c.image_id) {
+                    const img = document.createElement('img');
+                    img.className = 'comment-image';
+                    img.loading = 'lazy';
+                    img.src = storage.getFilePreview(BUCKET_ID, c.image_id, 600).href;
+                    el.appendChild(img);
+                }
+
+                if (c.youtube_id && c.youtube_id.length === 11) {
+                    const v = document.createElement('div');
+                    v.className = 'comment-video';
+                    v.innerHTML = `
+                        <iframe
+                            src="https://www.youtube-nocookie.com/embed/${c.youtube_id}?playsinline=1&modestbranding=1&rel=0"
+                            loading="lazy"
+                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                            allowfullscreen></iframe>
+                    `;
+                    el.appendChild(v);
+                }
+
                 return el;
             }
 
             async function loadComments(id) {
                 const list = document.getElementById('commentsList');
                 try {
-                    const res = await db.listDocuments(DB_ID, COMMENTS_COL_ID, [Query.equal('articleId', id), Query.orderDesc('$createdAt'), Query.limit(50)]);
-                    list.innerHTML = res.documents.length ? '' : '<p style="color:#888;font-style:italic;">No comments yet</p>';
-                    res.documents.forEach(c => list.appendChild(createComment(c)));
-                } catch(e){ list.innerHTML = '<p style="color:red;">Failed to load</p>'; }
+                    const res = await db.listDocuments(DB_ID, COMMENTS_COL_ID, [
+                        Query.equal('articleId', id),
+                        Query.orderDesc('$createdAt'),
+                        Query.limit(50)
+                    ]);
+
+                    list.innerHTML = res.documents.length
+                        ? ''
+                        : '<p class="state-box">No comments yet.</p>';
+
+                    res.documents.forEach(c => list.appendChild(createCommentCard(c)));
+                } catch (e) {
+                    list.innerHTML = '<p class="state-box" style="color:red;">Failed to load comments.</p>';
+                }
             }
 
             document.getElementById('submitComment').addEventListener('click', async () => {
-                const input = document.getElementById('commentInput'); const txt = input.value.trim(); if (!txt) return;
-                const btn = document.getElementById('submitComment'); btn.disabled = true;
-                try { let name='Anonymous'; try{ name=(await account.get()).name; }catch(e){} await db.createDocument(DB_ID, COMMENTS_COL_ID, ID.unique(), {articleId: currentArticleId, authorName: name, commentText: txt, createdAt: new Date().toISOString()}); input.value=''; loadComments(currentArticleId); } finally { btn.disabled=false; }
+                const input = document.getElementById('commentInput');
+                const txt = input.value.trim();
+                if (!txt) return;
+
+                const btn = document.getElementById('submitComment');
+                btn.disabled = true;
+
+                try {
+                    let name = 'Anonymous';
+                    try {
+                        name = (await account.get()).name || name;
+                    } catch (e) {}
+
+                    await db.createDocument(DB_ID, COMMENTS_COL_ID, ID.unique(), {
+                        articleId: currentArticleId,
+                        authorName: name,
+                        commentText: txt,
+                        createdAt: new Date().toISOString()
+                    });
+
+                    input.value = '';
+                    await loadComments(currentArticleId);
+                } catch (e) {
+                    alert('Failed to post comment.');
+                } finally {
+                    btn.disabled = false;
+                }
             });
 
-            loadData();
-        }
-        startApp();
+            if (localStorage.getItem('theme') === 'dark') {
+                document.body.classList.add('dark-mode');
+            }
+
+            loadArticle();
+        })();
     </script>
 </body>
 </html>
