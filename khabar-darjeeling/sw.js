@@ -1,4 +1,4 @@
-const CACHE_NAME = 'khabar-v4';
+const CACHE_NAME = 'khabar-v5';
 
 const STATIC_ASSETS = [
   '/',
@@ -18,32 +18,51 @@ self.addEventListener('install', (event) => {
 
 self.addEventListener('activate', (event) => {
   event.waitUntil(
-    caches.keys().then((cacheNames) => {
-      return Promise.all(
+    caches.keys().then((cacheNames) =>
+      Promise.all(
         cacheNames.map((cacheName) => {
-          if (cacheName !== CACHE_NAME) return caches.delete(cacheName);
+          if (cacheName !== CACHE_NAME) {
+            return caches.delete(cacheName);
+          }
         })
-      );
-    }).then(() => self.clients.claim())
+      )
+    ).then(() => self.clients.claim())
   );
 });
 
 self.addEventListener('fetch', (event) => {
-  const url = new URL(event.request.url);
-  
-  // ✅ DON'T TOUCH CDN OR APPWRITE
-  if (url.origin.includes('jsdelivr.net') || 
-      url.origin.includes('cloud.appwrite.io') ||
-      url.origin.includes('googlesyndication.com')) {
+  const request = event.request;
+  const url = new URL(request.url);
+
+  // Only handle same-origin GET requests
+  if (request.method !== 'GET' || url.origin !== self.location.origin) {
     return;
   }
 
+  // Let page navigations go straight to network, fallback to cached index.html only if offline
+  if (request.mode === 'navigate') {
+    event.respondWith(
+      fetch(request).catch(() => caches.match('/index.html'))
+    );
+    return;
+  }
+
+  // Cache-first for local static assets only
   event.respondWith(
-    caches.match(event.request).then((response) => {
-      return response || fetch(event.request).catch(() => {
-        if (event.request.mode === 'navigate') {
-          return caches.match('/index.html');
+    caches.match(request).then((cached) => {
+      if (cached) return cached;
+
+      return fetch(request).then((response) => {
+        if (!response || response.redirected || response.status !== 200) {
+          return response;
         }
+
+        const responseClone = response.clone();
+        caches.open(CACHE_NAME).then((cache) => {
+          cache.put(request, responseClone);
+        });
+
+        return response;
       });
     })
   );
