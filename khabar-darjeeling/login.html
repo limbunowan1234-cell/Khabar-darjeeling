@@ -41,7 +41,6 @@
         .status-feedback { margin-top: 16px; text-align: center; font-size: 13px; font-weight: 500; min-height: 20px; }
         .hidden { display: none !important; }
 
-        /* Dark Mode overrides */
         body.dark-mode { background-color: #121212; color: #f5f6f7; }
         body.dark-mode .card { background: #242526; box-shadow: 0 4px 12px rgba(0,0,0,0.3); border-top: 1px solid #3a3b3c;}
         body.dark-mode .form-control input { background: #3a3b3c; border-color: #4e4f50; color: #ffffff; }
@@ -60,7 +59,6 @@
         </div>
 
         <div class="card">
-            <!-- 1. LOGIN VIEW -->
             <form id="loginForm" onsubmit="handleLogin(event)">
                 <div class="form-control">
                     <input type="email" id="loginEmail" placeholder="Email address" required>
@@ -76,7 +74,6 @@
                 </div>
             </form>
 
-            <!-- 2. SIGN UP VIEW -->
             <form id="signupForm" class="hidden" onsubmit="handleSignup(event)">
                 <div class="form-control">
                     <input type="text" id="signupName" placeholder="Full name" required>
@@ -87,6 +84,9 @@
                 <div class="form-control">
                     <input type="password" id="signupPassword" placeholder="Create password (min 8 chars)" minlength="8" required>
                 </div>
+                <div class="form-control">
+                    <input type="password" id="signupPasswordConfirm" placeholder="Confirm password" minlength="8" required>
+                </div>
                 <button type="submit" id="signupBtn" class="btn-submit">Verify Email via OTP</button>
                 
                 <div class="toggle-box">
@@ -94,7 +94,6 @@
                 </div>
             </form>
 
-            <!-- 3. FORGOT PASSWORD REQUEST VIEW -->
             <form id="forgotForm" class="hidden" onsubmit="handleForgotRequest(event)">
                 <p class="instruction-text">Enter your account email. We'll send a security code to reset your password.</p>
                 <div class="form-control">
@@ -106,7 +105,6 @@
                 </div>
             </form>
 
-            <!-- 4. OTP VERIFICATION BOX -->
             <div id="otpVerificationView" class="hidden">
                 <p id="otpInstructions" class="instruction-text">Processing status...</p>
                 <div class="form-control">
@@ -147,8 +145,23 @@
             e.preventDefault();
             cachedName = document.getElementById('signupName').value.trim();
             cachedEmail = document.getElementById('signupEmail').value.trim();
-            cachedPassword = document.getElementById('signupPassword').value;
+            const password = document.getElementById('signupPassword').value;
+            const passwordConfirm = document.getElementById('signupPasswordConfirm').value;
             const feedback = document.getElementById('feedback');
+
+            // Validate passwords match
+            if (password !== passwordConfirm) {
+                feedback.style.color = "var(--brand-red)";
+                feedback.textContent = "Passwords do not match. Please check.";
+                return;
+            }
+            if (password.length < 8) {
+                feedback.style.color = "var(--brand-red)";
+                feedback.textContent = "Password must be at least 8 characters.";
+                return;
+            }
+            
+            cachedPassword = password;
 
             feedback.style.color = "var(--brand-red)";
             feedback.textContent = "Sending verification code...";
