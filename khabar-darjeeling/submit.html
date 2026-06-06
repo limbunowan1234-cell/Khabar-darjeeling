@@ -10,8 +10,8 @@
     <link rel="icon" type="image/png" href="assets/logo.png">
 
     <title>Submit News - खबर दार्जिलिंग</title>
-    <link rel="stylesheet" href="css/style.css?v=116">
-    <link rel="stylesheet" href="css/responsive.css?v=116">
+    <link rel="stylesheet" href="css/style.css?v=117">
+    <link rel="stylesheet" href="css/responsive.css?v=117">
 
     <style>
         #gatekeeperLoader {
@@ -37,7 +37,6 @@
             border-radius: 12px;
             box-shadow: 0 4px 20px rgba(0,0,0,0.08);
         }
-        /* ✅ FIXED: space added */
         body.dark-mode .submit-container { background: #2a2a2a; }
 
         .form-group { margin-bottom: 20px; }
@@ -47,7 +46,6 @@
             font-weight: 600;
             color: #333;
         }
-        /* ✅ FIXED: space added */
         body.dark-mode .form-group label { color: #ddd; }
 
         .form-group input,
@@ -61,7 +59,6 @@
             font-family: inherit;
             transition: border-color 0.3s;
         }
-        /* ✅ FIXED: space added */
         body.dark-mode .form-group input,
         body.dark-mode .form-group select,
         body.dark-mode .form-group textarea {
@@ -110,7 +107,6 @@
             align-items: center;
             gap: 12px;
         }
-        /* ✅ FIXED: space added */
         body.dark-mode .user-info { background: #333; }
 
         .user-avatar {
@@ -138,7 +134,6 @@
 </head>
 <body>
 
-    <!-- 🔒 SECURITY LOADER -->
     <div id="gatekeeperLoader">
         <div class="spinner"></div>
         <p style="font-weight: 600; letter-spacing: 0.5px;">Verifying Session...</p>
@@ -170,7 +165,6 @@
             <h2 style="margin-top:0;margin-bottom:10px;color:#c41e3a;">Submit News Article</h2>
             <p style="color:#666;margin-bottom:25px;">Share news from your community. All submissions are reviewed before publishing.</p>
 
-            <!-- User info bar -->
             <div id="userInfo" class="user-info">
                 <div class="user-avatar" id="userAvatar">?</div>
                 <div>
@@ -236,29 +230,35 @@
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/appwrite@14.0.1/dist/iife/sdk.min.js"></script>
-    <script src="js/appwrite.js?v=116"></script>
+    <script src="js/appwrite.js?v=117"></script>
 
     <script>
         (() => {
-            const account   = window.account;
-            const databases = window.databases;
-            const storage   = window.storage;
-            const ID        = window.ID;
-            const Query     = window.Query;
+            if (!window.account || !window.databases || !window.storage || !window.ID || !window.Query) {
+                console.error('❌ Appwrite not initialized on submit page');
+                alert('Appwrite failed to load. Please refresh the page.');
+                window.location.href = 'login.html';
+                return;
+            }
 
-            const DB_ID              = window.APPWRITE_DB_ID;
-            const COLLECTION_ID      = window.APPWRITE_COLLECTION_ID;
-            const BUCKET_ID          = window.APPWRITE_BUCKET_ID;
+            const account = window.account;
+            const databases = window.databases;
+            const storage = window.storage;
+            const ID = window.ID;
+            const Query = window.Query;
+
+            const DB_ID = window.APPWRITE_DB_ID;
+            const COLLECTION_ID = window.APPWRITE_COLLECTION_ID;
+            const BUCKET_ID = window.APPWRITE_BUCKET_ID;
             const PROFILES_COLLECTION = 'profiles';
 
-            let currentUser    = null;
+            let currentUser = null;
             let uploadedImageId = null;
 
-            // ── Auth gate ─────────────────────────────────────────────
             async function initGatekeeper() {
                 try {
                     currentUser = await account.get();
-                    await ensureProfileExists(currentUser); // ✅ auto-create profile
+                    await ensureProfileExists(currentUser);
                     showUserInfo(currentUser);
                     hideLoader();
                 } catch (error) {
@@ -266,7 +266,6 @@
                 }
             }
 
-            // ── ✅ Profile auto-create (fixed field names) ────────────
             async function ensureProfileExists(user) {
                 try {
                     const existing = await databases.listDocuments(DB_ID, PROFILES_COLLECTION, [
@@ -275,35 +274,37 @@
                     ]);
 
                     if (existing.documents.length === 0) {
+                        const safeName = (user.name || (user.email ? user.email.split('@')[0] : 'Reporter')).trim();
+                        const safeUserName =
+                            safeName.toLowerCase().replace(/[^a-z0-9]/g, '').slice(0, 20) +
+                            Math.floor(Math.random() * 1000);
+
                         await databases.createDocument(
                             DB_ID,
                             PROFILES_COLLECTION,
                             ID.unique(),
                             {
-                                userId:      user.$id,
-                                displayName: user.name,
-                                // ✅ FIXED: userName (capital N) matches Appwrite column
-                                userName:    user.name.toLowerCase().replace(/[^a-z0-9]/g, '').slice(0, 20)
-                                             + Math.floor(Math.random() * 100),
-                                bio:         'Reporter at Khabar Darjeeling',
-                                avatarUrl:   null,
-                                coverUrl:    null,
-                                // ✅ FIXED: joinedAT (capital AT) matches Appwrite column
-                                joinedAT:    new Date().toISOString()
+                                userId: user.$id,
+                                displayName: safeName,
+                                userName: safeUserName,
+                                bio: 'Reporter at Khabar Darjeeling',
+                                avatarUrl: null,
+                                coverUrl: null,
+                                joinedAT: new Date().toISOString()
                             }
                         );
-                        console.log('✅ Profile created for', user.name);
+                        console.log('✅ Profile created for', safeName);
                     }
                 } catch (e) {
-                    console.warn('Profile check failed (non-critical):', e);
+                    console.warn('Profile check failed:', e);
                 }
             }
 
-            // ── UI helpers ────────────────────────────────────────────
             function showUserInfo(user) {
-                document.getElementById('userName').textContent  = user.name;
-                document.getElementById('userEmail').textContent = user.email;
-                const initials = user.name.split(' ').map(n => n[0]).join('').toUpperCase().slice(0, 2);
+                const safeName = user.name || (user.email ? user.email.split('@')[0] : 'Reporter');
+                document.getElementById('userName').textContent = safeName;
+                document.getElementById('userEmail').textContent = user.email || '';
+                const initials = safeName.split(' ').map(n => n[0]).join('').toUpperCase().slice(0, 2) || 'R';
                 document.getElementById('userAvatar').textContent = initials;
             }
 
@@ -311,16 +312,20 @@
                 const loader = document.getElementById('gatekeeperLoader');
                 if (loader) {
                     loader.style.opacity = '0';
-                    setTimeout(() => loader.style.display = 'none', 300);
+                    setTimeout(() => {
+                        loader.style.display = 'none';
+                    }, 300);
                 }
             }
 
             function showAlert(message, type = 'success') {
                 const alertBox = document.getElementById('alertBox');
                 alertBox.textContent = message;
-                alertBox.className   = `alert ${type}`;
+                alertBox.className = `alert ${type}`;
                 alertBox.style.display = 'block';
-                setTimeout(() => alertBox.style.display = 'none', 5000);
+                setTimeout(() => {
+                    alertBox.style.display = 'none';
+                }, 5000);
             }
 
             function extractYouTubeID(url) {
@@ -330,9 +335,8 @@
                 return match ? match[1] : null;
             }
 
-            // ── Image preview ─────────────────────────────────────────
             document.getElementById('image').addEventListener('change', function (e) {
-                const file    = e.target.files[0];
+                const file = e.target.files[0];
                 const preview = document.getElementById('imagePreview');
 
                 if (file) {
@@ -344,7 +348,7 @@
                     }
                     const reader = new FileReader();
                     reader.onload = ev => {
-                        preview.src           = ev.target.result;
+                        preview.src = ev.target.result;
                         preview.style.display = 'block';
                     };
                     reader.readAsDataURL(file);
@@ -353,29 +357,34 @@
                 }
             });
 
-            // ── Form submit ───────────────────────────────────────────
             document.getElementById('submitForm').addEventListener('submit', async (e) => {
                 e.preventDefault();
 
                 const submitBtn = document.getElementById('submitBtn');
-                submitBtn.disabled    = true;
+                submitBtn.disabled = true;
                 submitBtn.textContent = 'Submitting...';
 
                 try {
-                    const title      = document.getElementById('title').value.trim();
-                    const category   = document.getElementById('category').value;
-                    const content    = document.getElementById('content').value.trim();
-                    const location   = document.getElementById('location').value.trim();
+                    const title = document.getElementById('title').value.trim();
+                    const category = document.getElementById('category').value;
+                    const content = document.getElementById('content').value.trim();
+                    const location = document.getElementById('location').value.trim();
                     const youtubeUrl = document.getElementById('youtubeUrl').value.trim();
-                    const imageFile  = document.getElementById('image').files[0];
+                    const imageFile = document.getElementById('image').files[0];
 
-                    // Upload image if provided
-                    if (imageFile) {
-                        const fileUpload  = await storage.createFile(BUCKET_ID, ID.unique(), imageFile);
-                        uploadedImageId   = fileUpload.$id;
+                    if (!title || !category || !content || !location) {
+                        throw new Error('Please fill all required fields.');
                     }
 
-                    // ✅ Fetch avatar from profile
+                    if (content.length < 100) {
+                        throw new Error('Article content must be at least 100 characters long.');
+                    }
+
+                    if (imageFile) {
+                        const fileUpload = await storage.createFile(BUCKET_ID, ID.unique(), imageFile);
+                        uploadedImageId = fileUpload.$id;
+                    }
+
                     let userAvatar = null;
                     try {
                         const profile = await databases.listDocuments(DB_ID, PROFILES_COLLECTION, [
@@ -383,9 +392,11 @@
                             Query.limit(1)
                         ]);
                         if (profile.documents.length > 0) {
-                            userAvatar = profile.documents[0].avatarUrl;
+                            userAvatar = profile.documents[0].avatarUrl || null;
                         }
-                    } catch (e) { /* non-critical */ }
+                    } catch (e) {
+                        console.warn('Could not load profile avatar:', e);
+                    }
 
                     const articlePayload = {
                         title,
@@ -393,20 +404,15 @@
                         content,
                         location,
                         status: 'pending',
-
-                        // submitter fields
-                        submitterId:     currentUser.$id,
-                        submitterName:   currentUser.name,
+                        submitterId: currentUser.$id,
+                        submitterName: currentUser.name || 'Reporter',
                         submitterAvatar: userAvatar,
-                        submitterEmail:  currentUser.email,
-
-                        // backward compat
-                        authorName:  currentUser.name,
-                        authorEmail: currentUser.email,
-
-                        submittedAt:  new Date().toISOString(),
-                        imageFileId:  uploadedImageId,
-                        youtube_id:   extractYouTubeID(youtubeUrl)
+                        submitterEmail: currentUser.email || '',
+                        authorName: currentUser.name || 'Reporter',
+                        authorEmail: currentUser.email || '',
+                        submittedAt: new Date().toISOString(),
+                        imageFileId: uploadedImageId,
+                        youtube_id: extractYouTubeID(youtubeUrl)
                     };
 
                     await databases.createDocument(DB_ID, COLLECTION_ID, ID.unique(), articlePayload);
@@ -415,17 +421,15 @@
                     document.getElementById('submitForm').reset();
                     document.getElementById('imagePreview').style.display = 'none';
                     uploadedImageId = null;
-
                 } catch (error) {
                     console.error('Submission error:', error);
-                    showAlert('Failed to submit article. Please try again.', 'error');
+                    showAlert(error.message || 'Failed to submit article. Please try again.', 'error');
                 } finally {
-                    submitBtn.disabled    = false;
+                    submitBtn.disabled = false;
                     submitBtn.textContent = 'Submit for Review';
                 }
             });
 
-            // ── Logout ────────────────────────────────────────────────
             document.getElementById('logoutBtn').addEventListener('click', async () => {
                 if (!confirm('Are you sure you want to sign out?')) return;
                 try {
@@ -436,13 +440,11 @@
                 }
             });
 
-            // ── Init ──────────────────────────────────────────────────
             if (document.readyState === 'loading') {
                 document.addEventListener('DOMContentLoaded', initGatekeeper);
             } else {
                 initGatekeeper();
             }
-
         })();
     </script>
 </body>
