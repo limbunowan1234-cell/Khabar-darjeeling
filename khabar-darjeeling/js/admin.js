@@ -118,10 +118,15 @@
             const published = allArticles.documents.filter(a => a.status === 'published').length;
             const rejected = allArticles.documents.filter(a => a.status === 'rejected').length;
 
-            document.getElementById('totalArticles').textContent = allArticles.total ?? allArticles.documents.length;
-            document.getElementById('pendingCount').textContent = pending;
-            document.getElementById('publishedCount').textContent = published;
-            document.getElementById('rejectedCount').textContent = rejected;
+            const totalArticles = document.getElementById('totalArticles');
+            const pendingCount = document.getElementById('pendingCount');
+            const publishedCount = document.getElementById('publishedCount');
+            const rejectedCount = document.getElementById('rejectedCount');
+
+            if (totalArticles) totalArticles.textContent = allArticles.total ?? allArticles.documents.length;
+            if (pendingCount) pendingCount.textContent = pending;
+            if (publishedCount) publishedCount.textContent = published;
+            if (rejectedCount) rejectedCount.textContent = rejected;
         } catch (error) {
             console.error('Dashboard loading error:', error);
         }
