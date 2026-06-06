@@ -3,668 +3,517 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Khabar Darjeeling - Latest news from Darjeeling, Kalimpong, Kurseong, Mirik, Siliguri and West Bengal">
-
-    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
-    <meta http-equiv="Pragma" content="no-cache">
-    <meta http-equiv="Expires" content="0">
-
-    <!-- 📱 PWA MANIFEST & META TAGS -->
-    <link rel="manifest" href="manifest.json">
+    <meta name="description" content="Contributor Profile - Khabar Darjeeling">
     <meta name="theme-color" content="#c41e3a">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <meta name="apple-mobile-web-app-title" content="खबर दार्जिलिंग">
+    <link rel="manifest" href="manifest.json">
+    <link rel="icon" type="image/png" href="assets/logo.png">
+    <title>Profile - खबर दार्जिलिंग</title>
 
-    <!-- Google AdSense -->
-    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8402633423386929"
-     crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="css/style.css?v=117">
+    <link rel="stylesheet" href="css/responsive.css?v=117">
 
-    <title>खबर दार्जिलिंग - Your Trusted News Source</title>
-    <link rel="stylesheet" href="css/style.css?v=111">
-    <link rel="stylesheet" href="css/responsive.css?v=111">
-
-    <!-- 🔒 PRE-LOAD OVERLAY STYLE + BREAKING TICKER STYLE -->
     <style>
-        #gatekeeperLoader {
-            position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
-            background: #ffffff; z-index: 99999; display: flex;
-            flex-direction: column; justify-content: center; align-items: center;
-            font-family: sans-serif; transition: opacity 0.3s ease;
+        body {
+            background: #f5f5f5;
         }
-        body.dark-mode #gatekeeperLoader { background: #1a1a1a; color: #ffffff; }
-       .spinner {
-            width: 40px; height: 40px; border: 4px solid rgba(196, 30, 58, 0.1);
-            border-left-color: #c41e3a; border-radius: 50%; animation: spin 1s linear infinite;
-            margin-bottom: 15px;
-        }
-        @keyframes spin { to { transform: rotate(360deg); } }
 
-        /* 🎬 VIDEO CARD STYLES */
-       .media-container {
-            position: relative;
-            width: 100%;
+        .profile-shell {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 30px 15px 60px;
+        }
+
+        .profile-card {
+            background: #fff;
+            border-radius: 16px;
             overflow: hidden;
-            background: #000;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.08);
+            margin-bottom: 30px;
         }
 
-       .media-container img {
+        body.dark-mode .profile-card {
+            background: #222;
+            color: #eee;
+        }
+
+        .profile-cover {
+            height: 220px;
+            background: linear-gradient(135deg, #c41e3a, #900);
+            position: relative;
+        }
+
+        .profile-cover img {
             width: 100%;
-            height: auto;
+            height: 100%;
+            object-fit: cover;
             display: block;
         }
 
-       .play-button-overlay {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            background: rgba(0, 0, 0, 0.3);
-            opacity: 0;
-            transition: opacity 0.3s ease, background 0.3s ease;
-            cursor: pointer;
-        }
-
-       .news-card:hover.play-button-overlay {
-            opacity: 1;
-            background: rgba(0, 0, 0, 0.5);
-        }
-
-       .play-button {
-            width: 70px;
-            height: 70px;
-            border-radius: 50%;
-            background: rgba(255, 255, 255, 0.95);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-            z-index: 10;
-        }
-
-       .news-card:hover.play-button {
-            transform: scale(1.15);
-            box-shadow: 0 12px 32px rgba(0, 0, 0, 0.4);
-        }
-
-       .play-button::after {
-            content: '';
-            width: 0;
-            height: 0;
-            border-left: 18px solid #c41e3a;
-            border-top: 12px solid transparent;
-            border-bottom: 12px solid transparent;
-            margin-left: 4px;
-        }
-
-       .video-badge {
-            position: absolute;
-            top: 10px;
-            right: 10px;
-            background: rgba(196, 30, 58, 0.95);
-            color: white;
-            padding: 4px 10px;
-            border-radius: 4px;
-            font-size: 11px;
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            z-index: 5;
-            backdrop-filter: blur(4px);
-        }
-
-       .video-duration {
-            position: absolute;
-            bottom: 10px;
-            right: 10px;
-            background: rgba(0, 0, 0, 0.8);
-            color: white;
-            padding: 4px 8px;
-            border-radius: 3px;
-            font-size: 12px;
-            font-weight: 600;
-            z-index: 5;
-        }
-
-       .featured-content {
+        .profile-header {
+            padding: 0 24px 24px;
+            margin-top: -54px;
             position: relative;
         }
 
-       .featured-content.media-container {
-            border-radius: 8px 8px 0 0;
-        }
-
-        /* 🔥 UPDATED BREAKING TICKER STYLES */
-       .breaking-ticker {
+        .profile-avatar {
+            width: 108px;
+            height: 108px;
+            border-radius: 50%;
+            border: 5px solid #fff;
             background: #c41e3a;
             color: #fff;
-            padding: 8px 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 34px;
+            font-weight: 800;
+            overflow: hidden;
         }
-       .breaking-label {
-            background: #900;
-            padding: 8px 15px;
-            font-weight: 700;
-            font-size: 14px;
-            white-space: nowrap;
-            margin-right: 0;
+
+        body.dark-mode .profile-avatar {
+            border-color: #222;
         }
-       .ticker-content a {
+
+        .profile-avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .profile-meta {
+            margin-top: 16px;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .profile-meta h1 {
+            font-size: 30px;
+            line-height: 1.2;
+            color: #1a1a1a;
+        }
+
+        body.dark-mode .profile-meta h1 {
             color: #fff;
-            text-decoration: none;
-            display: inline-block;
-            padding: 0 40px;
-            font-weight: 500;
         }
-       .ticker-content a:hover {
+
+        .profile-bio {
+            color: #666;
+            font-size: 15px;
+            line-height: 1.7;
+            max-width: 760px;
+        }
+
+        body.dark-mode .profile-bio {
+            color: #bbb;
+        }
+
+        .profile-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+            gap: 14px;
+            margin-top: 18px;
+        }
+
+        .stat-box {
+            background: #f8f8f8;
+            border-radius: 12px;
+            padding: 16px;
+            text-align: center;
+        }
+
+        body.dark-mode .stat-box {
+            background: #2b2b2b;
+        }
+
+        .stat-box .label {
+            display: block;
+            font-size: 12px;
+            color: #777;
+            margin-bottom: 6px;
+            text-transform: uppercase;
+            letter-spacing: 0.4px;
+        }
+
+        .stat-box .value {
+            font-size: 24px;
+            font-weight: 800;
+            color: #c41e3a;
+        }
+
+        .section-title {
+            margin: 0 0 16px;
+            font-size: 22px;
+            color: #1a1a1a;
+        }
+
+        body.dark-mode .section-title {
+            color: #fff;
+        }
+
+        .news-list {
+            display: grid;
+            gap: 18px;
+        }
+
+        .news-item {
+            background: #fff;
+            border-radius: 14px;
+            overflow: hidden;
+            box-shadow: 0 4px 16px rgba(0,0,0,0.06);
+            display: grid;
+            grid-template-columns: 180px 1fr;
+            min-height: 170px;
+        }
+
+        body.dark-mode .news-item {
+            background: #222;
+        }
+
+        .news-thumb {
+            width: 100%;
+            height: 100%;
+            min-height: 170px;
+            object-fit: cover;
+            background: #eee;
+        }
+
+        .news-body {
+            padding: 18px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            gap: 12px;
+        }
+
+        .news-body h3 {
+            font-size: 20px;
+            line-height: 1.3;
+            color: #1a1a1a;
+        }
+
+        body.dark-mode .news-body h3 {
+            color: #fff;
+        }
+
+        .news-body p {
+            color: #666;
+            line-height: 1.6;
+            font-size: 14px;
+        }
+
+        body.dark-mode .news-body p {
+            color: #bbb;
+        }
+
+        .news-meta {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+            align-items: center;
+            font-size: 13px;
+            color: #777;
+        }
+
+        .news-link {
+            color: #c41e3a;
+            font-weight: 700;
+            text-decoration: none;
+        }
+
+        .news-link:hover {
             text-decoration: underline;
         }
-        @media (max-width: 600px) {
-           .breaking-label { font-size: 12px; padding: 8px 10px; }
-           .ticker-content a { padding: 0 25px; font-size: 14px; }
+
+        .profile-actions {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-top: 16px;
+        }
+
+        .btn-profile {
+            display: inline-block;
+            padding: 10px 16px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 700;
+            border: none;
+            cursor: pointer;
+        }
+
+        .btn-primary {
+            background: #c41e3a;
+            color: #fff;
+        }
+
+        .btn-secondary {
+            background: #eee;
+            color: #222;
+        }
+
+        body.dark-mode .btn-secondary {
+            background: #333;
+            color: #fff;
+        }
+
+        .empty-state,
+        .error-state,
+        .loading-state {
+            background: #fff;
+            border-radius: 14px;
+            padding: 24px;
+            text-align: center;
+            box-shadow: 0 4px 16px rgba(0,0,0,0.06);
+        }
+
+        body.dark-mode .empty-state,
+        body.dark-mode .error-state,
+        body.dark-mode .loading-state {
+            background: #222;
+            color: #eee;
+        }
+
+        @media (max-width: 768px) {
+            .profile-cover {
+                height: 170px;
+            }
+
+            .profile-avatar {
+                width: 88px;
+                height: 88px;
+                font-size: 28px;
+            }
+
+            .profile-meta h1 {
+                font-size: 24px;
+            }
+
+            .news-item {
+                grid-template-columns: 1fr;
+            }
+
+            .news-thumb {
+                min-height: 210px;
+            }
         }
     </style>
 </head>
 <body>
 
-    <!-- 🔒 SECURITY BLOCKER VIEW SCREEN -->
-    <div id="gatekeeperLoader">
-        <div class="spinner"></div>
-        <p style="font-weight: 600; letter-spacing: 0.5px;">Securing Portal Session...</p>
-    </div>
-
     <nav class="navbar">
         <div class="container">
             <div class="navbar-content">
                 <div class="logo">
-                    <a href="index.html" style="display: flex; align-items: center; text-decoration: none; gap: 12px;">
-                        <img src="assets/logo.png" alt="Khabar Darjeeling Logo" style="height: 55px; width: 55px; object-fit: cover; border-radius: 50%; flex-shrink: 0;">
+                    <a href="index.html" style="display:flex;align-items:center;text-decoration:none;gap:12px;">
+                        <img src="assets/logo.png" alt="Khabar Darjeeling Logo" style="height:55px;width:55px;object-fit:cover;border-radius:50%;flex-shrink:0;">
                         <div>
-                            <h1 style="font-size: 24px; color: var(--primary-color); margin: 0; line-height: 1.2;">खबर दार्जिलिंग</h1>
-                            <p class="tagline" style="margin: 0; font-size: 11px; color: var(--text-light); font-weight: 500;">Hamro Khabar, Hami Lekhaw</p>
+                            <h1 style="font-size:24px;color:var(--primary-color);margin:0;line-height:1.2;">खबर दार्जिलिंग</h1>
+                            <p class="tagline" style="margin:0;font-size:11px;color:var(--text-light);font-weight:500;">Hamro Khabar, Hami Lekhaw</p>
                         </div>
                     </a>
                 </div>
 
-                <div class="nav-toggle" id="navToggle">
-                    <span></span>
-                    <span></span>
-                    <span></span>
-                </div>
-
-                <div class="nav-menu" id="navMenu">
-                    <ul class="nav-links">
-                        <li><a href="index.html" id="homeLink" class="active">Home</a></li>
-                        <li><a href="#latest">Latest</a></li>
-                        <li class="dropdown">
-                            <a href="#">Categories</a>
-                            <ul class="dropdown-menu">
-                                <li><a href="?category=darjeeling">Darjeeling</a></li>
-                                <li><a href="?category=kalimpong">Kalimpong</a></li>
-                                <li><a href="?category=kurseong">Kurseong</a></li>
-                                <li><a href="?category=mirik">Mirik</a></li>
-                                <li><a href="?category=siliguri">Siliguri</a></li>
-                                <li><a href="?category=west-bengal">West Bengal</a></li>
-                                <li><a href="?category=national">National</a></li>
-                                <li><a href="?category=entertainment">Entertainment</a></li>
-                                <li><a href="?category=sports">Sports</a></li>
-                            </ul>
-                        </li>
-                        <li><a href="submit.html">Submit News</a></li>
-                    </ul>
-                </div>
-
                 <div class="nav-right">
-                    <input type="text" id="searchInput" placeholder="Search news..." class="search-input">
-                    <button class="theme-toggle" id="themeToggle">🌙</button>
-                    <a href="admin.html" class="admin-link">Admin</a>
-                    <button id="logoutBtn" style="background: none; border: none; color: #c41e3a; font-weight: 600; font-size: 14px; cursor: pointer; margin-left: 15px; padding: 5px 10px; font-family: inherit;">Logout</button>
+                    <a href="index.html" class="admin-link" style="text-decoration:none;">Home</a>
+                    <a href="submit.html" class="admin-link" style="text-decoration:none;margin-left:12px;">Submit News</a>
                 </div>
             </div>
         </div>
     </nav>
 
-    <!-- ✅ UPDATED: Breaking News with Multiple Clickable Headlines -->
-    <section class="breaking-ticker" id="breaking">
-        <div class="container" style="display: flex; align-items: center;">
-            <span class="breaking-label">BREAKING NEWS</span>
-            <marquee class="ticker-content" id="breakingTicker" scrollamount="5" onmouseover="this.stop();" onmouseout="this.start();" style="flex-grow: 1;">
-                Loading breaking news...
-            </marquee>
+    <main class="profile-shell">
+        <div id="profileRoot">
+            <div class="loading-state">Loading profile...</div>
         </div>
-    </section>
 
-    <section class="hero" id="heroSection">
-        <div class="container">
-            <h2>Stay Updated with Latest News</h2>
-            <p>Comprehensive coverage of Darjeeling, Kalimpong, and entire West Bengal region</p>
-            <div class="hero-buttons">
-                <a href="#latest" class="btn btn-primary">Read Latest</a>
-                <a href="submit.html" class="btn btn-secondary">Submit News</a>
+        <section style="margin-top:30px;">
+            <h2 class="section-title">Published News</h2>
+            <div id="userNewsList" class="news-list">
+                <div class="loading-state">Loading news...</div>
             </div>
-        </div>
-    </section>
-
-    <section class="featured-section" id="featuredSection">
-        <div class="container">
-            <h3 class="section-title">Featured Story</h3>
-            <div id="featuredStory" class="featured-card">
-                Loading featured article...
-            </div>
-        </div>
-    </section>
-
-    <section class="news-section" id="latest">
-        <div class="container">
-            <h3 class="section-title" id="mainSectionTitle">Latest News</h3>
-            <div id="newsGrid" class="news-grid">
-                Loading articles...
-            </div>
-        </div>
-    </section>
-
-    <section class="categories-section" id="categoriesSection">
-        <div class="container">
-            <h3 class="section-title">Popular News Categories</h3>
-            <div class="category-grid">
-                <a href="?category=darjeeling" class="category-card">Darjeeling</a>
-                <a href="?category=kalimpong" class="category-card">Kalimpong</a>
-                <a href="?category=kurseong" class="category-card">Kurseong</a>
-                <a href="?category=mirik" class="category-card">Mirik</a>
-                <a href="?category=siliguri" class="category-card">Siliguri</a>
-                <a href="?category=west-bengal" class="category-card">West Bengal</a>
-                <a href="?category=national" class="category-card">National</a>
-                <a href="?category=entertainment" class="category-card">Entertainment</a>
-                <a href="?category=sports" class="category-card">Sports</a>
-            </div>
-        </div>
-    </section>
-
-    <footer class="footer">
-        <div class="container">
-            <p>&copy; 2026 Khabar Darjeeling. All rights reserved.</p>
-        </div>
-    </footer>
-
-    <!-- 📱 SERVICE WORKER REGISTRATION -->
-    <script>
-        if ('serviceWorker' in navigator) {
-            window.addEventListener('load', () => {
-                navigator.serviceWorker.register('sw.js')
-                   .then(registration => {
-                        console.log('✅ Service Worker registered:', registration);
-                    })
-                   .catch(error => {
-                        console.error('❌ Service Worker registration failed:', error);
-                    });
-            });
-        }
-    </script>
-
-    <script src="https://cdn.jsdelivr.net/npm/eruda"></script>
-    <script>eruda.init();</script>
+        </section>
+    </main>
 
     <script src="https://cdn.jsdelivr.net/npm/appwrite@14.0.1/dist/iife/sdk.min.js"></script>
-    <script src="js/appwrite.js"></script>
+    <script src="js/appwrite.js?v=117"></script>
 
     <script>
         (() => {
-            const appwriteDatabase = window.databases;
-            const QueryAPI = window.Query;
-            const dbId = window.APPWRITE_DB_ID;
-            const collectionId = window.APPWRITE_COLLECTION_ID;
+            if (!window.databases || !window.Query) {
+                document.getElementById('profileRoot').innerHTML =
+                    '<div class="error-state">Appwrite not initialized.</div>';
+                return;
+            }
 
-            const ENDPOINT = 'https://nyc.cloud.appwrite.io/v1';
-            const PROJECT_ID = 'khabardarjeeling';
+            const db = window.databases;
+            const QueryAPI = window.Query;
+            const DB_ID = window.APPWRITE_DB_ID;
+            const PROFILES_COLLECTION = 'profiles';
+            const ARTICLES_COLLECTION = window.APPWRITE_COLLECTION_ID;
+
+            const params = new URLSearchParams(window.location.search);
+            const userId = params.get('userId');
+
+            function escapeHtml(text) {
+                const div = document.createElement('div');
+                div.textContent = text || '';
+                return div.innerHTML;
+            }
+
+            function truncateText(htmlStr, maxLength) {
+                const div = document.createElement('div');
+                div.innerHTML = htmlStr || '';
+                const text = div.textContent || div.innerText || '';
+                return text.length > maxLength ? text.substring(0, maxLength) + '...' : text;
+            }
+
+            function formatDate(dateString) {
+                try {
+                    return new Date(dateString).toLocaleDateString('en-US', {
+                        year: 'numeric',
+                        month: 'short',
+                        day: 'numeric'
+                    });
+                } catch {
+                    return 'Date unknown';
+                }
+            }
+
+            function getInitials(name) {
+                if (!name) return 'KD';
+                const parts = name.trim().split(' ');
+                if (parts.length === 1) return parts[0].charAt(0).toUpperCase();
+                return (parts[0].charAt(0) + parts[parts.length - 1].charAt(0)).toUpperCase();
+            }
+
+            async function loadProfile() {
+                if (!userId) {
+                    document.getElementById('profileRoot').innerHTML =
+                        '<div class="error-state">No profile selected.</div>';
+                    document.getElementById('userNewsList').innerHTML = '';
+                    return;
+                }
+
+                try {
+                    const profileRes = await db.listDocuments(DB_ID, PROFILES_COLLECTION, [
+                        QueryAPI.equal('userId', userId),
+                        QueryAPI.limit(1)
+                    ]);
+
+                    if (!profileRes.documents.length) {
+                        document.getElementById('profileRoot').innerHTML =
+                            '<div class="empty-state">Profile not found.</div>';
+                        document.getElementById('userNewsList').innerHTML = '';
+                        return;
+                    }
+
+                    const profile = profileRes.documents[0];
+                    renderProfile(profile);
+                    await loadUserNews(userId, profile.displayName || profile.userName || 'Reporter');
+                } catch (error) {
+                    console.error(error);
+                    document.getElementById('profileRoot').innerHTML =
+                        '<div class="error-state">Failed to load profile.</div>';
+                    document.getElementById('userNewsList').innerHTML = '';
+                }
+            }
+
+            function renderProfile(profile) {
+                const displayName = profile.displayName || profile.userName || 'Reporter';
+                const bio = profile.bio || 'No bio yet.';
+                const avatarUrl = profile.avatarUrl;
+                const coverUrl = profile.coverUrl;
+                const joinedAt = profile.joinedAT || profile.joinedAt || profile.$createdAt;
+
+                const profileHtml = `
+                    <div class="profile-card">
+                        <div class="profile-cover">
+                            ${coverUrl ? `<img src="${coverUrl}" alt="${escapeHtml(displayName)} cover">` : ''}
+                        </div>
+                        <div class="profile-header">
+                            <div class="profile-avatar">
+                                ${avatarUrl ? `<img src="${avatarUrl}" alt="${escapeHtml(displayName)}">` : getInitials(displayName)}
+                            </div>
+                            <div class="profile-meta">
+                                <h1>${escapeHtml(displayName)}</h1>
+                                <div style="color:#888;font-size:13px;">@${escapeHtml(profile.userName || 'reporter')}</div>
+                                <div class="profile-bio">${escapeHtml(bio)}</div>
+
+                                <div class="profile-actions">
+                                    <a href="submit.html" class="btn-profile btn-primary">Submit News</a>
+                                    <a href="index.html" class="btn-profile btn-secondary">Back to Home</a>
+                                </div>
+
+                                <div class="profile-stats">
+                                    <div class="stat-box">
+                                        <span class="label">Profile ID</span>
+                                        <span class="value" style="font-size:14px;">${escapeHtml(profile.userId || '')}</span>
+                                    </div>
+                                    <div class="stat-box">
+                                        <span class="label">Joined</span>
+                                        <span class="value" style="font-size:14px;">${formatDate(joinedAt)}</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+
+                document.getElementById('profileRoot').innerHTML = profileHtml;
+                document.title = `${displayName} - खबर दार्जिलिंग`;
+            }
+
+            async function loadUserNews(targetUserId, displayName) {
+                const newsList = document.getElementById('userNewsList');
+                newsList.innerHTML = '<div class="loading-state">Loading news...</div>';
+
+                try {
+                    const res = await db.listDocuments(DB_ID, ARTICLES_COLLECTION, [
+                        QueryAPI.equal('submitterId', targetUserId),
+                        QueryAPI.equal('status', 'published'),
+                        QueryAPI.orderDesc('$createdAt'),
+                        QueryAPI.limit(20)
+                    ]);
+
+                    if (!res.documents.length) {
+                        newsList.innerHTML = `<div class="empty-state">${escapeHtml(displayName)} has not published any news yet.</div>`;
+                        return;
+                    }
+
+                    newsList.innerHTML = res.documents.map(article => {
+                        const img = article.imageUrl || article.imageFileId;
+                        const imageHtml = img ? `<img class="news-thumb" src="${img.startsWith('http') ? img : `https://nyc.cloud.appwrite.io/v1/storage/buckets/article-image/files/${img}/view?project=khabardarjeeling`}" alt="${escapeHtml(article.title)}">` : '';
+                        return `
+                            <article class="news-item">
+                                ${imageHtml}
+                                <div class="news-body">
+                                    <div>
+                                        <h3>${escapeHtml(article.title || 'Untitled')}</h3>
+                                        <div class="news-meta">
+                                            <span>${escapeHtml(article.category || 'General')}</span>
+                                            <span>${formatDate(article.$createdAt)}</span>
+                                        </div>
+                                        <p>${escapeHtml(truncateText(article.content, 180))}</p>
+                                    </div>
+                                    <div>
+                                        <a class="news-link" href="article.html?id=${article.$id}">Read full story →</a>
+                                    </div>
+                                </div>
+                            </article>
+                        `;
+                    }).join('');
+                } catch (error) {
+                    console.error(error);
+                    newsList.innerHTML = '<div class="error-state">Failed to load news.</div>';
+                }
+            }
 
             if (localStorage.getItem('theme') === 'dark') {
                 document.body.classList.add('dark-mode');
             }
 
-            if (!appwriteDatabase ||!QueryAPI ||!dbId ||!collectionId) {
-                console.error('❌ Appwrite not initialized.');
-                document.getElementById('newsGrid').innerHTML = '<p style="color: red; padding: 20px;">Configuration Error: Appwrite SDK not initialized.</p>';
-                return;
-            }
-
-            function getYouTubeThumbnail(youtubeId) {
-                if (!youtubeId) return null;
-                return `https://img.youtube.com/vi/${youtubeId}/maxresdefault.jpg`;
-            }
-
-            function getAppwriteImageUrl(article) {
-                const imageId = article.imageFileId || article.imageUrl;
-
-                if (!imageId || imageId === 'Text' || imageId === 'null' || imageId === 'undefined') {
-                    return '';
-                }
-
-                if (imageId.startsWith('http')) return imageId;
-                return `${ENDPOINT}/storage/buckets/article-image/files/${imageId}/view?project=${PROJECT_ID}`;
-            }
-
-            function getMediaSource(article) {
-                if (article.youtube_id) {
-                    return {
-                        type: 'video',
-                        url: getYouTubeThumbnail(article.youtube_id),
-                        youtubeId: article.youtube_id
-                    };
-                }
-
-                const imageUrl = getAppwriteImageUrl(article);
-                if (imageUrl) {
-                    return {
-                        type: 'image',
-                        url: imageUrl
-                    };
-                }
-
-                return null;
-            }
-
-            function waitForAppwrite(callback, retries = 0) {
-                if (window.account) {
-                    callback();
-                } else if (retries < 30) {
-                    setTimeout(() => waitForAppwrite(callback, retries + 1), 100);
-                } else {
-                    document.getElementById('gatekeeperLoader').innerHTML = '<p style="color:red; font-weight:bold; padding:20px; text-align:center;">Authentication Engine Timeout.</p>';
-                }
-            }
-
-            async function checkAuthGate() {
-                try {
-                    const activeUser = await window.account.get();
-                    const loader = document.getElementById('gatekeeperLoader');
-                    if (loader) {
-                        loader.style.opacity = '0';
-                        setTimeout(() => loader.style.display = 'none', 300);
-                    }
-                    loadHomepage();
-                } catch (error) {
-                    window.location.href = 'login.html';
-                }
-            }
-
-            async function loadHomepage() {
-                try {
-                    const urlParams = new URLSearchParams(window.location.search);
-                    const currentCategory = urlParams.get('category');
-
-                    const queries = [
-                        QueryAPI.equal('status', 'published'),
-                        QueryAPI.orderDesc('$createdAt'),
-                        QueryAPI.limit(30)
-                    ];
-
-                    if (currentCategory) {
-                        queries.push(QueryAPI.equal('category', currentCategory));
-                    }
-
-                    const response = await appwriteDatabase.listDocuments(dbId, collectionId, queries);
-
-                    if (!response.documents || response.documents.length === 0) {
-                        handleEmptyState(currentCategory);
-                        return;
-                    }
-
-                    if (currentCategory) {
-                        renderCategoryView(response.documents, currentCategory);
-                    } else {
-                        renderHomepageView(response.documents);
-                    }
-
-                } catch (error) {
-                    console.error('❌ Error loading articles:', error);
-                    handleError();
-                }
-            }
-
-            function renderCategoryView(articles, category) {
-                const categoryFormatted = category.split('-').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
-                document.getElementById('mainSectionTitle').textContent = categoryFormatted + ' Updates';
-                document.title = `${categoryFormatted} News - खबर दार्जिलिंग`;
-
-                hideHomepageSections();
-                renderNewsGrid(articles, 'newsGrid');
-            }
-
-            function renderHomepageView(articles) {
-                document.title = 'खबर दार्जिलिंग - Your Trusted News Source';
-                document.getElementById('mainSectionTitle').textContent = 'Latest News';
-
-                showHomepageSections();
-
-                let featuredArticles = articles.filter(a => a.isFeatured === true);
-                if (featuredArticles.length === 0) {
-                    featuredArticles = [articles[0]];
-                } else {
-                    featuredArticles = featuredArticles.slice(0, 3);
-                }
-
-                const featuredIds = featuredArticles.map(a => a.$id);
-                const gridArticles = articles.filter(a =>!featuredIds.includes(a.$id)).slice(0, 10);
-
-                renderBreakingTicker(articles); // ✅ UPDATED: Send all articles
-                renderFeaturedStory(featuredArticles);
-                renderNewsGrid(gridArticles, 'newsGrid');
-            }
-
-            function hideHomepageSections() {
-                const sections = ['breaking', 'heroSection', 'featuredSection', 'categoriesSection'];
-                sections.forEach(id => {
-                    const el = document.getElementById(id);
-                    if (el) el.style.display = 'none';
-                });
-                document.getElementById('homeLink')?.classList.remove('active');
-            }
-
-            function showHomepageSections() {
-                const sections = ['breaking', 'heroSection', 'featuredSection', 'categoriesSection'];
-                sections.forEach(id => {
-                    const el = document.getElementById(id);
-                    if (el) el.style.display = '';
-                });
-            }
-
-            // 🔥 UPDATED FUNCTION: Now shows ALL latest news, clickable
-            function renderBreakingTicker(articles) {
-                const tickerEl = document.getElementById('breakingTicker');
-                if (!tickerEl ||!articles.length) return;
-
-                // Take latest 8 articles for ticker
-                const tickerArticles = articles.slice(0, 8);
-
-                tickerEl.innerHTML = tickerArticles.map(article =>
-                    `<a href="article.html?id=${article.$id}">🔴 ${escapeHtml(article.title)}</a>`
-                ).join('');
-            }
-
-            function renderFeaturedStory(featuredArray) {
-                const featuredEl = document.getElementById('featuredStory');
-                if (!featuredEl) return;
-
-                if (featuredArray.length === 1) {
-                    featuredEl.style = '';
-                    const article = featuredArray[0];
-                    const media = getMediaSource(article);
-                    const mediaHtml = media? generateMediaHtml(media, article) : '';
-                    const content = article.content? truncateText(article.content, 250) : '';
-                    const textStyle = media? '' : 'width: 100%;';
-
-                    featuredEl.innerHTML = `
-                        <a href="article.html?id=${article.$id}" class="featured-content" style="text-decoration: none; color: inherit;">
-                            ${mediaHtml}
-                            <div class="featured-text" style="${textStyle}">
-                                <span class="category-badge">${escapeHtml(article.category || 'General')}</span>
-                                <h2>${escapeHtml(article.title)}</h2>
-                                <p>${content}</p>
-                                <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 15px;">
-                                    <span class="date">${formatDate(article.$createdAt)}</span>
-                                    <span style="color: #c41e3a; font-weight: 600;">Read full story &rarr;</span>
-                                </div>
-                            </div>
-                        </a>
-                    `;
-                    return;
-                }
-
-                featuredEl.style.display = 'grid';
-                featuredEl.style.gridTemplateColumns = 'repeat(auto-fit, minmax(280px, 1fr))';
-                featuredEl.style.gap = '20px';
-                featuredEl.style.background = 'transparent';
-                featuredEl.style.boxShadow = 'none';
-                featuredEl.style.padding = '0';
-
-                featuredEl.innerHTML = featuredArray.map(article => {
-                    const media = getMediaSource(article);
-                    const mediaHtml = media? generateMediaHtml(media, article) : '';
-                    const content = article.content? truncateText(article.content, 120) : '';
-
-                    return `
-                        <a href="article.html?id=${article.$id}" style="text-decoration: none; color: inherit; background: #fff; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.05); display: flex; flex-direction: column; overflow: hidden;">
-                            ${mediaHtml}
-                            <div style="padding: 20px; display: flex; flex-direction: column; flex-grow: 1;">
-                                <span class="category-badge" style="align-self: flex-start; margin-bottom: 10px;">${escapeHtml(article.category || 'General')}</span>
-                                <h3 style="margin-top: 0; margin-bottom: 10px; font-size: 1.2rem;">${escapeHtml(article.title)}</h3>
-                                <p style="color: #555; flex-grow: 1; font-size: 0.95rem;">${content}</p>
-                                <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 15px; border-top: 1px solid #eee; padding-top: 15px;">
-                                    <span class="date" style="font-size: 0.85rem; color: #888;">${formatDate(article.$createdAt)}</span>
-                                    <span style="color: #c41e3a; font-weight: 600; font-size: 0.9rem;">Read &rarr;</span>
-                                </div>
-                            </div>
-                        </a>
-                    `;
-                }).join('');
-            }
-
-            function generateMediaHtml(media, article) {
-                if (!media ||!media.url) return '';
-
-                if (media.type === 'video') {
-                    return `
-                        <div class="media-container" style="border-radius: 8px 8px 0 0;">
-                            <img src="${media.url}" alt="${escapeHtml(article.title)}" loading="lazy" style="width: 100%; height: 200px; object-fit: cover;">
-                            <div class="play-button-overlay">
-                                <div class="play-button"></div>
-                            </div>
-                            <div class="video-badge">🎬 VIDEO</div>
-                        </div>
-                    `;
-                } else {
-                    return `<img src="${media.url}" alt="${escapeHtml(article.title)}" loading="lazy" style="width: 100%; height: 200px; object-fit: cover; border-radius: 8px 8px 0 0;">`;
-                }
-            }
-
-            function renderNewsGrid(articles, elementId) {
-                const gridEl = document.getElementById(elementId);
-                if (!gridEl) return;
-
-                gridEl.innerHTML = articles.map(article => {
-                    const media = getMediaSource(article);
-                    const mediaHtml = media? generateMediaHtml(media, article) : '';
-                    const content = article.content? truncateText(article.content, 150) : '';
-
-                    return `
-                        <a href="article.html?id=${article.$id}" class="news-card" style="text-decoration: none; color: inherit; display: flex; flex-direction: column;">
-                            ${mediaHtml}
-                            <div class="news-card-content" style="display: flex; flex-direction: column; flex-grow: 1;">
-                                <span class="category-badge">${escapeHtml(article.category || 'General')}</span>
-                                <h3>${escapeHtml(article.title)}</h3>
-                                <p style="flex-grow: 1;">${content}</p>
-                                <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 15px;">
-                                    <span class="date">${formatDate(article.$createdAt)}</span>
-                                    <span style="color: #c41e3a; font-weight: 600; font-size: 0.9rem;">Read more &rarr;</span>
-                                </div>
-                            </div>
-                        </a>
-                    `;
-                }).join('');
-            }
-
-            function handleEmptyState(category) {
-                const message = category? 'No articles published in this category yet.' : 'No articles published yet.';
-                if (category) hideHomepageSections();
-                if (!category) {
-                    document.getElementById('featuredStory').innerHTML = '<p>No articles published yet.</p>';
-                    document.getElementById('breakingTicker').innerHTML = 'No breaking news at the moment.';
-                }
-                document.getElementById('newsGrid').innerHTML = `<p>${message}</p>`;
-            }
-
-            function handleError() {
-                const errorHtml = '<p style="color: #d32f2f; padding: 20px;">Failed to load articles. Please try refreshing.</p>';
-                const newsGridEl = document.getElementById('newsGrid');
-                if (newsGridEl) newsGridEl.innerHTML = errorHtml;
-            }
-
-            function truncateText(htmlStr, maxLength) {
-                const div = document.createElement('div');
-                div.innerHTML = htmlStr;
-                let text = div.textContent || div.innerText || '';
-                if (text.length > maxLength) {
-                    return text.substring(0, maxLength) + '...';
-                }
-                return text;
-            }
-
-            function formatDate(dateString) {
-                try {
-                    return new Date(dateString).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' });
-                } catch { return 'Date unknown'; }
-            }
-
-            function escapeHtml(text) {
-                const div = document.createElement('div');
-                div.textContent = text;
-                return div.innerHTML;
-            }
-
-            const navToggle = document.getElementById('navToggle');
-            const navMenu = document.getElementById('navMenu');
-            if (navToggle) {
-                navToggle.addEventListener('click', () => { navMenu.classList.toggle('active'); });
-            }
-
-            const themeToggle = document.getElementById('themeToggle');
-            if (themeToggle) {
-                themeToggle.addEventListener('click', () => {
-                    document.body.classList.toggle('dark-mode');
-                    const isDarkMode = document.body.classList.contains('dark-mode');
-                    themeToggle.textContent = isDarkMode? '☀' : '🌙';
-                    localStorage.setItem('theme', isDarkMode? 'dark' : 'light');
-                });
-                if (localStorage.getItem('theme') === 'dark') {
-                    themeToggle.textContent = '☀';
-                }
-            }
-
-            const logoutBtn = document.getElementById('logoutBtn');
-            if (logoutBtn) {
-                logoutBtn.addEventListener('click', async () => {
-                    const confirmLogout = confirm("Are you sure you want to sign out of Khabar Darjeeling?");
-                    if (!confirmLogout) return;
-
-                    try {
-                        await window.account.deleteSession('current');
-                        window.location.href = 'login.html';
-                    } catch (error) {
-                        alert("Failed to sign out safely. Please refresh and try again.");
-                    }
-                });
-            }
-
-            if (document.readyState === 'loading') {
-                document.addEventListener('DOMContentLoaded', () => waitForAppwrite(checkAuthGate));
-            } else {
-                waitForAppwrite(checkAuthGate);
-            }
-
+            loadProfile();
         })();
     </script>
 </body>
