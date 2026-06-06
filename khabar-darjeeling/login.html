@@ -13,44 +13,30 @@
             --bg-gray: #f0f2f5;
             --border-color: #dddfe2;
         }
-
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Poppins', sans-serif; }
         body { background-color: var(--bg-gray); display: flex; flex-direction: column; justify-content: center; align-items: center; min-height: 100vh; color: var(--text-dark); }
-       .login-wrapper { width: 100%; max-width: 396px; padding: 16px; }
-        
-       .brand-header { text-align: center; margin-bottom: 24px; display: flex; flex-direction: column; align-items: center; }
-       .brand-logo { height: 75px; width: 75px; object-fit: cover; border-radius: 50%; margin-bottom: 12px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); border: 2px solid #ffffff; }
-       .brand-header h1 { color: var(--brand-red); font-size: 34px; font-weight: 700; letter-spacing: -0.5px; margin-bottom: 2px; }
-       .brand-header p { color: #606770; font-size: 14px; font-weight: 600; letter-spacing: 0.5px; }
-
-       .card { background: #ffffff; border-radius: 8px; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1), 0 8px 16px rgba(0, 0, 0, 0.1); padding: 24px; width: 100%; }
-       .instruction-text { color: #606770; font-size: 13px; line-height: 1.4; text-align: center; margin-bottom: 16px; }
-       .form-control { width: 100%; margin-bottom: 14px; }
-       .form-control input { width: 100%; padding: 14px 12px; font-size: 14px; border: 1px solid var(--border-color); border-radius: 6px; background: #f5f6f7; color: var(--text-dark); outline: none; transition: all 0.2s; }
-       .form-control input:focus { border-color: var(--brand-red); background: #ffffff; box-shadow: 0 0 0 2px rgba(196, 30, 58, 0.2); }
-        
-       .form-control input.otp-style { font-size: 26px; letter-spacing: 6px; text-align: center; font-weight: 700; padding: 8px; }
-
-       .btn-submit { width: 100%; padding: 12px; font-size: 16px; font-weight: 600; color: #ffffff; background-color: var(--brand-red); border: none; border-radius: 6px; cursor: pointer; margin-top: 6px; transition: background-color 0.2s; }
-       .btn-submit:hover { background-color: var(--brand-red-dark); }
-       .btn-submit:disabled { opacity: 0.5; cursor: not-allowed; }
-        
-       .forgot-link { display: block; text-align: center; margin-top: 14px; font-size: 13px; color: var(--brand-red); text-decoration: none; cursor: pointer; font-weight: 500; }
-       .toggle-box { text-align: center; margin-top: 20px; padding-top: 20px; border-top: 1px solid var(--border-color); font-size: 14px; color: #606770; }
-       .toggle-link { color: var(--brand-red); font-weight: 600; text-decoration: none; cursor: pointer; }
-       .status-feedback { margin-top: 16px; text-align: center; font-size: 13px; font-weight: 500; min-height: 20px; }
-       .hidden { display: none!important; }
-
-        body.dark-mode { background-color: #121212; color: #f5f6f7; }
-        body.dark-mode.card { background: #242526; box-shadow: 0 4px 12px rgba(0,0,0,0.3); border-top: 1px solid #3a3b3c;}
-        body.dark-mode.form-control input { background: #3a3b3c; border-color: #4e4f50; color: #ffffff; }
-        body.dark-mode.form-control input:focus { border-color: var(--brand-red); background: #242526; }
-        body.dark-mode.toggle-box { border-top-color: #3a3b3c; }
-        body.dark-mode.brand-logo { border-color: #242526; }
+      .login-wrapper { width: 100%; max-width: 396px; padding: 16px; }
+      .brand-header { text-align: center; margin-bottom: 24px; display: flex; flex-direction: column; align-items: center; }
+      .brand-logo { height: 75px; width: 75px; object-fit: cover; border-radius: 50%; margin-bottom: 12px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); border: 2px solid #ffffff; }
+      .brand-header h1 { color: var(--brand-red); font-size: 34px; font-weight: 700; letter-spacing: -0.5px; margin-bottom: 2px; }
+      .brand-header p { color: #606770; font-size: 14px; font-weight: 600; letter-spacing: 0.5px; }
+      .card { background: #ffffff; border-radius: 8px; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1), 0 8px 16px rgba(0, 0, 0, 0.1); padding: 24px; width: 100%; }
+      .instruction-text { color: #606770; font-size: 13px; line-height: 1.4; text-align: center; margin-bottom: 16px; }
+      .form-control { width: 100%; margin-bottom: 14px; }
+      .form-control input { width: 100%; padding: 14px 12px; font-size: 14px; border: 1px solid var(--border-color); border-radius: 6px; background: #f5f6f7; color: var(--text-dark); outline: none; transition: all 0.2s; }
+      .form-control input:focus { border-color: var(--brand-red); background: #ffffff; box-shadow: 0 0 0 2px rgba(196, 30, 58, 0.2); }
+      .form-control input.otp-style { font-size: 26px; letter-spacing: 6px; text-align: center; font-weight: 700; padding: 8px; }
+      .btn-submit { width: 100%; padding: 12px; font-size: 16px; font-weight: 600; color: #ffffff; background-color: var(--brand-red); border: none; border-radius: 6px; cursor: pointer; margin-top: 6px; transition: background-color 0.2s; }
+      .btn-submit:hover { background-color: var(--brand-red-dark); }
+      .btn-submit:disabled { opacity: 0.5; cursor: not-allowed; }
+      .forgot-link { display: block; text-align: center; margin-top: 14px; font-size: 13px; color: var(--brand-red); text-decoration: none; cursor: pointer; font-weight: 500; }
+      .toggle-box { text-align: center; margin-top: 20px; padding-top: 20px; border-top: 1px solid var(--border-color); font-size: 14px; color: #606770; }
+      .toggle-link { color: var(--brand-red); font-weight: 600; text-decoration: none; cursor: pointer; }
+      .status-feedback { margin-top: 16px; text-align: center; font-size: 13px; font-weight: 500; min-height: 20px; }
+      .hidden { display: none!important; }
     </style>
 </head>
 <body>
-
     <div class="login-wrapper">
         <div class="brand-header">
             <img src="assets/logo.png" alt="Khabar Darjeeling Logo" class="brand-logo">
@@ -68,7 +54,6 @@
                 </div>
                 <button type="submit" id="loginBtn" class="btn-submit">Log In</button>
                 <span class="forgot-link" onclick="switchMode('forgot')">Forgot Password?</span>
-                
                 <div class="toggle-box">
                     Don't have an account? <span class="toggle-link" onclick="switchMode('signup')">Sign Up</span>
                 </div>
@@ -88,18 +73,17 @@
                     <input type="password" id="signupPasswordConfirm" placeholder="Confirm password" minlength="8" required>
                 </div>
                 <button type="submit" id="signupBtn" class="btn-submit">Verify Email via OTP</button>
-                
                 <div class="toggle-box">
                     Already have an account? <span class="toggle-link" onclick="switchMode('login')">Log In</span>
                 </div>
             </form>
 
             <form id="forgotForm" class="hidden" onsubmit="handleForgotRequest(event)">
-                <p class="instruction-text">Enter your account email. We'll send a security code to reset your password.</p>
+                <p class="instruction-text">Enter your account email. We'll send a login link to reset your password.</p>
                 <div class="form-control">
                     <input type="email" id="forgotEmail" placeholder="Account email address" required>
                 </div>
-                <button type="submit" id="forgotBtn" class="btn-submit">Send Reset Code</button>
+                <button type="submit" id="forgotBtn" class="btn-submit">Send Reset Link</button>
                 <div class="toggle-box">
                     Remembered credentials? <span class="toggle-link" onclick="switchMode('login')">Back to Log In</span>
                 </div>
@@ -110,9 +94,6 @@
                 <div class="form-control">
                     <input type="text" id="otpInputCode" class="otp-style" maxlength="6" placeholder="000000" inputmode="numeric">
                 </div>
-                <div id="newPasswordGroup" class="form-control hidden">
-                    <input type="password" id="newPasswordInput" placeholder="Enter new password (min 8 chars)" minlength="8">
-                </div>
                 <button onclick="submitOtpAction()" id="otpVerifyActionButton" class="btn-submit">Verify Code</button>
             </div>
 
@@ -120,55 +101,48 @@
         </div>
     </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/appwrite@14.0.1/dist/iife/sdk.min.js"></script>
-    <script src="js/appwrite.js"></script>
+    <!-- Appwrite SDK + Init inline - no external file -->
+    <script type="module">
+        import { Client, Account, Databases, ID, Query } from "https://cdn.jsdelivr.net/npm/appwrite@14.0.1/+esm";
 
-    <script>
-        // Wait for appwrite.js to load before doing anything
-        document.addEventListener('DOMContentLoaded', async () => {
-            // Wait for window.account to exist
-            let retries = 0;
-            while (!window.account && retries < 50) {
-                await new Promise(r => setTimeout(r, 100));
-                retries++;
-            }
-            
-            if (!window.account) {
-                document.getElementById('feedback').textContent = 'Failed to load. Please refresh.';
-                document.getElementById('feedback').style.color = 'var(--brand-red)';
-                return;
-            }
+        const client = new Client()
+           .setEndpoint('https://nyc.cloud.appwrite.io/v1')
+           .setProject('khabardarjeeling');
 
-            // Check if already logged in
-            try {
-                await window.account.get();
-                window.location.href = 'index.html'; // Already logged in
-            } catch (e) {
-                // Not logged in, show login form
-            }
-        });
+        const account = new Account(client);
+        const databases = new Databases(client);
+
+        // Make global for functions
+        window.account = account;
+        window.databases = databases;
+        window.ID = ID;
+        window.APPWRITE_DB_ID = 'Khabar_db';
+
+        // Check if already logged in
+        try {
+            await account.get();
+            window.location.href = 'index.html';
+        } catch (e) {
+            // Not logged in, stay on page
+        }
 
         let currentFlowType = "";
         let cachedEmail = "";
         let cachedPassword = "";
         let cachedName = "";
-        let tempUserId = ""; // For OTP flows
+        let tempUserId = "";
 
-        function switchMode(mode) {
+        window.switchMode = function(mode) {
             const forms = ['loginForm', 'signupForm', 'forgotForm', 'otpVerificationView'];
             forms.forEach(f => document.getElementById(f).classList.add('hidden'));
             document.getElementById('feedback').textContent = "";
-            document.getElementById('newPasswordGroup').classList.add('hidden');
-
             if(mode === 'login') document.getElementById('loginForm').classList.remove('hidden');
             if(mode === 'signup') document.getElementById('signupForm').classList.remove('hidden');
             if(mode === 'forgot') document.getElementById('forgotForm').classList.remove('hidden');
         }
 
-        async function handleSignup(e) {
+        window.handleSignup = async function(e) {
             e.preventDefault();
-            if (!window.account) return;
-            
             cachedName = document.getElementById('signupName').value.trim();
             cachedEmail = document.getElementById('signupEmail').value.trim();
             const password = document.getElementById('signupPassword').value;
@@ -193,12 +167,10 @@
             feedback.textContent = "Sending verification code...";
 
             try {
-                // Create a temp user ID for OTP
-                tempUserId = window.ID.unique();
-                await window.account.createEmailToken(tempUserId, cachedEmail);
+                tempUserId = ID.unique();
+                await account.createEmailToken(tempUserId, cachedEmail);
                 
                 currentFlowType = "signup_verify";
-                
                 document.getElementById('signupForm').classList.add('hidden');
                 document.getElementById('otpInstructions').innerHTML = `📨 Code sent to <b>${cachedEmail}</b>. Enter the 6-digit code.`;
                 document.getElementById('otpVerificationView').classList.remove('hidden');
@@ -211,44 +183,34 @@
             }
         }
 
-        async function handleForgotRequest(e) {
+        window.handleForgotRequest = async function(e) {
             e.preventDefault();
-            if (!window.account) return;
-            
             cachedEmail = document.getElementById('forgotEmail').value.trim();
             const feedback = document.getElementById('feedback');
             const btn = document.getElementById('forgotBtn');
             
             btn.disabled = true;
             feedback.style.color = "var(--brand-red)";
-            feedback.textContent = "Sending reset code...";
+            feedback.textContent = "Sending reset link...";
 
             try {
-                // For password reset via OTP, we use createEmailToken too
-                // We need the userId first - Appwrite doesn't expose get user by email
-                // So we create a session with magic URL instead, or use custom backend
-                // For now, we'll use Magic URL which sends a link, not OTP
-                
-                await window.account.createMagicURLToken(
-                    window.ID.unique(), 
+                await account.createMagicURLToken(
+                    ID.unique(), 
                     cachedEmail,
-                    window.location.origin + '/reset-password.html' // You need this page
+                    window.location.origin + '/reset-password.html'
                 );
                 
                 feedback.style.color = "var(--brand-red)";
                 feedback.textContent = "✓ Reset link sent! Check your email.";
-                btn.disabled = false;
-                
             } catch (error) {
                 feedback.style.color = "var(--brand-red)";
                 feedback.textContent = error.message || "Failed to send reset link.";
+            } finally {
                 btn.disabled = false;
             }
         }
 
-        async function submitOtpAction() {
-            if (!window.account) return;
-            
+        window.submitOtpAction = async function() {
             const code = document.getElementById('otpInputCode').value.trim();
             const feedback = document.getElementById('feedback');
             const btn = document.getElementById('otpVerifyActionButton');
@@ -265,18 +227,14 @@
 
             if (currentFlowType === "signup_verify") {
                 try {
-                    // 1. Create session with OTP
-                    await window.account.createSession(tempUserId, code);
-                    
-                    // 2. Set password and name for the new account
-                    await window.account.updatePassword(cachedPassword);
-                    await window.account.updateName(cachedName);
+                    await account.createSession(tempUserId, code);
+                    await account.updatePassword(cachedPassword);
+                    await account.updateName(cachedName);
 
-                    // 3. Create profile document
-                    await window.databases.createDocument(
-                        window.APPWRITE_DB_ID,
+                    await databases.createDocument(
+                        'Khabar_db',
                         'profiles',
-                        window.ID.unique(),
+                        ID.unique(),
                         {
                             userId: tempUserId,
                             displayName: cachedName,
@@ -296,10 +254,8 @@
             }
         }
 
-        async function handleLogin(e) {
+        window.handleLogin = async function(e) {
             e.preventDefault();
-            if (!window.account) return;
-            
             const email = document.getElementById('loginEmail').value.trim();
             const password = document.getElementById('loginPassword').value;
             const feedback = document.getElementById('feedback');
@@ -310,7 +266,7 @@
             btn.disabled = true;
 
             try {
-                await window.account.createEmailPasswordSession(email, password);
+                await account.createEmailPasswordSession(email, password);
                 feedback.style.color = "var(--brand-red)";
                 feedback.textContent = "✓ Success! Loading...";
                 setTimeout(() => { window.location.href = "index.html"; }, 1200);
