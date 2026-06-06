@@ -32,6 +32,7 @@
             font-family: sans-serif; transition: opacity 0.3s ease;
         }
         body.dark-mode #gatekeeperLoader { background: #1a1a1a; color: #ffffff; }
+
         .spinner {
             width: 40px; height: 40px; border: 4px solid rgba(196, 30, 58, 0.1);
             border-left-color: #c41e3a; border-radius: 50%; animation: spin 1s linear infinite;
@@ -50,10 +51,13 @@
             height: auto;
             display: block;
         }
+
         .play-button-overlay {
             position: absolute;
-            top: 0; left: 0;
-            width: 100%; height: 100%;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -67,7 +71,8 @@
             background: rgba(0, 0, 0, 0.5);
         }
         .play-button {
-            width: 70px; height: 70px;
+            width: 70px;
+            height: 70px;
             border-radius: 50%;
             background: rgba(255, 255, 255, 0.95);
             display: flex;
@@ -83,15 +88,18 @@
         }
         .play-button::after {
             content: '';
-            width: 0; height: 0;
+            width: 0;
+            height: 0;
             border-left: 18px solid #c41e3a;
             border-top: 12px solid transparent;
             border-bottom: 12px solid transparent;
             margin-left: 4px;
         }
+
         .video-badge {
             position: absolute;
-            top: 10px; right: 10px;
+            top: 10px;
+            right: 10px;
             background: rgba(196, 30, 58, 0.95);
             color: white;
             padding: 4px 10px;
@@ -103,10 +111,19 @@
             z-index: 5;
             backdrop-filter: blur(4px);
         }
-        .featured-content { position: relative; }
-        .featured-content .media-container { border-radius: 8px 8px 0 0; }
 
-        .breaking-ticker { background: #c41e3a; color: #fff; padding: 8px 0; }
+        .featured-content {
+            position: relative;
+        }
+        .featured-content .media-container {
+            border-radius: 8px 8px 0 0;
+        }
+
+        .breaking-ticker {
+            background: #c41e3a;
+            color: #fff;
+            padding: 8px 0;
+        }
         .breaking-label {
             background: #900;
             padding: 8px 15px;
@@ -174,18 +191,18 @@
 
     <div id="gatekeeperLoader">
         <div class="spinner"></div>
-        <p style="font-weight: 600; letter-spacing: 0.5px;">Securing Portal Session...</p>
+        <p style="font-weight: 600; letter-spacing: 0.5px;">Loading News...</p>
     </div>
 
     <nav class="navbar">
         <div class="container">
             <div class="navbar-content">
                 <div class="logo">
-                    <a href="index.html" style="display: flex; align-items: center; text-decoration: none; gap: 12px;">
-                        <img src="assets/logo.png" alt="Khabar Darjeeling Logo" style="height: 55px; width: 55px; object-fit: cover; border-radius: 50%; flex-shrink: 0;">
+                    <a href="index.html" style="display:flex;align-items:center;text-decoration:none;gap:12px;">
+                        <img src="assets/logo.png" alt="Khabar Darjeeling Logo" style="height:55px;width:55px;object-fit:cover;border-radius:50%;flex-shrink:0;">
                         <div>
-                            <h1 style="font-size: 24px; color: var(--primary-color); margin: 0; line-height: 1.2;">खबर दार्जिलिंग</h1>
-                            <p class="tagline" style="margin: 0; font-size: 11px; color: var(--text-light); font-weight: 500;">Hamro Khabar, Hami Lekhaw</p>
+                            <h1 style="font-size:24px;color:var(--primary-color);margin:0;line-height:1.2;">खबर दार्जिलिंग</h1>
+                            <p class="tagline" style="margin:0;font-size:11px;color:var(--text-light);font-weight:500;">Hamro Khabar, Hami Lekhaw</p>
                         </div>
                     </a>
                 </div>
@@ -222,16 +239,16 @@
                     <input type="text" id="searchInput" placeholder="Search news..." class="search-input">
                     <button class="theme-toggle" id="themeToggle">🌙</button>
                     <a href="admin.html" class="admin-link">Admin</a>
-                    <button id="logoutBtn" style="background: none; border: none; color: #c41e3a; font-weight: 600; font-size: 14px; cursor: pointer; margin-left: 15px; padding: 5px 10px; font-family: inherit;">Logout</button>
+                    <button id="logoutBtn" style="background:none;border:none;color:#c41e3a;font-weight:600;font-size:14px;cursor:pointer;margin-left:15px;padding:5px 10px;font-family:inherit;">Logout</button>
                 </div>
             </div>
         </div>
     </nav>
 
     <section class="breaking-ticker" id="breaking">
-        <div class="container" style="display: flex; align-items: center;">
+        <div class="container" style="display:flex;align-items:center;">
             <span class="breaking-label">BREAKING NEWS</span>
-            <marquee class="ticker-content" id="breakingTicker" scrollamount="5" onmouseover="this.stop();" onmouseout="this.start();" style="flex-grow: 1;">
+            <marquee class="ticker-content" id="breakingTicker" scrollamount="5" onmouseover="this.stop();" onmouseout="this.start();" style="flex-grow:1;">
                 Loading breaking news...
             </marquee>
         </div>
@@ -290,15 +307,13 @@
     <script>
         if ('serviceWorker' in navigator) {
             window.addEventListener('load', () => {
-                navigator.serviceWorker.register('sw.js')
-                    .then(r => console.log('✅ SW registered:', r))
-                    .catch(e => console.error('❌ SW failed:', e));
+                navigator.serviceWorker.register('sw.js').catch(() => {});
             });
         }
     </script>
 
     <script src="https://cdn.jsdelivr.net/npm/appwrite@14.0.1/dist/iife/sdk.min.js"></script>
-    <script src="js/appwrite.js?v=116"></script>
+    <script src="js/appwrite.js?v=117"></script>
     <script src="https://cdn.jsdelivr.net/npm/eruda"></script>
     <script>
         try { if (typeof eruda !== 'undefined') eruda.init(); } catch (e) {}
@@ -353,9 +368,8 @@
             function generateAuthorHtml(article) {
                 const authorName = article.submitterName || article.authorName || 'Staff Reporter';
                 const authorAvatar = article.submitterAvatar;
-                const authorId = article.submitterId || article.userId || '';
+                const authorId = article.submitterId || '';
                 const profileLink = authorId ? `profile.html?userId=${authorId}` : '#';
-
                 const nameHtml = `By <a href="${profileLink}" style="text-decoration:none;color:inherit;"><span class="author-name">${escapeHtml(authorName)}</span></a>`;
 
                 if (authorAvatar && authorAvatar !== '' && authorAvatar !== 'null') {
@@ -379,9 +393,7 @@
             }
 
             async function checkAuthGate() {
-                try {
-                    await window.account.get();
-                } catch (error) {}
+                try { await window.account.get(); } catch (e) {}
                 const loader = document.getElementById('gatekeeperLoader');
                 if (loader) {
                     loader.style.opacity = '0';
@@ -403,7 +415,6 @@
                     if (currentCategory) queries.push(QueryAPI.equal('category', currentCategory));
 
                     const response = await appwriteDatabase.listDocuments(dbId, collectionId, queries);
-
                     if (!response.documents || response.documents.length === 0) {
                         handleEmptyState(currentCategory);
                         return;
