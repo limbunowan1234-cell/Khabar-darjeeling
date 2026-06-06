@@ -33,26 +33,26 @@
         }
         body.dark-mode #gatekeeperLoader { background: #1a1a1a; color: #ffffff; }
 
-       .spinner {
+      .spinner {
             width: 40px; height: 40px; border: 4px solid rgba(196, 30, 58, 0.1);
             border-left-color: #c41e3a; border-radius: 50%; animation: spin 1s linear infinite;
             margin-bottom: 15px;
         }
         @keyframes spin { to { transform: rotate(360deg); } }
 
-       .media-container {
+      .media-container {
             position: relative;
             width: 100%;
             overflow: hidden;
             background: #000;
         }
-       .media-container img {
+      .media-container img {
             width: 100%;
             height: auto;
             display: block;
         }
 
-       .play-button-overlay {
+      .play-button-overlay {
             position: absolute;
             top: 0;
             left: 0;
@@ -66,11 +66,11 @@
             transition: opacity 0.3s ease, background 0.3s ease;
             cursor: pointer;
         }
-       .news-card:hover.play-button-overlay {
+      .news-card:hover.play-button-overlay {
             opacity: 1;
             background: rgba(0, 0, 0, 0.5);
         }
-       .play-button {
+      .play-button {
             width: 70px;
             height: 70px;
             border-radius: 50%;
@@ -82,11 +82,11 @@
             transition: transform 0.3s ease, box-shadow 0.3s ease;
             z-index: 10;
         }
-       .news-card:hover.play-button {
+      .news-card:hover.play-button {
             transform: scale(1.15);
             box-shadow: 0 12px 32px rgba(0, 0, 0, 0.4);
         }
-       .play-button::after {
+      .play-button::after {
             content: '';
             width: 0;
             height: 0;
@@ -96,7 +96,7 @@
             margin-left: 4px;
         }
 
-       .video-badge {
+      .video-badge {
             position: absolute;
             top: 10px;
             right: 10px;
@@ -112,39 +112,39 @@
             backdrop-filter: blur(4px);
         }
 
-       .featured-content {
+      .featured-content {
             position: relative;
         }
-       .featured-content.media-container {
+      .featured-content.media-container {
             border-radius: 8px 8px 0 0;
         }
 
-       .breaking-ticker {
+      .breaking-ticker {
             background: #c41e3a;
             color: #fff;
             padding: 8px 0;
         }
-       .breaking-label {
+      .breaking-label {
             background: #900;
             padding: 8px 15px;
             font-weight: 700;
             font-size: 14px;
             white-space: nowrap;
         }
-       .ticker-content a {
+      .ticker-content a {
             color: #fff;
             text-decoration: none;
             display: inline-block;
             padding: 0 40px;
             font-weight: 500;
         }
-       .ticker-content a:hover { text-decoration: underline; }
+      .ticker-content a:hover { text-decoration: underline; }
         @media (max-width: 600px) {
-           .breaking-label { font-size: 12px; padding: 8px 10px; }
-           .ticker-content a { padding: 0 25px; font-size: 14px; }
+          .breaking-label { font-size: 12px; padding: 8px 10px; }
+          .ticker-content a { padding: 0 25px; font-size: 14px; }
         }
 
-       .article-author {
+      .article-author {
             display: flex;
             align-items: center;
             gap: 8px;
@@ -156,18 +156,18 @@
         }
         body.dark-mode.article-author { border-top-color: #333; color: #aaa; }
 
-       .author-avatar,.author-initials {
+      .author-avatar,.author-initials {
             width: 28px; height: 28px;
             border-radius: 50%;
             flex-shrink: 0;
         }
-       .author-avatar {
+      .author-avatar {
             object-fit: cover;
             border: 1px solid #ddd;
         }
         body.dark-mode.author-avatar { border-color: #444; }
 
-       .author-initials {
+      .author-initials {
             background: #c41e3a;
             color: #fff;
             display: flex;
@@ -177,10 +177,10 @@
             font-size: 12px;
             text-transform: uppercase;
         }
-       .author-name { font-weight: 600; color: #333; }
+      .author-name { font-weight: 600; color: #333; }
         body.dark-mode.author-name { color: #ddd; }
 
-       .featured-text.article-author {
+      .featured-text.article-author {
             margin-top: 15px;
             border-top: none;
             padding-top: 0;
@@ -232,16 +232,16 @@
                             </ul>
                         </li>
                         <li><a href="post.html">Create Post</a></li>
-                        <li><a href="profile.html">Profile</a></li>
+                        <li><a href="#" id="mobileProfileLink" style="display:none;">Profile</a></li>
                     </ul>
                 </div>
 
                 <div class="nav-right">
                     <input type="text" id="searchInput" placeholder="Search news..." class="search-input">
                     <button class="theme-toggle" id="themeToggle">🌙</button>
-                    <a href="profile.html" class="admin-link">Profile</a>
-                    <a href="admin.html" class="admin-link">Admin</a>
-                    <button id="logoutBtn" style="background:none;border:none;color:#c41e3a;font-weight:600;font-size:14px;cursor:pointer;margin-left:15px;padding:5px 10px;font-family:inherit;">Logout</button>
+                    <a href="#" id="desktopProfileLink" class="admin-link" style="display:none;">Profile</a>
+                    <a href="admin.html" id="adminLink" class="admin-link" style="display:none;">Admin</a>
+                    <button id="logoutBtn" style="background:none;border:none;color:#c41e3a;font-weight:600;font-size:14px;cursor:pointer;margin-left:15px;padding:5px 10px;font-family:inherit;display:none;">Logout</button>
                 </div>
             </div>
         </div>
@@ -329,6 +329,7 @@
             const collectionId = window.APPWRITE_COLLECTION_ID;
             const ENDPOINT = 'https://nyc.cloud.appwrite.io/v1';
             const PROJECT_ID = 'khabardarjeeling';
+            const ADMIN_EMAIL = 'your-admin@email.com'; // <-- CHANGE THIS TO YOUR EMAIL
 
             if (localStorage.getItem('theme') === 'dark') {
                 document.body.classList.add('dark-mode');
@@ -370,9 +371,12 @@
             function generateAuthorHtml(article) {
                 const authorName = article.submitterName || article.authorName || 'Staff Reporter';
                 const authorAvatar = article.submitterAvatar;
-                const authorId = article.submitterId || '';
-                const profileLink = authorId? `profile.html?userId=${authorId}` : '#';
-                const nameHtml = `By <a href="${profileLink}" style="text-decoration:none;color:inherit;"><span class="author-name">${escapeHtml(authorName)}</span></a>`;
+                const authorId = article.submitterId;
+                
+                // Only link if we actually have an ID
+                const nameHtml = authorId 
+                   ? `By <a href="profile.html?userId=${authorId}" style="text-decoration:none;color:inherit;"><span class="author-name">${escapeHtml(authorName)}</span></a>`
+                    : `By <span class="author-name">${escapeHtml(authorName)}</span>`;
 
                 if (authorAvatar && authorAvatar!== '' && authorAvatar!== 'null') {
                     return `
@@ -395,7 +399,27 @@
             }
 
             async function checkAuthGate() {
-                try { await window.account.get(); } catch (e) {}
+                try { 
+                    const user = await window.account.get(); 
+                    
+                    // User logged in - inject their ID into Profile links
+                    const profileUrl = `profile.html?userId=${user.$id}`;
+                    document.getElementById('mobileProfileLink').href = profileUrl;
+                    document.getElementById('desktopProfileLink').href = profileUrl;
+                    document.getElementById('mobileProfileLink').style.display = '';
+                    document.getElementById('desktopProfileLink').style.display = '';
+                    document.getElementById('logoutBtn').style.display = '';
+                    
+                    // Only show Admin link if email matches
+                    if (user.email === ADMIN_EMAIL) {
+                        document.getElementById('adminLink').style.display = '';
+                    }
+                    
+                } catch (e) {
+                    // Not logged in - hide Profile, Admin, Logout buttons
+                    document.getElementById('logoutBtn').style.display = 'none';
+                }
+                
                 const loader = document.getElementById('gatekeeperLoader');
                 if (loader) {
                     loader.style.opacity = '0';
