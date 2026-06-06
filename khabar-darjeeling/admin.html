@@ -325,6 +325,31 @@
             }
         })();
     </script>
+    <script>
+        // ADMIN EMAIL GUARD - Change this to your email
+        const ADMIN_EMAIL = 'your-admin@email.com';
+        
+        (async () => {
+            try {
+                const user = await window.account.get();
+                if (user.email !== ADMIN_EMAIL) {
+                    // Not the admin - kick them out
+                    alert('Access denied. Admins only.');
+                    window.location.href = 'index.html';
+                    return;
+                }
+                // Admin confirmed - show admin panel
+                document.getElementById('loginScreen').style.display = 'none';
+                document.getElementById('adminPanel').style.display = 'block';
+                document.getElementById('adminUser').textContent = user.email;
+                document.getElementById('logoutBtn').style.display = '';
+            } catch (e) {
+                // Not logged in - show login form
+                document.getElementById('loginScreen').style.display = 'flex';
+                document.getElementById('adminPanel').style.display = 'none';
+            }
+        })();
+    </script>
     <script src="js/admin.js?v=117"></script>
 </body>
 </html>
