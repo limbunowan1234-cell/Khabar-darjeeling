@@ -21,12 +21,11 @@
   <div id="featuredStory" style="padding:20px"></div>
   <div id="newsGrid" style="padding:20px;display:grid;gap:15px"></div>
 
-  <!-- NO CDN -->
-  <script src="js/appwrite.js?v=200"></script>
-  <script src="js/index.js?v=200"></script>
+  <!-- NEW FILES - no cache -->
+  <script src="js/appwrite-v2.js"></script>
+  <script src="js/index-v2.js"></script>
 
   <script>
-    // kill old service worker + cache
     if ('serviceWorker' in navigator) {
       navigator.serviceWorker.getRegistrations().then(rs => rs.forEach(r => r.unregister()));
       caches.keys().then(keys => keys.forEach(k => caches.delete(k)));
