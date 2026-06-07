@@ -304,29 +304,60 @@
         })();
     </script>
     <script>
-        // ADMIN EMAIL GUARD - Change this to your email
-        const ADMIN_EMAIL = 'your-admin@email.com';
-        
+        // ADMIN LABEL GUARD - Checks if user has 'admin' label in Appwrite
+        // Make sure you added 'admin' label to nowanad@gmail.com in Appwrite Console
         (async () => {
             try {
                 const user = await window.account.get();
-                if (user.email !== ADMIN_EMAIL) {
-                    // Not the admin - kick them out
+                
+                // Check if user has 'admin' label
+                if (!user.labels || !user.labels.includes('admin')) {
                     alert('Access denied. Admins only.');
                     window.location.href = 'index.html';
                     return;
                 }
+                
                 // Admin confirmed - show admin panel
                 document.getElementById('loginScreen').style.display = 'none';
                 document.getElementById('adminPanel').style.display = 'block';
                 document.getElementById('adminUser').textContent = user.email;
                 document.getElementById('logoutBtn').style.display = '';
+                
+                // Logout handler
+                document.getElementById('logoutBtn').addEventListener('click', async () => {
+                    try {
+                        await window.account.deleteSession('current');
+                        window.location.reload();
+                    } catch (err) {
+                        console.error('Logout failed:', err);
+                    }
+                });
+                
             } catch (e) {
                 // Not logged in - show login form
                 document.getElementById('loginScreen').style.display = 'flex';
                 document.getElementById('adminPanel').style.display = 'none';
             }
         })();
+
+        // Login form handler
+        document.getElementById('loginForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            const errorBox = document.getElementById('loginError');
+            
+            try {
+                errorBox.className = 'status-box info';
+                errorBox.textContent = 'Logging in...';
+                
+                await window.account.createEmailPasswordSession(email, password);
+                window.location.reload();
+            } catch (err) {
+                errorBox.className = 'status-box error';
+                errorBox.textContent = err.message || 'Login failed. Check your email and password.';
+            }
+        });
     </script>
     <script src="js/admin.js?v=117"></script>
 </body>
