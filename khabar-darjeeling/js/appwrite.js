@@ -1,45 +1,31 @@
-// js/appwrite.js — NO SDK NEEDED
+// NO SDK - direct fetch to Appwrite
 const ENDPOINT = 'https://nyc.cloud.appwrite.io/v1';
-const PROJECT_ID = 'khabardarjeeling';
+const PROJECT = 'khabardarjeeling';
+const DB = 'Khabar_db';
+const COL = 'articles';
 
-window.APPWRITE_DB_ID = 'Khabar_db';
-window.APPWRITE_COLLECTION_ID = 'articles';
+window.APPWRITE_DB_ID = DB;
+window.APPWRITE_COLLECTION_ID = COL;
 window.APPWRITE_BUCKET_ID = 'article-image';
 
-// Fake Appwrite objects so your index.js doesn't break
 window.Query = {
-  equal: (a,b) => `equal("${a}","${b}")`,
-  orderDesc: (a) => `orderDesc("${a}")`,
+  equal: (k,v) => `equal("${k}","${v}")`,
+  orderDesc: (k) => `orderDesc("${k}")`,
   limit: (n) => `limit(${n})`
 };
 
 window.databases = {
-  listDocuments: async function(dbId, colId, queries=[]) {
-    const q = queries.map(q => `queries[]=${encodeURIComponent(q)}`).join('&');
-    const url = `${ENDPOINT}/databases/${dbId}/collections/${colId}/documents?${q}`;
-    const res = await fetch(url, {
-      headers: { 'X-Appwrite-Project': PROJECT_ID }
-    });
-    if (!res.ok) throw new Error('Appwrite fetch failed');
+  listDocuments: async (dbId, colId, queries=[]) => {
+    const qs = queries.map(q=>`queries[]=${encodeURIComponent(q)}`).join('&');
+    const url = `${ENDPOINT}/databases/${dbId}/collections/${colId}/documents?${qs}`;
+    const res = await fetch(url, { headers: { 'X-Appwrite-Project': PROJECT }});
     return await res.json();
   }
 };
 
-window.storage = {
-  getFileView: (bucket, id) => `${ENDPOINT}/storage/buckets/${bucket}/files/${id}/view?project=${PROJECT_ID}`
-};
+window.account = { get: ()=>Promise.reject(), deleteSession: ()=>Promise.resolve() };
 
-window.account = {
-  get: () => Promise.reject('not logged in'),
-  deleteSession: () => Promise.resolve()
-};
-
-// --- Auth buttons (simple) ---
-function renderAuth() {
-  const el = document.getElementById('authButtons');
-  if (el) el.innerHTML = `<a href="login.html" style="padding:6px 12px;background:#c41e3a;color:#fff;border-radius:4px;text-decoration:none;">Login</a>`;
-}
-document.addEventListener('DOMContentLoaded', renderAuth);
-
-// hide loader
-setTimeout(() => document.getElementById('gatekeeperLoader')?.remove(), 500);
+document.addEventListener('DOMContentLoaded', ()=>{
+  document.getElementById('authButtons').innerHTML = '<a href="login.html" style="background:#c41e3a;color:#fff;padding:6px 12px;border-radius:4px;text-decoration:none">Login</a>';
+  setTimeout(()=>document.getElementById('gatekeeperLoader')?.remove(), 300);
+});
