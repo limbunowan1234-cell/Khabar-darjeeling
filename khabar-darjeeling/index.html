@@ -3,24 +3,42 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Appwrite SDK Test</title>
+  <title>SDK Test</title>
   <style>
-    body{font-family:Arial,sans-serif;padding:30px}
-    .ok{color:green;font-weight:700}
-    .bad{color:red;font-weight:700}
+    body {
+      font-family: Arial, sans-serif;
+      display: flex;
+      min-height: 100vh;
+      align-items: center;
+      justify-content: center;
+      margin: 0;
+      background: #f6f6f6;
+    }
+    .box {
+      text-align: center;
+      background: white;
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.08);
+    }
+    .ok { color: green; font-weight: 700; }
+    .bad { color: red; font-weight: 700; }
   </style>
 </head>
 <body>
-  <h1>Appwrite SDK Test</h1>
-  <p id="status">Checking...</p>
+  <div class="box">
+    <h1>Appwrite Test</h1>
+    <p id="status">Loading...</p>
+  </div>
 
   <script src="https://cdn.jsdelivr.net/npm/appwrite@14.0.1/dist/iife/sdk.min.js"></script>
   <script src="js/appwrite.js?v=126"></script>
   <script>
-    const status = document.getElementById('status');
-    status.innerHTML = window.Appwrite
-      ? '<span class="ok">Appwrite loaded successfully.</span>'
-      : '<span class="bad">Appwrite NOT loaded.</span>';
+    setTimeout(() => {
+      document.getElementById('status').innerHTML = window.Appwrite
+        ? '<span class="ok">Appwrite loaded successfully.</span>'
+        : '<span class="bad">Appwrite not loaded.</span>';
+    }, 500);
   </script>
 </body>
 </html>
