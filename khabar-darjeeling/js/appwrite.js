@@ -25,14 +25,18 @@ window.database = databases;
 window.storage = storage;
 window.ID = ID;
 window.Query = Query;
+
 window.APPWRITE_DB_ID = APPWRITE_DB_ID;
 window.APPWRITE_COLLECTION_ID = APPWRITE_COLLECTION_ID;
 window.APPWRITE_BUCKET_ID = APPWRITE_BUCKET_ID;
+
 window.APPWRITEDBID = APPWRITE_DB_ID;
 window.APPWRITECOLLECTIONID = APPWRITE_COLLECTION_ID;
 window.APPWRITEBUCKETID = APPWRITE_BUCKET_ID;
+
 window.APPWRITE_ENDPOINT = 'https://nyc.cloud.appwrite.io/v1';
 window.APPWRITE_PROJECT_ID = 'khabardarjeeling';
+
 window.AppwriteReady = Promise.resolve();
 
 console.log('✅ Appwrite successfully initialized');
