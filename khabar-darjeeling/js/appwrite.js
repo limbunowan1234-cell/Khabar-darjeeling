@@ -2,13 +2,13 @@
 if (!window.Appwrite) {
     console.error('❌ Appwrite SDK not found! Check the CDN script tag.');
     throw new Error('Appwrite SDK missing');
-} 
+}
 
 const { Client, Databases, Storage, Account, ID, Query } = window.Appwrite;
 
 const client = new Client()
-    .setEndpoint('https://nyc.cloud.appwrite.io/v1')
-    .setProject('khabardarjeeling');
+   .setEndpoint('https://nyc.cloud.appwrite.io/v1')
+   .setProject('khabardarjeeling');
 
 const databases = new Databases(client);
 const storage = new Storage(client);
@@ -29,6 +29,10 @@ window.Query = Query;
 window.APPWRITE_DB_ID = APPWRITE_DB_ID;
 window.APPWRITE_COLLECTION_ID = APPWRITE_COLLECTION_ID;
 window.APPWRITE_BUCKET_ID = APPWRITE_BUCKET_ID;
+
+// Add these 2 lines so profile.html can check config
+window.APPWRITE_ENDPOINT = 'https://nyc.cloud.appwrite.io/v1';
+window.APPWRITE_PROJECT_ID = 'khabardarjeeling';
 
 // Signal that Appwrite is ready
 window.AppwriteReady = Promise.resolve();
