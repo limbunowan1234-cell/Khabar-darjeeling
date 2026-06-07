@@ -4,32 +4,45 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Post News • खबर दार्जिलिंग</title>
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="css/admin.css?v=1">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/admin.css?v=2">
 </head>
 <body>
-<header class="topbar">
-  <a href="/">← Home</a>
-  <h1>Post News</h1>
-  <button id="logoutBtn">Logout</button>
-</header>
+<button class="dark-toggle" id="darkToggle" aria-label="theme">🌙</button>
 
-<main class="wrap">
-  <form id="postForm" class="card">
-    <input id="title" type="text" placeholder="Headline (e.g. Darjeeling traffic...)" required>
-    <select id="category" required>
-      <option value="">Category</option>
-      <option>Darjeeling</option><option>Kalimpong</option><option>Kurseong</option>
-      <option>Siliguri</option><option>Politics</option><option>Sports</option>
-    </select>
-    <input id="location" type="text" placeholder="Location (e.g. Main Bazar)">
-    <textarea id="content" rows="8" placeholder="Full news content..." required></textarea>
-    <label class="file">Add Photo (optional)<input id="image" type="file" accept="image/*"></label>
-    <button type="submit" id="submitBtn">Publish</button>
-    <p id="status"></p>
-  </form>
-</main>
+<div class="wrap">
+  <div class="brand">
+    <img src="assets/logo.png" alt="">
+    <h1>खबर दार्जिलिंग</h1>
+    <p>Publisher Portal</p>
+  </div>
 
-<script src="js/admin.js?v=1"></script>
+  <div class="card">
+    <div class="card-head">
+      <h2>New Story</h2>
+      <div class="actions">
+        <a href="/">View Site</a>
+        <button id="logoutBtn">Logout</button>
+      </div>
+    </div>
+
+    <form id="postForm">
+      <input id="title" type="text" placeholder="Headline — keep it sharp" required>
+      <input id="location" type="text" placeholder="Location (e.g. Chowk Bazar)">
+      <textarea id="content" rows="10" placeholder="Write the full story here..." required></textarea>
+      
+      <div class="uploader">
+        <label for="image">📷 Add Photo</label>
+        <input id="image" type="file" accept="image/*" hidden>
+        <span id="fileName">No file chosen</span>
+      </div>
+
+      <button type="submit" id="submitBtn">Publish Now</button>
+      <p id="status"></p>
+    </form>
+  </div>
+</div>
+
+<script src="js/admin.js?v=2"></script>
 </body>
 </html>
