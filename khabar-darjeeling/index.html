@@ -3,37 +3,41 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Appwrite Load Test</title>
+  <title>Appwrite Clean Test</title>
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+  <meta http-equiv="Pragma" content="no-cache" />
+  <meta http-equiv="Expires" content="0" />
   <style>
     body{
       font-family:Arial,sans-serif;
-      display:flex;
+      margin:0;
       min-height:100vh;
+      display:flex;
       align-items:center;
       justify-content:center;
-      margin:0;
       background:#f6f6f6;
     }
     .box{
-      text-align:center;
       background:#fff;
-      padding:24px;
-      border-radius:12px;
+      padding:28px;
+      border-radius:14px;
       box-shadow:0 8px 24px rgba(0,0,0,.08);
-      max-width:320px;
+      width:min(90vw,360px);
+      text-align:center;
     }
     .ok{color:green;font-weight:700}
     .bad{color:red;font-weight:700}
+    .small{color:#555;margin-top:10px;font-size:14px;line-height:1.5}
   </style>
 </head>
 <body>
   <div class="box">
-    <h1>Appwrite Load Test</h1>
+    <h1>Appwrite Clean Test</h1>
     <p id="status">Checking...</p>
-    <p id="detail"></p>
+    <p id="detail" class="small"></p>
   </div>
 
-  <script src="https://cdn.jsdelivr.net/npm/appwrite@17.0.1"></script>
+  <script src="https://cdn.jsdelivr.net/npm/appwrite@14.0.1/dist/iife/sdk.min.js"></script>
   <script>
     setTimeout(() => {
       const status = document.getElementById('status');
@@ -41,12 +45,12 @@
 
       if (window.Appwrite) {
         status.innerHTML = '<span class="ok">Appwrite loaded successfully.</span>';
-        detail.textContent = 'Global namespace exists.';
+        detail.textContent = 'Global Appwrite namespace exists.';
       } else {
         status.innerHTML = '<span class="bad">Appwrite did not load.</span>';
-        detail.textContent = 'Check CSP, CDN blocking, or cached files.';
+        detail.textContent = 'CSP, CDN blocking, or cache is preventing the script from loading.';
       }
-    }, 500);
+    }, 600);
   </script>
 </body>
 </html>
