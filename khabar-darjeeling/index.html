@@ -1,23 +1,33 @@
 <!DOCTYPE html>
-<html>
-<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Debug</title>
-<style>body{font-family:sans-serif;padding:16px}pre{background:#f0f0f0;padding:12px;overflow:auto}</style>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Khabar Darjeeling</title>
+<link rel="stylesheet" href="css/style.css?v=600">
+<link rel="stylesheet" href="css/responsive.css?v=600">
 </head>
 <body>
-<h2>खबर दार्जिलिंग - Debug</h2>
-<div id="status">Fetching...</div>
-<pre id="out"></pre>
+<div id="loader">Loading...</div>
 
-<script>
-(async()=>{
-  const url='https://nyc.cloud.appwrite.io/v1/databases/Khabar_db/collections/articles/documents?limit=10';
-  const res=await fetch(url,{headers:{'X-Appwrite-Project':'khabardarjeeling'}});
-  const data=await res.json();
-  
-  document.getElementById('status').textContent = `Found ${data.total||0} total, ${data.documents?.length||0} returned`;
-  document.getElementById('out').textContent = JSON.stringify(data,null,2);
-})();
-</script>
+<nav class="navbar">
+  <div class="container">
+    <a href="/" class="logo">खबर दार्जिलिंग</a>
+    <a href="login.html" class="btn-login">Login</a>
+  </div>
+</nav>
+
+<div class="breaking">
+  <div class="container">
+    <strong>Breaking:</strong> <span id="ticker">Loading...</span>
+  </div>
+</div>
+
+<main class="container">
+  <section id="featured"></section>
+  <section id="grid"></section>
+</main>
+
+<script src="js/app.js?v=600"></script>
 </body>
 </html>
