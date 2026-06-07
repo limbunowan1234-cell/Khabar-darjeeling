@@ -1,5 +1,5 @@
-// NO SDK - direct fetch to Appwrite
-const ENDPOINT = 'https://nyc.cloud.appwrite.io/v1';
+// NO SDK - direct fetch
+window.ENDPOINT = 'https://nyc.cloud.appwrite.io/v1';
 const PROJECT = 'khabardarjeeling';
 const DB = 'Khabar_db';
 const COL = 'articles';
@@ -17,7 +17,7 @@ window.Query = {
 window.databases = {
   listDocuments: async (dbId, colId, queries=[]) => {
     const qs = queries.map(q=>`queries[]=${encodeURIComponent(q)}`).join('&');
-    const url = `${ENDPOINT}/databases/${dbId}/collections/${colId}/documents?${qs}`;
+    const url = `${window.ENDPOINT}/databases/${dbId}/collections/${colId}/documents?${qs}`;
     const res = await fetch(url, { headers: { 'X-Appwrite-Project': PROJECT }});
     return await res.json();
   }
