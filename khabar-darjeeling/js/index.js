@@ -1,12 +1,7 @@
-// js/index.js?v=128 - Khabar Darjeeling - NO ERUDA, production safe
+// js/index.js?v=129 - Khabar Darjeeling - categories removed, no Eruda
 const PROJECT_ID = 'khabardarjeeling';
 const ENDPOINT = 'https://nyc.cloud.appwrite.io/v1';
-
-// categoryThemes comes from categoryConfig.js - load it before this file
-// if it's missing, we fall back to a safe default
-const categoryThemes = window.categoryThemes || {
-  default: { color: '#c41e3a' }
-};
+const DEFAULT_COLOR = '#c41e3a';
 
 function getAppwriteObjects() {
   return {
@@ -60,18 +55,14 @@ async function loadArticles() {
         featuredElement.innerHTML = '<p>No featured story available.</p>';
       } else {
         const featured = articles[0];
-        const featCategoryKey = safeText(featured.category).toLowerCase() || 'default';
-        const featTheme = categoryThemes[featCategoryKey] || categoryThemes.default;
         const imgUrl = getImageUrl(featured.imageFileId || featured.imageUrl);
         const title = safeText(featured.title);
         const location = safeText(featured.location);
-        const category = safeText(featured.category);
         const content = safeText(featured.content).substring(0, 200);
 
         featuredElement.innerHTML = `
-          ${imgUrl? `<img src="${imgUrl}" alt="${title}" style="width:100%;height:400px;object-fit:cover;border-bottom:4px solid ${featTheme.color};">` : ''}
+          ${imgUrl? `<img src="${imgUrl}" alt="${title}" style="width:100%;height:400px;object-fit:cover;border-bottom:4px solid ${DEFAULT_COLOR};">` : ''}
           <div style="padding:30px;">
-            <span class="category-badge" style="background-color:${featTheme.color};color:white;">${category}</span>
             <h2>${title}</h2>
             <p class="meta">${location} • ${safeDate(featured.submittedAt || featured.$createdAt)}</p>
             <p>${content}${safeText(featured.content).length > 200? '...' : ''}</p>
@@ -83,19 +74,15 @@ async function loadArticles() {
     const newsGrid = document.getElementById('newsGrid');
     if (newsGrid) {
       newsGrid.innerHTML = articles.map(article => {
-        const categoryKey = safeText(article.category).toLowerCase() || 'default';
-        const theme = categoryThemes[categoryKey] || categoryThemes.default;
         const imgUrl = getImageUrl(article.imageFileId || article.imageUrl);
         const title = safeText(article.title);
         const location = safeText(article.location);
-        const category = safeText(article.category);
         const content = safeText(article.content);
 
         return `
-          <div class="news-card" style="border-top:4px solid ${theme.color};">
+          <div class="news-card" style="border-top:4px solid ${DEFAULT_COLOR};">
             ${imgUrl? `<img src="${imgUrl}" alt="${title}">` : ''}
             <div class="news-card-content">
-              <span class="category-badge" style="background-color:${theme.color};color:white;">${category}</span>
               <h4>${title}</h4>
               <p class="meta">${location} • ${safeDate(article.submittedAt || article.$createdAt)}</p>
               <p>${content.substring(0, 100)}${content.length > 100? '...' : ''}</p>
@@ -105,7 +92,6 @@ async function loadArticles() {
       }).join('');
     }
 
-    // hide loader once content is ready
     const loader = document.getElementById('gatekeeperLoader');
     if (loader) {
       loader.style.opacity = '0';
@@ -121,7 +107,6 @@ async function loadArticles() {
 
 document.addEventListener('DOMContentLoaded', loadArticles);
 
-// keep theme toggle in sync with HTML (uses 'dark-mode', not 'dark-theme')
 document.getElementById('themeToggle')?.addEventListener('click', function () {
   document.body.classList.toggle('dark-mode');
   const isDark = document.body.classList.contains('dark-mode');
