@@ -1,95 +1,23 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Khabar Darjeeling - खबर दार्जिलिंग</title>
-  <link rel="stylesheet" href="css/style.css?v=501">
-  <link rel="stylesheet" href="css/responsive.css?v=501">
-  <style>
-    /* fallback if your css is missing */
-    #gatekeeperLoader{position:fixed;inset:0;background:#fff;display:flex;align-items:center;justify-content:center;z-index:9999;font-family:sans-serif}
-  </style>
+<html>
+<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Debug</title>
+<style>body{font-family:sans-serif;padding:16px}pre{background:#f0f0f0;padding:12px;overflow:auto}</style>
 </head>
 <body>
-  <div id="gatekeeperLoader">Loading Khabar Darjeeling...</div>
-
-  <nav class="navbar">
-    <div class="container nav-inner">
-      <a href="index.html" class="logo">खबर दार्जिलिंग</a>
-      <div id="authButtons">
-        <a href="login.html" class="btn-login">Login</a>
-      </�div>
-    </div>
-  </nav>
-
-  <div class="breaking-news">
-    <div class="container breaking-inner">
-      <span class="breaking-label">Breaking</span>
-      <div id="breakingTicker" class="ticker">Loading news...</div>
-    </div>
-  </div>
-
-  <main class="container main-wrapper">
-    <section id="featuredStory" class="featured-section"></section>
-    <section id="newsGrid" class="news-grid"></section>
-  </main>
+<h2>खबर दार्जिलिंग - Debug</h2>
+<div id="status">Fetching...</div>
+<pre id="out"></pre>
 
 <script>
-const ENDPOINT='https://nyc.cloud.appwrite.io/v1';
-const PROJECT='khabardarjeeling';
-const DB='Khabar_db';
-const COL='articles';
-
-function img(id){ return id ? `${ENDPOINT}/storage/buckets/article-image/files/${id}/view?project=${PROJECT}` : ''; }
-
-async function loadNews(){
-  const q1=encodeURIComponent('orderDesc("$createdAt")');
-  const q2=encodeURIComponent('limit(20)');
-  const url=`${ENDPOINT}/databases/${DB}/collections/${COL}/documents?queries[]=${q1}&queries[]=${q2}`;
-  
-  const res=await fetch(url,{headers:{'X-Appwrite-Project':PROJECT}});
+(async()=>{
+  const url='https://nyc.cloud.appwrite.io/v1/databases/Khabar_db/collections/articles/documents?limit=10';
+  const res=await fetch(url,{headers:{'X-Appwrite-Project':'khabardarjeeling'}});
   const data=await res.json();
-  const arts=data.documents||[];
-
-  // remove loader
-  document.getElementById('gatekeeperLoader')?.remove();
-
-  // breaking ticker
-  document.getElementById('breakingTicker').textContent = arts.slice(0,5).map(a=>a.title).join(' • ');
-
-  // featured
-  const f=arts[0];
-  if(f){
-    document.getElementById('featuredStory').innerHTML = `
-      <article class="featured-card">
-        ${f.imageFileId?`<div class="featured-img"><img src="${img(f.imageFileId)}" alt="${f.title}" loading="eager" onerror="this.parentElement.remove()"></div>`:''}
-        <div class="featured-body">
-          <span class="category">${f.category||'Darjeeling'}</span>
-          <h1>${f.title}</h1>
-          <div class="meta">${f.location||''} • ${new Date(f.$createdAt).toLocaleDateString('en-IN',{day:'numeric',month:'short'})}</div>
-          <p>${(f.content||'').substring(0,220)}...</p>
-        </div>
-      </article>`;
-  }
-
-  // grid
-  document.getElementById('newsGrid').innerHTML = arts.slice(1).map(a=>`
-    <article class="news-card">
-      ${a.imageFileId?`<img src="${img(a.imageFileId)}" alt="" loading="lazy" onerror="this.remove()">`:''}
-      <div class="card-body">
-        <h3>${a.title}</h3>
-        <p class="excerpt">${(a.content||'').substring(0,110)}...</p>
-        <span class="time">${new Date(a.$createdAt).toLocaleDateString('en-IN')}</span>
-      </div>
-    </article>
-  `).join('');
-}
-
-loadNews().catch(e=>{
-  document.getElementById('breakingTicker').textContent='Error loading news';
-  document.getElementById('gatekeeperLoader')?.remove();
-});
+  
+  document.getElementById('status').textContent = `Found ${data.total||0} total, ${data.documents?.length||0} returned`;
+  document.getElementById('out').textContent = JSON.stringify(data,null,2);
+})();
 </script>
 </body>
 </html>
