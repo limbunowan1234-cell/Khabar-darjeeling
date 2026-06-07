@@ -1,4 +1,4 @@
-// js/appwrite.js?v=134 — with auth buttons restored
+// js/appwrite.js?v=134 — Khabar Darjeeling with auth buttons
 const APPWRITE_ENDPOINT = 'https://nyc.cloud.appwrite.io/v1';
 const APPWRITE_PROJECT_ID = 'khabardarjeeling';
 
@@ -25,14 +25,13 @@ window.storage = new Appwrite.Storage(client);
 window.account = new Appwrite.Account(client);
 window.Query = Appwrite.Query;
 
-// --- AUTH UI ---
 function renderAuth(user) {
   const desktop = document.getElementById('authButtons');
   const mobile = document.getElementById('mobileAuthContainer');
   if (!desktop) return;
 
   if (user) {
-    const isAdmin = user.labels?.includes('admin'); // set 'admin' label in Appwrite console
+    const isAdmin = user.labels?.includes('admin');
     desktop.innerHTML = `
       <span style="font-size:13px;margin-right:8px;">Hi, ${user.name || 'User'}</span>
       ${isAdmin ? '<a href="admin.html" style="padding:6px 12px;background:#c41e3a;color:#fff;border-radius:4px;text-decoration:none;font-size:13px;">Admin</a>' : ''}
@@ -50,6 +49,15 @@ function renderAuth(user) {
 }
 
 window.currentUser = null;
-account.get()
-  .then(user => { window.currentUser = user; renderAuth(user); })
-  .catch(() => renderAuth(null));
+account.get().then(user => { window.currentUser = user; renderAuth(user); }).catch(() => renderAuth(null));
+
+// remove old loader text
+document.addEventListener('DOMContentLoaded', () => {
+  setTimeout(() => {
+    document.querySelectorAll('*').forEach(el => {
+      if (el.textContent?.includes('Checking authentication')) {
+        el.closest('div')?.remove();
+      }
+    });
+  }, 300);
+});
