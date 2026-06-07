@@ -4,32 +4,30 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Khabar Darjeeling</title>
-  <link rel="stylesheet" href="css/style.css?v=200" />
-  <link rel="stylesheet" href="css/responsive.css?v=200" />
+  <link rel="stylesheet" href="css/style.css?v=301" />
+  <link rel="stylesheet" href="css/responsive.css?v=301" />
 </head>
 <body>
-  <div id="gatekeeperLoader" style="position:fixed;inset:0;background:#fff;z-index:99999;display:flex;justify-content:center;align-items:center;font-family:sans-serif">Loading...</div>
+  <div id="gatekeeperLoader">Loading...</div>
 
-  <nav class="navbar" style="padding:12px;background:#fff;border-bottom:1px solid #eee">
-    <div class="container" style="display:flex;justify-content:space-between;align-items:center">
-      <a href="index.html" style="font-weight:700;color:#c41e3a;text-decoration:none">खबर दार्जिलिंग</a>
+  <nav class="navbar">
+    <div class="container nav-container">
+      <a href="index.html" class="logo">खबर दार्जिलिंग</a>
       <div id="authButtons"></div>
     </div>
   </nav>
 
-  <div id="breakingTicker" style="background:#c41e3a;color:#fff;padding:8px;text-align:center">Loading breaking news...</div>
-  <div id="featuredStory" style="padding:20px"></div>
-  <div id="newsGrid" style="padding:20px;display:grid;gap:15px"></div>
+  <div class="breaking-ticker">
+    <span class="breaking-label">Breaking</span>
+    <div id="breakingTicker">Loading news...</div>
+  </div>
 
-  <!-- NEW FILES - no cache -->
-  <script src="js/appwrite-v2.js"></script>
-  <script src="js/index-v2.js"></script>
+  <main class="container main-content">
+    <section id="featuredStory"></section>
+    <section id="newsGrid" class="news-grid"></section>
+  </main>
 
-  <script>
-    if ('serviceWorker' in navigator) {
-      navigator.serviceWorker.getRegistrations().then(rs => rs.forEach(r => r.unregister()));
-      caches.keys().then(keys => keys.forEach(k => caches.delete(k)));
-    }
-  </script>
+  <script src="js/appwrite-v3.js"></script>
+  <script src="js/index-v3.js"></script>
 </body>
 </html>
