@@ -6,427 +6,58 @@
   <meta name="theme-color" content="#b81d24">
   <link rel="icon" type="image/png" href="assets/logo.png">
   <title>Profile - खबर दार्जिलिंग</title>
-
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="css/style.css?v=124" />
+  <link rel="stylesheet" href="css/style.css?v=126" />
   <style>
-    :root {
-      --primary: #c41e3a;
-      --bg: #f6f6f6;
-      --card: #ffffff;
-      --text: #222;
-      --muted: #666;
-      --border: #e7e7e7;
-    }
-    body.dark-mode {
-      --bg: #121212;
-      --card: #1d1d1d;
-      --text: #f4f4;
-      --muted: #b4b4b4;
-      --border: #2c2c2c;
-      background: var(--bg);
-      color: var(--text);
-    }
-    body {
-      margin: 0;
-      font-family: 'Poppins', Arial, sans-serif;
-      background: var(--bg);
-      color: var(--text);
-    }
-.wrap {
-      max-width: 900px;
-      margin: 0 auto;
-      padding: 16px;
-    }
-.topbar {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 14px 16px;
-      background: var(--card);
-      border-bottom: 1px solid var(--border);
-      position: sticky;
-      top: 0;
-      z-index: 10;
-    }
-.brand {
-      font-weight: 700;
-      color: var(--primary);
-      font-size: 20px;
-      text-decoration: none;
-    }
-.brand:hover {
-      opacity: 0.8;
-    }
-.topbar-actions {
-      display: flex;
-      gap: 8px;
-    }
-.btn {
-      border: none;
-      background: var(--primary);
-      color: #fff;
-      padding: 10px 14px;
-      border-radius: 8px;
-      cursor: pointer;
-      text-decoration: none;
-      display: inline-block;
-      font-size: 14px;
-      font-family: inherit;
-    }
-.btn.secondary {
-      background: #666;
-    }
-.btn.ghost {
-      background: transparent;
-      color: var(--primary);
-      border: 1px solid var(--primary);
-    }
-.btn:disabled {
-      opacity: 0.6;
-      cursor: not-allowed;
-    }
-.card {
-      background: var(--card);
-      border: 1px solid var(--border);
-      border-radius: 16px;
-      overflow: hidden;
-      box-shadow: 0 4px 18px rgba(0,0,0,0.05);
-      margin-top: 18px;
-    }
-.cover {
-      height: 180px;
-      background: linear-gradient(135deg, #c41e3a, #8b1025);
-      background-size: cover;
-      background-position: center;
-      position: relative;
-    }
-.avatar {
-      width: 120px;
-      height: 120px;
-      border-radius: 50%;
-      border: 5px solid var(--card);
-      background: #ddd;
-      background-size: cover;
-      background-position: center;
-      position: absolute;
-      left: 24px;
-      bottom: -60px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 34px;
-      font-weight: 700;
-      color: #fff;
-      background-color: var(--primary);
-    }
-.edit-profile-btn {
-      position: absolute;
-      right: 16px;
-      top: 16px;
-      background: rgba(0,0,0,0.5);
-      color: #fff;
-      border: 1px solid rgba(255,255,0.3);
-      padding: 8px 14px;
-      border-radius: 8px;
-      cursor: pointer;
-      font-size: 13px;
-      font-weight: 600;
-      backdrop-filter: blur(10px);
-    }
-.content {
-      padding: 76px 24px 24px;
-    }
-.name {
-      font-size: 30px;
-      font-weight: 800;
-      margin: 0 0 6px;
-    }
-.username {
-      color: var(--muted);
-      margin: 0 0 12px;
-      font-size: 16px;
-    }
-.joined {
-      color: var(--muted);
-      font-size: 14px;
-      margin-bottom: 18px;
-    }
-.bio {
-      line-height: 1.6;
-      font-size: 16px;
-      white-space: pre-wrap;
-      margin-bottom: 20px;
-    }
-.profile-actions {
-      display: flex;
-      gap: 10px;
-      margin: 20px 0;
-      flex-wrap: wrap;
-    }
-.action-btn {
-      padding: 10px 20px;
-      border: 1px solid var(--border);
-      background: var(--card);
-      color: var(--text);
-      border-radius: 8px;
-      cursor: pointer;
-      font-size: 14px;
-      font-weight: 600;
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      font-family: inherit;
-      transition: all 0.2s;
-    }
-.action-btn:hover {
-      border-color: var(--primary);
-      background: rgba(196, 30, 58, 0.05);
-    }
-.action-btn.liked {
-      background: var(--primary);
-      color: #fff;
-      border-color: var(--primary);
-    }
-.stats-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
-      gap: 12px;
-      margin: 20px 0;
-    }
-.stat-box {
-      padding: 16px;
-      border: 1px solid var(--border);
-      border-radius: 12px;
-      background: rgba(196, 30, 58, 0.04);
-      text-align: center;
-    }
-.stat-number {
-      font-size: 26px;
-      font-weight: 800;
-      color: var(--primary);
-      margin-bottom: 4px;
-    }
-.stat-label {
-      font-size: 12px;
-      color: var(--muted);
-      text-transform: uppercase;
-      letter-spacing:.04em;
-    }
-.section-title {
-      font-size: 20px;
-      font-weight: 700;
-      margin: 30px 0 15px;
-    }
-.article-item {
-      padding: 15px;
-      border: 1px solid var(--border);
-      border-radius: 12px;
-      margin-bottom: 12px;
-      background: rgba(0,0,0,0.01);
-    }
-.article-info a {
-      text-decoration: none;
-      color: var(--primary);
-      font-weight: 600;
-      font-size: 16px;
-    }
-.article-stats {
-      font-size: 13px;
-      color: var(--muted);
-      margin-top: 5px;
-      display: flex;
-      gap: 15px;
-      flex-wrap: wrap;
-    }
-.comment-box {
-      margin-top: 20px;
-      padding: 16px;
-      border: 1px solid var(--border);
-      border-radius: 12px;
-    }
-.comment-input {
-      width: 100%;
-      padding: 10px 12px;
-      border: 1px solid var(--border);
-      border-radius: 8px;
-      background: var(--bg);
-      color: var(--text);
-      font-family: inherit;
-      font-size: 14px;
-      box-sizing: border-box;
-      resize: vertical;
-      min-height: 60px;
-      margin-bottom: 10px;
-    }
-.comment-item {
-      padding: 12px;
-      border-bottom: 1px solid var(--border);
-      display: flex;
-      gap: 10px;
-    }
-.comment-item:last-child {
-      border-bottom: none;
-    }
-.comment-avatar {
-      width: 36px;
-      height: 36px;
-      border-radius: 50%;
-      background: var(--primary);
-      color: #fff;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-weight: 700;
-      font-size: 14px;
-      flex-shrink: 0;
-    }
-.comment-content {
-      flex: 1;
-    }
-.comment-author {
-      font-weight: 600;
-      font-size: 14px;
-      margin-bottom: 4px;
-    }
-.comment-text {
-      font-size: 14px;
-      line-height: 1.5;
-    }
-.comment-time {
-      font-size: 12px;
-      color: var(--muted);
-      margin-top: 4px;
-    }
-.alert {
-      padding: 14px 16px;
-      border-radius: 10px;
-      margin-top: 18px;
-      display: none;
-    }
-.alert.error {
-      background: #ffe1e5;
-      color: #8b1025;
-      border: 1px solid #ffb9c5;
-    }
-.alert.success {
-      background: #d4edda;
-      color: #155724;
-      border: 1px solid #c3e6cb;
-    }
-.loader {
-      padding: 60px 20px;
-      text-align: center;
-      color: var(--muted);
-    }
-.modal {
-      display: none;
-      position: fixed;
-      z-index: 1000;
-      left: 0;
-      top: 0;
-      width: 100%;
-      height: 100%;
-      background: rgba(0,0,0,0.6);
-      backdrop-filter: blur(4px);
-    }
-.modal.active {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-.modal-content {
-      background: var(--card);
-      padding: 24px;
-      border-radius: 16px;
-      max-width: 500px;
-      width: 90%;
-      max-height: 90vh;
-      overflow-y: auto;
-    }
-.modal-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 20px;
-    }
-.modal-title {
-      font-size: 22px;
-      font-weight: 700;
-    }
-.close-btn {
-      background: none;
-      border: none;
-      font-size: 28px;
-      cursor: pointer;
-      color: var(--muted);
-      line-height: 1;
-    }
-.form-group {
-      margin-bottom: 16px;
-    }
-.form-label {
-      display: block;
-      margin-bottom: 6px;
-      font-weight: 600;
-      font-size: 14px;
-    }
-.form-input,.form-textarea {
-      width: 100%;
-      padding: 10px 12px;
-      border: 1px solid var(--border);
-      border-radius: 8px;
-      background: var(--bg);
-      color: var(--text);
-      font-family: inherit;
-      font-size: 14px;
-      box-sizing: border-box;
-    }
-.form-textarea {
-      resize: vertical;
-      min-height: 80px;
-    }
-.file-input-wrapper {
-      position: relative;
-      display: inline-block;
-      width: 100%;
-    }
-.file-input {
-      position: absolute;
-      opacity: 0;
-      width: 100%;
-      height: 100%;
-      cursor: pointer;
-    }
-.file-input-label {
-      display: block;
-      padding: 10px 12px;
-      border: 1px dashed var(--border);
-      border-radius: 8px;
-      text-align: center;
-      cursor: pointer;
-      color: var(--muted);
-      font-size: 13px;
-    }
-.preview-img {
-      width: 100%;
-      max-height: 200px;
-      object-fit: cover;
-      border-radius: 8px;
-      margin-top: 8px;
-      display: none;
-    }
-.modal-actions {
-      display: flex;
-      gap: 10px;
-      margin-top: 20px;
-    }
-    @media (max-width: 640px) {
-.avatar { width: 96px; height: 96px; bottom: -48px; }
-.content { padding-top: 62px; }
-.name { font-size: 24px; }
-.stats-grid { grid-template-columns: 1fr 1fr; }
-    }
+    :root { --primary: #c41e3a; --bg: #f6f6f6; --card: #ffffff; --text: #222; --muted: #666; --border: #e7e7; }
+    body.dark-mode { --bg: #121212; --card: #1d1d1d; --text: #f4f4f4; --muted: #b4b4b4; --border: #2c2c2c; background: var(--bg); color: var(--text); }
+    body { margin: 0; font-family: 'Poppins', Arial, sans-serif; background: var(--bg); color: var(--text); }
+    .wrap { max-width: 900px; margin: 0 auto; padding: 16px; }
+    .topbar { display: flex; justify-content: space-between; align-items: center; padding: 14px 16px; background: var(--card); border-bottom: 1px solid var(--border); position: sticky; top: 0; z-index: 10; }
+    .brand { font-weight: 700; color: var(--primary); font-size: 20px; text-decoration: none; }
+    .brand:hover { opacity: 0.8; }
+    .topbar-actions { display: flex; gap: 8px; }
+    .btn { border: none; background: var(--primary); color: #fff; padding: 10px 14px; border-radius: 8px; cursor: pointer; text-decoration: none; display: inline-block; font-size: 14px; font-family: inherit; }
+    .btn.secondary { background: #666; }
+    .btn.ghost { background: transparent; color: var(--primary); border: 1px solid var(--primary); }
+    .btn:disabled { opacity: 0.6; cursor: not-allowed; }
+    .card { background: var(--card); border: 1px solid var(--border); border-radius: 16px; overflow: hidden; box-shadow: 0 4px 18px rgba(0,0,0,0.05); margin-top: 18px; }
+    .cover { height: 180px; background: linear-gradient(135deg, #c41e3a, #8b1025); background-size: cover; background-position: center; position: relative; }
+    .avatar { width: 120px; height: 120px; border-radius: 50%; border: 5px solid var(--card); background: #ddd; background-size: cover; background-position: center; position: absolute; left: 24px; bottom: -60px; display: flex; align-items: center; justify-content: center; font-size: 34px; font-weight: 700; color: #fff; background-color: var(--primary); }
+    .edit-profile-btn { position: absolute; right: 16px; top: 16px; background: rgba(0,0,0,0.5); color: #fff; border: 1px solid rgba(255,255,255,0.3); padding: 8px 14px; border-radius: 8px; cursor: pointer; font-size: 13px; font-weight: 600; backdrop-filter: blur(10px); }
+    .content { padding: 76px 24px 24px; }
+    .name { font-size: 30px; font-weight: 800; margin: 0 0 6px; }
+    .username { color: var(--muted); margin: 0 0 12px; font-size: 16px; }
+    .joined { color: var(--muted); font-size: 14px; margin-bottom: 18px; }
+    .bio { line-height: 1.6; font-size: 16px; white-space: pre-wrap; margin-bottom: 20px; }
+    .profile-actions { display: flex; gap: 10px; margin: 20px 0; flex-wrap: wrap; }
+    .action-btn { padding: 10px 20px; border: 1px solid var(--border); background: var(--card); color: var(--text); border-radius: 8px; cursor: pointer; font-size: 14px; font-weight: 600; display: inline-flex; align-items: center; gap: 6px; font-family: inherit; transition: all 0.2s; }
+    .action-btn:hover { border-color: var(--primary); background: rgba(196, 30, 58, 0.05); }
+    .action-btn.liked { background: var(--primary); color: #fff; border-color: var(--primary); }
+    .action-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+    .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 12px; margin: 20px 0; }
+    .stat-box { padding: 16px; border: 1px solid var(--border); border-radius: 12px; background: rgba(196, 30, 58, 0.04); text-align: center; }
+    .stat-number { font-size: 26px; font-weight: 800; color: var(--primary); margin-bottom: 4px; }
+    .stat-label { font-size: 12px; color: var(--muted); text-transform: uppercase; letter-spacing:.04em; }
+    .section-title { font-size: 20px; font-weight: 700; margin: 30px 0 15px; }
+    .article-item { padding: 15px; border: 1px solid var(--border); border-radius: 12px; margin-bottom: 12px; background: rgba(0,0,0,0.01); }
+    .article-info a { text-decoration: none; color: var(--primary); font-weight: 600; font-size: 16px; }
+    .article-info a:hover { text-decoration: underline; }
+    .article-stats { font-size: 13px; color: var(--muted); margin-top: 5px; display: flex; gap: 15px; flex-wrap: wrap; }
+    .comment-box { margin-top: 20px; padding: 16px; border: 1px solid var(--border); border-radius: 12px; }
+    .comment-input { width: 100%; padding: 10px 12px; border: 1px solid var(--border); border-radius: 8px; background: var(--bg); color: var(--text); font-family: inherit; font-size: 14px; box-sizing: border-box; resize: vertical; min-height: 60px; margin-bottom: 10px; }
+    .comment-item { padding: 12px; border-bottom: 1px solid var(--border); display: flex; gap: 10px; }
+    .comment-item:last-child { border-bottom: none; }
+    .comment-avatar { width: 36px; height: 36px; border-radius: 50%; background: var(--primary); color: #fff; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 14px; flex-shrink: 0; background-size: cover; background-position: center; }
+    .comment-content { flex: 1; }
+    .comment-author { font-weight: 600; font-size: 14px; margin-bottom: 4px; }
+    .comment-text { font-size: 14px; line-height: 1.5; }
+    .comment-time { font-size: 12px; color: var(--muted); margin-top: 4px; }
+    .alert { padding: 14px 16px; border-radius: 10px; margin-top: 18px; display: none; }
+    .alert.error { background: #ffe1e5; color: #8b1025; border: 1px solid #ffb9c5; }
+    .alert.success { background: #d4edda; color: #155724; border: 1px solid #c3e6cb; }
+    .loader { padding: 60px 20px; text-align: center; color: var(--muted); }
+    @media (max-width: 640px) { .avatar { width: 96px; height: 96px; bottom: -48px; } .content { padding-top: 62px; } .name { font-size: 24px; } .stats-grid { grid-template-columns: 1fr; } }
   </style>
 </head>
 <body>
@@ -441,54 +72,36 @@
 
   <div class="wrap">
     <div id="alertBox" class="alert"></div>
-
     <div class="card">
       <div id="cover" class="cover">
         <button class="edit-profile-btn" id="editProfileBtn" style="display:none;">✏️ Edit Profile</button>
         <div id="avatar" class="avatar">?</div>
       </div>
-
       <div class="content">
         <div id="loader" class="loader">Loading profile...</div>
-
         <div id="profileBody" style="display:none;">
           <h1 id="displayName" class="name">Name</h1>
           <p id="userName" class="username">@username</p>
           <p id="joinedAT" class="joined">Joined date</p>
-
           <div id="bio" class="bio"></div>
 
           <div class="profile-actions">
             <button class="action-btn" id="likeBtn">
               <span id="likeIcon">🤍</span> <span id="likeText">Like</span> <span id="likeCount">0</span>
             </button>
-            <button class="action-btn" id="shareBtn">🔗 Share Profile</button>
+            <button class="action-btn" id="shareProfileBtn">🔗 Share Profile</button>
             <button class="action-btn" id="whatsappShareBtn">WhatsApp</button>
           </div>
 
           <div class="stats-grid">
-            <div class="stat-box">
-              <div class="stat-number" id="totalPosts">0</div>
-              <div class="stat-label">Total Posts</div>
-            </div>
-            <div class="stat-box">
-              <div class="stat-number" id="totalViews">0</div>
-              <div class="stat-label">Total Views</div>
-            </div>
-            <div class="stat-box">
-              <div class="stat-number" id="profileLikes">0</div>
-              <div class="stat-label">Profile Likes</div>
-            </div>
-            <div class="stat-box">
-              <div class="stat-number" id="profileComments">0</div>
-              <div class="stat-label">Comments</div>
-            </div>
+            <div class="stat-box"><div class="stat-number" id="totalPosts">0</div><div class="stat-label">Total Posts</div></div>
+            <div class="stat-box"><div class="stat-number" id="totalViews">0</div><div class="stat-label">Total Views</div></div>
+            <div class="stat-box"><div class="stat-number" id="profileLikes">0</div><div class="stat-label">Profile Likes</div></div>
+            <div class="stat-box"><div class="stat-number" id="profileComments">0</div><div class="stat-label">Comments</div></div>
           </div>
 
           <h3 class="section-title">Articles</h3>
-          <div id="userArticles">
-            <div class="loader">Loading articles...</div>
-          </div>
+          <div id="userArticles"><div class="loader">Loading articles...</div></div>
 
           <h3 class="section-title">Comments</h3>
           <div class="comment-box">
@@ -501,108 +114,36 @@
     </div>
   </div>
 
-  <!-- Edit Profile Modal -->
-  <div id="editModal" class="modal">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h2 class="modal-title">Edit Profile</h2>
-        <button class="close-btn" id="closeModal">&times;</button>
-      </div>
-      <form id="editForm">
-        <div class="form-group">
-          <label class="form-label">Display Name</label>
-          <input type="text" class="form-input" id="editDisplayName" required>
-        </div>
-        <div class="form-group">
-          <label class="form-label">Username</label>
-          <input type="text" class="form-input" id="editUserName" required>
-        </div>
-        <div class="form-group">
-          <label class="form-label">Bio</label>
-          <textarea class="form-textarea" id="editBio" placeholder="Tell us about yourself..."></textarea>
-        </div>
-        <div class="form-group">
-          <label class="form-label">Avatar Image</label>
-          <div class="file-input-wrapper">
-            <input type="file" class="file-input" id="editAvatar" accept="image/*">
-            <label for="editAvatar" class="file-input-label">📷 Choose Avatar Image</label>
-          </div>
-          <img id="avatarPreview" class="preview-img">
-        </div>
-        <div class="form-group">
-          <label class="form-label">Cover Image</label>
-          <div class="file-input-wrapper">
-            <input type="file" class="file-input" id="editCover" accept="image/*">
-            <label for="editCover" class="file-input-label">🖼️ Choose Cover Image</label>
-          </div>
-          <img id="coverPreview" class="preview-img">
-        </div>
-        <div class="modal-actions">
-          <button type="button" class="btn secondary" id="cancelEdit">Cancel</button>
-          <button type="submit" class="btn" id="saveBtn">Save Changes</button>
-        </div>
-      </form>
-    </div>
-  </div>
-
   <script src="https://cdn.jsdelivr.net/npm/appwrite@14.0.1/dist/iife/sdk.min.js"></script>
-  <script src="js/appwrite.js?v=124"></script>
+  <script src="js/appwrite.js?v=126"></script>
   <script>
     document.addEventListener('DOMContentLoaded', async () => {
       if (window.AppwriteReady) await window.AppwriteReady;
-
-      const { account, databases, storage, ID, Query } = window;
+      const { account, databases, ID, Query } = window;
       const DB_ID = window.APPWRITE_DB_ID;
       const ARTICLES_COLLECTION = window.APPWRITE_COLLECTION_ID;
       const PROFILES_COLLECTION = 'profiles';
       const PROFILE_LIKES_COLLECTION = 'profile_likes';
       const PROFILE_COMMENTS_COLLECTION = 'profile_comments';
-      const BUCKET_ID = window.APPWRITE_BUCKET_ID;
 
       const urlParams = new URLSearchParams(window.location.search);
-      const profileUserId = urlParams.get('id') || urlParams.get('user');
+      const profileUserId = urlParams.get('id') || urlParams.get('user') || urlParams.get('username');
 
       let currentUser = null;
-      let profileUser = null;
       let currentProfile = null;
+      let profileUser = null;
       let isOwnProfile = false;
       let hasLiked = false;
 
       const els = {
-        alertBox: document.getElementById('alertBox'),
-        loader: document.getElementById('loader'),
-        profileBody: document.getElementById('profileBody'),
-        displayName: document.getElementById('displayName'),
-        userName: document.getElementById('userName'),
-        joinedAT: document.getElementById('joinedAT'),
-        bio: document.getElementById('bio'),
-        avatar: document.getElementById('avatar'),
-        cover: document.getElementById('cover'),
-        totalPosts: document.getElementById('totalPosts'),
-        totalViews: document.getElementById('totalViews'),
-        profileLikes: document.getElementById('profileLikes'),
-        profileComments: document.getElementById('profileComments'),
-        userArticles: document.getElementById('userArticles'),
-        editProfileBtn: document.getElementById('editProfileBtn'),
-        likeBtn: document.getElementById('likeBtn'),
-        likeIcon: document.getElementById('likeIcon'),
-        likeText: document.getElementById('likeText'),
-        likeCount: document.getElementById('likeCount'),
-        shareBtn: document.getElementById('shareBtn'),
-        whatsappShareBtn: document.getElementById('whatsappShareBtn'),
-        commentInput: document.getElementById('commentInput'),
-        postCommentBtn: document.getElementById('postCommentBtn'),
-        commentsList: document.getElementById('commentsList'),
-        editModal: document.getElementById('editModal'),
-        editForm: document.getElementById('editForm'),
-        editDisplayName: document.getElementById('editDisplayName'),
-        editUserName: document.getElementById('editUserName'),
-        editBio: document.getElementById('editBio'),
-        editAvatar: document.getElementById('editAvatar'),
-        editCover: document.getElementById('editCover'),
-        avatarPreview: document.getElementById('avatarPreview'),
-        coverPreview: document.getElementById('coverPreview'),
-        saveBtn: document.getElementById('saveBtn'),
+        alertBox: document.getElementById('alertBox'), loader: document.getElementById('loader'), profileBody: document.getElementById('profileBody'),
+        displayName: document.getElementById('displayName'), userName: document.getElementById('userName'), joinedAT: document.getElementById('joinedAT'),
+        bio: document.getElementById('bio'), avatar: document.getElementById('avatar'), cover: document.getElementById('cover'),
+        totalPosts: document.getElementById('totalPosts'), totalViews: document.getElementById('totalViews'), profileLikes: document.getElementById('profileLikes'),
+        profileComments: document.getElementById('profileComments'), userArticles: document.getElementById('userArticles'), editProfileBtn: document.getElementById('editProfileBtn'),
+        likeBtn: document.getElementById('likeBtn'), likeIcon: document.getElementById('likeIcon'), likeText: document.getElementById('likeText'),
+        likeCount: document.getElementById('likeCount'), shareProfileBtn: document.getElementById('shareProfileBtn'), whatsappShareBtn: document.getElementById('whatsappShareBtn'),
+        commentInput: document.getElementById('commentInput'), postCommentBtn: document.getElementById('postCommentBtn'), commentsList: document.getElementById('commentsList'),
         topbarActions: document.getElementById('topbarActions')
       };
 
@@ -610,146 +151,60 @@
         els.alertBox.textContent = message;
         els.alertBox.className = `alert ${type}`;
         els.alertBox.style.display = 'block';
-        if (type!== 'error') setTimeout(() => els.alertBox.style.display = 'none', 3000);
+        if (type !== 'error') setTimeout(() => els.alertBox.style.display = 'none', 3000);
       }
 
-      function initials(name) {
-        return (name || '?').split(' ').filter(Boolean).map(x => x[0]).join('').toUpperCase().slice(0, 2) || '?';
-      }
-
-      function safeText(v) {
-        return v && String(v).trim()? String(v) : '—';
-      }
-
-      function formatDate(v) {
-        if (!v) return '—';
-        const d = new Date(v);
-        if (Number.isNaN(d.getTime())) return String(v);
-        return d.toLocaleDateString(undefined, { year: 'numeric', month: 'short', day: 'numeric' });
-      }
-
-      function timeAgo(date) {
-        const seconds = Math.floor((new Date() - new Date(date)) / 1000);
-        if (seconds < 60) return 'just now';
-        const intervals = { year: 31536000, month: 2592000, week: 604800, day: 86400, hour: 3600, minute: 60 };
-        for (const [unit, secondsInUnit] of Object.entries(intervals)) {
-          const interval = Math.floor(seconds / secondsInUnit);
-          if (interval >= 1) return `${interval} ${unit}${interval > 1? 's' : ''} ago`;
-        }
-      }
+      function initials(name) { return (name || '?').split(' ').filter(Boolean).map(x => x[0]).join('').toUpperCase().slice(0, 2) || '?'; }
+      function safeText(v) { return v && String(v).trim() ? String(v) : '—'; }
+      function formatDate(v) { if (!v) return '—'; const d = new Date(v); if (Number.isNaN(d.getTime())) return String(v); return d.toLocaleDateString(undefined, { year: 'numeric', month: 'short', day: 'numeric' }); }
+      function timeAgo(date) { const seconds = Math.floor((new Date() - new Date(date)) / 1000); if (seconds < 60) return 'just now'; const i = { year: 31536000, month: 2592000, week: 604800, day: 86400, hour: 3600, minute: 60 }; for (const [u, s] of Object.entries(i)) { const interval = Math.floor(seconds / s); if (interval >= 1) return `${interval} ${u}${interval > 1 ? 's' : ''} ago`; } }
 
       async function loadProfile() {
         try {
-          // Get current logged in user
-          try {
-            currentUser = await account.get();
-          } catch (e) {
-            currentUser = null;
-          }
+          try { currentUser = await account.get(); } catch (e) { currentUser = null; }
+          let targetUserId = profileUserId;
+          if (!targetUserId && currentUser) targetUserId = currentUser.$id;
+          if (!targetUserId) { showAlert('Please log in to view profiles', 'error'); els.loader.style.display = 'none'; return; }
 
-          // Determine which profile to load
-          const targetUserId = profileUserId || currentUser?.$id;
-          if (!targetUserId) {
-            showAlert('Please log in to view profiles', 'error');
-            els.loader.style.display = 'none';
-            return;
+          let result = await databases.listDocuments(DB_ID, PROFILES_COLLECTION, [Query.equal('userId', targetUserId), Query.limit(1)]);
+          if (!result.documents.length && profileUserId) {
+            result = await databases.listDocuments(DB_ID, PROFILES_COLLECTION, [Query.equal('userName', profileUserId), Query.limit(1)]);
           }
-
-          // Load profile document
-          const result = await databases.listDocuments(DB_ID, PROFILES_COLLECTION, [
-            Query.equal('userId', targetUserId),
-            Query.limit(1)
-          ]);
-
-          if (!result.documents.length) {
-            els.loader.style.display = 'none';
-            showAlert('Profile not found', 'error');
-            return;
-          }
+          if (!result.documents.length) { els.loader.style.display = 'none'; showAlert('Profile not found', 'error'); return; }
 
           currentProfile = result.documents[0];
-          profileUser = targetUserId;
-          isOwnProfile = currentUser && currentUser.$id === targetUserId;
+          profileUser = currentProfile.userId;
+          isOwnProfile = currentUser && currentUser.$id === profileUser;
 
-          // Show edit button only on own profile
-          if (isOwnProfile) {
-            els.editProfileBtn.style.display = 'block';
-          } else {
-            els.topbarActions.innerHTML = `<a class="btn secondary" href="index.html">Home</a>`;
-          }
+          if (isOwnProfile) { els.editProfileBtn.style.display = 'block'; } else { els.topbarActions.innerHTML = `<a class="btn secondary" href="index.html">Home</a>`; }
 
-          // Render profile
           els.displayName.textContent = safeText(currentProfile.displayName);
           els.userName.textContent = '@' + safeText(currentProfile.userName);
           els.joinedAT.textContent = 'Joined ' + formatDate(currentProfile.joinedAT);
           els.bio.textContent = safeText(currentProfile.bio);
+          els.avatar.textContent = initials(currentProfile.displayName || 'User');
+          if (currentProfile.avatarUrl) { els.avatar.style.backgroundImage = `url('${currentProfile.avatarUrl}')`; els.avatar.textContent = ''; }
+          if (currentProfile.coverUrl) { els.cover.style.backgroundImage = `url('${currentProfile.coverUrl}')`; }
 
-          const nameForInitials = currentProfile.displayName || 'User';
-          els.avatar.textContent = initials(nameForInitials);
-
-          if (currentProfile.avatarUrl) {
-            els.avatar.style.backgroundImage = `url('${currentProfile.avatarUrl}')`;
-            els.avatar.textContent = '';
-          }
-
-          if (currentProfile.coverUrl) {
-            els.cover.style.backgroundImage = `url('${currentProfile.coverUrl}')`;
-          }
-
-          // Load articles
           let articles;
-          try {
-            articles = await databases.listDocuments(DB_ID, ARTICLES_COLLECTION, [
-              Query.equal('authorId', targetUserId),
-              Query.equal('status', 'published'),
-              Query.orderDesc('$createdAt'),
-              Query.limit(100)
-            ]);
-          } catch (e) {
-            articles = await databases.listDocuments(DB_ID, ARTICLES_COLLECTION, [
-              Query.equal('submitterId', targetUserId),
-              Query.equal('status', 'published'),
-              Query.orderDesc('$createdAt'),
-              Query.limit(100)
-            ]);
+          try { articles = await databases.listDocuments(DB_ID, ARTICLES_COLLECTION, [Query.equal('authorId', profileUser), Query.equal('status', 'published'), Query.orderDesc('$createdAt'), Query.limit(100)]); } catch (e) {
+            articles = await databases.listDocuments(DB_ID, ARTICLES_COLLECTION, [Query.equal('submitterId', profileUser), Query.equal('status', 'published'), Query.orderDesc('$createdAt'), Query.limit(100)]);
           }
+          let totalViews = 0; articles.documents.forEach(a => totalViews += (a.views || 0));
+          els.totalPosts.textContent = articles.total; els.totalViews.textContent = totalViews;
 
-          let totalViews = 0;
-          articles.documents.forEach(a => totalViews += (a.views || 0));
-          els.totalPosts.textContent = articles.total;
-          els.totalViews.textContent = totalViews;
+          const likes = await databases.listDocuments(DB_ID, PROFILE_LIKES_COLLECTION, [Query.equal('profileId', currentProfile.$id), Query.limit(1)]).catch(() => ({ total: 0 }));
+          els.profileLikes.textContent = likes.total; els.likeCount.textContent = likes.total;
 
-          // Load profile likes
-          const likes = await databases.listDocuments(DB_ID, PROFILE_LIKES_COLLECTION, [
-            Query.equal('profileId', currentProfile.$id),
-            Query.limit(1)
-          ]).catch(() => ({ total: 0 }));
-          els.profileLikes.textContent = likes.total;
-          els.likeCount.textContent = likes.total;
-
-          // Check if current user liked
           if (currentUser) {
-            const userLike = await databases.listDocuments(DB_ID, PROFILE_LIKES_COLLECTION, [
-              Query.equal('profileId', currentProfile.$id),
-              Query.equal('userId', currentUser.$id),
-              Query.limit(1)
-            ]).catch(() => ({ documents: [] }));
+            const userLike = await databases.listDocuments(DB_ID, PROFILE_LIKES_COLLECTION, [Query.equal('profileId', currentProfile.$id), Query.equal('userId', currentUser.$id), Query.limit(1)]).catch(() => ({ documents: [] }));
             hasLiked = userLike.documents.length > 0;
-            if (hasLiked) {
-              els.likeBtn.classList.add('liked');
-              els.likeIcon.textContent = '❤️';
-              els.likeText.textContent = 'Liked';
-            }
+            if (hasLiked) { els.likeBtn.classList.add('liked'); els.likeIcon.textContent = '❤️'; els.likeText.textContent = 'Liked'; }
           }
 
-          // Load comments count
-          const comments = await databases.listDocuments(DB_ID, PROFILE_COMMENTS_COLLECTION, [
-            Query.equal('profileId', currentProfile.$id),
-            Query.limit(1)
-          ]).catch(() => ({ total: 0 }));
+          const comments = await databases.listDocuments(DB_ID, PROFILE_COMMENTS_COLLECTION, [Query.equal('profileId', currentProfile.$id), Query.limit(1)]).catch(() => ({ total: 0 }));
           els.profileComments.textContent = comments.total;
 
-          // Render articles
           if (articles.documents.length === 0) {
             els.userArticles.innerHTML = '<p style="color:var(--muted);padding:20px;text-align:center;">No articles published yet.</p>';
           } else {
@@ -757,22 +212,15 @@
               <div class="article-item">
                 <div class="article-info">
                   <a href="article.html?id=${a.$id}">${a.title || 'Untitled'}</a>
-                  <div class="article-stats">
-                    ${formatDate(a.$createdAt)} • ${a.views || 0} views • ${a.category || 'General'}
-                  </div>
+                  <div class="article-stats">${formatDate(a.$createdAt)} • ${a.views || 0} views • ${a.category || 'General'}</div>
                 </div>
-              </div>
-            `).join('');
+              </div>`).join('');
           }
 
-          // Load comments
           await loadComments();
-
           els.loader.style.display = 'none';
           els.profileBody.style.display = 'block';
-
         } catch (error) {
-          console.error('[Profile] Error:', error);
           els.loader.style.display = 'none';
           showAlert(`Error: ${error?.message || 'Failed to load profile'}`, 'error');
         }
@@ -780,80 +228,45 @@
 
       async function loadComments() {
         try {
-          const comments = await databases.listDocuments(DB_ID, PROFILE_COMMENTS_COLLECTION, [
-            Query.equal('profileId', currentProfile.$id),
-            Query.orderDesc('$createdAt'),
-            Query.limit(50)
-          ]);
-
+          const comments = await databases.listDocuments(DB_ID, PROFILE_COMMENTS_COLLECTION, [Query.equal('profileId', currentProfile.$id), Query.orderDesc('$createdAt'), Query.limit(50)]);
           if (comments.documents.length === 0) {
             els.commentsList.innerHTML = '<p style="color:var(--muted);text-align:center;padding:20px;">No comments yet. Be the first!</p>';
           } else {
             els.commentsList.innerHTML = comments.documents.map(c => `
               <div class="comment-item">
-                <div class="comment-avatar">${initials(c.userName)}</div>
+                <div class="comment-avatar" style="${c.avatarUrl ? `background-image:url('${c.avatarUrl}');background-size:cover;` : ''}">${c.avatarUrl ? '' : initials(c.userName)}</div>
                 <div class="comment-content">
                   <div class="comment-author">${c.userName}</div>
                   <div class="comment-text">${c.text}</div>
                   <div class="comment-time">${timeAgo(c.$createdAt)}</div>
                 </div>
-              </div>
-            `).join('');
+              </div>`).join('');
           }
-        } catch (e) {
-          console.warn('Comments load failed:', e);
-        }
+        } catch (e) { console.warn('Comments load failed:', e); }
       }
 
-      // Like button
       els.likeBtn.addEventListener('click', async () => {
-        if (!currentUser) {
-          showAlert('Please log in to like profiles', 'error');
-          return;
-        }
-        if (isOwnProfile) {
-          showAlert("You can't like your own profile", 'error');
-          return;
-        }
-
+        if (!currentUser) { showAlert('Please log in to like profiles', 'error'); return; }
+        if (isOwnProfile) { showAlert("You can't like your own profile", 'error'); return; }
         try {
           if (hasLiked) {
-            // Unlike
-            const like = await databases.listDocuments(DB_ID, PROFILE_LIKES_COLLECTION, [
-              Query.equal('profileId', currentProfile.$id),
-              Query.equal('userId', currentUser.$id),
-              Query.limit(1)
-            ]);
+            const like = await databases.listDocuments(DB_ID, PROFILE_LIKES_COLLECTION, [Query.equal('profileId', currentProfile.$id), Query.equal('userId', currentUser.$id), Query.limit(1)]);
             if (like.documents.length > 0) {
               await databases.deleteDocument(DB_ID, PROFILE_LIKES_COLLECTION, like.documents[0].$id);
-              hasLiked = false;
-              els.likeBtn.classList.remove('liked');
-              els.likeIcon.textContent = '🤍';
-              els.likeText.textContent = 'Like';
-              els.likeCount.textContent = parseInt(els.likeCount.textContent) - 1;
+              hasLiked = false; els.likeBtn.classList.remove('liked'); els.likeIcon.textContent = '🤍'; els.likeText.textContent = 'Like';
+              els.likeCount.textContent = parseInt(els.likeCount.textContent) - 1; els.profileLikes.textContent = els.likeCount.textContent;
             }
           } else {
-            // Like
-            await databases.createDocument(DB_ID, PROFILE_LIKES_COLLECTION, ID.unique(), {
-              profileId: currentProfile.$id,
-              userId: currentUser.$id
-            });
-            hasLiked = true;
-            els.likeBtn.classList.add('liked');
-            els.likeIcon.textContent = '❤️';
-            els.likeText.textContent = 'Liked';
-            els.likeCount.textContent = parseInt(els.likeCount.textContent) + 1;
+            await databases.createDocument(DB_ID, PROFILE_LIKES_COLLECTION, ID.unique(), { profileId: currentProfile.$id, userId: currentUser.$id });
+            hasLiked = true; els.likeBtn.classList.add('liked'); els.likeIcon.textContent = '❤️'; els.likeText.textContent = 'Liked';
+            els.likeCount.textContent = parseInt(els.likeCount.textContent) + 1; els.profileLikes.textContent = els.likeCount.textContent;
           }
-        } catch (error) {
-          showAlert('Failed to update like', 'error');
-        }
+        } catch (error) { showAlert('Failed to update like. Check permissions.', 'error'); }
       });
 
-      // Share buttons
-      els.shareBtn.addEventListener('click', () => {
+      els.shareProfileBtn.addEventListener('click', () => {
         const url = `${window.location.origin}/profile.html?id=${profileUser}`;
-        navigator.clipboard.writeText(url);
-        showAlert('Profile link copied!', 'success');
+        navigator.clipboard.writeText(url); showAlert('Profile link copied!', 'success');
       });
 
       els.whatsappShareBtn.addEventListener('click', () => {
@@ -862,106 +275,26 @@
         window.open(`https://wa.me/?text=${encodeURIComponent(text + ' ' + url)}`, '_blank');
       });
 
-      // Post comment
       els.postCommentBtn.addEventListener('click', async () => {
-        if (!currentUser) {
-          showAlert('Please log in to comment', 'error');
-          return;
-        }
+        if (!currentUser) { showAlert('Please log in to comment', 'error'); return; }
         const text = els.commentInput.value.trim();
-        if (!text) {
-          showAlert('Comment cannot be empty', 'error');
-          return;
-        }
-
+        if (!text) { showAlert('Comment cannot be empty', 'error'); return; }
         try {
           await databases.createDocument(DB_ID, PROFILE_COMMENTS_COLLECTION, ID.unique(), {
-            profileId: currentProfile.$id,
-            userId: currentUser.$id,
-            userName: currentUser.name || 'User',
-            text: text,
-            avatarUrl: currentProfile.avatarUrl || ''
+            profileId: currentProfile.$id, userId: currentUser.$id, userName: currentUser.name || 'User', text: text, avatarUrl: currentProfile.avatarUrl || ''
           });
-          els.commentInput.value = '';
-          showAlert('Comment posted!', 'success');
-          await loadComments();
+          els.commentInput.value = ''; showAlert('Comment posted!', 'success'); await loadComments();
           els.profileComments.textContent = parseInt(els.profileComments.textContent) + 1;
-        } catch (error) {
-          showAlert('Failed to post comment', 'error');
-        }
-      });
-
-      // Edit profile - only for own profile
-      document.getElementById('editProfileBtn').addEventListener('click', () => {
-        els.editDisplayName.value = currentProfile.displayName || '';
-        els.editUserName.value = currentProfile.userName || '';
-        els.editBio.value = currentProfile.bio || '';
-        els.avatarPreview.style.display = 'none';
-        els.coverPreview.style.display = 'none';
-        els.editModal.classList.add('active');
-      });
-
-      document.getElementById('closeModal').addEventListener('click', () => {
-        els.editModal.classList.remove('active');
-      });
-
-      document.getElementById('cancelEdit').addEventListener('click', () => {
-        els.editModal.classList.remove('active');
-      });
-
-      els.editAvatar.addEventListener('change', (e) => {
-        const file = e.target.files[0];
-        if (file) {
-          els.avatarPreview.src = URL.createObjectURL(file);
-          els.avatarPreview.style.display = 'block';
-        }
-      });
-
-      els.editCover.addEventListener('change', (e) => {
-        const file = e.target.files[0];
-        if (file) {
-          els.coverPreview.src = URL.createObjectURL(file);
-          els.coverPreview.style.display = 'block';
-        }
-      });
-
-      els.editForm.addEventListener('submit', async (e) => {
-        e.preventDefault();
-        els.saveBtn.disabled = true;
-        els.saveBtn.textContent = 'Saving...';
-
-        try {
-          let avatarUrl = currentProfile.avatarUrl;
-          let coverUrl = currentProfile.coverUrl;
-
-          if (els.editAvatar.files[0]) {
-            const avatarFile = await storage.createFile(BUCKET_ID, ID.unique(), els.editAvatar.files[0]);
-            avatarUrl = storage.getFileView(BUCKET_ID, avatarFile.$id).href;
-          }
-
-          if (els.editCover.files[0]) {
-            const coverFile = await storage.createFile(BUCKET_ID, ID.unique(), els.editCover.files[0]);
-            coverUrl = storage.getFileView(BUCKET_ID, coverFile.$id).href;
-          }
-
-          await databases.updateDocument(DB_ID, PROFILES_COLLECTION, currentProfile.$id, {
-            displayName: els.editDisplayName.value,
-            userName: els.editUserName.value,
-            bio: els.editBio.value,
-            avatarUrl,
-            coverUrl
-          });
-
-          showAlert('Profile updated successfully!', 'success');
-          els.editModal.classList.remove('active');
-          setTimeout(() => location.reload(), 1000);
-        } catch (error) {
-          showAlert(`Upload failed: ${error?.message || 'Check bucket permissions'}`, 'error');
-        } finally {
-          els.saveBtn.disabled = false;
-          els.saveBtn.textContent = 'Save Changes';
-        }
+        } catch (error) { showAlert('Failed to post comment. Check collection permissions.', 'error'); }
       });
 
       document.getElementById('logoutBtn').addEventListener('click', async () => {
-        if (!confirm('Sign out?'))
+        if (!confirm('Sign out?')) return;
+        try { await account.deleteSession('current'); window.location.href = 'login.html'; } catch (error) { showAlert('Failed to sign out', 'error'); }
+      });
+
+      loadProfile();
+    });
+  </script>
+</body>
+</html>
