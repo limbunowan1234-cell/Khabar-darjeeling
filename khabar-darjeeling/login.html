@@ -1,257 +1,497 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Portal Access • खबर दार्जिलिंग</title>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <style>
-        :root {
-            --brand-red: #c41e3a;
-            --brand-red-dark: #a01830;
-            --text-dark: #1c1e21;
-            --bg-gray: #f0f2f5;
-            --border-color: #dddfe2;
-            --text-light: #f5f6f7;
-        }
-        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Poppins', sans-serif; }
-        body { background-color: var(--bg-gray); display: flex; flex-direction: column; justify-content: center; align-items: center; min-height: 100vh; color: var(--text-dark); transition: background-color 0.3s, color 0.3s; }
-        
-        .login-wrapper { width: 100%; max-width: 396px; padding: 16px; }
-        
-        .brand-header { text-align: center; margin-bottom: 24px; display: flex; flex-direction: column; align-items: center; }
-        .brand-logo { height: 75px; width: 75px; object-fit: cover; border-radius: 50%; margin-bottom: 12px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); border: 2px solid #ffffff; }
-        .brand-header h1 { color: var(--brand-red); font-size: 34px; font-weight: 700; letter-spacing: -0.5px; margin-bottom: 2px; }
-        .brand-header p { color: #606770; font-size: 14px; font-weight: 600; letter-spacing: 0.5px; }
-        
-        .card { background: #ffffff; border-radius: 8px; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1), 0 8px 16px rgba(0, 0, 0, 0.1); padding: 24px; width: 100%; transition: background-color 0.3s, box-shadow 0.3s; }
-        
-        .instruction-text { color: #606770; font-size: 13px; line-height: 1.4; text-align: center; margin-bottom: 16px; }
-        
-        .form-control { width: 100%; margin-bottom: 14px; position: relative; }
-        .form-control input { width: 100%; padding: 14px 12px; font-size: 14px; border: 1px solid var(--border-color); border-radius: 6px; background: #f5f6f7; color: var(--text-dark); outline: none; transition: all 0.2s; }
-        .form-control input:focus { border-color: var(--brand-red); background: #ffffff; box-shadow: 0 0 0 2px rgba(196, 30, 58, 0.2); }
-        .form-control input.otp-style { font-size: 26px; letter-spacing: 6px; text-align: center; font-weight: 700; padding: 8px; }
-        
-        .password-toggle { position: absolute; right: 12px; top: 50%; transform: translateY(-50%); cursor: pointer; color: #606770; font-size: 14px; user-select: none; padding: 4px 8px; background: transparent; border: none; }
-        .password-toggle:hover { color: var(--brand-red); }
-        
-        .btn-submit { width: 100%; padding: 12px; font-size: 16px; font-weight: 600; color: #ffffff; background-color: var(--brand-red); border: none; border-radius: 6px; cursor: pointer; margin-top: 6px; transition: background-color 0.2s; }
-        .btn-submit:hover { background-color: var(--brand-red-dark); }
-        .btn-submit:disabled { opacity: 0.5; cursor: not-allowed; }
-        
-        .forgot-link { display: block; text-align: center; margin-top: 14px; font-size: 13px; color: var(--brand-red); text-decoration: none; cursor: pointer; font-weight: 500; }
-        
-        .toggle-box { text-align: center; margin-top: 20px; padding-top: 20px; border-top: 1px solid var(--border-color); font-size: 14px; color: #606770; }
-        .toggle-link { color: var(--brand-red); font-weight: 600; text-decoration: none; cursor: pointer; }
-        
-        .status-feedback { margin-top: 16px; text-align: center; font-size: 13px; font-weight: 500; min-height: 20px; }
-        .status-feedback.success { color: #2e7d32; }
-        .status-feedback.error { color: var(--brand-red); }
-        
-        .hidden { display: none!important; }
-        
-        /* Dark Mode */
-        body.dark-mode { background-color: #121212; color: var(--text-light); }
-        body.dark-mode .card { background: #242526; box-shadow: 0 4px 12px rgba(0,0,0,0.3); border-top: 1px solid #3a3b3c; }
-        body.dark-mode .form-control input { background: #3a3b3c; border-color: #4e4f50; color: var(--text-light); }
-        body.dark-mode .form-control input:focus { border-color: var(--brand-red); background: #242526; }
-        body.dark-mode .toggle-box { border-top-color: #3a3b3c; }
-        body.dark-mode .brand-logo { border-color: #242526; }
-        body.dark-mode .brand-header p { color: #b0b3b8; }
-        body.dark-mode .instruction-text { color: #b0b3b8; }
-        body.dark-mode .password-toggle { color: #b0b3b8; }
-        body.dark-mode .password-toggle:hover { color: var(--brand-red); }
-        
-        /* Dark mode toggle button */
-        .dark-mode-toggle { position: fixed; top: 20px; right: 20px; background: #ffffff; border: 2px solid var(--border-color); border-radius: 50%; width: 44px; height: 44px; cursor: pointer; display: flex; align-items: center; justify-content: center; box-shadow: 0 2px 8px rgba(0,0,0,0.15); transition: all 0.3s; }
-        .dark-mode-toggle:hover { transform: scale(1.1); box-shadow: 0 4px 12px rgba(0,0,0,0.2); }
-        body.dark-mode .dark-mode-toggle { background: #242526; border-color: #3a3b3c; }
-        .dark-mode-toggle svg { width: 22px; height: 22px; }
-        .dark-mode-toggle .sun-icon { display: none; fill: var(--brand-red); }
-        .dark-mode-toggle .moon-icon { display: block; fill: #606770; }
-        body.dark-mode .dark-mode-toggle .sun-icon { display: block; fill: var(--brand-red); }
-        body.dark-mode .dark-mode-toggle .moon-icon { display: none; }
-        
-        /* Gatekeeper Loader */
-        .gatekeeper-loader { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: var(--bg-gray); display: flex; flex-direction: column; justify-content: center; align-items: center; z-index: 9999; transition: opacity 0.4s, background-color 0.3s; }
-        .gatekeeper-loader.hide { opacity: 0; pointer-events: none; }
-        body.dark-mode .gatekeeper-loader { background: #121212; }
-        .loader-spinner { width: 56px; height: 56px; border: 5px solid var(--border-color); border-top-color: var(--brand-red); border-radius: 50%; animation: spin 1s linear infinite; }
-        body.dark-mode .loader-spinner { border: 5px solid #3a3b3c; border-top-color: var(--brand-red); }
-        @keyframes spin { to { transform: rotate(360deg); } }
-        .loader-text { margin-top: 20px; font-size: 16px; font-weight: 600; color: var(--text-dark); }
-        body.dark-mode .loader-text { color: var(--text-light); }
-        .loader-logo { width: 80px; height: 80px; object-fit: cover; border-radius: 50%; margin-bottom: 20px; box-shadow: 0 4px 12px rgba(0,0,0,0.15); }
-    </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Portal Access • खबर दार्जिलिंग</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --brand-red: #c41e3a;
+      --brand-red-dark: #a01830;
+      --text-dark: #1c1e21;
+      --bg-gray: #f0f2f5;
+      --border-color: #dddfe2;
+      --text-light: #f5f6f7;
+      --card-bg: #ffffff;
+      --input-bg: #f5f6f7;
+      --input-text: #1c1e21;
+      --muted: #606770;
+      --shadow: 0 2px 4px rgba(0, 0, 0, 0.1), 0 8px 16px rgba(0, 0, 0, 0.1);
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Poppins', sans-serif; }
+
+    html, body { min-height: 100%; }
+
+    body {
+      background-color: var(--bg-gray);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      color: var(--text-dark);
+      transition: background-color 0.3s, color 0.3s;
+      padding: 18px;
+    }
+
+    body.dark-mode {
+      background-color: #121212;
+      color: var(--text-light);
+      --card-bg: #242526;
+      --input-bg: #3a3b3c;
+      --input-text: #f5f6f7;
+      --muted: #b0b3b8;
+      --border-color: #4e4f50;
+      --shadow: 0 4px 12px rgba(0,0,0,0.3);
+    }
+
+    .login-wrapper { width: 100%; max-width: 396px; padding: 16px; }
+
+    .brand-header {
+      text-align: center;
+      margin-bottom: 24px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .brand-logo {
+      height: 75px;
+      width: 75px;
+      object-fit: cover;
+      border-radius: 50%;
+      margin-bottom: 12px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      border: 2px solid #ffffff;
+    }
+
+    body.dark-mode .brand-logo { border-color: #242526; }
+
+    .brand-header h1 {
+      color: var(--brand-red);
+      font-size: 34px;
+      font-weight: 700;
+      letter-spacing: -0.5px;
+      margin-bottom: 2px;
+    }
+
+    .brand-header p {
+      color: var(--muted);
+      font-size: 14px;
+      font-weight: 600;
+      letter-spacing: 0.5px;
+    }
+
+    .card {
+      background: var(--card-bg);
+      border-radius: 8px;
+      box-shadow: var(--shadow);
+      padding: 24px;
+      width: 100%;
+      transition: background-color 0.3s, box-shadow 0.3s;
+    }
+
+    .instruction-text {
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.4;
+      text-align: center;
+      margin-bottom: 16px;
+    }
+
+    .form-control { width: 100%; margin-bottom: 14px; position: relative; }
+
+    .form-control input {
+      width: 100%;
+      padding: 14px 12px;
+      font-size: 14px;
+      border: 1px solid var(--border-color);
+      border-radius: 6px;
+      background: var(--input-bg);
+      color: var(--input-text);
+      outline: none;
+      transition: all 0.2s;
+    }
+
+    .form-control input:focus {
+      border-color: var(--brand-red);
+      background: #ffffff;
+      box-shadow: 0 0 0 2px rgba(196, 30, 58, 0.2);
+    }
+
+    body.dark-mode .form-control input:focus {
+      background: #242526;
+    }
+
+    .password-toggle {
+      position: absolute;
+      right: 12px;
+      top: 50%;
+      transform: translateY(-50%);
+      cursor: pointer;
+      color: var(--muted);
+      font-size: 14px;
+      user-select: none;
+      padding: 4px 8px;
+      background: transparent;
+      border: none;
+    }
+
+    .password-toggle:hover { color: var(--brand-red); }
+
+    .btn-submit {
+      width: 100%;
+      padding: 12px;
+      font-size: 16px;
+      font-weight: 600;
+      color: #ffffff;
+      background-color: var(--brand-red);
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      margin-top: 6px;
+      transition: background-color 0.2s;
+    }
+
+    .btn-submit:hover { background-color: var(--brand-red-dark); }
+    .btn-submit:disabled { opacity: 0.5; cursor: not-allowed; }
+
+    .forgot-link {
+      display: block;
+      text-align: center;
+      margin-top: 14px;
+      font-size: 13px;
+      color: var(--brand-red);
+      text-decoration: none;
+      cursor: pointer;
+      font-weight: 500;
+    }
+
+    .toggle-box {
+      text-align: center;
+      margin-top: 20px;
+      padding-top: 20px;
+      border-top: 1px solid var(--border-color);
+      font-size: 14px;
+      color: var(--muted);
+    }
+
+    .toggle-link {
+      color: var(--brand-red);
+      font-weight: 600;
+      text-decoration: none;
+      cursor: pointer;
+    }
+
+    .status-feedback {
+      margin-top: 16px;
+      text-align: center;
+      font-size: 13px;
+      font-weight: 500;
+      min-height: 20px;
+    }
+
+    .status-feedback.success { color: #2e7d32; }
+    .status-feedback.error { color: var(--brand-red); }
+
+    .hidden { display: none !important; }
+
+    .dark-mode-toggle {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      background: #ffffff;
+      border: 2px solid var(--border-color);
+      border-radius: 50%;
+      width: 44px;
+      height: 44px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+      transition: all 0.3s;
+      z-index: 20;
+    }
+
+    .dark-mode-toggle:hover {
+      transform: scale(1.1);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+    }
+
+    body.dark-mode .dark-mode-toggle {
+      background: #242526;
+      border-color: #3a3b3c;
+    }
+
+    .dark-mode-toggle svg { width: 22px; height: 22px; }
+    .dark-mode-toggle .sun-icon { display: none; fill: var(--brand-red); }
+    .dark-mode-toggle .moon-icon { display: block; fill: #606770; }
+    body.dark-mode .dark-mode-toggle .sun-icon { display: block; fill: var(--brand-red); }
+    body.dark-mode .dark-mode-toggle .moon-icon { display: none; }
+
+    .gatekeeper-loader {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: var(--bg-gray);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      z-index: 9999;
+      transition: opacity 0.4s, background-color 0.3s;
+    }
+
+    .gatekeeper-loader.hide {
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    body.dark-mode .gatekeeper-loader { background: #121212; }
+
+    .loader-spinner {
+      width: 56px;
+      height: 56px;
+      border: 5px solid var(--border-color);
+      border-top-color: var(--brand-red);
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+    }
+
+    body.dark-mode .loader-spinner {
+      border: 5px solid #3a3b3c;
+      border-top-color: var(--brand-red);
+    }
+
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    .loader-text {
+      margin-top: 20px;
+      font-size: 16px;
+      font-weight: 600;
+      color: var(--text-dark);
+    }
+
+    body.dark-mode .loader-text { color: var(--text-light); }
+
+    .loader-logo {
+      width: 80px;
+      height: 80px;
+      object-fit: cover;
+      border-radius: 50%;
+      margin-bottom: 20px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    }
+
+    @media (max-width: 420px) {
+      .login-wrapper { padding: 8px; }
+      .card { padding: 20px; }
+      .brand-header h1 { font-size: 30px; }
+    }
+  </style>
 </head>
 <body>
-    <div class="gatekeeper-loader" id="gatekeeperLoader">
-        <img src="assets/logo.png" alt="Khabar Darjeeling" class="loader-logo">
-        <div class="loader-spinner"></div>
-        <p class="loader-text">Checking authentication...</p>
+  <div class="gatekeeper-loader" id="gatekeeperLoader" aria-live="polite">
+    <img src="assets/logo.png" alt="Khabar Darjeeling" class="loader-logo">
+    <div class="loader-spinner"></div>
+    <p class="loader-text">Checking authentication...</p>
+  </div>
+
+  <button class="dark-mode-toggle" id="darkModeToggle" type="button" aria-label="Toggle dark mode">
+    <svg class="sun-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 7c-2.76 0-5 2.24-5 5s2.24 5 5 5 5-2.24 5-5-2.24-5-5-5zM2 13h2c.55 0 1-.45 1-1s-.45-1-1-1H2c-.55 0-1 .45-1 1s.45 1 1 1zm18 0h2c.55 0 1-.45 1-1s-.45-1-1-1h-2c-.55 0-1 .45-1 1s.45 1 1 1zM11 2v2c0 .55.45 1 1 1s1-.45 1-1V2c0-.55-.45-1-1-1s-1 .45-1 1zm0 18v2c0 .55.45 1 1 1s1-.45 1-1v-2c0-.55-.45-1-1-1s-1 .45-1 1z"/></svg>
+    <svg class="moon-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3c-4.96 0-9 4.04-9 9s4.04 9 9 9 9-4.04 9-9-4.04-9-9-9zm0 16c-3.86 0-7-3.14-7-7s3.14-7 7-7 7 3.14 7 7-3.14 7-7 7z"/></svg>
+  </button>
+
+  <div class="login-wrapper">
+    <div class="brand-header">
+      <img src="assets/logo.png" alt="Khabar Darjeeling Logo" class="brand-logo">
+      <h1>खबर दार्जिलिंग</h1>
+      <p>Hamro Khabar, Hami Lekhaw</p>
     </div>
 
-    <button class="dark-mode-toggle" id="darkModeToggle" aria-label="Toggle dark mode">
-        <svg class="sun-icon" viewBox="0 0 24 24"><path d="M12 7c-2.76 0-5 2.24-5 5s2.24 5 5 5 5-2.24 5-5-2.24-5-5-5zM2 13h2c.55 0 1-.45 1-1s-.45-1-1-1H2c-.55 0-1 .45-1 1s.45 1 1 1zm18 0h2c.55 0 1-.45 1-1s-.45-1-1-1h-2c-.55 0-1 .45-1 1s.45 1 1 1zM11 2v2c0 .55.45 1 1 1s1-.45 1-1V2c0-.55-.45-1-1-1s-1 .45-1 1zm0 18v2c0 .55.45 1 1 1s1-.45 1-1v-2c0-.55-.45-1-1-1s-1 .45-1 1zM5.99 4.58c-.39-.39-1.03-.39-1.41 0-.39.39-.39 1.03 0 1.41l1.06 1.06c.39.39 1.03.39 1.41 0s.39-1.03 0-1.41L5.99 4.58zm12.37 12.37c-.39-.39-1.03-.39-1.41 0-.39.39-.39 1.03 0 1.41l1.06 1.06c.39.39 1.03.39 1.41 0 .39-.39.39-1.03 0-1.41l-1.06-1.06zm1.06-10.96c.39-.39.39-1.03 0-1.41-.39-.39-1.03-.39-1.41 0l-1.06 1.06c-.39.39-.39 1.03 0 1.41s1.03.39 1.41 0l1.06-1.06zM7.05 18.36c.39-.39.39-1.03 0-1.41-.39-.39-1.03-.39-1.41 0l-1.06 1.06c-.39.39-.39 1.03 0 1.41s1.03.39 1.41 0l1.06-1.06z"/></svg>
-        <svg class="moon-icon" viewBox="0 0 24 24"><path d="M12 3c-4.96 0-9 4.04-9 9s4.04 9 9 9 9-4.04 9-9-4.04-9-9-9zm0 16c-3.86 0-7-3.14-7-7s3.14-7 7-7 7 3.14 7 7-3.14 7-7 7z"/></svg>
-    </button>
-
-    <div class="login-wrapper">
-        <div class="brand-header">
-            <img src="assets/logo.png" alt="Khabar Darjeeling Logo" class="brand-logo">
-            <h1>खबर दार्जिलिंग</h1>
-            <p>Hamro Khabar, Hami Lekhaw</p>
+    <div class="card">
+      <form id="loginForm">
+        <div class="form-control">
+          <input type="email" id="loginEmail" placeholder="Email address" required autocomplete="email">
         </div>
 
-        <div class="card">
-            <form id="loginForm" onsubmit="handleLogin(event)">
-                <div class="form-control"><input type="email" id="loginEmail" placeholder="Email address" required autocomplete="email"></div>
-                <div class="form-control">
-                    <input type="password" id="loginPassword" placeholder="Password" required autocomplete="current-password">
-                    <button type="button" class="password-toggle" onclick="togglePassword('loginPassword')">👁</button>
-                </div>
-                <button type="submit" id="loginBtn" class="btn-submit">Log In</button>
-                <span class="forgot-link" onclick="switchMode('forgot')">Forgot Password?</span>
-                <div class="toggle-box">Don't have an account? <span class="toggle-link" onclick="switchMode('signup')">Sign Up</span></div>
-            </form>
-
-            <form id="signupForm" class="hidden" onsubmit="handleSignup(event)">
-                <p class="instruction-text">Create your account to access Khabar Darjeeling portal</p>
-                <div class="form-control"><input type="text" id="signupName" placeholder="Full name" required autocomplete="name"></div>
-                <div class="form-control"><input type="email" id="signupEmail" placeholder="Email address" required autocomplete="email"></div>
-                <div class="form-control">
-                    <input type="password" id="signupPassword" placeholder="Create password (min 8 chars)" minlength="8" required autocomplete="new-password">
-                    <button type="button" class="password-toggle" onclick="togglePassword('signupPassword')">👁</button>
-                </div>
-                <div class="form-control">
-                    <input type="password" id="signupPasswordConfirm" placeholder="Confirm password" minlength="8" required autocomplete="new-password">
-                    <button type="button" class="password-toggle" onclick="togglePassword('signupPasswordConfirm')">👁</button>
-                </div>
-                <button type="submit" id="signupBtn" class="btn-submit">Create Account</button>
-                <div class="toggle-box">Already have an account? <span class="toggle-link" onclick="switchMode('login')">Log In</span></div>
-            </form>
-
-            <form id="forgotForm" class="hidden" onsubmit="handleForgotRequest(event)">
-                <p class="instruction-text">Enter your account email. We'll send a login link to reset your password.</p>
-                <div class="form-control"><input type="email" id="forgotEmail" placeholder="Account email address" required autocomplete="email"></div>
-                <button type="submit" id="forgotBtn" class="btn-submit">Send Reset Link</button>
-                <div class="toggle-box">Remembered credentials? <span class="toggle-link" onclick="switchMode('login')">Back to Log In</span></div>
-            </form>
-
-            <form id="otpVerificationView" class="hidden" onsubmit="submitOtpAction(event)">
-                <p id="otpInstructions" class="instruction-text">Processing status...</p>
-                <div class="form-control"><input type="text" id="otpInputCode" class="otp-style" maxlength="6" placeholder="000000" inputmode="numeric" autocomplete="one-time-code" required></div>
-                <button type="submit" id="otpVerifyActionButton" class="btn-submit">Verify Code</button>
-                <div class="toggle-box"><span class="toggle-link" onclick="cancelOtpFlow()">Cancel</span></div>
-            </form>
-
-            <p id="feedback" class="status-feedback"></p>
+        <div class="form-control">
+          <input type="password" id="loginPassword" placeholder="Password" required autocomplete="current-password">
+          <button type="button" class="password-toggle" id="loginPasswordToggle" aria-label="Toggle password visibility">👁</button>
         </div>
+
+        <button type="submit" id="loginBtn" class="btn-submit">Log In</button>
+        <a href="#" class="forgot-link" id="forgotLink">Forgot Password?</a>
+        <div class="toggle-box">Don't have an account? <span class="toggle-link" id="signupLink">Sign Up</span></div>
+      </form>
+
+      <form id="signupForm" class="hidden">
+        <p class="instruction-text">Create your account to access Khabar Darjeeling portal</p>
+        <div class="form-control"><input type="text" id="signupName" placeholder="Full name" required autocomplete="name"></div>
+        <div class="form-control"><input type="email" id="signupEmail" placeholder="Email address" required autocomplete="email"></div>
+        <div class="form-control">
+          <input type="password" id="signupPassword" placeholder="Create password (min 8 chars)" minlength="8" required autocomplete="new-password">
+          <button type="button" class="password-toggle" id="signupPasswordToggle" aria-label="Toggle password visibility">👁</button>
+        </div>
+        <div class="form-control">
+          <input type="password" id="signupPasswordConfirm" placeholder="Confirm password" minlength="8" required autocomplete="new-password">
+          <button type="button" class="password-toggle" id="signupPasswordConfirmToggle" aria-label="Toggle password visibility">👁</button>
+        </div>
+        <button type="submit" id="signupBtn" class="btn-submit">Create Account</button>
+        <div class="toggle-box">Already have an account? <span class="toggle-link" id="loginLinkFromSignup">Log In</span></div>
+      </form>
+
+      <form id="forgotForm" class="hidden">
+        <p class="instruction-text">Enter your account email. We'll send a password reset link.</p>
+        <div class="form-control">
+          <input type="email" id="forgotEmail" placeholder="Account email address" required autocomplete="email">
+        </div>
+        <button type="submit" id="forgotBtn" class="btn-submit">Send Reset Link</button>
+        <div class="toggle-box">Remembered credentials? <span class="toggle-link" id="backToLoginFromForgot">Back to Log In</span></div>
+      </form>
+
+      <p id="feedback" class="status-feedback" aria-live="polite"></p>
     </div>
+  </div>
 
-    <script type="module">
-        import { Client, Account, Databases, ID, Query } from "https://cdn.jsdelivr.net/npm/appwrite@14.0.1/+esm";
+  <script type="module">
+    import { Client, Account, Databases, ID } from "https://cdn.jsdelivr.net/npm/appwrite@14.0.1/+esm";
 
-        const client = new Client().setEndpoint('https://nyc.cloud.appwrite.io/v1').setProject('khabardarjeeling');
-        const account = new Account(client);
-        const databases = new Databases(client);
+    const client = new Client()
+      .setEndpoint('https://nyc.cloud.appwrite.io/v1')
+      .setProject('khabardarjeeling');
 
-        window.account = account; window.databases = databases; window.ID = ID; window.APPWRITE_DB_ID = 'Khabar_db';
+    const account = new Account(client);
+    const databases = new Databases(client);
 
-        if (localStorage.getItem('theme') === 'dark') document.body.classList.add('dark-mode');
-        document.getElementById('darkModeToggle').addEventListener('click', () => {
-            document.body.classList.toggle('dark-mode');
-            localStorage.setItem('theme', document.body.classList.contains('dark-mode') ? 'dark' : 'light');
-        });
+    window.account = account;
+    window.databases = databases;
+    window.ID = ID;
+    window.APPWRITE_DB_ID = 'Khabar_db';
 
-        const gatekeeper = document.getElementById('gatekeeperLoader');
-        async function checkAuth() {
-            try { await account.get(); window.location.href = 'index.html'; } 
-            catch (e) { gatekeeper.classList.add('hide'); }
-        }
-        checkAuth();
+    const gatekeeper = document.getElementById('gatekeeperLoader');
+    const feedback = document.getElementById('feedback');
 
-        let currentFlowType = "", cachedEmail = "", cachedPassword = "", cachedName = "", tempUserId = "";
+    const forms = {
+      login: document.getElementById('loginForm'),
+      signup: document.getElementById('signupForm'),
+      forgot: document.getElementById('forgotForm')
+    };
 
-        window.switchMode = function(mode) {
-            ['loginForm','signupForm','forgotForm','otpVerificationView'].forEach(f => document.getElementById(f).classList.add('hidden'));
-            document.getElementById('feedback').textContent = ""; document.getElementById('feedback').className = "status-feedback";
-            if(mode === 'login') document.getElementById('loginForm').classList.remove('hidden');
-            if(mode === 'signup') document.getElementById('signupForm').classList.remove('hidden');
-            if(mode === 'forgot') document.getElementById('forgotForm').classList.remove('hidden');
-        }
+    function setFeedback(type, message) {
+      feedback.className = `status-feedback ${type || ''}`.trim();
+      feedback.textContent = message || '';
+    }
 
-        window.togglePassword = function(fieldId) {
-            const field = document.getElementById(fieldId); const toggle = field.nextElementSibling;
-            field.type = field.type === 'password' ? 'text' : 'password';
-            toggle.textContent = field.type === 'password' ? '👁' : '🙈';
-        }
+    function showForm(name) {
+      Object.values(forms).forEach(form => form.classList.add('hidden'));
+      forms[name].classList.remove('hidden');
+      setFeedback('', '');
+    }
 
-        window.handleSignup = async function(e) {
-            e.preventDefault();
-            cachedName = document.getElementById('signupName').value.trim();
-            cachedEmail = document.getElementById('signupEmail').value.trim();
-            const password = document.getElementById('signupPassword').value;
-            const passwordConfirm = document.getElementById('signupPasswordConfirm').value;
-            const feedback = document.getElementById('feedback'); const btn = document.getElementById('signupBtn');
+    function toggleDarkMode() {
+      document.body.classList.toggle('dark-mode');
+      localStorage.setItem('theme', document.body.classList.contains('dark-mode') ? 'dark' : 'light');
+    }
 
-            if (cachedName.length < 2) { feedback.className = "status-feedback error"; feedback.textContent = "Please enter a valid name."; return; }
-            if (password !== passwordConfirm) { feedback.className = "status-feedback error"; feedback.textContent = "Passwords do not match."; return; }
-            if (password.length < 8) { feedback.className = "status-feedback error"; feedback.textContent = "Password must be at least 8 characters."; return; }
-            
-            cachedPassword = password; btn.disabled = true;
-            feedback.className = "status-feedback error"; feedback.textContent = "Creating account... Sending verification code...";
+    function togglePasswordVisibility(inputId, buttonId) {
+      const input = document.getElementById(inputId);
+      const button = document.getElementById(buttonId);
+      if (!input || !button) return;
+      input.type = input.type === 'password' ? 'text' : 'password';
+      button.textContent = input.type === 'password' ? '👁' : '🙈';
+    }
 
-            try {
-                const user = await account.create(ID.unique(), cachedEmail, password, cachedName);
-                tempUserId = user.$id;
-                await account.createEmailToken(ID.unique(), cachedEmail);
-                currentFlowType = "signup_verify";
-                document.getElementById('signupForm').classList.add('hidden');
-                document.getElementById('otpInstructions').innerHTML = `📨 Verification code sent to <b>${cachedEmail}</b>. Enter the 6-digit code.`;
-                document.getElementById('otpVerificationView').classList.remove('hidden');
-                feedback.textContent = "";
-            } catch (error) {
-                btn.disabled = false; feedback.className = "status-feedback error";
-                let errorMsg = "Could not create account.";
-                if (error.message.includes('already exists')) errorMsg = "This email is already registered. Please log in.";
-                feedback.textContent = errorMsg; console.error('Signup error:', error);
-            }
-        }
+    async function checkAuth() {
+      try {
+        await account.get();
+        window.location.href = 'index.html';
+      } catch (e) {
+        gatekeeper.classList.add('hide');
+      }
+    }
 
-        window.submitOtpAction = async function(e) {
-            e.preventDefault();
-            const code = document.getElementById('otpInputCode').value.trim();
-            const feedback = document.getElementById('feedback'); const btn = document.getElementById('otpVerifyActionButton');
-            if(code.length !== 6) { feedback.className = "status-feedback error"; feedback.textContent = "Enter the complete 6-digit code."; return; }
-            btn.disabled = true; feedback.className = "status-feedback error"; feedback.textContent = "Verifying...";
-            try {
-                await account.createSession(tempUserId, code);
-                feedback.className = "status-feedback success"; feedback.textContent = "✓ Account verified! Redirecting...";
-                setTimeout(() => { window.location.href = "index.html"; }, 1200);
-            } catch (error) {
-                btn.disabled = false; feedback.className = "status-feedback error"; feedback.textContent = "Invalid or expired code.";
-            }
-        }
+    async function handleLogin(event) {
+      event.preventDefault();
+      const email = document.getElementById('loginEmail').value.trim();
+      const password = document.getElementById('loginPassword').value;
+      const btn = document.getElementById('loginBtn');
+      btn.disabled = true;
+      setFeedback('error', 'Verifying...');
+      try {
+        await account.createEmailPasswordSession(email, password);
+        setFeedback('success', '✓ Login successful! Redirecting...');
+        setTimeout(() => { window.location.href = 'index.html'; }, 1000);
+      } catch (error) {
+        setFeedback('error', 'Incorrect email or password.');
+        btn.disabled = false;
+      }
+    }
 
-        window.handleLogin = async function(e) {
-            e.preventDefault();
-            const email = document.getElementById('loginEmail').value.trim();
-            const password = document.getElementById('loginPassword').value;
-            const feedback = document.getElementById('feedback'); const btn = document.getElementById('loginBtn');
-            feedback.className = "status-feedback error"; feedback.textContent = "Verifying..."; btn.disabled = true;
-            try {
-                await account.createEmailPasswordSession(email, password);
-                feedback.className = "status-feedback success"; feedback.textContent = "✓ Login successful! Redirecting...";
-                setTimeout(() => { window.location.href = "index.html"; }, 1000);
-            } catch (error) {
-                btn.disabled = false; feedback.className = "status-feedback error"; feedback.textContent = "Incorrect email or password.";
-            }
-        }
+    async function handleSignup(event) {
+      event.preventDefault();
+      const name = document.getElementById('signupName').value.trim();
+      const email = document.getElementById('signupEmail').value.trim();
+      const password = document.getElementById('signupPassword').value;
+      const confirm = document.getElementById('signupPasswordConfirm').value;
+      const btn = document.getElementById('signupBtn');
 
-        window.handleForgotRequest = async function(e) { e.preventDefault(); /* same as before */ }
-        window.cancelOtpFlow = function() { currentFlowType=""; tempUserId=""; document.getElementById('otpInputCode').value=""; switchMode('signup'); }
-    </script>
+      if (name.length < 2) return setFeedback('error', 'Please enter a valid name.');
+      if (password !== confirm) return setFeedback('error', 'Passwords do not match.');
+      if (password.length < 8) return setFeedback('error', 'Password must be at least 8 characters.');
+
+      btn.disabled = true;
+      setFeedback('error', 'Creating account...');
+      try {
+        await account.create(ID.unique(), email, password, name);
+        setFeedback('success', '✓ Account created! Please log in.');
+        showForm('login');
+      } catch (error) {
+        btn.disabled = false;
+        setFeedback('error', error?.message?.includes('already exists') ? 'This email is already registered.' : 'Could not create account.');
+      }
+    }
+
+    async function handleForgotRequest(event) {
+      event.preventDefault();
+      const email = document.getElementById('forgotEmail').value.trim();
+      const btn = document.getElementById('forgotBtn');
+      btn.disabled = true;
+      setFeedback('error', 'Sending reset link...');
+
+      try {
+        await account.createRecovery(email, 'https://khabardarjeeling.space/reset-password.html');
+        setFeedback('success', '✓ Reset link sent. Check your email.');
+      } catch (error) {
+        setFeedback('error', 'Could not send reset link.');
+      } finally {
+        btn.disabled = false;
+      }
+    }
+
+    document.getElementById('darkModeToggle').addEventListener('click', toggleDarkMode);
+    document.getElementById('loginPasswordToggle').addEventListener('click', () => togglePasswordVisibility('loginPassword', 'loginPasswordToggle'));
+    document.getElementById('signupPasswordToggle').addEventListener('click', () => togglePasswordVisibility('signupPassword', 'signupPasswordToggle'));
+    document.getElementById('signupPasswordConfirmToggle').addEventListener('click', () => togglePasswordVisibility('signupPasswordConfirm', 'signupPasswordConfirmToggle'));
+    document.getElementById('signupLink').addEventListener('click', () => showForm('signup'));
+    document.getElementById('loginLinkFromSignup').addEventListener('click', () => showForm('login'));
+    document.getElementById('forgotLink').addEventListener('click', (e) => { e.preventDefault(); showForm('forgot'); });
+    document.getElementById('backToLoginFromForgot').addEventListener('click', () => showForm('login'));
+
+    forms.login.addEventListener('submit', handleLogin);
+    forms.signup.addEventListener('submit', handleSignup);
+    forms.forgot.addEventListener('submit', handleForgotRequest);
+
+    if (localStorage.getItem('theme') === 'dark') document.body.classList.add('dark-mode');
+    showForm('login');
+    checkAuth();
+  </script>
 </body>
 </html>
