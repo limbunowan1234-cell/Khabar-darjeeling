@@ -1,15 +1,16 @@
 async function load(){
   try{
-    const res = await window.databases.listDocuments('Khabar_db','articles',[
-      window.Query.equal('status','approved'),
-      window.Query.orderDesc('$createdAt'),
-      window.Query.limit(20)
-    ]);
-    const arts = res.documents||[];
-    document.getElementById('breakingTicker').textContent = arts.map(a=>a.title).slice(0,3).join(' • ') || 'No news';
-    document.getElementById('newsGrid').innerHTML = arts.map(a=>`<div style="padding:10px;border-bottom:1px solid #eee"><b>${a.title}</b><br>${(a.content||'').substring(0,80)}...</div>`).join('');
+    const url = `${window.ENDPOINT}/databases/Khabar_db/collections/articles/documents?limit=20`;
+    const res = await fetch(url, { headers: { 'X-Appwrite-Project': 'khabardarjeeling' }});
+    const data = await res.json();
+    console.log('Appwrite response:', data);
+    
+    const arts = data.documents || [];
+    document.getElementById('breakingTicker').textContent = arts.length ? arts[0].title : 'Found '+arts.length+' docs (check status field)';
+    document.getElementById('newsGrid').innerHTML = arts.map(a=>`<div style="padding:10px;border-bottom:1px solid #eee"><b>${a.title}</b></div>`).join('');
   }catch(e){
-    document.getElementById('breakingTicker').textContent = 'Error: '+e.message;
+    document.getElementById('breakingTicker').textContent = 'Fetch error: '+e;
+    console.error(e);
   }
 }
 document.addEventListener('DOMContentLoaded', load);
