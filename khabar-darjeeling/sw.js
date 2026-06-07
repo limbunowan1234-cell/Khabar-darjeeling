@@ -1,12 +1,12 @@
-const CACHE_NAME = 'khabar-v5';
+const CACHE_NAME = 'khabar-v6'; // <-- bump this every deploy
 
 const STATIC_ASSETS = [
   '/',
   '/index.html',
   '/manifest.json',
+  '/assets/logo.png',
   '/css/style.css',
-  '/css/responsive.css',
-  '/assets/logo.png'
+  '/css/responsive.css'
 ];
 
 self.addEventListener('install', (event) => {
@@ -34,34 +34,34 @@ self.addEventListener('fetch', (event) => {
   const request = event.request;
   const url = new URL(request.url);
 
-  // Only handle same-origin GET requests
+  // Only handle same-origin GET
   if (request.method !== 'GET' || url.origin !== self.location.origin) {
     return;
   }
 
-  // Let page navigations go straight to network, fallback to cached index.html only if offline
-  if (request.mode === 'navigate') {
+  // 1. HTML pages & JS — NETWORK FIRST (always get your new code)
+  if (request.mode === 'navigate' || url.pathname.endsWith('.js') || url.pathname.endsWith('.html')) {
     event.respondWith(
-      fetch(request).catch(() => caches.match('/index.html'))
+      fetch(request)
+        .then((response) => {
+          // update cache in background
+          const clone = response.clone();
+          caches.open(CACHE_NAME).then(cache => cache.put(request, clone));
+          return response;
+        })
+        .catch(() => caches.match(request).then(r => r || caches.match('/index.html')))
     );
     return;
   }
 
-  // Cache-first for local static assets only
+  // 2. CSS, images, fonts — CACHE FIRST (fast)
   event.respondWith(
     caches.match(request).then((cached) => {
-      if (cached) return cached;
-
-      return fetch(request).then((response) => {
-        if (!response || response.redirected || response.status !== 200) {
-          return response;
+      return cached || fetch(request).then((response) => {
+        if (response && response.status === 200) {
+          const clone = response.clone();
+          caches.open(CACHE_NAME).then(cache => cache.put(request, clone));
         }
-
-        const responseClone = response.clone();
-        caches.open(CACHE_NAME).then((cache) => {
-          cache.put(request, responseClone);
-        });
-
         return response;
       });
     })
