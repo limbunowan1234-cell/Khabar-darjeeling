@@ -1,63 +1,95 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Khabar Darjeeling</title>
-<style>
-body{font-family:sans-serif;margin:0;background:#f5f5f5}
-.nav{background:#fff;padding:12px;border-bottom:1px solid #ddd;display:flex;justify-content:space-between;align-items:center}
-.logo{color:#c41e3a;font-weight:700;font-size:20px;text-decoration:none}
-.login{background:#c41e3a;color:#fff;padding:6px 14px;border-radius:4px;text-decoration:none}
-.breaking{background:#c41e3a;color:#fff;padding:8px 12px}
-main{max-width:900px;margin:auto;padding:16px}
-.card{background:#fff;padding:14px;margin-bottom:12px;border-radius:6px;box-shadow:0 1px 3px rgba(0,0,0,.08)}
-</style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Khabar Darjeeling - खबर दार्जिलिंग</title>
+  <link rel="stylesheet" href="css/style.css?v=501">
+  <link rel="stylesheet" href="css/responsive.css?v=501">
+  <style>
+    /* fallback if your css is missing */
+    #gatekeeperLoader{position:fixed;inset:0;background:#fff;display:flex;align-items:center;justify-content:center;z-index:9999;font-family:sans-serif}
+  </style>
 </head>
 <body>
-<div id="loader" style="position:fixed;inset:0;background:#fff;display:flex;align-items:center;justify-content:center;z-index:99">Loading...</div>
+  <div id="gatekeeperLoader">Loading Khabar Darjeeling...</div>
 
-<div class="nav">
-  <a href="/" class="logo">खबर दार्जिलिंग</a>
-  <a href="login.html" class="login">Login</a>
-</div>
+  <nav class="navbar">
+    <div class="container nav-inner">
+      <a href="index.html" class="logo">खबर दार्जिलिंग</a>
+      <div id="authButtons">
+        <a href="login.html" class="btn-login">Login</a>
+      </�div>
+    </div>
+  </nav>
 
-<div class="breaking"><b>Breaking:</b> <span id="ticker">Loading...</span></div>
+  <div class="breaking-news">
+    <div class="container breaking-inner">
+      <span class="breaking-label">Breaking</span>
+      <div id="breakingTicker" class="ticker">Loading news...</div>
+    </div>
+  </div>
 
-<main>
-  <div id="featured"></div>
-  <div id="list"></div>
-</main>
+  <main class="container main-wrapper">
+    <section id="featuredStory" class="featured-section"></section>
+    <section id="newsGrid" class="news-grid"></section>
+  </main>
 
 <script>
 const ENDPOINT='https://nyc.cloud.appwrite.io/v1';
 const PROJECT='khabardarjeeling';
+const DB='Khabar_db';
+const COL='articles';
 
-(async()=>{
-  try{
-    // THIS is the exact query that gave you 10 docs before
-    const q1=encodeURIComponent('orderDesc("$createdAt")');
-    const q2=encodeURIComponent('limit(20)');
-    const url=`${ENDPOINT}/databases/Khabar_db/collections/articles/documents?queries[]=${q1}&queries[]=${q2}`;
+function img(id){ return id ? `${ENDPOINT}/storage/buckets/article-image/files/${id}/view?project=${PROJECT}` : ''; }
 
-    const r=await fetch(url,{headers:{'X-Appwrite-Project':PROJECT}});
-    const data=await r.json();
-    const arts=data.documents||[];
+async function loadNews(){
+  const q1=encodeURIComponent('orderDesc("$createdAt")');
+  const q2=encodeURIComponent('limit(20)');
+  const url=`${ENDPOINT}/databases/${DB}/collections/${COL}/documents?queries[]=${q1}&queries[]=${q2}`;
+  
+  const res=await fetch(url,{headers:{'X-Appwrite-Project':PROJECT}});
+  const data=await res.json();
+  const arts=data.documents||[];
 
-    document.getElementById('loader').remove();
-    document.getElementById('ticker').textContent = arts.map(a=>a.title).slice(0,3).join(' • ') || 'No articles found';
+  // remove loader
+  document.getElementById('gatekeeperLoader')?.remove();
 
-    if(arts[0]){
-      const f=arts[0];
-      document.getElementById('featured').innerHTML=`<div class="card"><h2>${f.title}</h2><p>${(f.content||'').substring(0,200)}...</p></div>`;
-    }
-    document.getElementById('list').innerHTML=arts.slice(1).map(a=>`<div class="card"><h3>${a.title}</h3><p>${(a.content||'').substring(0,120)}...</p></div>`).join('');
+  // breaking ticker
+  document.getElementById('breakingTicker').textContent = arts.slice(0,5).map(a=>a.title).join(' • ');
 
-    console.log('Loaded', arts.length, 'articles'); // you should see 10
-  }catch(e){
-    document.getElementById('ticker').textContent='Fetch error: '+e;
-    document.getElementById('loader').remove();
+  // featured
+  const f=arts[0];
+  if(f){
+    document.getElementById('featuredStory').innerHTML = `
+      <article class="featured-card">
+        ${f.imageFileId?`<div class="featured-img"><img src="${img(f.imageFileId)}" alt="${f.title}" loading="eager" onerror="this.parentElement.remove()"></div>`:''}
+        <div class="featured-body">
+          <span class="category">${f.category||'Darjeeling'}</span>
+          <h1>${f.title}</h1>
+          <div class="meta">${f.location||''} • ${new Date(f.$createdAt).toLocaleDateString('en-IN',{day:'numeric',month:'short'})}</div>
+          <p>${(f.content||'').substring(0,220)}...</p>
+        </div>
+      </article>`;
   }
-})();
+
+  // grid
+  document.getElementById('newsGrid').innerHTML = arts.slice(1).map(a=>`
+    <article class="news-card">
+      ${a.imageFileId?`<img src="${img(a.imageFileId)}" alt="" loading="lazy" onerror="this.remove()">`:''}
+      <div class="card-body">
+        <h3>${a.title}</h3>
+        <p class="excerpt">${(a.content||'').substring(0,110)}...</p>
+        <span class="time">${new Date(a.$createdAt).toLocaleDateString('en-IN')}</span>
+      </div>
+    </article>
+  `).join('');
+}
+
+loadNews().catch(e=>{
+  document.getElementById('breakingTicker').textContent='Error loading news';
+  document.getElementById('gatekeeperLoader')?.remove();
+});
 </script>
 </body>
 </html>
