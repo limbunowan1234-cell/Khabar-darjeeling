@@ -3,157 +3,24 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="description" content="Khabar Darjeeling - Latest news from Darjeeling, Kalimpong, Kurseong, Mirik, Siliguri and West Bengal" />
-  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
-  <meta http-equiv="Pragma" content="no-cache" />
-  <meta http-equiv="Expires" content="0" />
-  <link rel="manifest" href="manifest.json" />
-  <meta name="theme-color" content="#c41e3a" />
-  <meta name="mobile-web-app-capable" content="yes" />
-  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
-  <meta name="apple-mobile-web-app-title" content="Khabar Darjeeling" />
-  <link rel="icon" type="image/png" href="assets/logo.png" />
-  <link rel="apple-touch-icon" href="assets/logo.png" />
-  <title>Khabar Darjeeling - Test Home</title>
-
-  <link rel="stylesheet" href="css/style.css?v=126" />
-  <link rel="stylesheet" href="css/responsive.css?v=126" />
-
+  <title>Appwrite SDK Test</title>
   <style>
-    .breaking-ticker{background:#c41e3a;color:#fff;padding:8px 0}
-    .breaking-label{background:#900;padding:8px 15px;font-weight:700;font-size:14px;white-space:nowrap}
-    .ticker-content a{color:#fff;text-decoration:none;display:inline-block;padding:0 40px;font-weight:500}
-    .theme-toggle{background:none;border:none;font-size:20px;cursor:pointer;padding:5px;border-radius:50%;transition:transform .3s;line-height:1}
-    .theme-toggle:hover{transform:rotate(20deg)}
-    .interaction-bar{display:flex;gap:12px;align-items:center;flex-wrap:wrap;margin-top:10px;padding-top:10px;border-top:1px solid #eee;font-size:13px}
-    .interaction-btn{border:none;background:#f4f4f4;color:#333;padding:7px 10px;border-radius:999px;cursor:pointer;font:inherit;display:inline-flex;align-items:center;gap:6px}
-    .interaction-btn.active{background:#c41e3a;color:#fff}
-    .interaction-link{color:#c41e3a;text-decoration:none;font-weight:600}
-    .news-card{background:#fff;border-radius:8px;overflow:hidden;box-shadow:0 2px 10px rgba(0,0,0,0.06);display:flex;flex-direction:column}
-    .news-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:20px}
-    .top-lists-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:20px}
-    .top-list-card{background:#fff;border-radius:8px;padding:20px;box-shadow:0 2px 8px rgba(0,0,0,.05)}
-    .top-list-item{display:flex;gap:12px;padding:12px 0;border-bottom:1px solid #eee;text-decoration:none;color:inherit}
-    .top-rank{font-size:20px;font-weight:700;color:#c41e3a;min-width:25px}
-    .user-search-wrapper{position:relative}
-    #userSearchResults{position:absolute;top:100%;left:0;right:0;background:#fff;border:1px solid #ddd;border-radius:6px;margin-top:5px;display:none;max-height:300px;overflow-y:auto;z-index:1000;box-shadow:0 4px 12px rgba(0,0,0,0.1)}
+    body{font-family:Arial,sans-serif;padding:30px}
+    .ok{color:green;font-weight:700}
+    .bad{color:red;font-weight:700}
   </style>
 </head>
 <body>
-  <div id="gatekeeperLoader" style="position:fixed;inset:0;background:#fff;z-index:99999;display:flex;flex-direction:column;justify-content:center;align-items:center;font-family:sans-serif;transition:opacity .3s ease;">
-    <div style="width:40px;height:40px;border:4px solid rgba(196,30,58,.1);border-left-color:#c41e3a;border-radius:50%;animation:spin 1s linear infinite;margin-bottom:15px"></div>
-    <p style="font-weight:600;letter-spacing:.5px">Loading News...</p>
-  </div>
-
-  <nav class="navbar">
-    <div class="container">
-      <div class="navbar-content">
-        <div class="logo">
-          <a href="index.html" style="display:flex;align-items:center;text-decoration:none;gap:12px;">
-            <img src="assets/logo.png" alt="Khabar Darjeeling Logo" style="height:55px;width:55px;object-fit:cover;border-radius:50%;flex-shrink:0;">
-            <div>
-              <h1 style="font-size:24px;color:var(--primary-color);margin:0;line-height:1.2;">खबर दार्जिलिंग</h1>
-              <p class="tagline" style="margin:0;font-size:11px;color:var(--text-light);font-weight:500;">Hamro Khabar, Hami Lekhaw</p>
-            </div>
-          </a>
-        </div>
-
-        <div class="nav-toggle" id="navToggle"><span></span><span></span><span></span></div>
-
-        <div class="nav-menu" id="navMenu">
-          <ul class="nav-links">
-            <li><a href="index.html" class="active">Home</a></li>
-            <li><a href="latest.html">Latest</a></li>
-            <li><a href="post.html">Create Post</a></li>
-            <li id="mobileAuthContainer"></li>
-          </ul>
-        </div>
-
-        <div class="nav-right" style="display:flex;gap:12px;align-items:center;flex-wrap:wrap;">
-          <div class="user-search-wrapper">
-            <input type="text" id="userSearch" placeholder="Search users..." autocomplete="off" aria-label="Search users" />
-            <div id="userSearchResults"></div>
-          </div>
-          <input type="text" id="searchInput" placeholder="Search news..." class="search-input" />
-          <button class="theme-toggle" id="themeToggle" aria-label="Toggle dark mode">🌙</button>
-          <div id="authButtons" style="display:flex;gap:8px;align-items:center;"></div>
-        </div>
-      </div>
-    </div>
-  </nav>
-
-  <section class="breaking-ticker" id="breakingTickerSection">
-    <div class="container" style="display:flex;align-items:center;">
-      <span class="breaking-label">BREAKING NEWS</span>
-      <marquee class="ticker-content" id="breakingTicker" scrollamount="5" onmouseover="this.stop()" onmouseout="this.start()" style="flex-grow:1;">Loading breaking news...</marquee>
-    </div>
-  </section>
-
-  <section class="hero" id="heroSection">
-    <div class="container">
-      <h2>Test Mode</h2>
-      <p>This is a clean Appwrite test page.</p>
-    </div>
-  </section>
-
-  <section class="featured-section" id="featuredSection">
-    <div class="container">
-      <h3 class="section-title">Featured Story</h3>
-      <div id="featuredStory" class="featured-card">Loading featured article...</div>
-    </div>
-  </section>
-
-  <section class="top-lists-section" id="topListsSection">
-    <div class="container">
-      <h3 class="section-title">Trending Posts</h3>
-      <div class="top-lists-grid">
-        <div class="top-list-card"><h4>Top Today</h4><div id="topDailyList">Loading...</div></div>
-        <div class="top-list-card"><h4>Top This Week</h4><div id="topWeeklyList">Loading...</div></div>
-        <div class="top-list-card"><h4>Top This Month</h4><div id="topMonthlyList">Loading...</div></div>
-      </div>
-    </div>
-  </section>
-
-  <section class="news-section" id="latestNewsSection">
-    <div class="container">
-      <h3 class="section-title" id="mainSectionTitle">Latest News</h3>
-      <div id="newsGrid" class="news-grid">Loading articles...</div>
-    </div>
-  </section>
-
-  <footer class="footer">
-    <div class="container"><div class="footer-bottom"><p>© 2026 Khabar Darjeeling. All rights reserved.</p></div></div>
-  </footer>
-
-  <script>
-    if ('serviceWorker' in navigator) {
-      window.addEventListener('load', () => navigator.serviceWorker.register('sw.js').catch(() => {}));
-    }
-  </script>
+  <h1>Appwrite SDK Test</h1>
+  <p id="status">Checking...</p>
 
   <script src="https://cdn.jsdelivr.net/npm/appwrite@14.0.1/dist/iife/sdk.min.js"></script>
   <script src="js/appwrite.js?v=126"></script>
-  <script src="js/index.js?v=126"></script>
-
   <script>
-    document.getElementById('themeToggle')?.addEventListener('click', function () {
-      document.body.classList.toggle('dark-mode');
-      const isDark = document.body.classList.contains('dark-mode');
-      localStorage.setItem('theme', isDark ? 'dark' : 'light');
-      this.textContent = isDark ? '☀' : '🌙';
-    });
-
-    const navToggle = document.getElementById('navToggle');
-    const navMenu = document.getElementById('navMenu');
-    if (navToggle && navMenu) {
-      navToggle.addEventListener('click', () => navMenu.classList.toggle('active'));
-    }
-
-    if (localStorage.getItem('theme') === 'dark') {
-      document.body.classList.add('dark-mode');
-      const t = document.getElementById('themeToggle');
-      if (t) t.textContent = '☀';
-    }
+    const status = document.getElementById('status');
+    status.innerHTML = window.Appwrite
+      ? '<span class="ok">Appwrite loaded successfully.</span>'
+      : '<span class="bad">Appwrite NOT loaded.</span>';
   </script>
 </body>
 </html>
