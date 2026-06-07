@@ -12,7 +12,7 @@
   <title>My Profile - खबर दार्जिलिंग</title>
 
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="css/style.css?v=122" />
+  <link rel="stylesheet" href="css/style.css?v=123" />
   <style>
     :root {
       --primary: #c41e3a;
@@ -26,7 +26,7 @@
       --bg: #121212;
       --card: #1d1d1d;
       --text: #f4f4f4;
-      --muted: #b4b4b4;
+      --muted: #b4b4;
       --border: #2c2c2c;
       background: var(--bg);
       color: var(--text);
@@ -37,12 +37,12 @@
       background: var(--bg);
       color: var(--text);
     }
- .wrap {
+.wrap {
       max-width: 900px;
       margin: 0 auto;
       padding: 16px;
     }
- .topbar {
+.topbar {
       display: flex;
       justify-content: space-between;
       align-items: center;
@@ -53,16 +53,20 @@
       top: 0;
       z-index: 10;
     }
- .brand {
+.brand {
       font-weight: 700;
       color: var(--primary);
       font-size: 20px;
+      text-decoration: none;
     }
- .topbar-actions {
+.brand:hover {
+      opacity: 0.8;
+    }
+.topbar-actions {
       display: flex;
       gap: 8px;
     }
- .btn {
+.btn {
       border: none;
       background: var(--primary);
       color: #fff;
@@ -74,14 +78,14 @@
       font-size: 14px;
       font-family: inherit;
     }
- .btn.secondary {
+.btn.secondary {
       background: #666;
     }
- .btn:disabled {
+.btn:disabled {
       opacity: 0.6;
       cursor: not-allowed;
     }
- .card {
+.card {
       background: var(--card);
       border: 1px solid var(--border);
       border-radius: 16px;
@@ -89,14 +93,14 @@
       box-shadow: 0 4px 18px rgba(0,0,0,0.05);
       margin-top: 18px;
     }
- .cover {
+.cover {
       height: 180px;
       background: linear-gradient(135deg, #c41e3a, #8b1025);
       background-size: cover;
       background-position: center;
       position: relative;
     }
- .avatar {
+.avatar {
       width: 120px;
       height: 120px;
       border-radius: 50%;
@@ -115,7 +119,7 @@
       color: #fff;
       background-color: var(--primary);
     }
- .edit-profile-btn {
+.edit-profile-btn {
       position: absolute;
       right: 16px;
       top: 16px;
@@ -129,74 +133,77 @@
       font-weight: 600;
       backdrop-filter: blur(10px);
     }
- .content {
+.content {
       padding: 76px 24px;
     }
- .name {
+.name {
       font-size: 30px;
       font-weight: 800;
       margin: 0 0 6px;
     }
- .username {
+.username {
       color: var(--muted);
       margin: 0 0 12px;
       font-size: 16px;
     }
- .joined {
+.joined {
       color: var(--muted);
       font-size: 14px;
       margin-bottom: 18px;
     }
- .bio {
+.bio {
       line-height: 1.6;
       font-size: 16px;
       white-space: pre-wrap;
       margin-bottom: 20px;
     }
- .stats-grid {
+.stats-grid {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
       gap: 12px;
       margin: 20px 0;
     }
- .stat-box {
+.stat-box {
       padding: 16px;
       border: 1px solid var(--border);
       border-radius: 12px;
       background: rgba(196, 30, 58, 0.04);
       text-align: center;
     }
- .stat-number {
+.stat-number {
       font-size: 26px;
       font-weight: 800;
       color: var(--primary);
       margin-bottom: 4px;
     }
- .stat-label {
+.stat-label {
       font-size: 12px;
       color: var(--muted);
       text-transform: uppercase;
       letter-spacing:.04em;
     }
- .section-title {
+.section-title {
       font-size: 20px;
       font-weight: 700;
       margin: 30px 0 15px;
     }
- .article-item {
+.article-item {
       padding: 15px;
       border: 1px solid var(--border);
       border-radius: 12px;
       margin-bottom: 12px;
       background: rgba(0,0,0,0.01);
     }
- .article-info a {
+.article-info a {
       text-decoration: none;
       color: var(--primary);
       font-weight: 600;
       font-size: 16px;
     }
- .article-stats {
+.article-info a:hover {
+      text-decoration: underline;
+    }
+.article-stats {
       font-size: 13px;
       color: var(--muted);
       margin-top: 5px;
@@ -204,13 +211,13 @@
       gap: 15px;
       flex-wrap: wrap;
     }
- .share-buttons {
+.share-buttons {
       display: flex;
       gap: 8px;
       margin-top: 10px;
       flex-wrap: wrap;
     }
- .share-btn {
+.share-btn {
       padding: 6px 12px;
       border: 1px solid var(--border);
       background: var(--card);
@@ -223,51 +230,61 @@
       gap: 5px;
       font-family: inherit;
     }
- .meta {
+.share-btn:hover {
+      background: var(--primary);
+      color: #fff;
+      border-color: var(--primary);
+    }
+.meta {
       display: grid;
       grid-template-columns: 1fr 1fr;
       gap: 12px;
       margin-top: 20px;
     }
- .box {
+.box {
       padding: 14px;
       border: 1px solid var(--border);
       border-radius: 12px;
       background: rgba(0,0,0,0.02);
     }
- .label {
+.label {
       font-size: 12px;
       color: var(--muted);
       margin-bottom: 4px;
       text-transform: uppercase;
       letter-spacing:.04em;
     }
- .value {
+.value {
       font-size: 15px;
       word-break: break-word;
     }
- .alert {
+.alert {
       padding: 14px 16px;
       border-radius: 10px;
       margin-top: 18px;
       display: none;
     }
- .alert.error {
+.alert.error {
       background: #ffe1e5;
       color: #8b1025;
       border: 1px solid #ffb9c5;
     }
- .alert.success {
+.alert.success {
       background: #d4edda;
       color: #155724;
       border: 1px solid #c3e6cb;
     }
- .loader {
+.alert.info {
+      background: #e7f3ff;
+      color: #0b4f8a;
+      border: 1px solid #b8dcff;
+    }
+.loader {
       padding: 60px 20px;
       text-align: center;
       color: var(--muted);
     }
- .modal {
+.modal {
       display: none;
       position: fixed;
       z-index: 1000;
@@ -278,12 +295,12 @@
       background: rgba(0,0,0,0.6);
       backdrop-filter: blur(4px);
     }
- .modal.active {
+.modal.active {
       display: flex;
       align-items: center;
       justify-content: center;
     }
- .modal-content {
+.modal-content {
       background: var(--card);
       padding: 24px;
       border-radius: 16px;
@@ -292,17 +309,17 @@
       max-height: 90vh;
       overflow-y: auto;
     }
- .modal-header {
+.modal-header {
       display: flex;
       justify-content: space-between;
       align-items: center;
       margin-bottom: 20px;
     }
- .modal-title {
+.modal-title {
       font-size: 22px;
       font-weight: 700;
     }
- .close-btn {
+.close-btn {
       background: none;
       border: none;
       font-size: 28px;
@@ -310,16 +327,16 @@
       color: var(--muted);
       line-height: 1;
     }
- .form-group {
+.form-group {
       margin-bottom: 16px;
     }
- .form-label {
+.form-label {
       display: block;
       margin-bottom: 6px;
       font-weight: 600;
       font-size: 14px;
     }
- .form-input,.form-textarea {
+.form-input,.form-textarea {
       width: 100%;
       padding: 10px 12px;
       border: 1px solid var(--border);
@@ -330,23 +347,23 @@
       font-size: 14px;
       box-sizing: border-box;
     }
- .form-textarea {
+.form-textarea {
       resize: vertical;
       min-height: 80px;
     }
- .file-input-wrapper {
+.file-input-wrapper {
       position: relative;
       display: inline-block;
       width: 100%;
     }
- .file-input {
+.file-input {
       position: absolute;
       opacity: 0;
       width: 100%;
       height: 100%;
       cursor: pointer;
     }
- .file-input-label {
+.file-input-label {
       display: block;
       padding: 10px 12px;
       border: 1px dashed var(--border);
@@ -356,7 +373,7 @@
       color: var(--muted);
       font-size: 13px;
     }
- .preview-img {
+.preview-img {
       width: 100%;
       max-height: 200px;
       object-fit: cover;
@@ -364,23 +381,23 @@
       margin-top: 8px;
       display: none;
     }
- .modal-actions {
+.modal-actions {
       display: flex;
       gap: 10px;
       margin-top: 20px;
     }
     @media (max-width: 640px) {
- .meta { grid-template-columns: 1fr; }
- .avatar { width: 96px; height: 96px; bottom: -48px; }
- .content { padding-top: 62px; }
- .name { font-size: 24px; }
- .stats-grid { grid-template-columns: 1fr 1fr; }
+.meta { grid-template-columns: 1fr; }
+.avatar { width: 96px; height: 96px; bottom: -48px; }
+.content { padding-top: 62px; }
+.name { font-size: 24px; }
+.stats-grid { grid-template-columns: 1fr 1fr; }
     }
   </style>
 </head>
 <body>
   <div class="topbar">
-    <div class="brand">खबर दार्जिलिंग</div>
+    <a class="brand" href="index.html">खबर दार्जिलिंग</a>
     <div class="topbar-actions">
       <a class="btn secondary" href="index.html">Home</a>
       <a class="btn" href="post.html">Create Post</a>
@@ -491,13 +508,28 @@
   </div>
 
   <script src="https://cdn.jsdelivr.net/npm/appwrite@14.0.1/dist/iife/sdk.min.js"></script>
-  <script src="js/appwrite.js?v=122"></script>
+  <script src="js/appwrite.js?v=123"></script>
   <script>
     document.addEventListener('DOMContentLoaded', async () => {
       console.log('[Profile] DOM loaded');
 
-      // Wait for appwrite.js
       if (window.AppwriteReady) await window.AppwriteReady;
+
+      if (!window.account ||!window.databases ||!window.storage) {
+        document.getElementById('alertBox').textContent = 'Appwrite not initialized. Check js/appwrite.js';
+        document.getElementById('alertBox').className = 'alert error';
+        document.getElementById('alertBox').style.display = 'block';
+        document.getElementById('loader').style.display = 'none';
+        return;
+      }
+
+      const { account, databases, storage, ID, Query } = window;
+      const DB_ID = window.APPWRITE_DB_ID;
+      const ARTICLES_COLLECTION = window.APPWRITE_COLLECTION_ID;
+      const PROFILES_COLLECTION = 'profiles';
+      const LIKES_COLLECTION = 'likes';
+      const COMMENTS_COLLECTION = 'comments';
+      const BUCKET_ID = window.APPWRITE_BUCKET_ID;
 
       const els = {
         alertBox: document.getElementById('alertBox'),
@@ -537,21 +569,6 @@
           setTimeout(() => els.alertBox.style.display = 'none', 3000);
         }
       }
-
-      // Use objects from appwrite.js
-      if (!window.account ||!window.databases ||!window.storage) {
-        showAlert('Appwrite not initialized. Check js/appwrite.js', 'error');
-        els.loader.style.display = 'none';
-        return;
-      }
-
-      const { account, databases, storage, ID, Query } = window;
-      const DB_ID = window.APPWRITE_DB_ID;
-      const ARTICLES_COLLECTION = window.APPWRITE_COLLECTION_ID;
-      const PROFILES_COLLECTION = 'profiles';
-      const LIKES_COLLECTION = 'likes';
-      const COMMENTS_COLLECTION = 'comments';
-      const BUCKET_ID = window.APPWRITE_BUCKET_ID;
 
       let currentProfile = null;
       let currentUser = null;
@@ -626,12 +643,31 @@
             els.cover.style.backgroundImage = `url('${currentProfile.coverUrl}')`;
           }
 
-          const articles = await databases.listDocuments(DB_ID, ARTICLES_COLLECTION, [
-            Query.equal('submitterId', currentUser.$id),
-            Query.equal('status', 'published'),
-            Query.orderDesc('$createdAt'),
-            Query.limit(100)
-          ]);
+          // Load articles - FIXED: Handle both submitterId and authorId
+          let articles;
+          try {
+            articles = await databases.listDocuments(DB_ID, ARTICLES_COLLECTION, [
+              Query.equal('submitterId', currentUser.$id),
+              Query.equal('status', 'published'),
+              Query.orderDesc('$createdAt'),
+              Query.limit(100)
+            ]);
+          } catch (e1) {
+            console.warn('[Profile] submitterId query failed, trying authorId:', e1.message);
+            try {
+              articles = await databases.listDocuments(DB_ID, ARTICLES_COLLECTION, [
+                Query.equal('authorId', currentUser.$id),
+                Query.equal('status', 'published'),
+                Query.orderDesc('$createdAt'),
+                Query.limit(100)
+              ]);
+            } catch (e2) {
+              console.warn('[Profile] authorId query failed:', e2.message);
+              articles = { total: 0, documents: [] };
+            }
+          }
+
+          console.log('[Profile] Articles found:', articles.total, articles.documents);
 
           let totalViews = 0;
           articles.documents.forEach(a => totalViews += (a.views || 0));
@@ -670,22 +706,27 @@
           if (articles.documents.length === 0) {
             els.userArticles.innerHTML = '<p style="color:var(--muted);padding:20px;text-align:center;">No articles published yet.</p>';
           } else {
-            els.userArticles.innerHTML = articles.documents.map(a => `
-              <div class="article-item">
-                <div class="article-info">
-                  <a href="article.html?id=${a.$id}">${a.title}</a>
-                  <div class="article-stats">
-                    ${formatDate(a.$createdAt)} • ${a.views || 0} views • ${a.category || 'General'}
-                  </div>
-                  <div class="share-buttons">
-                    <button class="share-btn" onclick="shareArticle('${a.$id}', '${a.title.replace(/'/g, "\\'")}', 'whatsapp')">📱 WhatsApp</button>
-                    <button class="share-btn" onclick="shareArticle('${a.$id}', '${a.title.replace(/'/g, "\\'")}', 'facebook')">📘 Facebook</button>
-                    <button class="share-btn" onclick="shareArticle('${a.$id}', '${a.title.replace(/'/g, "\\'")}', 'twitter')">🐦 Twitter</button>
-                    <button class="share-btn" onclick="shareArticle('${a.$id}', '${a.title.replace(/'/g, "\\'")}', 'native')">🔗 Share</button>
+            try {
+              els.userArticles.innerHTML = articles.documents.map(a => `
+                <div class="article-item">
+                  <div class="article-info">
+                    <a href="article.html?id=${a.$id}">${a.title || 'Untitled'}</a>
+                    <div class="article-stats">
+                      ${formatDate(a.$createdAt)} • ${a.views || 0} views • ${a.category || 'General'}
+                    </div>
+                    <div class="share-buttons">
+                      <button class="share-btn" onclick="shareArticle('${a.$id}', '${(a.title || '').replace(/'/g, "\\'")}', 'whatsapp')">📱 WhatsApp</button>
+                      <button class="share-btn" onclick="shareArticle('${a.$id}', '${(a.title || '').replace(/'/g, "\\'")}', 'facebook')">📘 Facebook</button>
+                      <button class="share-btn" onclick="shareArticle('${a.$id}', '${(a.title || '').replace(/'/g, "\\'")}', 'twitter')">🐦 Twitter</button>
+                      <button class="share-btn" onclick="shareArticle('${a.$id}', '${(a.title || '').replace(/'/g, "\\'")}', 'native')">🔗 Share</button>
+                    </div>
                   </div>
                 </div>
-              </div>
-            `).join('');
+              `).join('');
+            } catch (renderErr) {
+              console.error('[Profile] Article render error:', renderErr);
+              els.userArticles.innerHTML = '<p style="color:var(--muted);padding:20px;text-align:center;">Error rendering articles. Check console.</p>';
+            }
           }
 
           els.loader.style.display = 'none';
