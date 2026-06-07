@@ -4,30 +4,29 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Khabar Darjeeling</title>
-  <link rel="stylesheet" href="css/style.css?v=301" />
-  <link rel="stylesheet" href="css/responsive.css?v=301" />
+  <link rel="stylesheet" href="css/style.css?v=302" />
+  <link rel="stylesheet" href="css/responsive.css?v=302" />
 </head>
 <body>
   <div id="gatekeeperLoader">Loading...</div>
 
   <nav class="navbar">
-    <div class="container nav-container">
+    <div class="container">
       <a href="index.html" class="logo">खबर दार्जिलिंग</a>
       <div id="authButtons"></div>
     </div>
   </nav>
 
   <div class="breaking-ticker">
-    <span class="breaking-label">Breaking</span>
     <div id="breakingTicker">Loading news...</div>
   </div>
 
-  <main class="container main-content">
-    <section id="featuredStory"></section>
-    <section id="newsGrid" class="news-grid"></section>
+  <main class="container">
+    <div id="featuredStory"></div>
+    <div id="newsGrid"></div>
   </main>
 
-  <script src="js/appwrite-v3.js"></script>
-  <script src="js/index-v3.js"></script>
+  <script src="js/appwrite-v2.js?v=2"></script>
+  <script src="js/index-v2.js?v=2"></script>
 </body>
 </html>
