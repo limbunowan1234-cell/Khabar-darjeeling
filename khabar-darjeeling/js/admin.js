@@ -1,10 +1,10 @@
-// js/admin.js — CSP-clean FIXED for 'posts' collection
+// js/admin.js — USES YOUR REAL 'articles' COLLECTION
 (function () {
     const ADMIN_EMAIL = 'nowanad@gmail.com';
     const ENDPOINT = 'https://nyc.cloud.appwrite.io/v1';
     const PROJECT = 'khabardarjeeling';
     const DB = 'Khabar_db';
-    const COL = 'posts'; // <-- FIXED: was 'articles'
+    const COL = 'articles'; // <-- YOUR REAL COLLECTION
     const H = { 'X-Appwrite-Project': PROJECT };
 
     const loginForm = document.getElementById('loginForm');
@@ -105,8 +105,7 @@
                         <h3>${escapeHtml(a.title||'Untitled')}</h3>
                         <p style="margin:5px 0;font-size:13px;color:#666;">
                             <strong>Location:</strong> ${escapeHtml(a.location||'—')} |
-                            <strong>Author:</strong> ${escapeHtml(a.authorName||a.submitterName||'Anonymous')} |
-                            <strong>Category:</strong> ${escapeHtml(a.category||'general')}
+                            <strong>Author:</strong> ${escapeHtml(a.authorName||a.submitterName||'Anonymous')}
                         </p>
                         <p style="font-size:14px;">${escapeHtml((a.content||'').substring(0,150))}...</p>
                         <div style="margin-top:12px;display:flex;gap:15px;align-items:center;flex-wrap:wrap;border-top:1px solid #eee;padding-top:10px">
@@ -116,7 +115,7 @@
                         </div>
                     </div>
                 </div>
-            `).join('') || '<p style="padding:15px">No posts yet</p>';
+            `).join('') || '<p style="padding:15px">No articles yet</p>';
         }catch(e){ list.innerHTML=`<p style="color:red;padding:15px">Error: ${e.message}</p>`; }
     }
 
@@ -127,7 +126,7 @@
         await api(`/databases/${DB}/collections/${COL}/documents/${id}`,{
             method:'PATCH',
             headers:{'Content-Type':'application/json'},
-            body:JSON.stringify({data:{featured:checked}}) // <-- FIXED: was isFeatured
+            body:JSON.stringify({data:{featured:checked}})
         });
     };
 
