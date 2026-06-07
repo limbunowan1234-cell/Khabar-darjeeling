@@ -12,7 +12,7 @@
   <title>My Profile - खबर दार्जिलिंग</title>
 
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="css/style.css?v=118" />
+  <link rel="stylesheet" href="css/style.css?v=120" />
   <style>
     :root {
       --primary: #c41e3a;
@@ -37,12 +37,12 @@
       background: var(--bg);
       color: var(--text);
     }
-   .wrap {
+  .wrap {
       max-width: 900px;
       margin: 0 auto;
       padding: 16px;
     }
-   .topbar {
+  .topbar {
       display: flex;
       justify-content: space-between;
       align-items: center;
@@ -53,16 +53,16 @@
       top: 0;
       z-index: 10;
     }
-   .brand {
+  .brand {
       font-weight: 700;
       color: var(--primary);
       font-size: 20px;
     }
-   .topbar-actions {
+  .topbar-actions {
       display: flex;
       gap: 8px;
     }
-   .btn {
+  .btn {
       border: none;
       background: var(--primary);
       color: #fff;
@@ -74,10 +74,14 @@
       font-size: 14px;
       font-family: inherit;
     }
-   .btn.secondary {
+  .btn.secondary {
       background: #666;
     }
-   .card {
+  .btn:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
+  .card {
       background: var(--card);
       border: 1px solid var(--border);
       border-radius: 16px;
@@ -85,14 +89,14 @@
       box-shadow: 0 4px 18px rgba(0,0,0,0.05);
       margin-top: 18px;
     }
-   .cover {
+  .cover {
       height: 180px;
       background: linear-gradient(135deg, #c41e3a, #8b1025);
       background-size: cover;
       background-position: center;
       position: relative;
     }
-   .avatar {
+  .avatar {
       width: 120px;
       height: 120px;
       border-radius: 50%;
@@ -111,7 +115,7 @@
       color: #fff;
       background-color: var(--primary);
     }
-   .edit-profile-btn {
+  .edit-profile-btn {
       position: absolute;
       right: 16px;
       top: 16px;
@@ -125,80 +129,74 @@
       font-weight: 600;
       backdrop-filter: blur(10px);
     }
-   .content {
-      padding: 76px 24px 24px;
+  .content {
+      padding: 76px 24px;
     }
-   .name {
+  .name {
       font-size: 30px;
       font-weight: 800;
       margin: 0 0 6px;
     }
-   .username {
+  .username {
       color: var(--muted);
       margin: 0 0 12px;
       font-size: 16px;
     }
-   .joined {
+  .joined {
       color: var(--muted);
       font-size: 14px;
       margin-bottom: 18px;
     }
-   .bio {
+  .bio {
       line-height: 1.6;
       font-size: 16px;
       white-space: pre-wrap;
       margin-bottom: 20px;
     }
-   .stats-grid {
+  .stats-grid {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
       gap: 12px;
       margin: 20px 0;
     }
-   .stat-box {
+  .stat-box {
       padding: 16px;
       border: 1px solid var(--border);
       border-radius: 12px;
       background: rgba(196, 30, 58, 0.04);
       text-align: center;
     }
-    body.dark-mode.stat-box {
-      background: rgba(255, 255, 255, 0.03);
-    }
-   .stat-number {
+  .stat-number {
       font-size: 26px;
       font-weight: 800;
       color: var(--primary);
       margin-bottom: 4px;
     }
-   .stat-label {
+  .stat-label {
       font-size: 12px;
       color: var(--muted);
       text-transform: uppercase;
       letter-spacing:.04em;
     }
-   .section-title {
+  .section-title {
       font-size: 20px;
       font-weight: 700;
       margin: 30px 0 15px;
     }
-   .article-item {
+  .article-item {
       padding: 15px;
       border: 1px solid var(--border);
       border-radius: 12px;
       margin-bottom: 12px;
       background: rgba(0,0,0,0.01);
     }
-    body.dark-mode.article-item {
-      background: rgba(255,255,255,0.02);
-    }
-   .article-info a {
+  .article-info a {
       text-decoration: none;
       color: var(--primary);
       font-weight: 600;
       font-size: 16px;
     }
-   .article-stats {
+  .article-stats {
       font-size: 13px;
       color: var(--muted);
       margin-top: 5px;
@@ -206,13 +204,13 @@
       gap: 15px;
       flex-wrap: wrap;
     }
-   .share-buttons {
+  .share-buttons {
       display: flex;
       gap: 8px;
       margin-top: 10px;
       flex-wrap: wrap;
     }
-   .share-btn {
+  .share-btn {
       padding: 6px 12px;
       border: 1px solid var(--border);
       background: var(--card);
@@ -223,72 +221,53 @@
       display: inline-flex;
       align-items: center;
       gap: 5px;
-      transition: all 0.2s;
       font-family: inherit;
     }
-   .share-btn:hover {
-      background: var(--primary);
-      color: #fff;
-      border-color: var(--primary);
-    }
-   .meta {
+  .meta {
       display: grid;
       grid-template-columns: 1fr 1fr;
       gap: 12px;
       margin-top: 20px;
     }
-   .box {
+  .box {
       padding: 14px;
       border: 1px solid var(--border);
       border-radius: 12px;
       background: rgba(0,0,0,0.02);
     }
-    body.dark-mode.box {
-      background: rgba(255,255,255,0.03);
-    }
-   .label {
+  .label {
       font-size: 12px;
       color: var(--muted);
       margin-bottom: 4px;
       text-transform: uppercase;
       letter-spacing:.04em;
     }
-   .value {
+  .value {
       font-size: 15px;
       word-break: break-word;
     }
-   .alert {
+  .alert {
       padding: 14px 16px;
       border-radius: 10px;
       margin-top: 18px;
       display: none;
     }
-   .alert.error {
+  .alert.error {
       background: #ffe1e5;
       color: #8b1025;
       border: 1px solid #ffb9c5;
     }
-   .alert.info {
-      background: #e7f3ff;
-      color: #0b4f8a;
-      border: 1px solid #b8dcff;
-    }
-   .alert.success {
+  .alert.success {
       background: #d4edda;
       color: #155724;
       border: 1px solid #c3e6cb;
     }
-    body.dark-mode.alert.error {
-      background: #3a151c;
-      color: #ffb9c5;
-      border-color: #5a1d29;
-    }
-   .loader {
+  .loader {
       padding: 60px 20px;
       text-align: center;
       color: var(--muted);
     }
-   .modal {
+  .modal {
       display: none;
       position: fixed;
       z-index: 1000;
@@ -299,12 +278,12 @@
       background: rgba(0,0,0,0.6);
       backdrop-filter: blur(4px);
     }
-   .modal.active {
+  .modal.active {
       display: flex;
       align-items: center;
       justify-content: center;
     }
-   .modal-content {
+  .modal-content {
       background: var(--card);
       padding: 24px;
       border-radius: 16px;
@@ -313,17 +292,17 @@
       max-height: 90vh;
       overflow-y: auto;
     }
-   .modal-header {
+  .modal-header {
       display: flex;
       justify-content: space-between;
       align-items: center;
       margin-bottom: 20px;
     }
-   .modal-title {
+  .modal-title {
       font-size: 22px;
       font-weight: 700;
     }
-   .close-btn {
+  .close-btn {
       background: none;
       border: none;
       font-size: 28px;
@@ -331,16 +310,16 @@
       color: var(--muted);
       line-height: 1;
     }
-   .form-group {
+  .form-group {
       margin-bottom: 16px;
     }
-   .form-label {
+  .form-label {
       display: block;
       margin-bottom: 6px;
       font-weight: 600;
       font-size: 14px;
     }
-   .form-input,.form-textarea {
+  .form-input,.form-textarea {
       width: 100%;
       padding: 10px 12px;
       border: 1px solid var(--border);
@@ -351,23 +330,23 @@
       font-size: 14px;
       box-sizing: border-box;
     }
-   .form-textarea {
+  .form-textarea {
       resize: vertical;
       min-height: 80px;
     }
-   .file-input-wrapper {
+  .file-input-wrapper {
       position: relative;
       display: inline-block;
       width: 100%;
     }
-   .file-input {
+  .file-input {
       position: absolute;
       opacity: 0;
       width: 100%;
       height: 100%;
       cursor: pointer;
     }
-   .file-input-label {
+  .file-input-label {
       display: block;
       padding: 10px 12px;
       border: 1px dashed var(--border);
@@ -377,7 +356,7 @@
       color: var(--muted);
       font-size: 13px;
     }
-   .preview-img {
+  .preview-img {
       width: 100%;
       max-height: 200px;
       object-fit: cover;
@@ -385,35 +364,20 @@
       margin-top: 8px;
       display: none;
     }
-   .modal-actions {
+  .modal-actions {
       display: flex;
       gap: 10px;
       margin-top: 20px;
     }
-   .modal-actions.btn {
+  .modal-actions.btn {
       flex: 1;
     }
-    #debugPanel {
-      display: none;
-      background: #1e1e1e;
-      color: #0f0;
-      padding: 12px;
-      font-family: monospace;
-      font-size: 12px;
-      border-radius: 8px;
-      margin: 16px 0;
-      max-height: 300px;
-      overflow-y: auto;
-    }
-    #debugPanel.show {
-      display: block;
-    }
     @media (max-width: 640px) {
-     .meta { grid-template-columns: 1fr; }
-     .avatar { width: 96px; height: 96px; bottom: -48px; }
-     .content { padding-top: 62px; }
-     .name { font-size: 24px; }
-     .stats-grid { grid-template-columns: 1fr 1fr; }
+   .meta { grid-template-columns: 1fr; }
+   .avatar { width: 96px; height: 96px; bottom: -48px; }
+   .content { padding-top: 62px; }
+   .name { font-size: 24px; }
+   .stats-grid { grid-template-columns: 1fr 1fr; }
     }
   </style>
 </head>
@@ -429,7 +393,6 @@
 
   <div class="wrap">
     <div id="alertBox" class="alert"></div>
-    <div id="debugPanel"></div>
 
     <div class="card">
       <div id="cover" class="cover">
@@ -524,71 +487,40 @@
         </div>
         <div class="modal-actions">
           <button type="button" class="btn secondary" id="cancelEdit">Cancel</button>
-          <button type="submit" class="btn">Save Changes</button>
+          <button type="submit" class="btn" id="saveBtn">Save Changes</button>
         </div>
       </form>
     </div>
   </div>
 
   <script src="https://cdn.jsdelivr.net/npm/appwrite@14.0.1/dist/iife/sdk.min.js"></script>
-  <script src="js/appwrite.js?v=118"></script>
+  <script src="js/appwrite.js?v=120"></script>
   <script>
-    (() => {
-      const DEBUG = new URLSearchParams(window.location.search).get('debug') === '1';
-      const debugLog = (msg, data = '') => {
-        console.log(`[DEBUG] ${msg}`, data);
-        if (DEBUG) {
-          const panel = document.getElementById('debugPanel');
-          panel.classList.add('show');
-          panel.innerHTML += `<div>[${new Date().toLocaleTimeString()}] ${msg} ${data? JSON.stringify(data) : ''}</div>`;
-          panel.scrollTop = panel.scrollHeight;
-        }
-      };
+    document.addEventListener('DOMContentLoaded', () => {
+      console.log('[Profile] DOM loaded');
 
-      debugLog('Script start');
-
-      if (!window.Appwrite) {
-        debugLog('ERROR: Appwrite SDK not loaded');
-        document.getElementById('alertBox').textContent = 'Appwrite failed to load.';
+      // Check if Appwrite config exists BEFORE doing anything
+      if (!window.APPWRITE_ENDPOINT ||!window.APPWRITE_PROJECT_ID ||!window.APPWRITE_DB_ID) {
+        console.error('[Profile] Missing Appwrite config');
+        document.getElementById('alertBox').textContent = 'Appwrite config missing. Check js/appwrite.js';
         document.getElementById('alertBox').className = 'alert error';
         document.getElementById('alertBox').style.display = 'block';
+        document.getElementById('loader').style.display = 'none';
+        return;
+      }
+
+      if (!window.Appwrite) {
+        console.error('[Profile] Appwrite SDK not loaded');
+        document.getElementById('alertBox').textContent = 'Appwrite SDK failed to load';
+        document.getElementById('alertBox').className = 'alert error';
+        document.getElementById('alertBox').style.display = 'block';
+        document.getElementById('loader').style.display = 'none';
         return;
       }
 
       const { Client, Account, Databases, Storage, Query, ID } = window.Appwrite;
 
-      // Config check
-      debugLog('Config check', {
-        endpoint: window.APPWRITE_ENDPOINT,
-        project: window.APPWRITE_PROJECT_ID,
-        db: window.APPWRITE_DB_ID,
-        origin: window.location.origin
-      });
-
-      if (!window.APPWRITE_ENDPOINT ||!window.APPWRITE_PROJECT_ID ||!window.APPWRITE_DB_ID) {
-        debugLog('ERROR: Missing Appwrite config in appwrite.js');
-        showAlert('Appwrite config missing. Check js/appwrite.js', 'error');
-        return;
-      }
-
-      const client = new Client()
-       .setEndpoint(window.APPWRITE_ENDPOINT)
-       .setProject(window.APPWRITE_PROJECT_ID);
-
-      const account = new Account(client);
-      const databases = new Databases(client);
-      const storage = new Storage(client);
-
-      const DB_ID = window.APPWRITE_DB_ID;
-      const PROFILES_COLLECTION = 'profiles';
-      const ARTICLES_COLLECTION = 'articles';
-      const LIKES_COLLECTION = 'likes';
-      const COMMENTS_COLLECTION = 'comments';
-      const BUCKET_ID = 'article-image';
-
-      let currentProfile = null;
-      let currentUser = null;
-
+      // Define els AFTER we know Appwrite is ready
       const els = {
         alertBox: document.getElementById('alertBox'),
         loader: document.getElementById('loader'),
@@ -614,11 +546,12 @@
         editAvatar: document.getElementById('editAvatar'),
         editCover: document.getElementById('editCover'),
         avatarPreview: document.getElementById('avatarPreview'),
-        coverPreview: document.getElementById('coverPreview')
+        coverPreview: document.getElementById('coverPreview'),
+        saveBtn: document.getElementById('saveBtn')
       };
 
       function showAlert(message, type = 'info') {
-        debugLog(`Alert: ${type}`, message);
+        console.log(`[Alert ${type}]:`, message);
         els.alertBox.textContent = message;
         els.alertBox.className = `alert ${type}`;
         els.alertBox.style.display = 'block';
@@ -626,6 +559,24 @@
           setTimeout(() => els.alertBox.style.display = 'none', 3000);
         }
       }
+
+      const client = new Client()
+     .setEndpoint(window.APPWRITE_ENDPOINT)
+     .setProject(window.APPWRITE_PROJECT_ID);
+
+      const account = new Account(client);
+      const databases = new Databases(client);
+      const storage = new Storage(client);
+
+      const DB_ID = window.APPWRITE_DB_ID;
+      const PROFILES_COLLECTION = 'profiles';
+      const ARTICLES_COLLECTION = 'articles';
+      const LIKES_COLLECTION = 'likes';
+      const COMMENTS_COLLECTION = 'comments';
+      const BUCKET_ID = 'article-image';
+
+      let currentProfile = null;
+      let currentUser = null;
 
       function initials(name) {
         return (name || '?').split(' ').filter(Boolean).map(x => x[0]).join('').toUpperCase().slice(0, 2) || '?';
@@ -645,7 +596,6 @@
       function shareArticle(articleId, title, platform) {
         const url = `${window.location.origin}/article.html?id=${articleId}`;
         const text = `Check out: ${title}`;
-
         if (platform === 'whatsapp') {
           window.open(`https://wa.me/?text=${encodeURIComponent(text + ' ' + url)}`, '_blank');
         } else if (platform === 'facebook') {
@@ -661,20 +611,15 @@
       }
 
       async function loadProfile() {
-        debugLog('loadProfile() started');
-        await new Promise(r => setTimeout(r, 150));
-
+        console.log('[Profile] loadProfile() start');
         try {
-          debugLog('Step 1: account.get()');
           currentUser = await account.get();
-          debugLog('Step 1: Success', { userId: currentUser.$id });
+          console.log('[Profile] User:', currentUser.$id);
 
-          debugLog('Step 2: Fetching profile document');
           const result = await databases.listDocuments(DB_ID, PROFILES_COLLECTION, [
             Query.equal('userId', currentUser.$id),
             Query.limit(1)
           ]);
-          debugLog('Step 2: Result', { count: result.documents.length });
 
           if (!result.documents.length) {
             els.loader.style.display = 'none';
@@ -683,7 +628,6 @@
           }
 
           currentProfile = result.documents[0];
-          debugLog('Step 3: Profile loaded', { docId: currentProfile.$id });
 
           els.displayName.textContent = safeText(currentProfile.displayName);
           els.userName.textContent = '@' + safeText(currentProfile.userName);
@@ -704,48 +648,44 @@
             els.cover.style.backgroundImage = `url('${currentProfile.coverUrl}')`;
           }
 
-          debugLog('Step 4: Fetching articles');
           const articles = await databases.listDocuments(DB_ID, ARTICLES_COLLECTION, [
             Query.equal('submitterId', currentUser.$id),
             Query.equal('status', 'published'),
             Query.orderDesc('$createdAt'),
             Query.limit(100)
           ]);
-          debugLog('Step 4: Articles loaded', { total: articles.total });
 
           let totalViews = 0;
           articles.documents.forEach(a => totalViews += (a.views || 0));
           els.totalPosts.textContent = articles.total;
           els.totalViews.textContent = totalViews;
 
-          debugLog('Step 5: Calculating likes');
           let totalLikes = 0;
-          let likesErrors = 0;
-          for (const article of articles.documents) {
-            try {
-              const likes = await databases.listDocuments(DB_ID, LIKES_COLLECTION, [
-                Query.equal('articleId', article.$id),
-                Query.limit(1)
-              ]);
-              totalLikes += likes.total;
-            } catch (likeErr) {
-              likesErrors++;
-              debugLog('Likes fetch failed', { articleId: article.$id, error: likeErr.message });
+          try {
+            for (const article of articles.documents) {
+              try {
+                const likes = await databases.listDocuments(DB_ID, LIKES_COLLECTION, [
+                  Query.equal('articleId', article.$id),
+                  Query.limit(1)
+                ]);
+                totalLikes += likes.total;
+              } catch (e) {
+                console.warn('[Profile] Likes failed for', article.$id, e.message);
+              }
             }
+          } catch (e) {
+            console.warn('[Profile] Likes collection error:', e.message);
           }
           els.totalLikes.textContent = totalLikes;
-          debugLog('Step 5: Likes done', { totalLikes, errors: likesErrors });
 
-          debugLog('Step 6: Fetching comment count');
           try {
             const userComments = await databases.listDocuments(DB_ID, COMMENTS_COLLECTION, [
               Query.equal('userId', currentUser.$id),
               Query.limit(1)
             ]);
             els.totalComments.textContent = userComments.total;
-            debugLog('Step 6: Comments done', { total: userComments.total });
-          } catch (commentErr) {
-            debugLog('Step 6: Comments failed', { error: commentErr.message });
+          } catch (e) {
+            console.warn('[Profile] Comments failed:', e.message);
             els.totalComments.textContent = '0';
           }
 
@@ -772,22 +712,20 @@
 
           els.loader.style.display = 'none';
           els.profileBody.style.display = 'block';
-          debugLog('SUCCESS: Profile rendered');
+          console.log('[Profile] Render complete');
 
         } catch (error) {
-          debugLog('FATAL ERROR in loadProfile', {
-            message: error?.message,
-            code: error?.code,
-            type: error?.type,
-            stack: error?.stack
-          });
+          console.error('[Profile] Fatal error:', error);
           els.loader.style.display = 'none';
-          showAlert(`Error: ${error?.message || 'Failed to load profile'}. Check console.`, 'error');
+          showAlert(`Error: ${error?.message || 'Failed to load profile'}`, 'error');
         }
       }
 
-      // Edit Profile Modal Logic
       document.getElementById('editProfileBtn').addEventListener('click', () => {
+        if (!currentProfile) {
+          showAlert('Profile not loaded yet', 'error');
+          return;
+        }
         els.editDisplayName.value = currentProfile.displayName || '';
         els.editUserName.value = currentProfile.userName || '';
         els.editBio.value = currentProfile.bio || '';
@@ -822,27 +760,29 @@
 
       els.editForm.addEventListener('submit', async (e) => {
         e.preventDefault();
-        debugLog('Edit form submit');
+        console.log('[Profile] Save clicked');
+        els.saveBtn.disabled = true;
+        els.saveBtn.textContent = 'Saving...';
 
         try {
           let avatarUrl = currentProfile.avatarUrl;
           let coverUrl = currentProfile.coverUrl;
 
           if (els.editAvatar.files[0]) {
-            debugLog('Uploading avatar');
+            console.log('[Profile] Uploading avatar...');
             const avatarFile = await storage.createFile(BUCKET_ID, ID.unique(), els.editAvatar.files[0]);
             avatarUrl = storage.getFileView(BUCKET_ID, avatarFile.$id).href;
-            debugLog('Avatar uploaded', { url: avatarUrl });
+            console.log('[Profile] Avatar uploaded:', avatarUrl);
           }
 
           if (els.editCover.files[0]) {
-            debugLog('Uploading cover');
+            console.log('[Profile] Uploading cover...');
             const coverFile = await storage.createFile(BUCKET_ID, ID.unique(), els.editCover.files[0]);
             coverUrl = storage.getFileView(BUCKET_ID, coverFile.$id).href;
-            debugLog('Cover uploaded', { url: coverUrl });
+            console.log('[Profile] Cover uploaded:', coverUrl);
           }
 
-          debugLog('Updating profile doc');
+          console.log('[Profile] Updating document...');
           await databases.updateDocument(DB_ID, PROFILES_COLLECTION, currentProfile.$id, {
             displayName: els.editDisplayName.value,
             userName: els.editUserName.value,
@@ -855,32 +795,27 @@
           els.editModal.classList.remove('active');
           setTimeout(() => location.reload(), 1000);
         } catch (error) {
-          debugLog('Edit error', { message: error?.message, code: error?.code });
-          showAlert(error?.message || 'Failed to update profile', 'error');
+          console.error('[Profile] Save error:', error);
+          showAlert(`Upload failed: ${error?.message || 'Check bucket permissions'}`, 'error');
+        } finally {
+          els.saveBtn.disabled = false;
+          els.saveBtn.textContent = 'Save Changes';
         }
       });
 
-      // Logout
       document.getElementById('logoutBtn').addEventListener('click', async () => {
         if (!confirm('Sign out?')) return;
         try {
-          debugLog('Logging out');
           await account.deleteSession('current');
           window.location.href = 'login.html';
         } catch (error) {
-          debugLog('Logout error', { message: error?.message });
           showAlert('Failed to sign out', 'error');
         }
       });
 
       window.shareArticle = shareArticle;
-
-      if (document.readyState === 'loading') {
-        document.addEventListener('DOMContentLoaded', loadProfile);
-      } else {
-        loadProfile();
-      }
-    })();
+      loadProfile();
+    });
   </script>
 </body>
 </html>
