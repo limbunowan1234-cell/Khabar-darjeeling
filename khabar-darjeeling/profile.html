@@ -7,10 +7,10 @@
   <link rel="icon" type="image/png" href="assets/logo.png">
   <title>Profile - खबर दार्जिलिंग</title>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="css/style.css?v=126" />
+  <link rel="stylesheet" href="css/style.css?v=127" />
   <style>
-    :root { --primary: #c41e3a; --bg: #f6f6f6; --card: #ffffff; --text: #222; --muted: #666; --border: #e7e7; }
-    body.dark-mode { --bg: #121212; --card: #1d1d1d; --text: #f4f4f4; --muted: #b4b4b4; --border: #2c2c2c; background: var(--bg); color: var(--text); }
+    :root { --primary: #c41e3a; --bg: #f6f6; --card: #ffffff; --text: #222; --muted: #666; --border: #e7e7; }
+    body.dark-mode { --bg: #121212; --card: #1d1d; --text: #f4f4f4; --muted: #b4b4b4; --border: #2c2c2c; background: var(--bg); color: var(--text); }
     body { margin: 0; font-family: 'Poppins', Arial, sans-serif; background: var(--bg); color: var(--text); }
     .wrap { max-width: 900px; margin: 0 auto; padding: 16px; }
     .topbar { display: flex; justify-content: space-between; align-items: center; padding: 14px 16px; background: var(--card); border-bottom: 1px solid var(--border); position: sticky; top: 0; z-index: 10; }
@@ -84,7 +84,6 @@
           <p id="userName" class="username">@username</p>
           <p id="joinedAT" class="joined">Joined date</p>
           <div id="bio" class="bio"></div>
-
           <div class="profile-actions">
             <button class="action-btn" id="likeBtn">
               <span id="likeIcon">🤍</span> <span id="likeText">Like</span> <span id="likeCount">0</span>
@@ -92,17 +91,14 @@
             <button class="action-btn" id="shareProfileBtn">🔗 Share Profile</button>
             <button class="action-btn" id="whatsappShareBtn">WhatsApp</button>
           </div>
-
           <div class="stats-grid">
             <div class="stat-box"><div class="stat-number" id="totalPosts">0</div><div class="stat-label">Total Posts</div></div>
             <div class="stat-box"><div class="stat-number" id="totalViews">0</div><div class="stat-label">Total Views</div></div>
             <div class="stat-box"><div class="stat-number" id="profileLikes">0</div><div class="stat-label">Profile Likes</div></div>
             <div class="stat-box"><div class="stat-number" id="profileComments">0</div><div class="stat-label">Comments</div></div>
           </div>
-
           <h3 class="section-title">Articles</h3>
           <div id="userArticles"><div class="loader">Loading articles...</div></div>
-
           <h3 class="section-title">Comments</h3>
           <div class="comment-box">
             <textarea class="comment-input" id="commentInput" placeholder="Write a comment..."></textarea>
@@ -115,7 +111,7 @@
   </div>
 
   <script src="https://cdn.jsdelivr.net/npm/appwrite@14.0.1/dist/iife/sdk.min.js"></script>
-  <script src="js/appwrite.js?v=126"></script>
+  <script src="js/appwrite.js?v=127"></script>
   <script>
     document.addEventListener('DOMContentLoaded', async () => {
       if (window.AppwriteReady) await window.AppwriteReady;
@@ -129,11 +125,7 @@
       const urlParams = new URLSearchParams(window.location.search);
       const profileUserId = urlParams.get('id') || urlParams.get('user') || urlParams.get('username');
 
-      let currentUser = null;
-      let currentProfile = null;
-      let profileUser = null;
-      let isOwnProfile = false;
-      let hasLiked = false;
+      let currentUser = null, currentProfile = null, profileUser = null, isOwnProfile = false, hasLiked = false;
 
       const els = {
         alertBox: document.getElementById('alertBox'), loader: document.getElementById('loader'), profileBody: document.getElementById('profileBody'),
@@ -148,12 +140,9 @@
       };
 
       function showAlert(message, type = 'info') {
-        els.alertBox.textContent = message;
-        els.alertBox.className = `alert ${type}`;
-        els.alertBox.style.display = 'block';
+        els.alertBox.textContent = message; els.alertBox.className = `alert ${type}`; els.alertBox.style.display = 'block';
         if (type !== 'error') setTimeout(() => els.alertBox.style.display = 'none', 3000);
       }
-
       function initials(name) { return (name || '?').split(' ').filter(Boolean).map(x => x[0]).join('').toUpperCase().slice(0, 2) || '?'; }
       function safeText(v) { return v && String(v).trim() ? String(v) : '—'; }
       function formatDate(v) { if (!v) return '—'; const d = new Date(v); if (Number.isNaN(d.getTime())) return String(v); return d.toLocaleDateString(undefined, { year: 'numeric', month: 'short', day: 'numeric' }); }
@@ -162,8 +151,7 @@
       async function loadProfile() {
         try {
           try { currentUser = await account.get(); } catch (e) { currentUser = null; }
-          let targetUserId = profileUserId;
-          if (!targetUserId && currentUser) targetUserId = currentUser.$id;
+          let targetUserId = profileUserId || currentUser?.$id;
           if (!targetUserId) { showAlert('Please log in to view profiles', 'error'); els.loader.style.display = 'none'; return; }
 
           let result = await databases.listDocuments(DB_ID, PROFILES_COLLECTION, [Query.equal('userId', targetUserId), Query.limit(1)]);
@@ -193,6 +181,7 @@
           let totalViews = 0; articles.documents.forEach(a => totalViews += (a.views || 0));
           els.totalPosts.textContent = articles.total; els.totalViews.textContent = totalViews;
 
+          // These will fail silently if collection doesn't exist or permissions wrong
           const likes = await databases.listDocuments(DB_ID, PROFILE_LIKES_COLLECTION, [Query.equal('profileId', currentProfile.$id), Query.limit(1)]).catch(() => ({ total: 0 }));
           els.profileLikes.textContent = likes.total; els.likeCount.textContent = likes.total;
 
@@ -218,8 +207,7 @@
           }
 
           await loadComments();
-          els.loader.style.display = 'none';
-          els.profileBody.style.display = 'block';
+          els.loader.style.display = 'none'; els.profileBody.style.display = 'block';
         } catch (error) {
           els.loader.style.display = 'none';
           showAlert(`Error: ${error?.message || 'Failed to load profile'}`, 'error');
@@ -242,7 +230,7 @@
                 </div>
               </div>`).join('');
           }
-        } catch (e) { console.warn('Comments load failed:', e); }
+        } catch (e) { console.warn('Comments load failed:', e.message); }
       }
 
       els.likeBtn.addEventListener('click', async () => {
@@ -281,7 +269,7 @@
         if (!text) { showAlert('Comment cannot be empty', 'error'); return; }
         try {
           await databases.createDocument(DB_ID, PROFILE_COMMENTS_COLLECTION, ID.unique(), {
-            profileId: currentProfile.$id, userId: currentUser.$id, userName: currentUser.name || 'User', text: text, avatarUrl: currentProfile.avatarUrl || ''
+            profileId: currentProfile.$id, userId: currentUser.$id, userName: currentUser.name || 'User', text: text, avatarUrl: ''
           });
           els.commentInput.value = ''; showAlert('Comment posted!', 'success'); await loadComments();
           els.profileComments.textContent = parseInt(els.profileComments.textContent) + 1;
