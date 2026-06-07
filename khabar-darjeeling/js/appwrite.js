@@ -1,52 +1,40 @@
-// js/index.js?v=130 - forces loaders off, no categories, no Eruda
-const PROJECT_ID = 'khabardarjeeling';
-const ENDPOINT = 'https://nyc.cloud.appwrite.io/v1';
-const DEFAULT_COLOR = '#c41e3a';
+// js/appwrite.js?v=131 — Khabar Darjeeling
+// 1. Appwrite setup
+const APPWRITE_ENDPOINT = 'https://nyc.cloud.appwrite.io/v1';
+const APPWRITE_PROJECT_ID = 'khabardarjeeling';
 
-function hideAllLoaders() {
-  // 1) the HTML loader
-  document.getElementById('gatekeeperLoader')?.remove();
-  // 2) the auth overlay from appwrite.js (find by text)
-  document.querySelectorAll('div, p, span').forEach(el => {
-    if (el.textContent && el.textContent.includes('Checking authentication')) {
-      el.closest('div[style*="position:fixed"], body > div')?.remove();
-    }
-  });
-}
+// 2. >>> REPLACE THESE WITH YOUR REAL IDs FROM APPWRITE CONSOLE <<<
+window.APPWRITE_DB_ID = 'REPLACE_WITH_YOUR_DATABASE_ID';           // e.g. '68a1b2c3d4e5f6...'
+window.APPWRITE_COLLECTION_ID = 'REPLACE_WITH_YOUR_ARTICLES_ID';   // e.g. 'articles'
 
-function getAppwriteObjects() { /* same as before */ 
-  return {
-    databases: window.databases || window.database,
-    Query: window.Query,
-    APPWRITE_DATABASE_ID: window.APPWRITE_DB_ID || window.APPWRITEDBID,
-    APPWRITE_COLLECTION_ID: window.APPWRITE_COLLECTION_ID || window.APPWRITECOLLECTIONID
-  };
-}
-function safeText(v){return v==null?'':String(v)}
-function safeDate(v){const d=new Date(v);return isNaN(d)?'Date unknown':d.toLocaleDateString()}
-function getImageUrl(id){if(!id||['Text','null','undefined','<URL>'].includes(id))return'';return id.startsWith('http')?id:`${ENDPOINT}/storage/buckets/article-image/files/${id}/view?project=${PROJECT_ID}`}
+// 3. Initialize client (uses the CDN you already load in index.html)
+const client = new Appwrite.Client()
+  .setEndpoint(APPWRITE_ENDPOINT)
+  .setProject(APPWRITE_PROJECT_ID);
 
-async function loadArticles(){
-  try{
-    const {databases,Query,APPWRITE_DATABASE_ID,APPWRITE_COLLECTION_ID}=getAppwriteObjects();
-    if(!databases||!Query||!APPWRITE_DATABASE_ID||!APPWRITE_COLLECTION_ID) throw new Error('Appwrite not initialized');
+// 4. Expose globals for index.js
+window.client = client;
+window.databases = new Appwrite.Databases(client);
+window.storage = new Appwrite.Storage(client);
+window.account = new Appwrite.Account(client);
+window.Query = Appwrite.Query;
 
-    const res = await databases.listDocuments(APPWRITE_DATABASE_ID,APPWRITE_COLLECTION_ID,[
-      Query.equal('status','approved'), Query.orderDesc('$createdAt'), Query.limit(20)
-    ]);
-    const articles=res.documents||[];
+// 5. Non-blocking auth check — does NOT show a loader
+// If user is logged in, we store it. If not, we just continue as guest.
+window.currentUser = null;
+window.account.get()
+  .then(user => { window.currentUser = user; })
+  .catch(() => { window.currentUser = null; });
 
-    document.getElementById('breakingTicker').textContent = articles.slice(0,3).map(a=>safeText(a.title)).join(' • ') || 'No breaking news';
-
-    // featured + grid (same simplified code as before, using DEFAULT_COLOR)
-    // ... [keep your existing rendering code here] ...
-
-  }catch(e){
-    console.error('Load failed:',e);
-    document.getElementById('newsGrid').innerHTML='<p>Error loading news. Please refresh.</p>';
-  }finally{
-    hideAllLoaders(); // <-- THIS is the fix
-  }
-}
-
-document.addEventListener('DOMContentLoaded', loadArticles);
+// 6. Remove any old "Checking authentication..." overlay if it exists
+// (this cleans up the screen you were stuck on)
+document.addEventListener('DOMContentLoaded', () => {
+  setTimeout(() => {
+    document.querySelectorAll('div, p').forEach(el => {
+      if (el.textContent && el.textContent.includes('Checking authentication')) {
+        const overlay = el.closest('div[style*="fixed"]') || el.parentElement;
+        if (overlay) overlay.remove();
+      }
+    });
+  }, 500);
+});
