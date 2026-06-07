@@ -17,11 +17,11 @@
       --card: #ffffff;
       --text: #222;
       --muted: #666;
-      --border: #e7;
+      --border: #e7e7e7;
     }
     body.dark-mode {
       --bg: #121212;
-      --card: #1d1d;
+      --card: #1d1d1d;
       --text: #f4f4f4;
       --muted: #b4b4b4;
       --border: #2c2c2c;
@@ -32,12 +32,12 @@
       background: var(--bg);
       color: var(--text);
     }
-   .wrap {
+  .wrap {
       max-width: 800px;
       margin: 0 auto;
       padding: 16px;
     }
-   .topbar {
+  .topbar {
       display: flex;
       justify-content: space-between;
       align-items: center;
@@ -48,12 +48,13 @@
       top: 0;
       z-index: 10;
     }
-   .brand {
+  .brand {
       font-weight: 700;
       color: var(--primary);
       font-size: 20px;
+      text-decoration: none;
     }
-   .btn {
+  .btn {
       border: none;
       background: var(--primary);
       color: #fff;
@@ -65,10 +66,10 @@
       font-size: 14px;
       font-family: inherit;
     }
-   .btn.secondary {
+  .btn.secondary {
       background: #666;
     }
-   .card {
+  .card {
       background: var(--card);
       border: 1px solid var(--border);
       border-radius: 16px;
@@ -76,7 +77,7 @@
       margin-top: 18px;
       padding: 24px;
     }
-   .category-badge {
+  .category-badge {
       display: inline-block;
       background: var(--primary);
       color: #fff;
@@ -87,25 +88,25 @@
       text-transform: uppercase;
       margin-bottom: 12px;
     }
-   .title {
+  .title {
       font-size: 32px;
       font-weight: 800;
       margin: 0 0 12px;
       line-height: 1.2;
     }
-   .meta {
+  .meta {
       color: var(--muted);
       font-size: 14px;
       margin-bottom: 20px;
     }
-   .actions {
+  .actions {
       display: flex;
       gap: 16px;
       align-items: center;
       margin-bottom: 20px;
       flex-wrap: wrap;
     }
-   .action-btn {
+  .action-btn {
       display: flex;
       align-items: center;
       gap: 6px;
@@ -118,17 +119,17 @@
       font-weight: 600;
       font-family: inherit;
     }
-   .action-btn.liked {
+  .action-btn.liked {
       background: rgba(196, 30, 58, 0.1);
       border-color: var(--primary);
       color: var(--primary);
     }
-   .share-buttons {
+  .share-buttons {
       display: flex;
       gap: 8px;
       margin-left: auto;
     }
-   .share-btn {
+  .share-btn {
       padding: 6px 12px;
       border: 1px solid var(--border);
       background: var(--card);
@@ -137,37 +138,37 @@
       font-size: 12px;
       font-weight: 600;
     }
-   .share-btn:hover {
+  .share-btn:hover {
       background: var(--primary);
       color: #fff;
       border-color: var(--primary);
     }
-   .content {
+  .content {
       line-height: 1.8;
       font-size: 16px;
       margin: 24px 0;
       white-space: pre-wrap;
     }
-   .content img {
+  .content img {
       max-width: 100%;
       border-radius: 12px;
       margin: 16px 0;
     }
-   .divider {
+  .divider {
       height: 1px;
       background: var(--border);
       margin: 30px 0;
     }
-   .comments-section h3 {
+  .comments-section h3 {
       font-size: 20px;
       margin-bottom: 16px;
     }
-   .comment-form {
+  .comment-form {
       display: flex;
       gap: 12px;
       margin-bottom: 24px;
     }
-   .comment-input {
+  .comment-input {
       flex: 1;
       padding: 10px 14px;
       border: 1px solid var(--border);
@@ -177,7 +178,7 @@
       font-family: inherit;
       font-size: 14px;
     }
-   .comment-item {
+  .comment-item {
       padding: 14px;
       border: 1px solid var(--border);
       border-radius: 12px;
@@ -185,43 +186,43 @@
       background: rgba(0,0,0,0.01);
     }
     body.dark-mode.comment-item {
-      background: rgba(255,255,0.02);
+      background: rgba(255,255,255,0.02);
     }
-   .comment-author {
+  .comment-author {
       font-weight: 700;
       font-size: 14px;
       margin-bottom: 4px;
     }
-   .comment-text {
+  .comment-text {
       font-size: 15px;
       line-height: 1.6;
     }
-   .comment-date {
+  .comment-date {
       font-size: 12px;
       color: var(--muted);
       margin-top: 6px;
     }
-   .login-prompt {
+  .login-prompt {
       padding: 20px;
       text-align: center;
       background: rgba(196, 30, 58, 0.05);
       border-radius: 12px;
       margin-bottom: 24px;
     }
-   .loader {
+  .loader {
       padding: 60px 20px;
       text-align: center;
       color: var(--muted);
     }
     @media (max-width: 640px) {
-     .title { font-size: 24px; }
-     .share-buttons { margin-left: 0; width: 100%; }
+    .title { font-size: 24px; }
+    .share-buttons { margin-left: 0; width: 100%; }
     }
   </style>
 </head>
 <body>
   <div class="topbar">
-    <div class="brand">खबर दार्जिलिंग</div>
+    <a href="index.html" class="brand">खबर दार्जिलिंग</a>
     <div>
       <a class="btn secondary" href="index.html">← Back to Home</a>
     </div>
@@ -280,8 +281,8 @@
     (() => {
       const { Client, Account, Databases, Query, ID } = window.Appwrite;
       const client = new Client()
-       .setEndpoint(window.APPWRITE_ENDPOINT)
-       .setProject(window.APPWRITE_PROJECT_ID);
+      .setEndpoint(window.APPWRITE_ENDPOINT)
+      .setProject(window.APPWRITE_PROJECT_ID);
 
       const account = new Account(client);
       const databases = new Databases(client);
@@ -339,7 +340,7 @@
       }
 
       async function loadArticle() {
-        // KEY FIX: Wait for session to load
+        // Wait for session to load
         await new Promise(r => setTimeout(r, 150));
 
         const urlParams = new URLSearchParams(window.location.search);
@@ -358,20 +359,28 @@
             currentUser = null;
           }
 
-          // Load article
+          // Load article - works for everyone because Any → Read
           currentArticle = await databases.getDocument(DB_ID, ARTICLES_COLLECTION, currentArticleId);
 
-          // Increment views
-          await databases.updateDocument(DB_ID, ARTICLES_COLLECTION, currentArticleId, {
-            views: (currentArticle.views || 0) + 1
-          });
+          // Increment views ONLY if user is logged in
+          try {
+            if (currentUser) {
+              await databases.updateDocument(DB_ID, ARTICLES_COLLECTION, currentArticleId, {
+                views: (currentArticle.views || 0) + 1
+              });
+              currentArticle.views = (currentArticle.views || 0) + 1;
+            }
+          } catch (viewError) {
+            // Silently fail if view update doesn't work. Article still loads.
+            console.log('View count not updated:', viewError.message);
+          }
 
           // Render article
           els.category.textContent = currentArticle.category || 'GENERAL';
           els.title.textContent = currentArticle.title;
           els.meta.textContent = `${currentArticle.submitterName || 'Anonymous'} • ${formatDate(currentArticle.$createdAt)}`;
           els.content.innerHTML = currentArticle.content;
-          els.views.textContent = (currentArticle.views || 0) + 1;
+          els.views.textContent = currentArticle.views || 0;
 
           // Check if liked
           if (currentUser) {
