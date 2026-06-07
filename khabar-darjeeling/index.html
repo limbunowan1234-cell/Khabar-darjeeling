@@ -1,67 +1,63 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Khabar Darjeeling</title>
-  <link rel="stylesheet" href="css/style.css?v=400">
-  <link rel="stylesheet" href="css/responsive.css?v=400">
-  <style>
-    #gatekeeperLoader{position:fixed;inset:0;background:#fff;display:flex;align-items:center;justify-content:center;z-index:9999}
-  </style>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Khabar Darjeeling</title>
+<style>
+body{font-family:sans-serif;margin:0;background:#f5f5f5}
+.nav{background:#fff;padding:12px;border-bottom:1px solid #ddd;display:flex;justify-content:space-between;align-items:center}
+.logo{color:#c41e3a;font-weight:700;font-size:20px;text-decoration:none}
+.login{background:#c41e3a;color:#fff;padding:6px 14px;border-radius:4px;text-decoration:none}
+.breaking{background:#c41e3a;color:#fff;padding:8px 12px}
+main{max-width:900px;margin:auto;padding:16px}
+.card{background:#fff;padding:14px;margin-bottom:12px;border-radius:6px;box-shadow:0 1px 3px rgba(0,0,0,.08)}
+</style>
 </head>
 <body>
-  <div id="gatekeeperLoader">Loading...</div>
+<div id="loader" style="position:fixed;inset:0;background:#fff;display:flex;align-items:center;justify-content:center;z-index:99">Loading...</div>
 
-  <nav class="navbar">
-    <div class="container" style="display:flex;justify-content:space-between;padding:12px">
-      <a href="index.html" style="font-weight:700;color:#c41e3a;text-decoration:none;font-size:20px">खबर दार्जिलिंग</a>
-      <a href="login.html" style="background:#c41e3a;color:#fff;padding:6px 12px;border-radius:4px;text-decoration:none">Login</a>
-    </div>
-  </nav>
+<div class="nav">
+  <a href="/" class="logo">खबर दार्जिलिंग</a>
+  <a href="login.html" class="login">Login</a>
+</div>
 
-  <div style="background:#c41e3a;color:#fff;padding:8px">
-    <strong>Breaking:</strong> <span id="breakingTicker">Loading news...</span>
-  </div>
+<div class="breaking"><b>Breaking:</b> <span id="ticker">Loading...</span></div>
 
-  <main style="padding:16px;max-width:900px;margin:auto">
-    <div id="featuredStory" style="margin-bottom:24px"></div>
-    <div id="newsGrid" style="display:grid;gap:16px"></div>
-  </main>
+<main>
+  <div id="featured"></div>
+  <div id="list"></div>
+</main>
 
 <script>
-// NO EXTERNAL JS - everything here
-const ENDPOINT = 'https://nyc.cloud.appwrite.io/v1';
-const PROJECT = 'khabardarjeeling';
+const ENDPOINT='https://nyc.cloud.appwrite.io/v1';
+const PROJECT='khabardarjeeling';
 
-async function load(){
+(async()=>{
   try{
-    const url = `${ENDPOINT}/databases/Khabar_db/collections/articles/documents?limit=20&orderDesc="$createdAt"`;
-    const res = await fetch(url, { headers:{'X-Appwrite-Project': PROJECT}});
-    const data = await res.json();
-    const arts = data.documents || [];
+    // THIS is the exact query that gave you 10 docs before
+    const q1=encodeURIComponent('orderDesc("$createdAt")');
+    const q2=encodeURIComponent('limit(20)');
+    const url=`${ENDPOINT}/databases/Khabar_db/collections/articles/documents?queries[]=${q1}&queries[]=${q2}`;
 
-    document.getElementById('gatekeeperLoader').remove();
-    document.getElementById('breakingTicker').textContent = arts.slice(0,3).map(a=>a.title).join(' • ') || 'No articles';
+    const r=await fetch(url,{headers:{'X-Appwrite-Project':PROJECT}});
+    const data=await r.json();
+    const arts=data.documents||[];
+
+    document.getElementById('loader').remove();
+    document.getElementById('ticker').textContent = arts.map(a=>a.title).slice(0,3).join(' • ') || 'No articles found';
 
     if(arts[0]){
-      const f = arts[0];
-      const img = f.imageFileId? `<img src="${ENDPOINT}/storage/buckets/article-image/files/${f.imageFileId}/view?project=${PROJECT}" style="width:100%;max-height:300px;object-fit:cover;border-radius:8px">` : '';
-      document.getElementById('featuredStory').innerHTML = `${img}<h2>${f.title}</h2><p>${f.content?.substring(0,180)}...</p>`;
+      const f=arts[0];
+      document.getElementById('featured').innerHTML=`<div class="card"><h2>${f.title}</h2><p>${(f.content||'').substring(0,200)}...</p></div>`;
     }
+    document.getElementById('list').innerHTML=arts.slice(1).map(a=>`<div class="card"><h3>${a.title}</h3><p>${(a.content||'').substring(0,120)}...</p></div>`).join('');
 
-    document.getElementById('newsGrid').innerHTML = arts.slice(1).map(a=>`
-      <div style="border-bottom:1px solid #eee;padding:12px 0">
-        <h3 style="margin:0 0 6px">${a.title}</h3>
-        <p style="margin:0;color:#555">${a.content?.substring(0,100)}...</p>
-      </div>
-    `).join('');
+    console.log('Loaded', arts.length, 'articles'); // you should see 10
   }catch(e){
-    document.getElementById('breakingTicker').textContent = 'Error: '+e.message;
-    document.getElementById('gatekeeperLoader').remove();
+    document.getElementById('ticker').textContent='Fetch error: '+e;
+    document.getElementById('loader').remove();
   }
-}
-load();
+})();
 </script>
 </body>
 </html>
