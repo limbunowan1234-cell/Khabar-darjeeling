@@ -7,8 +7,9 @@
     <meta name="theme-color" content="#c41e3a">
     <title>Create Post - खबर दार्जिलिंग</title>
     
-    <link rel="stylesheet" href="css/style.css?v=118">
-    <link rel="stylesheet" href="css/responsive.css?v=118">
+    <link rel="stylesheet" href="css/style.css?v=119">
+    <link rel="stylesheet" href="css/responsive.css?v=119">
+    <link rel="icon" type="image/png" href="assets/logo.png">
 
     <style>
         /* Gatekeeper Loader */
@@ -20,7 +21,7 @@
         }
         body.dark-mode #gatekeeperLoader { background: #1a1a1a; color: #ffffff; }
 
-       .spinner {
+     .spinner {
             width: 40px; height: 40px; border: 4px solid rgba(196, 30, 58, 0.1);
             border-left-color: #c41e3a; border-radius: 50%; animation: spin 1s linear infinite;
             margin-bottom: 15px;
@@ -28,13 +29,13 @@
         @keyframes spin { to { transform: rotate(360deg); } }
 
         /* Main Container */
-       .post-wrapper {
+     .post-wrapper {
             max-width: 750px;
             margin: 30px auto;
             padding: 0 15px;
         }
         
-       .post-card {
+     .post-card {
             background: #fff;
             border-radius: 12px;
             box-shadow: 0 2px 15px rgba(0,0,0,0.05);
@@ -43,7 +44,7 @@
         }
         body.dark-mode.post-card { background: #222; border-color: #333; }
 
-       .post-header {
+     .post-header {
             margin-bottom: 25px;
             padding-bottom: 15px;
             border-bottom: 1px solid #eee;
@@ -51,21 +52,8 @@
         body.dark-mode.post-header { border-color: #444; }
 
         /* Form Elements */
-       .form-row {
-            display: flex;
-            gap: 15px;
-            margin-bottom: 20px;
-        }
-       .form-row.form-group {
-            flex: 1;
-            margin-bottom: 0;
-        }
-        @media(max-width: 600px) {
-           .form-row { flex-direction: column; }
-        }
-
-       .form-group { margin-bottom: 20px; }
-       .form-group label {
+     .form-group { margin-bottom: 20px; }
+     .form-group label {
             display: block;
             margin-bottom: 8px;
             font-weight: 600;
@@ -74,7 +62,7 @@
         }
         body.dark-mode.form-group label { color: #ccc; }
 
-       .form-control {
+     .form-control {
             width: 100%;
             padding: 12px 15px;
             border: 1px solid #ddd;
@@ -89,7 +77,7 @@
             border-color: #444;
             color: #fff;
         }
-       .form-control:focus {
+     .form-control:focus {
             outline: none;
             border-color: #c41e3a;
             background: #fff;
@@ -100,7 +88,7 @@
         textarea.form-control { min-height: 250px; resize: vertical; line-height: 1.6; }
 
         /* Media Attachments */
-       .media-upload-section {
+     .media-upload-section {
             background: #fcfcfc;
             border: 1px dashed #ccc;
             padding: 20px;
@@ -109,7 +97,7 @@
         }
         body.dark-mode.media-upload-section { background: #1e1e1e; border-color: #555; }
         
-       .image-preview {
+     .image-preview {
             margin-top: 15px;
             max-width: 100%;
             max-height: 300px;
@@ -119,7 +107,7 @@
         }
 
         /* Submit Button */
-       .submit-btn {
+     .submit-btn {
             background: #c41e3a;
             color: white;
             padding: 15px 40px;
@@ -135,11 +123,11 @@
             align-items: center;
             gap: 10px;
         }
-       .submit-btn:hover { background: #a01729; }
-       .submit-btn:disabled { background: #e09ba5; cursor: not-allowed; }
+     .submit-btn:hover { background: #a01729; }
+     .submit-btn:disabled { background: #e09ba5; cursor: not-allowed; }
 
         /* Alerts & Info */
-       .author-badge {
+     .author-badge {
             display: inline-flex;
             align-items: center;
             gap: 10px;
@@ -151,18 +139,11 @@
             margin-bottom: 20px;
         }
         body.dark-mode.author-badge { background: #333; color: #fff; }
-       .author-badge span { color: #c41e3a; font-weight: 700; }
+     .author-badge span { color: #c41e3a; font-weight: 700; }
 
-       .alert { padding: 15px; border-radius: 8px; margin-bottom: 20px; display: none; font-size: 14px; }
-       .alert.success { background: #d4edda; color: #155724; border: 1px solid #c3e6cb; }
-       .alert.error { background: #f8d7da; color: #721c24; border: 1px solid #f5c6cb; }
-
-        /* Custom Nav adjustments */
-       .nav-links { display: flex; gap: 15px; align-items: center; }
-       .nav-links a { color: #333; text-decoration: none; font-weight: 500; font-size: 14px; transition: color 0.2s; }
-       .nav-links a:hover { color: #c41e3a; }
-        body.dark-mode.nav-links a { color: #ddd; }
-        body.dark-mode.nav-links a:hover { color: #ff6b81; }
+     .alert { padding: 15px; border-radius: 8px; margin-bottom: 20px; display: none; font-size: 14px; }
+     .alert.success { background: #d4edda; color: #155724; border: 1px solid #c3e6cb; }
+     .alert.error { background: #f8d7da; color: #721c24; border: 1px solid #f5c6cb; }
     </style>
 </head>
 <body>
@@ -186,9 +167,25 @@
                     </a>
                 </div>
 
-                <div class="nav-links">
-                    <a href="index.html">Home</a>
-                    <a href="profile.html">My Profile</a>
+                <div class="nav-toggle" id="navToggle">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
+
+                <div class="nav-menu" id="navMenu">
+                    <ul class="nav-links">
+                        <li><a href="index.html">Home</a></li>
+                        <li><a href="index.html#latest">Latest</a></li>
+                        <li><a href="post.html" class="active">Create Post</a></li>
+                        <li><a href="#" id="mobileProfileLink" style="display:none;">Profile</a></li>
+                    </ul>
+                </div>
+
+                <div class="nav-right">
+                    <button class="theme-toggle" id="themeToggle">🌙</button>
+                    <a href="#" id="profileLink" class="admin-link" style="display:none;">Profile</a>
+                    <button id="logoutBtn" style="background:none;border:none;color:#c41e3a;font-weight:600;font-size:14px;cursor:pointer;margin-left:15px;padding:5px 10px;font-family:inherit;">Logout</button>
                 </div>
             </div>
         </div>
@@ -214,26 +211,9 @@
                     <input type="text" id="title" class="form-control" required maxlength="200" placeholder="What is the story about?">
                 </div>
 
-                <div class="form-row">
-                    <div class="form-group">
-                        <label for="category">Category *</label>
-                        <select id="category" class="form-control" required>
-                            <option value="">Select a category</option>
-                            <option value="darjeeling">Darjeeling</option>
-                            <option value="kalimpong">Kalimpong</option>
-                            <option value="kurseong">Kurseong</option>
-                            <option value="mirik">Mirik</option>
-                            <option value="siliguri">Siliguri</option>
-                            <option value="west-bengal">West Bengal</option>
-                            <option value="national">National</option>
-                            <option value="entertainment">Entertainment</option>
-                            <option value="sports">Sports</option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label for="location">Location *</label>
-                        <input type="text" id="location" class="form-control" required maxlength="100" placeholder="e.g., Darjeeling Chowrasta">
-                    </div>
+                <div class="form-group">
+                    <label for="location">Location *</label>
+                    <input type="text" id="location" class="form-control" required maxlength="100" placeholder="e.g., Darjeeling Chowrasta">
                 </div>
 
                 <div class="form-group">
@@ -255,6 +235,13 @@
                     <input type="url" id="youtubeUrl" class="form-control" placeholder="https://www.youtube.com/watch?v=...">
                 </div>
 
+                <div class="form-group">
+                    <div style="display:flex;align-items:center;gap:8px;">
+                        <input type="checkbox" id="isFeatured" name="isFeatured" style="width:auto;">
+                        <label for="isFeatured" style="margin:0;font-weight:500;">Mark as Featured Story</label>
+                    </div>
+                </div>
+
                 <button type="submit" class="submit-btn" id="submitBtn">
                     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>
                     Publish Post
@@ -265,17 +252,10 @@
 
     <!-- Appwrite SDK -->
     <script src="https://cdn.jsdelivr.net/npm/appwrite@14.0.1/dist/iife/sdk.min.js"></script>
-    <script src="js/appwrite.js?v=118"></script>
+    <script src="js/appwrite.js?v=119"></script>
 
     <script>
         (() => {
-            // Verify global Appwrite objects exist
-            if (!window.account ||!window.databases ||!window.storage ||!window.ID ||!window.Query) {
-                alert('Appwrite connection failed. Please check your configuration.');
-                window.location.href = 'login.html';
-                return;
-            }
-
             const { account, databases, storage, ID, Query } = window;
             const DB_ID = window.APPWRITE_DB_ID;
             const COLLECTION_ID = window.APPWRITE_COLLECTION_ID;
@@ -285,7 +265,12 @@
             let currentUser = null;
             let uploadedImageId = null;
 
-            // Initialize Gatekeeper
+            if (localStorage.getItem('theme') === 'dark') {
+                document.body.classList.add('dark-mode');
+                document.getElementById('themeToggle').textContent = '☀';
+            }
+
+            // Auth check
             async function initGatekeeper() {
                 try {
                     currentUser = await account.get();
@@ -293,6 +278,10 @@
                     
                     const safeName = currentUser.name || (currentUser.email? currentUser.email.split('@')[0] : 'Reporter');
                     document.getElementById('displayAuthorName').textContent = safeName;
+                    document.getElementById('profileLink').href = `profile.html?userId=${currentUser.$id}`;
+                    document.getElementById('profileLink').style.display = '';
+                    document.getElementById('mobileProfileLink').href = `profile.html?userId=${currentUser.$id}`;
+                    document.getElementById('mobileProfileLink').style.display = '';
                     
                     hideLoader();
                 } catch (error) {
@@ -301,7 +290,7 @@
                 }
             }
 
-            // Sync user profile data silently
+            // Sync user profile
             async function ensureProfileExists(user) {
                 try {
                     const existing = await databases.listDocuments(DB_ID, PROFILES_COLLECTION, [
@@ -328,7 +317,6 @@
                 }
             }
 
-            // UI Helpers
             function hideLoader() {
                 const loader = document.getElementById('gatekeeperLoader');
                 if (loader) {
@@ -352,14 +340,50 @@
                 return match? match[1] : null;
             }
 
-            // Handle Image Preview & Validation
+            // Mobile menu toggle - FIXED: uses 'active'
+            const navToggle = document.getElementById('navToggle');
+            const navMenu = document.getElementById('navMenu');
+            if (navToggle) {
+                const toggleMenu = () => navMenu.classList.toggle('active');
+                navToggle.addEventListener('click', toggleMenu);
+                navToggle.addEventListener('touchstart', (e) => {
+                    e.preventDefault();
+                    toggleMenu();
+                });
+            }
+
+            // Close menu when clicking a link
+            document.querySelectorAll('.nav-links a').forEach(link => {
+                link.addEventListener('click', () => navMenu.classList.remove('active'));
+            });
+
+            // Theme toggle
+            document.getElementById('themeToggle').addEventListener('click', () => {
+                document.body.classList.toggle('dark-mode');
+                const isDark = document.body.classList.contains('dark-mode');
+                document.getElementById('themeToggle').textContent = isDark? '☀' : '🌙';
+                localStorage.setItem('theme', isDark? 'dark' : 'light');
+            });
+
+            // Logout
+            document.getElementById('logoutBtn').addEventListener('click', async () => {
+                if (!confirm('Sign out?')) return;
+                try {
+                    await account.deleteSession('current');
+                    window.location.href = 'login.html';
+                } catch (e) {
+                    alert('Logout failed');
+                }
+            });
+
+            // Image preview
             document.getElementById('image').addEventListener('change', function (e) {
                 const file = e.target.files[0];
                 const preview = document.getElementById('imagePreview');
 
                 if (file) {
                     if (file.size > 5 * 1024 * 1024) {
-                        showAlert('Image exceeds the 5MB limit. Please compress it and try again.', 'error');
+                        showAlert('Image exceeds 5MB limit.', 'error');
                         e.target.value = '';
                         preview.style.display = 'none';
                         return;
@@ -375,22 +399,23 @@
                 }
             });
 
-            // Handle Form Submission
+            // Form submit - NO CATEGORY
             document.getElementById('postForm').addEventListener('submit', async (e) => {
                 e.preventDefault();
-
+                
                 const submitBtn = document.getElementById('submitBtn');
                 submitBtn.disabled = true;
                 submitBtn.innerHTML = '<div class="spinner" style="width:20px;height:20px;border-width:2px;margin:0;"></div> Publishing...';
 
                 try {
                     const title = document.getElementById('title').value.trim();
-                    const category = document.getElementById('category').value;
                     const content = document.getElementById('content').value.trim();
                     const location = document.getElementById('location').value.trim();
                     const youtubeUrl = document.getElementById('youtubeUrl').value.trim();
+                    const isFeatured = document.getElementById('isFeatured').checked;
                     const imageFile = document.getElementById('image').files[0];
 
+                    if (!title ||!content ||!location) throw new Error('Title, content, and location are required');
                     if (content.length < 100) throw new Error('Story content must be at least 100 characters.');
 
                     // Upload Image if present
@@ -399,7 +424,7 @@
                         uploadedImageId = fileUpload.$id;
                     }
 
-                    // Fetch Avatar (Optional enhancement for feed display)
+                    // Fetch Avatar
                     let userAvatar = null;
                     try {
                         const profile = await databases.listDocuments(DB_ID, PROFILES_COLLECTION, [
@@ -411,13 +436,12 @@
                         console.warn('Avatar fetch warning:', e);
                     }
 
-                    // Create Article Document - AUTO PUBLISHED
+                    // Create Article Document - NO CATEGORY FIELD
                     await databases.createDocument(DB_ID, COLLECTION_ID, ID.unique(), {
                         title,
-                        category,
                         content,
                         location,
-                        status: 'published', // <-- AUTO-PUBLISHED, NO ADMIN REVIEW
+                        status: 'published',
                         submitterId: currentUser.$id,
                         submitterName: currentUser.name || 'Reporter',
                         submitterAvatar: userAvatar,
@@ -426,27 +450,25 @@
                         authorEmail: currentUser.email || '',
                         submittedAt: new Date().toISOString(),
                         imageFileId: uploadedImageId,
-                        youtube_id: extractYouTubeID(youtubeUrl)
+                        youtube_id: extractYouTubeID(youtubeUrl),
+                        isFeatured,
+                        views: 0
                     });
 
-                    showAlert('Post published successfully! It\'s now live on the homepage.', 'success');
+                    showAlert('Post published successfully! Redirecting...', 'success');
                     
-                    // Reset Form
-                    document.getElementById('postForm').reset();
-                    document.getElementById('imagePreview').style.display = 'none';
-                    uploadedImageId = null;
+                    setTimeout(() => {
+                        window.location.href = 'index.html';
+                    }, 1500);
 
                 } catch (error) {
                     console.error('Post Error:', error);
-                    showAlert(error.message || 'Failed to publish post. Please check your connection.', 'error');
-                } finally {
-                    // Restore Button State
+                    showAlert(error.message || 'Failed to publish post.', 'error');
                     submitBtn.disabled = false;
                     submitBtn.innerHTML = '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg> Publish Post';
                 }
             });
 
-            // Trigger initialization
             if (document.readyState === 'loading') {
                 document.addEventListener('DOMContentLoaded', initGatekeeper);
             } else {
