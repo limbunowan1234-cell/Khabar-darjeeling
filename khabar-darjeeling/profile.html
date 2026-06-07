@@ -3,16 +3,12 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
-  <meta http-equiv="Pragma" content="no-cache">
-  <meta http-equiv="Expires" content="0">
   <meta name="theme-color" content="#b81d24">
   <link rel="icon" type="image/png" href="assets/logo.png">
-  <link rel="manifest" href="manifest.json">
-  <title>My Profile - खबर दार्जिलिंग</title>
+  <title>Profile - खबर दार्जिलिंग</title>
 
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="css/style.css?v=123" />
+  <link rel="stylesheet" href="css/style.css?v=124" />
   <style>
     :root {
       --primary: #c41e3a;
@@ -25,8 +21,8 @@
     body.dark-mode {
       --bg: #121212;
       --card: #1d1d1d;
-      --text: #f4f4f4;
-      --muted: #b4b4;
+      --text: #f4f4;
+      --muted: #b4b4b4;
       --border: #2c2c2c;
       background: var(--bg);
       color: var(--text);
@@ -81,6 +77,11 @@
 .btn.secondary {
       background: #666;
     }
+.btn.ghost {
+      background: transparent;
+      color: var(--primary);
+      border: 1px solid var(--primary);
+    }
 .btn:disabled {
       opacity: 0.6;
       cursor: not-allowed;
@@ -125,7 +126,7 @@
       top: 16px;
       background: rgba(0,0,0,0.5);
       color: #fff;
-      border: 1px solid rgba(255,255,255,0.3);
+      border: 1px solid rgba(255,255,0.3);
       padding: 8px 14px;
       border-radius: 8px;
       cursor: pointer;
@@ -134,7 +135,7 @@
       backdrop-filter: blur(10px);
     }
 .content {
-      padding: 76px 24px;
+      padding: 76px 24px 24px;
     }
 .name {
       font-size: 30px;
@@ -156,6 +157,36 @@
       font-size: 16px;
       white-space: pre-wrap;
       margin-bottom: 20px;
+    }
+.profile-actions {
+      display: flex;
+      gap: 10px;
+      margin: 20px 0;
+      flex-wrap: wrap;
+    }
+.action-btn {
+      padding: 10px 20px;
+      border: 1px solid var(--border);
+      background: var(--card);
+      color: var(--text);
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 14px;
+      font-weight: 600;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-family: inherit;
+      transition: all 0.2s;
+    }
+.action-btn:hover {
+      border-color: var(--primary);
+      background: rgba(196, 30, 58, 0.05);
+    }
+.action-btn.liked {
+      background: var(--primary);
+      color: #fff;
+      border-color: var(--primary);
     }
 .stats-grid {
       display: grid;
@@ -200,9 +231,6 @@
       font-weight: 600;
       font-size: 16px;
     }
-.article-info a:hover {
-      text-decoration: underline;
-    }
 .article-stats {
       font-size: 13px;
       color: var(--muted);
@@ -211,52 +239,64 @@
       gap: 15px;
       flex-wrap: wrap;
     }
-.share-buttons {
-      display: flex;
-      gap: 8px;
-      margin-top: 10px;
-      flex-wrap: wrap;
-    }
-.share-btn {
-      padding: 6px 12px;
-      border: 1px solid var(--border);
-      background: var(--card);
-      border-radius: 6px;
-      cursor: pointer;
-      font-size: 12px;
-      font-weight: 600;
-      display: inline-flex;
-      align-items: center;
-      gap: 5px;
-      font-family: inherit;
-    }
-.share-btn:hover {
-      background: var(--primary);
-      color: #fff;
-      border-color: var(--primary);
-    }
-.meta {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 12px;
+.comment-box {
       margin-top: 20px;
-    }
-.box {
-      padding: 14px;
+      padding: 16px;
       border: 1px solid var(--border);
       border-radius: 12px;
-      background: rgba(0,0,0,0.02);
     }
-.label {
+.comment-input {
+      width: 100%;
+      padding: 10px 12px;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      background: var(--bg);
+      color: var(--text);
+      font-family: inherit;
+      font-size: 14px;
+      box-sizing: border-box;
+      resize: vertical;
+      min-height: 60px;
+      margin-bottom: 10px;
+    }
+.comment-item {
+      padding: 12px;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      gap: 10px;
+    }
+.comment-item:last-child {
+      border-bottom: none;
+    }
+.comment-avatar {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      background: var(--primary);
+      color: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: 14px;
+      flex-shrink: 0;
+    }
+.comment-content {
+      flex: 1;
+    }
+.comment-author {
+      font-weight: 600;
+      font-size: 14px;
+      margin-bottom: 4px;
+    }
+.comment-text {
+      font-size: 14px;
+      line-height: 1.5;
+    }
+.comment-time {
       font-size: 12px;
       color: var(--muted);
-      margin-bottom: 4px;
-      text-transform: uppercase;
-      letter-spacing:.04em;
-    }
-.value {
-      font-size: 15px;
-      word-break: break-word;
+      margin-top: 4px;
     }
 .alert {
       padding: 14px 16px;
@@ -273,11 +313,6 @@
       background: #d4edda;
       color: #155724;
       border: 1px solid #c3e6cb;
-    }
-.alert.info {
-      background: #e7f3ff;
-      color: #0b4f8a;
-      border: 1px solid #b8dcff;
     }
 .loader {
       padding: 60px 20px;
@@ -387,7 +422,6 @@
       margin-top: 20px;
     }
     @media (max-width: 640px) {
-.meta { grid-template-columns: 1fr; }
 .avatar { width: 96px; height: 96px; bottom: -48px; }
 .content { padding-top: 62px; }
 .name { font-size: 24px; }
@@ -398,7 +432,7 @@
 <body>
   <div class="topbar">
     <a class="brand" href="index.html">खबर दार्जिलिंग</a>
-    <div class="topbar-actions">
+    <div class="topbar-actions" id="topbarActions">
       <a class="btn secondary" href="index.html">Home</a>
       <a class="btn" href="post.html">Create Post</a>
       <button class="btn secondary" id="logoutBtn">Logout</button>
@@ -410,7 +444,7 @@
 
     <div class="card">
       <div id="cover" class="cover">
-        <button class="edit-profile-btn" id="editProfileBtn">✏️ Edit Profile</button>
+        <button class="edit-profile-btn" id="editProfileBtn" style="display:none;">✏️ Edit Profile</button>
         <div id="avatar" class="avatar">?</div>
       </div>
 
@@ -424,6 +458,14 @@
 
           <div id="bio" class="bio"></div>
 
+          <div class="profile-actions">
+            <button class="action-btn" id="likeBtn">
+              <span id="likeIcon">🤍</span> <span id="likeText">Like</span> <span id="likeCount">0</span>
+            </button>
+            <button class="action-btn" id="shareBtn">🔗 Share Profile</button>
+            <button class="action-btn" id="whatsappShareBtn">WhatsApp</button>
+          </div>
+
           <div class="stats-grid">
             <div class="stat-box">
               <div class="stat-number" id="totalPosts">0</div>
@@ -434,29 +476,25 @@
               <div class="stat-label">Total Views</div>
             </div>
             <div class="stat-box">
-              <div class="stat-number" id="totalLikes">0</div>
-              <div class="stat-label">Total Likes</div>
+              <div class="stat-number" id="profileLikes">0</div>
+              <div class="stat-label">Profile Likes</div>
             </div>
             <div class="stat-box">
-              <div class="stat-number" id="totalComments">0</div>
-              <div class="stat-label">Comments Made</div>
+              <div class="stat-number" id="profileComments">0</div>
+              <div class="stat-label">Comments</div>
             </div>
           </div>
 
-          <h3 class="section-title">Your Articles</h3>
+          <h3 class="section-title">Articles</h3>
           <div id="userArticles">
             <div class="loader">Loading articles...</div>
           </div>
 
-          <div class="meta" style="margin-top:30px;">
-            <div class="box">
-              <div class="label">User ID</div>
-              <div id="userId" class="value"></div>
-            </div>
-            <div class="box">
-              <div class="label">Profile Document</div>
-              <div id="docId" class="value"></div>
-            </div>
+          <h3 class="section-title">Comments</h3>
+          <div class="comment-box">
+            <textarea class="comment-input" id="commentInput" placeholder="Write a comment..."></textarea>
+            <button class="btn" id="postCommentBtn">Post Comment</button>
+            <div id="commentsList" style="margin-top: 20px;"></div>
           </div>
         </div>
       </div>
@@ -508,28 +546,27 @@
   </div>
 
   <script src="https://cdn.jsdelivr.net/npm/appwrite@14.0.1/dist/iife/sdk.min.js"></script>
-  <script src="js/appwrite.js?v=123"></script>
+  <script src="js/appwrite.js?v=124"></script>
   <script>
     document.addEventListener('DOMContentLoaded', async () => {
-      console.log('[Profile] DOM loaded');
-
       if (window.AppwriteReady) await window.AppwriteReady;
-
-      if (!window.account ||!window.databases ||!window.storage) {
-        document.getElementById('alertBox').textContent = 'Appwrite not initialized. Check js/appwrite.js';
-        document.getElementById('alertBox').className = 'alert error';
-        document.getElementById('alertBox').style.display = 'block';
-        document.getElementById('loader').style.display = 'none';
-        return;
-      }
 
       const { account, databases, storage, ID, Query } = window;
       const DB_ID = window.APPWRITE_DB_ID;
       const ARTICLES_COLLECTION = window.APPWRITE_COLLECTION_ID;
       const PROFILES_COLLECTION = 'profiles';
-      const LIKES_COLLECTION = 'likes';
-      const COMMENTS_COLLECTION = 'comments';
+      const PROFILE_LIKES_COLLECTION = 'profile_likes';
+      const PROFILE_COMMENTS_COLLECTION = 'profile_comments';
       const BUCKET_ID = window.APPWRITE_BUCKET_ID;
+
+      const urlParams = new URLSearchParams(window.location.search);
+      const profileUserId = urlParams.get('id') || urlParams.get('user');
+
+      let currentUser = null;
+      let profileUser = null;
+      let currentProfile = null;
+      let isOwnProfile = false;
+      let hasLiked = false;
 
       const els = {
         alertBox: document.getElementById('alertBox'),
@@ -539,15 +576,23 @@
         userName: document.getElementById('userName'),
         joinedAT: document.getElementById('joinedAT'),
         bio: document.getElementById('bio'),
-        userId: document.getElementById('userId'),
-        docId: document.getElementById('docId'),
         avatar: document.getElementById('avatar'),
         cover: document.getElementById('cover'),
         totalPosts: document.getElementById('totalPosts'),
         totalViews: document.getElementById('totalViews'),
-        totalLikes: document.getElementById('totalLikes'),
-        totalComments: document.getElementById('totalComments'),
+        profileLikes: document.getElementById('profileLikes'),
+        profileComments: document.getElementById('profileComments'),
         userArticles: document.getElementById('userArticles'),
+        editProfileBtn: document.getElementById('editProfileBtn'),
+        likeBtn: document.getElementById('likeBtn'),
+        likeIcon: document.getElementById('likeIcon'),
+        likeText: document.getElementById('likeText'),
+        likeCount: document.getElementById('likeCount'),
+        shareBtn: document.getElementById('shareBtn'),
+        whatsappShareBtn: document.getElementById('whatsappShareBtn'),
+        commentInput: document.getElementById('commentInput'),
+        postCommentBtn: document.getElementById('postCommentBtn'),
+        commentsList: document.getElementById('commentsList'),
         editModal: document.getElementById('editModal'),
         editForm: document.getElementById('editForm'),
         editDisplayName: document.getElementById('editDisplayName'),
@@ -557,21 +602,16 @@
         editCover: document.getElementById('editCover'),
         avatarPreview: document.getElementById('avatarPreview'),
         coverPreview: document.getElementById('coverPreview'),
-        saveBtn: document.getElementById('saveBtn')
+        saveBtn: document.getElementById('saveBtn'),
+        topbarActions: document.getElementById('topbarActions')
       };
 
       function showAlert(message, type = 'info') {
-        console.log(`[Alert ${type}]:`, message);
         els.alertBox.textContent = message;
         els.alertBox.className = `alert ${type}`;
         els.alertBox.style.display = 'block';
-        if (type!== 'error') {
-          setTimeout(() => els.alertBox.style.display = 'none', 3000);
-        }
+        if (type!== 'error') setTimeout(() => els.alertBox.style.display = 'none', 3000);
       }
-
-      let currentProfile = null;
-      let currentUser = null;
 
       function initials(name) {
         return (name || '?').split(' ').filter(Boolean).map(x => x[0]).join('').toUpperCase().slice(0, 2) || '?';
@@ -588,50 +628,63 @@
         return d.toLocaleDateString(undefined, { year: 'numeric', month: 'short', day: 'numeric' });
       }
 
-      function shareArticle(articleId, title, platform) {
-        const url = `${window.location.origin}/article.html?id=${articleId}`;
-        const text = `Check out: ${title}`;
-        if (platform === 'whatsapp') {
-          window.open(`https://wa.me/?text=${encodeURIComponent(text + ' ' + url)}`, '_blank');
-        } else if (platform === 'facebook') {
-          window.open(`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(url)}`, '_blank');
-        } else if (platform === 'twitter') {
-          window.open(`https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}&url=${encodeURIComponent(url)}`, '_blank');
-        } else if (platform === 'native' && navigator.share) {
-          navigator.share({ title, text, url }).catch(() => {});
-        } else {
-          navigator.clipboard.writeText(url);
-          showAlert('Link copied to clipboard!', 'success');
+      function timeAgo(date) {
+        const seconds = Math.floor((new Date() - new Date(date)) / 1000);
+        if (seconds < 60) return 'just now';
+        const intervals = { year: 31536000, month: 2592000, week: 604800, day: 86400, hour: 3600, minute: 60 };
+        for (const [unit, secondsInUnit] of Object.entries(intervals)) {
+          const interval = Math.floor(seconds / secondsInUnit);
+          if (interval >= 1) return `${interval} ${unit}${interval > 1? 's' : ''} ago`;
         }
       }
 
       async function loadProfile() {
-        console.log('[Profile] loadProfile() start');
         try {
-          currentUser = await account.get();
-          console.log('[Profile] User:', currentUser.$id);
+          // Get current logged in user
+          try {
+            currentUser = await account.get();
+          } catch (e) {
+            currentUser = null;
+          }
 
+          // Determine which profile to load
+          const targetUserId = profileUserId || currentUser?.$id;
+          if (!targetUserId) {
+            showAlert('Please log in to view profiles', 'error');
+            els.loader.style.display = 'none';
+            return;
+          }
+
+          // Load profile document
           const result = await databases.listDocuments(DB_ID, PROFILES_COLLECTION, [
-            Query.equal('userId', currentUser.$id),
+            Query.equal('userId', targetUserId),
             Query.limit(1)
           ]);
 
           if (!result.documents.length) {
             els.loader.style.display = 'none';
-            showAlert('No profile found. Open post.html once to auto-create it.', 'info');
+            showAlert('Profile not found', 'error');
             return;
           }
 
           currentProfile = result.documents[0];
+          profileUser = targetUserId;
+          isOwnProfile = currentUser && currentUser.$id === targetUserId;
 
+          // Show edit button only on own profile
+          if (isOwnProfile) {
+            els.editProfileBtn.style.display = 'block';
+          } else {
+            els.topbarActions.innerHTML = `<a class="btn secondary" href="index.html">Home</a>`;
+          }
+
+          // Render profile
           els.displayName.textContent = safeText(currentProfile.displayName);
           els.userName.textContent = '@' + safeText(currentProfile.userName);
           els.joinedAT.textContent = 'Joined ' + formatDate(currentProfile.joinedAT);
           els.bio.textContent = safeText(currentProfile.bio);
-          els.userId.textContent = safeText(currentProfile.userId);
-          els.docId.textContent = safeText(currentProfile.$id);
 
-          const nameForInitials = currentProfile.displayName || currentUser.name || 'User';
+          const nameForInitials = currentProfile.displayName || 'User';
           els.avatar.textContent = initials(nameForInitials);
 
           if (currentProfile.avatarUrl) {
@@ -643,108 +696,203 @@
             els.cover.style.backgroundImage = `url('${currentProfile.coverUrl}')`;
           }
 
-          // Load articles - FIXED: Handle both submitterId and authorId
+          // Load articles
           let articles;
           try {
             articles = await databases.listDocuments(DB_ID, ARTICLES_COLLECTION, [
-              Query.equal('submitterId', currentUser.$id),
+              Query.equal('authorId', targetUserId),
               Query.equal('status', 'published'),
               Query.orderDesc('$createdAt'),
               Query.limit(100)
             ]);
-          } catch (e1) {
-            console.warn('[Profile] submitterId query failed, trying authorId:', e1.message);
-            try {
-              articles = await databases.listDocuments(DB_ID, ARTICLES_COLLECTION, [
-                Query.equal('authorId', currentUser.$id),
-                Query.equal('status', 'published'),
-                Query.orderDesc('$createdAt'),
-                Query.limit(100)
-              ]);
-            } catch (e2) {
-              console.warn('[Profile] authorId query failed:', e2.message);
-              articles = { total: 0, documents: [] };
-            }
+          } catch (e) {
+            articles = await databases.listDocuments(DB_ID, ARTICLES_COLLECTION, [
+              Query.equal('submitterId', targetUserId),
+              Query.equal('status', 'published'),
+              Query.orderDesc('$createdAt'),
+              Query.limit(100)
+            ]);
           }
-
-          console.log('[Profile] Articles found:', articles.total, articles.documents);
 
           let totalViews = 0;
           articles.documents.forEach(a => totalViews += (a.views || 0));
           els.totalPosts.textContent = articles.total;
           els.totalViews.textContent = totalViews;
 
-          let totalLikes = 0;
-          try {
-            for (const article of articles.documents) {
-              try {
-                const likes = await databases.listDocuments(DB_ID, LIKES_COLLECTION, [
-                  Query.equal('articleId', article.$id),
-                  Query.limit(1)
-                ]);
-                totalLikes += likes.total;
-              } catch (e) {
-                console.warn('[Profile] Likes failed for', article.$id, e.message);
-              }
-            }
-          } catch (e) {
-            console.warn('[Profile] Likes collection error:', e.message);
-          }
-          els.totalLikes.textContent = totalLikes;
+          // Load profile likes
+          const likes = await databases.listDocuments(DB_ID, PROFILE_LIKES_COLLECTION, [
+            Query.equal('profileId', currentProfile.$id),
+            Query.limit(1)
+          ]).catch(() => ({ total: 0 }));
+          els.profileLikes.textContent = likes.total;
+          els.likeCount.textContent = likes.total;
 
-          try {
-            const userComments = await databases.listDocuments(DB_ID, COMMENTS_COLLECTION, [
+          // Check if current user liked
+          if (currentUser) {
+            const userLike = await databases.listDocuments(DB_ID, PROFILE_LIKES_COLLECTION, [
+              Query.equal('profileId', currentProfile.$id),
               Query.equal('userId', currentUser.$id),
               Query.limit(1)
-            ]);
-            els.totalComments.textContent = userComments.total;
-          } catch (e) {
-            console.warn('[Profile] Comments failed:', e.message);
-            els.totalComments.textContent = '0';
+            ]).catch(() => ({ documents: [] }));
+            hasLiked = userLike.documents.length > 0;
+            if (hasLiked) {
+              els.likeBtn.classList.add('liked');
+              els.likeIcon.textContent = '❤️';
+              els.likeText.textContent = 'Liked';
+            }
           }
 
+          // Load comments count
+          const comments = await databases.listDocuments(DB_ID, PROFILE_COMMENTS_COLLECTION, [
+            Query.equal('profileId', currentProfile.$id),
+            Query.limit(1)
+          ]).catch(() => ({ total: 0 }));
+          els.profileComments.textContent = comments.total;
+
+          // Render articles
           if (articles.documents.length === 0) {
             els.userArticles.innerHTML = '<p style="color:var(--muted);padding:20px;text-align:center;">No articles published yet.</p>';
           } else {
-            try {
-              els.userArticles.innerHTML = articles.documents.map(a => `
-                <div class="article-item">
-                  <div class="article-info">
-                    <a href="article.html?id=${a.$id}">${a.title || 'Untitled'}</a>
-                    <div class="article-stats">
-                      ${formatDate(a.$createdAt)} • ${a.views || 0} views • ${a.category || 'General'}
-                    </div>
-                    <div class="share-buttons">
-                      <button class="share-btn" onclick="shareArticle('${a.$id}', '${(a.title || '').replace(/'/g, "\\'")}', 'whatsapp')">📱 WhatsApp</button>
-                      <button class="share-btn" onclick="shareArticle('${a.$id}', '${(a.title || '').replace(/'/g, "\\'")}', 'facebook')">📘 Facebook</button>
-                      <button class="share-btn" onclick="shareArticle('${a.$id}', '${(a.title || '').replace(/'/g, "\\'")}', 'twitter')">🐦 Twitter</button>
-                      <button class="share-btn" onclick="shareArticle('${a.$id}', '${(a.title || '').replace(/'/g, "\\'")}', 'native')">🔗 Share</button>
-                    </div>
+            els.userArticles.innerHTML = articles.documents.map(a => `
+              <div class="article-item">
+                <div class="article-info">
+                  <a href="article.html?id=${a.$id}">${a.title || 'Untitled'}</a>
+                  <div class="article-stats">
+                    ${formatDate(a.$createdAt)} • ${a.views || 0} views • ${a.category || 'General'}
                   </div>
                 </div>
-              `).join('');
-            } catch (renderErr) {
-              console.error('[Profile] Article render error:', renderErr);
-              els.userArticles.innerHTML = '<p style="color:var(--muted);padding:20px;text-align:center;">Error rendering articles. Check console.</p>';
-            }
+              </div>
+            `).join('');
           }
+
+          // Load comments
+          await loadComments();
 
           els.loader.style.display = 'none';
           els.profileBody.style.display = 'block';
-          console.log('[Profile] Render complete');
 
         } catch (error) {
-          console.error('[Profile] Fatal error:', error);
+          console.error('[Profile] Error:', error);
           els.loader.style.display = 'none';
           showAlert(`Error: ${error?.message || 'Failed to load profile'}`, 'error');
         }
       }
 
-      document.getElementById('editProfileBtn').addEventListener('click', () => {
-        if (!currentProfile) {
-          showAlert('Profile not loaded yet', 'error');
+      async function loadComments() {
+        try {
+          const comments = await databases.listDocuments(DB_ID, PROFILE_COMMENTS_COLLECTION, [
+            Query.equal('profileId', currentProfile.$id),
+            Query.orderDesc('$createdAt'),
+            Query.limit(50)
+          ]);
+
+          if (comments.documents.length === 0) {
+            els.commentsList.innerHTML = '<p style="color:var(--muted);text-align:center;padding:20px;">No comments yet. Be the first!</p>';
+          } else {
+            els.commentsList.innerHTML = comments.documents.map(c => `
+              <div class="comment-item">
+                <div class="comment-avatar">${initials(c.userName)}</div>
+                <div class="comment-content">
+                  <div class="comment-author">${c.userName}</div>
+                  <div class="comment-text">${c.text}</div>
+                  <div class="comment-time">${timeAgo(c.$createdAt)}</div>
+                </div>
+              </div>
+            `).join('');
+          }
+        } catch (e) {
+          console.warn('Comments load failed:', e);
+        }
+      }
+
+      // Like button
+      els.likeBtn.addEventListener('click', async () => {
+        if (!currentUser) {
+          showAlert('Please log in to like profiles', 'error');
           return;
         }
+        if (isOwnProfile) {
+          showAlert("You can't like your own profile", 'error');
+          return;
+        }
+
+        try {
+          if (hasLiked) {
+            // Unlike
+            const like = await databases.listDocuments(DB_ID, PROFILE_LIKES_COLLECTION, [
+              Query.equal('profileId', currentProfile.$id),
+              Query.equal('userId', currentUser.$id),
+              Query.limit(1)
+            ]);
+            if (like.documents.length > 0) {
+              await databases.deleteDocument(DB_ID, PROFILE_LIKES_COLLECTION, like.documents[0].$id);
+              hasLiked = false;
+              els.likeBtn.classList.remove('liked');
+              els.likeIcon.textContent = '🤍';
+              els.likeText.textContent = 'Like';
+              els.likeCount.textContent = parseInt(els.likeCount.textContent) - 1;
+            }
+          } else {
+            // Like
+            await databases.createDocument(DB_ID, PROFILE_LIKES_COLLECTION, ID.unique(), {
+              profileId: currentProfile.$id,
+              userId: currentUser.$id
+            });
+            hasLiked = true;
+            els.likeBtn.classList.add('liked');
+            els.likeIcon.textContent = '❤️';
+            els.likeText.textContent = 'Liked';
+            els.likeCount.textContent = parseInt(els.likeCount.textContent) + 1;
+          }
+        } catch (error) {
+          showAlert('Failed to update like', 'error');
+        }
+      });
+
+      // Share buttons
+      els.shareBtn.addEventListener('click', () => {
+        const url = `${window.location.origin}/profile.html?id=${profileUser}`;
+        navigator.clipboard.writeText(url);
+        showAlert('Profile link copied!', 'success');
+      });
+
+      els.whatsappShareBtn.addEventListener('click', () => {
+        const url = `${window.location.origin}/profile.html?id=${profileUser}`;
+        const text = `Check out ${currentProfile.displayName}'s profile on Khabar Darjeeling`;
+        window.open(`https://wa.me/?text=${encodeURIComponent(text + ' ' + url)}`, '_blank');
+      });
+
+      // Post comment
+      els.postCommentBtn.addEventListener('click', async () => {
+        if (!currentUser) {
+          showAlert('Please log in to comment', 'error');
+          return;
+        }
+        const text = els.commentInput.value.trim();
+        if (!text) {
+          showAlert('Comment cannot be empty', 'error');
+          return;
+        }
+
+        try {
+          await databases.createDocument(DB_ID, PROFILE_COMMENTS_COLLECTION, ID.unique(), {
+            profileId: currentProfile.$id,
+            userId: currentUser.$id,
+            userName: currentUser.name || 'User',
+            text: text,
+            avatarUrl: currentProfile.avatarUrl || ''
+          });
+          els.commentInput.value = '';
+          showAlert('Comment posted!', 'success');
+          await loadComments();
+          els.profileComments.textContent = parseInt(els.profileComments.textContent) + 1;
+        } catch (error) {
+          showAlert('Failed to post comment', 'error');
+        }
+      });
+
+      // Edit profile - only for own profile
+      document.getElementById('editProfileBtn').addEventListener('click', () => {
         els.editDisplayName.value = currentProfile.displayName || '';
         els.editUserName.value = currentProfile.userName || '';
         els.editBio.value = currentProfile.bio || '';
@@ -779,7 +927,6 @@
 
       els.editForm.addEventListener('submit', async (e) => {
         e.preventDefault();
-        console.log('[Profile] Save clicked');
         els.saveBtn.disabled = true;
         els.saveBtn.textContent = 'Saving...';
 
@@ -788,20 +935,15 @@
           let coverUrl = currentProfile.coverUrl;
 
           if (els.editAvatar.files[0]) {
-            console.log('[Profile] Uploading avatar...');
             const avatarFile = await storage.createFile(BUCKET_ID, ID.unique(), els.editAvatar.files[0]);
             avatarUrl = storage.getFileView(BUCKET_ID, avatarFile.$id).href;
-            console.log('[Profile] Avatar uploaded:', avatarUrl);
           }
 
           if (els.editCover.files[0]) {
-            console.log('[Profile] Uploading cover...');
             const coverFile = await storage.createFile(BUCKET_ID, ID.unique(), els.editCover.files[0]);
             coverUrl = storage.getFileView(BUCKET_ID, coverFile.$id).href;
-            console.log('[Profile] Cover uploaded:', coverUrl);
           }
 
-          console.log('[Profile] Updating document...');
           await databases.updateDocument(DB_ID, PROFILES_COLLECTION, currentProfile.$id, {
             displayName: els.editDisplayName.value,
             userName: els.editUserName.value,
@@ -814,7 +956,6 @@
           els.editModal.classList.remove('active');
           setTimeout(() => location.reload(), 1000);
         } catch (error) {
-          console.error('[Profile] Save error:', error);
           showAlert(`Upload failed: ${error?.message || 'Check bucket permissions'}`, 'error');
         } finally {
           els.saveBtn.disabled = false;
@@ -823,18 +964,4 @@
       });
 
       document.getElementById('logoutBtn').addEventListener('click', async () => {
-        if (!confirm('Sign out?')) return;
-        try {
-          await account.deleteSession('current');
-          window.location.href = 'login.html';
-        } catch (error) {
-          showAlert('Failed to sign out', 'error');
-        }
-      });
-
-      window.shareArticle = shareArticle;
-      loadProfile();
-    });
-  </script>
-</body>
-</html>
+        if (!confirm('Sign out?'))
