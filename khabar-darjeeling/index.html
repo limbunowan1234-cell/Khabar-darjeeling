@@ -1,32 +1,67 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Khabar Darjeeling</title>
-  <link rel="stylesheet" href="css/style.css?v=302" />
-  <link rel="stylesheet" href="css/responsive.css?v=302" />
+  <link rel="stylesheet" href="css/style.css?v=400">
+  <link rel="stylesheet" href="css/responsive.css?v=400">
+  <style>
+    #gatekeeperLoader{position:fixed;inset:0;background:#fff;display:flex;align-items:center;justify-content:center;z-index:9999}
+  </style>
 </head>
 <body>
   <div id="gatekeeperLoader">Loading...</div>
 
   <nav class="navbar">
-    <div class="container">
-      <a href="index.html" class="logo">खबर दार्जिलिंग</a>
-      <div id="authButtons"></div>
+    <div class="container" style="display:flex;justify-content:space-between;padding:12px">
+      <a href="index.html" style="font-weight:700;color:#c41e3a;text-decoration:none;font-size:20px">खबर दार्जिलिंग</a>
+      <a href="login.html" style="background:#c41e3a;color:#fff;padding:6px 12px;border-radius:4px;text-decoration:none">Login</a>
     </div>
   </nav>
 
-  <div class="breaking-ticker">
-    <div id="breakingTicker">Loading news...</div>
+  <div style="background:#c41e3a;color:#fff;padding:8px">
+    <strong>Breaking:</strong> <span id="breakingTicker">Loading news...</span>
   </div>
 
-  <main class="container">
-    <div id="featuredStory"></div>
-    <div id="newsGrid"></div>
+  <main style="padding:16px;max-width:900px;margin:auto">
+    <div id="featuredStory" style="margin-bottom:24px"></div>
+    <div id="newsGrid" style="display:grid;gap:16px"></div>
   </main>
 
-  <script src="js/appwrite-v2.js?v=2"></script>
-  <script src="js/index-v2.js?v=2"></script>
+<script>
+// NO EXTERNAL JS - everything here
+const ENDPOINT = 'https://nyc.cloud.appwrite.io/v1';
+const PROJECT = 'khabardarjeeling';
+
+async function load(){
+  try{
+    const url = `${ENDPOINT}/databases/Khabar_db/collections/articles/documents?limit=20&orderDesc="$createdAt"`;
+    const res = await fetch(url, { headers:{'X-Appwrite-Project': PROJECT}});
+    const data = await res.json();
+    const arts = data.documents || [];
+
+    document.getElementById('gatekeeperLoader').remove();
+    document.getElementById('breakingTicker').textContent = arts.slice(0,3).map(a=>a.title).join(' • ') || 'No articles';
+
+    if(arts[0]){
+      const f = arts[0];
+      const img = f.imageFileId? `<img src="${ENDPOINT}/storage/buckets/article-image/files/${f.imageFileId}/view?project=${PROJECT}" style="width:100%;max-height:300px;object-fit:cover;border-radius:8px">` : '';
+      document.getElementById('featuredStory').innerHTML = `${img}<h2>${f.title}</h2><p>${f.content?.substring(0,180)}...</p>`;
+    }
+
+    document.getElementById('newsGrid').innerHTML = arts.slice(1).map(a=>`
+      <div style="border-bottom:1px solid #eee;padding:12px 0">
+        <h3 style="margin:0 0 6px">${a.title}</h3>
+        <p style="margin:0;color:#555">${a.content?.substring(0,100)}...</p>
+      </div>
+    `).join('');
+  }catch(e){
+    document.getElementById('breakingTicker').textContent = 'Error: '+e.message;
+    document.getElementById('gatekeeperLoader').remove();
+  }
+}
+load();
+</script>
 </body>
 </html>
