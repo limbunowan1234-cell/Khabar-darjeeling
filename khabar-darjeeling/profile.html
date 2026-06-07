@@ -12,7 +12,7 @@
   <title>My Profile - खबर दार्जिलिंग</title>
 
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="css/style.css?v=121" />
+  <link rel="stylesheet" href="css/style.css?v=122" />
   <style>
     :root {
       --primary: #c41e3a;
@@ -370,11 +370,11 @@
       margin-top: 20px;
     }
     @media (max-width: 640px) {
-  .meta { grid-template-columns: 1fr; }
-  .avatar { width: 96px; height: 96px; bottom: -48px; }
-  .content { padding-top: 62px; }
-  .name { font-size: 24px; }
-  .stats-grid { grid-template-columns: 1fr 1fr; }
+ .meta { grid-template-columns: 1fr; }
+ .avatar { width: 96px; height: 96px; bottom: -48px; }
+ .content { padding-top: 62px; }
+ .name { font-size: 24px; }
+ .stats-grid { grid-template-columns: 1fr 1fr; }
     }
   </style>
 </head>
@@ -491,29 +491,13 @@
   </div>
 
   <script src="https://cdn.jsdelivr.net/npm/appwrite@14.0.1/dist/iife/sdk.min.js"></script>
-  <script src="js/appwrite.js?v=121"></script>
+  <script src="js/appwrite.js?v=122"></script>
   <script>
     document.addEventListener('DOMContentLoaded', async () => {
       console.log('[Profile] DOM loaded');
 
-      // Wait for appwrite.js to finish
+      // Wait for appwrite.js
       if (window.AppwriteReady) await window.AppwriteReady;
-
-      if (!window.Appwrite ||!window.account ||!window.databases ||!window.storage) {
-        document.getElementById('alertBox').textContent = 'Appwrite not initialized. Check js/appwrite.js';
-        document.getElementById('alertBox').className = 'alert error';
-        document.getElementById('alertBox').style.display = 'block';
-        document.getElementById('loader').style.display = 'none';
-        return;
-      }
-
-      const { account, databases, storage, ID, Query } = window;
-      const DB_ID = window.APPWRITE_DB_ID;
-      const ARTICLES_COLLECTION = window.APPWRITE_COLLECTION_ID;
-      const PROFILES_COLLECTION = 'profiles';
-      const LIKES_COLLECTION = 'likes';
-      const COMMENTS_COLLECTION = 'comments';
-      const BUCKET_ID = window.APPWRITE_BUCKET_ID;
 
       const els = {
         alertBox: document.getElementById('alertBox'),
@@ -553,6 +537,21 @@
           setTimeout(() => els.alertBox.style.display = 'none', 3000);
         }
       }
+
+      // Use objects from appwrite.js
+      if (!window.account ||!window.databases ||!window.storage) {
+        showAlert('Appwrite not initialized. Check js/appwrite.js', 'error');
+        els.loader.style.display = 'none';
+        return;
+      }
+
+      const { account, databases, storage, ID, Query } = window;
+      const DB_ID = window.APPWRITE_DB_ID;
+      const ARTICLES_COLLECTION = window.APPWRITE_COLLECTION_ID;
+      const PROFILES_COLLECTION = 'profiles';
+      const LIKES_COLLECTION = 'likes';
+      const COMMENTS_COLLECTION = 'comments';
+      const BUCKET_ID = window.APPWRITE_BUCKET_ID;
 
       let currentProfile = null;
       let currentUser = null;
