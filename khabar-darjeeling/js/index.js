@@ -1,7 +1,12 @@
-import { categoryThemes } from './categoryConfig.js';
-
+// js/index.js?v=128 - Khabar Darjeeling - NO ERUDA, production safe
 const PROJECT_ID = 'khabardarjeeling';
 const ENDPOINT = 'https://nyc.cloud.appwrite.io/v1';
+
+// categoryThemes comes from categoryConfig.js - load it before this file
+// if it's missing, we fall back to a safe default
+const categoryThemes = window.categoryThemes || {
+  default: { color: '#c41e3a' }
+};
 
 function getAppwriteObjects() {
   return {
@@ -13,12 +18,12 @@ function getAppwriteObjects() {
 }
 
 function safeText(value) {
-  return value == null ? '' : String(value);
+  return value == null? '' : String(value);
 }
 
 function safeDate(value) {
   const d = new Date(value);
-  return Number.isNaN(d.getTime()) ? 'Date unknown' : d.toLocaleDateString();
+  return Number.isNaN(d.getTime())? 'Date unknown' : d.toLocaleDateString();
 }
 
 function getImageUrl(id) {
@@ -31,7 +36,7 @@ async function loadArticles() {
   try {
     const { databases, Query, APPWRITE_DATABASE_ID, APPWRITE_COLLECTION_ID } = getAppwriteObjects();
 
-    if (!databases || !Query || !APPWRITE_DATABASE_ID || !APPWRITE_COLLECTION_ID) {
+    if (!databases ||!Query ||!APPWRITE_DATABASE_ID ||!APPWRITE_COLLECTION_ID) {
       throw new Error('Appwrite not initialized');
     }
 
@@ -56,7 +61,7 @@ async function loadArticles() {
       } else {
         const featured = articles[0];
         const featCategoryKey = safeText(featured.category).toLowerCase() || 'default';
-        const featTheme = categoryThemes[featCategoryKey] || categoryThemes.default || { color: '#b81d24' };
+        const featTheme = categoryThemes[featCategoryKey] || categoryThemes.default;
         const imgUrl = getImageUrl(featured.imageFileId || featured.imageUrl);
         const title = safeText(featured.title);
         const location = safeText(featured.location);
@@ -64,12 +69,12 @@ async function loadArticles() {
         const content = safeText(featured.content).substring(0, 200);
 
         featuredElement.innerHTML = `
-          ${imgUrl ? `<img src="${imgUrl}" alt="${title}" style="width:100%;height:400px;object-fit:cover;border-bottom:4px solid ${featTheme.color};">` : ''}
+          ${imgUrl? `<img src="${imgUrl}" alt="${title}" style="width:100%;height:400px;object-fit:cover;border-bottom:4px solid ${featTheme.color};">` : ''}
           <div style="padding:30px;">
             <span class="category-badge" style="background-color:${featTheme.color};color:white;">${category}</span>
             <h2>${title}</h2>
             <p class="meta">${location} • ${safeDate(featured.submittedAt || featured.$createdAt)}</p>
-            <p>${content}${safeText(featured.content).length > 200 ? '...' : ''}</p>
+            <p>${content}${safeText(featured.content).length > 200? '...' : ''}</p>
           </div>
         `;
       }
@@ -79,7 +84,7 @@ async function loadArticles() {
     if (newsGrid) {
       newsGrid.innerHTML = articles.map(article => {
         const categoryKey = safeText(article.category).toLowerCase() || 'default';
-        const theme = categoryThemes[categoryKey] || categoryThemes.default || { color: '#b81d24' };
+        const theme = categoryThemes[categoryKey] || categoryThemes.default;
         const imgUrl = getImageUrl(article.imageFileId || article.imageUrl);
         const title = safeText(article.title);
         const location = safeText(article.location);
@@ -88,17 +93,25 @@ async function loadArticles() {
 
         return `
           <div class="news-card" style="border-top:4px solid ${theme.color};">
-            ${imgUrl ? `<img src="${imgUrl}" alt="${title}">` : ''}
+            ${imgUrl? `<img src="${imgUrl}" alt="${title}">` : ''}
             <div class="news-card-content">
               <span class="category-badge" style="background-color:${theme.color};color:white;">${category}</span>
               <h4>${title}</h4>
               <p class="meta">${location} • ${safeDate(article.submittedAt || article.$createdAt)}</p>
-              <p>${content.substring(0, 100)}${content.length > 100 ? '...' : ''}</p>
+              <p>${content.substring(0, 100)}${content.length > 100? '...' : ''}</p>
             </div>
           </div>
         `;
       }).join('');
     }
+
+    // hide loader once content is ready
+    const loader = document.getElementById('gatekeeperLoader');
+    if (loader) {
+      loader.style.opacity = '0';
+      setTimeout(() => loader.style.display = 'none', 300);
+    }
+
   } catch (error) {
     console.error('Error loading articles:', error);
     const newsGrid = document.getElementById('newsGrid');
@@ -108,11 +121,10 @@ async function loadArticles() {
 
 document.addEventListener('DOMContentLoaded', loadArticles);
 
-document.getElementById('navToggle')?.addEventListener('click', function () {
-  document.getElementById('navMenu')?.classList.toggle('active');
-});
-
+// keep theme toggle in sync with HTML (uses 'dark-mode', not 'dark-theme')
 document.getElementById('themeToggle')?.addEventListener('click', function () {
-  document.body.classList.toggle('dark-theme');
-  this.textContent = document.body.classList.contains('dark-theme') ? '☀️' : '🌙';
+  document.body.classList.toggle('dark-mode');
+  const isDark = document.body.classList.contains('dark-mode');
+  localStorage.setItem('theme', isDark? 'dark' : 'light');
+  this.textContent = isDark? '☀️' : '🌙';
 });
