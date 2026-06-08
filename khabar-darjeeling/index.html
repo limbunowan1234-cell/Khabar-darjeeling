@@ -234,7 +234,7 @@
                     <div class="user-search-wrapper">
                         <div class="search-row">
                             <input type="text" id="userSearch" placeholder="Search users by name..." autocomplete="off" aria-label="Search users">
-                            <button onclick="doUserSearch()" aria-label="Search">🔍</button>
+                            <button type="button" onclick="doUserSearch()" aria-label="Search">🔍</button>
                         </div>
                         <div id="userSearchResults"></div>
                     </div>
@@ -574,7 +574,8 @@
         }
 
         document.addEventListener('click', e => {
-            if (!userSearchInput.contains(e.target) && !userSearchResults.contains(e.target)) {
+            const wrapper = document.querySelector('.user-search-wrapper');
+            if (wrapper && !wrapper.contains(e.target)) {
                 userSearchResults.style.display = 'none';
             }
         });
