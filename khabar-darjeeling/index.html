@@ -1,54 +1,140 @@
 <!DOCTYPE html>
 <html lang="ne">
 <head>
-  <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>खबर दार्जिलिंग</title>
-  <link rel="stylesheet" href="css/style.css?v=703">
-  <link rel="stylesheet" href="css/responsive.css?v=703">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Khabar Darjeeling - ताजा खबर</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="manifest" href="/manifest.json">
+  <meta name="theme-color" content="#c41e3a">
+  <style>
+    .tab-btn{flex:1;padding:8px;border:1px solid #ddd;background:#fff;border-radius:6px;cursor:pointer;font-size:13px;font-weight:500}
+    .tab-btn.active{background:#c41e3a;color:#fff;border-color:#c41e3a}
+    .popular-item{display:flex;gap:10px;padding:10px 0;border-bottom:1px solid #f0f0f0;cursor:pointer;align-items:flex-start}
+    .popular-item:hover{background:#fafafa}
+    .popular-item h5{margin:0;font-size:14px;line-height:1.3;font-weight:500}
+    .action-btn{background:#f5f5f5;border:none;padding:8px 14px;border-radius:20px;font-size:14px;cursor:pointer}
+    .action-btn:hover{background:#e0e0e0}
+  </style>
 </head>
 <body>
-  <header class="navbar"><div class="container" style="display:flex;justify-content:space-between;align-items:center">
-    <a class="logo" href="/">खबर दार्जिलिंग</a>
-    <nav style="display:flex;gap:8px">
-      <a href="login.html" id="loginBtn" class="btn-login">Login</a>
-      <div id="userActions" style="display:none;gap:8px">
-        <a href="post.html" style="background:#c41e3a;color:#fff;padding:8px 14px;border-radius:6px;text-decoration:none;font-size:14px">✍️ Post</a>
-        <a href="admin.html" id="adminBtn" style="background:#000;color:#fff;padding:8px 14px;border-radius:6px;text-decoration:none;font-size:14px;display:none">⚙️ Admin</a>
-        <button id="logoutBtn" style="background:#f0f2f5;border:1px solid #ddd;padding:8px 12px;border-radius:6px;font-size:14px">Logout</button>
+  <header class="header">
+    <div class="container header-inner">
+      <div class="logo">
+        <h1>🏔️ Khabar Darjeeling</h1>
+        <p class="tagline">दार्जिलिङको आवाज</p>
+      </div>
+      <div class="header-actions">
+        <button id="themeToggle" class="icon-btn">🌙</button>
+        <a href="/login.html" id="loginBtn" class="btn btn-primary">Login</a>
+        <div id="userActions" style="display:none;gap:8px">
+          <a href="/post.html" id="postBtn" class="btn btn-primary">+ Post</a>
+          <a href="/admin.html" id="adminBtn" class="btn btn-outline" style="display:none">Admin</a>
+          <button id="logoutBtn" class="btn btn-outline">Logout</button>
+        </div>
+      </div>
+    </div>
+    <nav class="nav">
+      <div class="container nav-inner">
+        <button class="nav-toggle" id="navToggle">☰</button>
+        <ul class="nav-menu" id="navMenu">
+          <li><a href="/" class="active">Home</a></li>
+          <li><a href="/?category=local">Local</a></li>
+          <li><a href="/?category=politics">Politics</a></li>
+          <li><a href="/?category=culture">Culture</a></li>
+          <li><a href="/?category=tourism">Tourism</a></li>
+          <li><a href="/?category=sports">Sports</a></li>
+        </ul>
+        <div class="search-box">
+          <input type="text" id="searchInput" placeholder="Search...">
+          <button id="searchBtn">🔍</button>
+        </div>
       </div>
     </nav>
-  </div></header>
+  </header>
 
-  <div class="breaking-bar"><div class="container"><span class="breaking-tag">Breaking</span><span id="ticker"></span></div></div>
-  <main class="container"><section id="featured"></section><section id="grid" class="news-grid"></section></main>
-  <script src="js/app.js?v=700"></script>
-  
-  <script>
-  (async()=>{
-    const jwt = localStorage.getItem('kd_jwt');
-    const email = localStorage.getItem('kd_email');
-    if(!jwt) return;
-    
-    try{
-      const r = await fetch('https://nyc.cloud.appwrite.io/v1/account',{
-        headers:{'X-Appwrite-Project':'khabardarjeeling','X-Appwrite-JWT':jwt}
-      });
-      if(!r.ok) throw 0;
-      const user = await r.json();
+  <div class="breaking-news">
+    <div class="container">
+      <span class="breaking-label">BREAKING</span>
+      <div id="breakingContent" class="breaking-content">Loading...</div>
+    </div>
+  </div>
+
+  <main class="container main-grid">
+    <section class="content">
+      <div id="featuredArticle" class="featured"></div>
+      <h2 class="section-title">Latest News</h2>
+      <div id="articlesContainer" class="articles-grid"></div>
+    </section>
+
+    <aside class="sidebar">
+      <!-- TOP 10 WIDGET -->
+      <div class="widget">
+        <h3>📊 Top 10 News</h3>
+        <div class="tabs" style="display:flex;gap:4px;margin:12px 0">
+          <button class="tab-btn active" onclick="loadTop('daily',this)">Today</button>
+          <button class="tab-btn" onclick="loadTop('weekly',this)">Week</button>
+          <button class="tab-btn" onclick="loadTop('monthly',this)">Month</button>
+        </div>
+        <div id="topNews"><p style="color:#999;text-align:center;padding:20px">Loading...</p></div>
+      </div>
+
+      <div class="widget">
+        <h3>🔥 Popular</h3>
+        <div id="popularNews"></div>
+      </div>
       
-      document.getElementById('loginBtn').style.display='none';
-      document.getElementById('userActions').style.display='flex';
-      if((user.email||email).toLowerCase()==='nowanad@gmail.com'){
-        document.getElementById('adminBtn').style.display='inline-block';
-      }
-      document.getElementById('logoutBtn').onclick=()=>{
-        localStorage.removeItem('kd_jwt');
-        localStorage.removeItem('kd_email');
-        location.reload();
-      };
-    }catch(e){
-      localStorage.removeItem('kd_jwt');
+      <div class="widget newsletter">
+        <h3>📧 Subscribe</h3>
+        <form id="newsletterForm">
+          <input type="email" placeholder="Your email" required style="width:100%;padding:10px;border:1px solid #ddd;border-radius:6px">
+          <button type="submit" class="btn btn-primary" style="width:100%;margin-top:8px">Subscribe</button>
+        </form>
+      </div>
+    </aside>
+  </main>
+
+  <footer class="footer">
+    <div class="container">
+      <p>&copy; 2026 Khabar Darjeeling</p>
+    </div>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/appwrite@15.0.0"></script>
+  <script src="js/config.js"></script>
+  <script src="js/app.js"></script>
+  <script>
+    // Top 10 loader (added here to keep index self-contained)
+    async function loadTop(period, btn){
+      document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
+      btn.classList.add('active');
+      const now = new Date(); let since = new Date();
+      if(period==='daily') since.setDate(now.getDate()-1);
+      if(period==='weekly') since.setDate(now.getDate()-7);
+      if(period==='monthly') since.setMonth(now.getMonth()-1);
+      
+      try {
+        const { Query } = window.Appwrite;
+        const res = await getArticles([
+          Query.equal('status','approved'),
+          Query.greaterThanEqual('publishedAt', since.toISOString()),
+          Query.orderDesc('views'),
+          Query.limit(10)
+        ]);
+        const el = document.getElementById('topNews');
+        if(!res.documents.length){ el.innerHTML='<p style="text-align:center;color:#999">No data yet</p>'; return; }
+        el.innerHTML = res.documents.map((a,i)=>`
+          <div class="popular-item" onclick="location.href='article.html?id=${a.$id}'">
+            <span style="color:#c41e3a;font-weight:bold;min-width:20px">${i+1}</span>
+            <div style="flex:1">
+              <h5>${a.title}</h5>
+              <div style="font-size:12px;color:#666;margin-top:2px">👁️ ${a.views||0} • ❤️ ${a.likes||0} • 💬</div>
+            </div>
+          </div>
+        `).join('');
+      } catch(e){ document.getElementById('topNews').innerHTML='<p>Error loading</p>'; }
     }
-  })();
+    setTimeout(()=>{ const first=document.querySelector('.tab-btn'); if(first) loadTop('daily',first); }, 1500);
   </script>
-</body></html>
+</body>
+</html>
