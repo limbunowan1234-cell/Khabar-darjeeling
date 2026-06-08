@@ -6,103 +6,83 @@
     <title>Profile • खबर दार्जिलिंग</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
-        :root {
-            --brand-red: #c41e3a;
-            --brand-red-dark: #a01830;
-            --text-dark: #1c1e21;
-            --bg-gray: #f0f2f5;
-            --border-color: #dddfe2;
-            --text-light: #f5f6f7;
-        }
-        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Poppins', sans-serif; }
-        body { background-color: var(--bg-gray); color: var(--text-dark); transition: background-color 0.3s, color 0.3s; }
-
-       .container { max-width: 1100px; margin: 0 auto; padding: 0 16px; }
-
-        /* Navbar */
-       .navbar { background: #fff; border-bottom: 1px solid var(--border-color); padding: 12px 0; position: sticky; top: 0; z-index: 100; }
-       .navbar-content { display: flex; justify-content: space-between; align-items: center; }
-       .nav-logo { display: flex; align-items: center; gap: 12px; text-decoration: none; }
-       .nav-logo img { height: 45px; width: 45px; border-radius: 50%; }
-       .nav-logo h1 { font-size: 20px; color: var(--brand-red); }
-       .nav-links { display: flex; gap: 12px; align-items: center; }
-       .nav-links a { text-decoration: none; color: var(--text-dark); font-weight: 500; font-size: 14px; }
-       .nav-links a:hover { color: var(--brand-red); }
-
-        /* Profile Header */
-       .profile-header { background: #fff; border-radius: 8px; margin: 24px 0; padding: 32px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
-       .profile-top { display: flex; gap: 24px; align-items: flex-start; flex-wrap: wrap; }
-       .profile-avatar { width: 120px; height: 120px; border-radius: 50%; object-fit: cover; border: 3px solid var(--brand-red); flex-shrink: 0; }
-       .profile-avatar-initials { width: 120px; height: 120px; border-radius: 50%; background: var(--brand-red); color: #fff; display: flex; align-items: center; justify-content: center; font-size: 42px; font-weight: 700; flex-shrink: 0; }
-       .profile-info { flex: 1; min-width: 250px; }
-       .profile-info h1 { font-size: 28px; margin-bottom: 8px; }
-       .profile-meta { color: #606770; font-size: 14px; margin-bottom: 16px; }
-       .profile-badges { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 16px; }
-       .badge { background: var(--brand-red); color: #fff; padding: 4px 12px; border-radius: 12px; font-size: 12px; font-weight: 600; }
-       .profile-stats { display: flex; gap: 32px; margin-top: 20px; padding-top: 20px; border-top: 1px solid var(--border-color); }
-       .stat-item { text-align: center; }
-       .stat-number { font-size: 24px; font-weight: 700; color: var(--brand-red); }
-       .stat-label { font-size: 13px; color: #606770; margin-top: 4px; }
-       .profile-actions { display: flex; gap: 12px; margin-top: 16px; flex-wrap: wrap; }
-       .btn { padding: 10px 20px; border-radius: 6px; font-weight: 600; font-size: 14px; cursor: pointer; border: none; transition: all 0.2s; text-decoration: none; display: inline-block; }
-       .btn-primary { background: var(--brand-red); color: #fff; }
-       .btn-primary:hover { background: var(--brand-red-dark); }
-       .btn-secondary { background: #e4e6eb; color: var(--text-dark); }
-       .btn-secondary:hover { background: #d8dadf; }
-
-        /* Edit Modal */
-       .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 1000; align-items: center; justify-content: center; }
-       .modal.active { display: flex; }
-       .modal-content { background: #fff; border-radius: 8px; padding: 24px; max-width: 500px; width: 90%; max-height: 90vh; overflow-y: auto; }
-       .modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
-       .modal-header h2 { font-size: 20px; }
-       .modal-close { background: none; border: none; font-size: 28px; cursor: pointer; color: #606770; }
-       .form-group { margin-bottom: 16px; }
-       .form-group label { display: block; margin-bottom: 6px; font-weight: 500; font-size: 14px; }
-       .form-group input { width: 100%; padding: 12px; border: 1px solid var(--border-color); border-radius: 6px; font-size: 14px; }
-       .form-group input:focus { outline: none; border-color: var(--brand-red); }
-       .avatar-preview { width: 100px; height: 100px; border-radius: 50%; object-fit: cover; margin: 12px auto; display: block; }
-
-        /* Posts Grid */
-       .posts-section { background: #fff; border-radius: 8px; padding: 24px; margin-bottom: 24px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
-       .section-title { font-size: 20px; margin-bottom: 20px; padding-bottom: 12px; border-bottom: 2px solid var(--brand-red); }
-       .posts-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 20px; }
-       .post-card { border: 1px solid var(--border-color); border-radius: 8px; overflow: hidden; transition: transform 0.2s, box-shadow 0.2s; text-decoration: none; color: inherit; display: flex; flex-direction: column; }
-       .post-card:hover { transform: translateY(-4px); box-shadow: 0 4px 12px rgba(0,0,0,0.15); }
-       .post-card img { width: 100%; height: 180px; object-fit: cover; }
-       .post-card-content { padding: 16px; flex: 1; display: flex; flex-direction: column; }
-       .post-card h3 { font-size: 16px; margin-bottom: 8px; line-height: 1.3; }
-       .post-card p { font-size: 13px; color: #606770; flex: 1; margin-bottom: 12px; }
-       .post-card-meta { display: flex; justify-content: space-between; font-size: 12px; color: #90949c; padding-top: 12px; border-top: 1px solid var(--border-color); }
-
-       .empty-state { text-align: center; padding: 40px; color: #606770; }
-       .loader { text-align: center; padding: 40px; }
-       .spinner { width: 40px; height: 40px; border: 4px solid rgba(196, 30, 58, 0.1); border-left-color: var(--brand-red); border-radius: 50%; animation: spin 1s linear infinite; margin: 0 auto; }
-        @keyframes spin { to { transform: rotate(360deg); } }
-
-        /* Dark Mode */
-        body.dark-mode { background-color: #18191a; color: var(--text-light); }
-        body.dark-mode.navbar { background: #242526; border-bottom-color: #3a3b3c; }
-        body.dark-mode.nav-links a { color: var(--text-light); }
-        body.dark-mode.profile-header, body.dark-mode.posts-section, body.dark-mode.modal-content { background: #242526; }
-        body.dark-mode.profile-meta, body.dark-mode.post-card p, body.dark-mode.stat-label { color: #b0b3b8; }
-        body.dark-mode.profile-stats, body.dark-mode.post-card-meta { border-color: #3a3b3c; }
-        body.dark-mode.post-card { border-color: #3a3b3c; background: #242526; }
-        body.dark-mode.btn-secondary { background: #3a3b3c; color: var(--text-light); }
-        body.dark-mode.form-group input { background: #3a3b3c; border-color: #4e4f50; color: var(--text-light); }
-
-        /* Dark mode toggle */
-       .theme-toggle { background: none; border: none; font-size: 20px; cursor: pointer; padding: 5px; }
-
-        @media (max-width: 768px) {
-           .profile-top { flex-direction: column; align-items: center; text-align: center; }
-           .profile-stats { justify-content: center; }
-           .posts-grid { grid-template-columns: 1fr; }
+        :root { --brand-red:#c41e3a;--brand-red-dark:#a01830;--text-dark:#1c1e21;--bg-gray:#f0f2f5;--border-color:#dddfe2;--text-light:#f5f6f7; }
+        * { box-sizing:border-box;margin:0;padding:0;font-family:'Poppins',sans-serif; }
+        body { background-color:var(--bg-gray);color:var(--text-dark);transition:background-color 0.3s,color 0.3s; }
+        .container { max-width:1100px;margin:0 auto;padding:0 16px; }
+        .navbar { background:#fff;border-bottom:1px solid var(--border-color);padding:12px 0;position:sticky;top:0;z-index:100; }
+        .navbar-content { display:flex;justify-content:space-between;align-items:center; }
+        .nav-logo { display:flex;align-items:center;gap:12px;text-decoration:none; }
+        .nav-logo img { height:45px;width:45px;border-radius:50%; }
+        .nav-logo h1 { font-size:20px;color:var(--brand-red); }
+        .nav-links { display:flex;gap:12px;align-items:center; }
+        .nav-links a { text-decoration:none;color:var(--text-dark);font-weight:500;font-size:14px; }
+        .nav-links a:hover { color:var(--brand-red); }
+        .theme-toggle { background:none;border:none;font-size:20px;cursor:pointer;padding:5px; }
+        .profile-header { background:#fff;border-radius:8px;margin:24px 0;padding:32px;box-shadow:0 2px 4px rgba(0,0,0,0.1); }
+        .profile-top { display:flex;gap:24px;align-items:flex-start;flex-wrap:wrap; }
+        .profile-avatar { width:120px;height:120px;border-radius:50%;object-fit:cover;border:3px solid var(--brand-red);flex-shrink:0; }
+        .profile-avatar-initials { width:120px;height:120px;border-radius:50%;background:var(--brand-red);color:#fff;display:flex;align-items:center;justify-content:center;font-size:42px;font-weight:700;flex-shrink:0; }
+        .profile-info { flex:1;min-width:250px; }
+        .profile-info h1 { font-size:28px;margin-bottom:8px; }
+        .profile-bio { color:#444;font-size:14px;margin-bottom:8px;line-height:1.5; }
+        body.dark-mode .profile-bio { color:#ccc; }
+        .profile-meta { color:#606770;font-size:14px;margin-bottom:16px; }
+        .profile-badges { display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px; }
+        .badge { background:var(--brand-red);color:#fff;padding:4px 12px;border-radius:12px;font-size:12px;font-weight:600; }
+        .profile-stats { display:flex;gap:32px;margin-top:20px;padding-top:20px;border-top:1px solid var(--border-color); }
+        .stat-item { text-align:center; }
+        .stat-number { font-size:24px;font-weight:700;color:var(--brand-red); }
+        .stat-label { font-size:13px;color:#606770;margin-top:4px; }
+        .profile-actions { display:flex;gap:12px;margin-top:16px;flex-wrap:wrap; }
+        .btn { padding:10px 20px;border-radius:6px;font-weight:600;font-size:14px;cursor:pointer;border:none;transition:all 0.2s;text-decoration:none;display:inline-block; }
+        .btn-primary { background:var(--brand-red);color:#fff; }
+        .btn-primary:hover { background:var(--brand-red-dark); }
+        .btn-secondary { background:#e4e6eb;color:var(--text-dark); }
+        .btn-secondary:hover { background:#d8dadf; }
+        .modal { display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.5);z-index:1000;align-items:center;justify-content:center; }
+        .modal.active { display:flex; }
+        .modal-content { background:#fff;border-radius:8px;padding:24px;max-width:500px;width:90%;max-height:90vh;overflow-y:auto; }
+        .modal-header { display:flex;justify-content:space-between;align-items:center;margin-bottom:20px; }
+        .modal-header h2 { font-size:20px; }
+        .modal-close { background:none;border:none;font-size:28px;cursor:pointer;color:#606770; }
+        .form-group { margin-bottom:16px; }
+        .form-group label { display:block;margin-bottom:6px;font-weight:500;font-size:14px; }
+        .form-group input, .form-group textarea { width:100%;padding:12px;border:1px solid var(--border-color);border-radius:6px;font-size:14px;font-family:inherit; }
+        .form-group textarea { min-height:80px;resize:vertical; }
+        .form-group input:focus, .form-group textarea:focus { outline:none;border-color:var(--brand-red); }
+        .avatar-preview { width:100px;height:100px;border-radius:50%;object-fit:cover;margin:12px auto;display:block; }
+        .posts-section { background:#fff;border-radius:8px;padding:24px;margin-bottom:24px;box-shadow:0 2px 4px rgba(0,0,0,0.1); }
+        .section-title { font-size:20px;margin-bottom:20px;padding-bottom:12px;border-bottom:2px solid var(--brand-red); }
+        .posts-grid { display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:20px; }
+        .post-card { border:1px solid var(--border-color);border-radius:8px;overflow:hidden;transition:transform 0.2s,box-shadow 0.2s;text-decoration:none;color:inherit;display:flex;flex-direction:column; }
+        .post-card:hover { transform:translateY(-4px);box-shadow:0 4px 12px rgba(0,0,0,0.15); }
+        .post-card img { width:100%;height:180px;object-fit:cover; }
+        .post-card-content { padding:16px;flex:1;display:flex;flex-direction:column; }
+        .post-card h3 { font-size:16px;margin-bottom:8px;line-height:1.3; }
+        .post-card p { font-size:13px;color:#606770;flex:1;margin-bottom:12px; }
+        .post-card-meta { display:flex;justify-content:space-between;font-size:12px;color:#90949c;padding-top:12px;border-top:1px solid var(--border-color); }
+        .empty-state { text-align:center;padding:40px;color:#606770; }
+        .loader { text-align:center;padding:40px; }
+        .spinner { width:40px;height:40px;border:4px solid rgba(196,30,58,0.1);border-left-color:var(--brand-red);border-radius:50%;animation:spin 1s linear infinite;margin:0 auto; }
+        @keyframes spin { to { transform:rotate(360deg); } }
+        body.dark-mode { background-color:#18191a;color:var(--text-light); }
+        body.dark-mode .navbar { background:#242526;border-bottom-color:#3a3b3c; }
+        body.dark-mode .nav-links a { color:var(--text-light); }
+        body.dark-mode .profile-header, body.dark-mode .posts-section, body.dark-mode .modal-content { background:#242526; }
+        body.dark-mode .profile-meta, body.dark-mode .post-card p, body.dark-mode .stat-label { color:#b0b3b8; }
+        body.dark-mode .profile-stats, body.dark-mode .post-card-meta { border-color:#3a3b3c; }
+        body.dark-mode .post-card { border-color:#3a3b3c;background:#242526; }
+        body.dark-mode .btn-secondary { background:#3a3b3c;color:var(--text-light); }
+        body.dark-mode .form-group input, body.dark-mode .form-group textarea { background:#3a3b3c;border-color:#4e4f50;color:var(--text-light); }
+        @media (max-width:768px) {
+          .profile-top { flex-direction:column;align-items:center;text-align:center; }
+          .profile-stats { justify-content:center; }
+          .posts-grid { grid-template-columns:1fr; }
         }
     </style>
 </head>
 <body>
-    <!-- Navbar -->
     <nav class="navbar">
         <div class="container">
             <div class="navbar-content">
@@ -118,52 +98,37 @@
         </div>
     </nav>
 
-    <!-- Loader -->
     <div class="loader" id="pageLoader">
         <div class="spinner"></div>
-        <p style="margin-top: 16px;">Loading profile...</p>
+        <p style="margin-top:16px;">Loading profile...</p>
     </div>
 
-    <!-- Main Content -->
-    <div class="container" id="profileContent" style="display: none;">
-        <!-- Profile Header -->
+    <div class="container" id="profileContent" style="display:none;">
         <div class="profile-header">
             <div class="profile-top">
                 <div id="avatarContainer"></div>
                 <div class="profile-info">
                     <h1 id="profileName">Loading...</h1>
+                    <div class="profile-bio" id="profileBio"></div>
                     <div class="profile-meta" id="profileMeta"></div>
                     <div class="profile-badges" id="profileBadges"></div>
                     <div class="profile-actions" id="profileActions"></div>
                     <div class="profile-stats">
-                        <div class="stat-item">
-                            <div class="stat-number" id="postCount">0</div>
-                            <div class="stat-label">Posts</div>
-                        </div>
-                        <div class="stat-item">
-                            <div class="stat-number" id="viewCount">0</div>
-                            <div class="stat-label">Total Views</div>
-                        </div>
-                        <div class="stat-item">
-                            <div class="stat-number" id="joinDate">-</div>
-                            <div class="stat-label">Joined</div>
-                        </div>
+                        <div class="stat-item"><div class="stat-number" id="postCount">0</div><div class="stat-label">Posts</div></div>
+                        <div class="stat-item"><div class="stat-number" id="viewCount">0</div><div class="stat-label">Total Views</div></div>
+                        <div class="stat-item"><div class="stat-number" id="joinDate">-</div><div class="stat-label">Joined</div></div>
                     </div>
                 </div>
             </div>
         </div>
 
-        <!-- Posts Section -->
         <div class="posts-section">
             <h2 class="section-title">Published Articles</h2>
             <div class="posts-grid" id="postsGrid"></div>
-            <div class="empty-state" id="emptyPosts" style="display: none;">
-                <p>No articles published yet.</p>
-            </div>
+            <div class="empty-state" id="emptyPosts" style="display:none;"><p>No articles published yet.</p></div>
         </div>
     </div>
 
-    <!-- Edit Profile Modal -->
     <div class="modal" id="editModal">
         <div class="modal-content">
             <div class="modal-header">
@@ -177,22 +142,25 @@
                     <input type="file" id="avatarInput" accept="image/*" onchange="previewAvatar(event)">
                 </div>
                 <div class="form-group">
-                    <label>Full Name</label>
+                    <label>Display Name</label>
                     <input type="text" id="editName" required>
                 </div>
-                <button type="submit" class="btn btn-primary" style="width: 100%;" id="saveBtn">Save Changes</button>
+                <div class="form-group">
+                    <label>Bio</label>
+                    <textarea id="editBio" placeholder="Tell people about yourself..."></textarea>
+                </div>
+                <button type="submit" class="btn btn-primary" style="width:100%;" id="saveBtn">Save Changes</button>
             </form>
         </div>
     </div>
 
-    <script src="js/appwrite.js"></script>
+    <script src="js/appwrite.js?v=127"></script>
     <script>
         let currentUser = null;
         let profileUserId = null;
-        let profileUserData = null;
+        let profileData = null;   // row from profiles collection (or synthesized)
         let isOwnProfile = false;
 
-        // Theme toggle
         if (localStorage.getItem('theme') === 'dark') {
             document.body.classList.add('dark-mode');
             document.getElementById('themeToggle').textContent = '☀️';
@@ -200,251 +168,185 @@
         document.getElementById('themeToggle').addEventListener('click', () => {
             document.body.classList.toggle('dark-mode');
             const isDark = document.body.classList.contains('dark-mode');
-            localStorage.setItem('theme', isDark? 'dark' : 'light');
-            document.getElementById('themeToggle').textContent = isDark? '☀️' : '🌙';
+            localStorage.setItem('theme', isDark ? 'dark' : 'light');
+            document.getElementById('themeToggle').textContent = isDark ? '☀️' : '🌙';
         });
 
-        // Get userId from URL
-        const urlParams = new URLSearchParams(window.location.search);
-        profileUserId = urlParams.get('userId');
+        profileUserId = new URLSearchParams(location.search).get('userId');
 
-        // Initialize
         async function init() {
             try {
-                // Check if logged in
-                try {
-                    currentUser = await window.account.get();
-                } catch (e) {
-                    // Not logged in
-                }
-
-                // If no userId in URL, use current user or redirect
+                try { currentUser = await window.account.get(); } catch {}
                 if (!profileUserId) {
-                    if (currentUser) {
-                        profileUserId = currentUser.$id;
-                    } else {
-                        window.location.href = 'login.html';
-                        return;
-                    }
+                    if (currentUser) profileUserId = currentUser.$id;
+                    else { location.href = 'login.html'; return; }
                 }
-
                 isOwnProfile = currentUser && currentUser.$id === profileUserId;
 
-                // Load profile
                 await loadProfile();
                 await loadUserPosts();
 
                 document.getElementById('pageLoader').style.display = 'none';
                 document.getElementById('profileContent').style.display = 'block';
-
             } catch (error) {
                 console.error('Init error:', error);
-                document.getElementById('pageLoader').innerHTML = '<p style="color:red;">Failed to load profile. User may not exist.</p>';
+                document.getElementById('pageLoader').innerHTML = '<p style="color:red;">Failed to load profile.</p>';
             }
         }
 
         async function loadProfile() {
-            // For now, we can only get current user details
-            // To get other users, you'd need an Appwrite Function with users.list()
-            if (isOwnProfile) {
-                profileUserData = currentUser;
-            } else {
-                // Placeholder - in production use Appwrite Function to get user by ID
-                profileUserData = {
-                    $id: profileUserId,
-                    name: 'User ' + profileUserId.substring(0, 8),
-                    email: 'user@example.com',
-                    $createdAt: new Date().toISOString(),
-                    labels: []
+            // Read from profiles collection
+            const prof = await window.getProfile(profileUserId);
+            if (prof) {
+                profileData = prof;
+            } else if (isOwnProfile && currentUser) {
+                // No profile row yet — synthesize from account; create on first save
+                profileData = {
+                    userId: currentUser.$id,
+                    displayName: currentUser.name,
+                    userName: currentUser.name,
+                    bio: '',
+                    avatarUrl: '',
+                    joinedAT: currentUser.$createdAt
                 };
+            } else {
+                profileData = { userId: profileUserId, displayName: 'User', userName: 'User', bio: '', avatarUrl: '', joinedAT: new Date().toISOString() };
             }
-
             renderProfile();
         }
 
         function renderProfile() {
-            // Avatar
-            const avatarContainer = document.getElementById('avatarContainer');
-            if (profileUserData.prefs?.avatar) {
-                avatarContainer.innerHTML = `<img src="${profileUserData.prefs.avatar}" class="profile-avatar" alt="${profileUserData.name}">`;
-            } else {
-                const initials = getInitials(profileUserData.name);
-                avatarContainer.innerHTML = `<div class="profile-avatar-initials">${initials}</div>`;
-            }
+            const name = profileData.displayName || profileData.userName || 'User';
+            const avatar = (profileData.avatarUrl && profileData.avatarUrl !== 'null') ? profileData.avatarUrl : '';
 
-            // Name & Meta
-            document.getElementById('profileName').textContent = profileUserData.name || 'User';
-            document.title = `${profileUserData.name} • खबर दार्जिलिंग`;
+            const ac = document.getElementById('avatarContainer');
+            ac.innerHTML = avatar
+                ? `<img src="${avatar}" class="profile-avatar" alt="${esc(name)}" onerror="this.outerHTML='<div class=\\'profile-avatar-initials\\'>${getInitials(name)}</div>'">`
+                : `<div class="profile-avatar-initials">${getInitials(name)}</div>`;
 
-            const joinDate = new Date(profileUserData.$createdAt).toLocaleDateString('en-US', { year: 'numeric', month: 'long' });
-            document.getElementById('profileMeta').textContent = `Joined ${joinDate}`;
-            document.getElementById('joinDate').textContent = joinDate;
+            document.getElementById('profileName').textContent = name;
+            document.title = `${name} • खबर दार्जिलिंग`;
+            document.getElementById('profileBio').textContent = profileData.bio || '';
 
-            // Badges
-            const badgesEl = document.getElementById('profileBadges');
-            badgesEl.innerHTML = '';
-            if (profileUserData.labels && profileUserData.labels.length > 0) {
-                profileUserData.labels.forEach(label => {
-                    badgesEl.innerHTML += `<span class="badge">${label.toUpperCase()}</span>`;
-                });
-            }
+            const joined = new Date(profileData.joinedAT || profileData.$createdAt).toLocaleDateString('en-US', { year:'numeric', month:'long' });
+            document.getElementById('profileMeta').textContent = `Joined ${joined}`;
+            document.getElementById('joinDate').textContent = joined;
 
-            // Actions
-            const actionsEl = document.getElementById('profileActions');
+            const actions = document.getElementById('profileActions');
             if (isOwnProfile) {
-                actionsEl.innerHTML = `<button class="btn btn-primary" onclick="openEditModal()">Edit Profile</button>`;
-            } else if (currentUser) {
-                actionsEl.innerHTML = `<button class="btn btn-secondary" onclick="alert('Follow feature coming soon!')">Follow</button>`;
+                actions.innerHTML = `<button class="btn btn-primary" onclick="openEditModal()">Edit Profile</button>`;
+            } else {
+                actions.innerHTML = '';
             }
         }
 
         async function loadUserPosts() {
             try {
-                const response = await window.databases.listDocuments(
-                    window.APPWRITE_DB_ID,
-                    window.APPWRITE_COLLECTION_ID,
-                    [
-                        window.Query.equal('submitterId', profileUserId),
-                        window.Query.equal('status', 'published'),
-                        window.Query.orderDesc('$createdAt'),
-                        window.Query.limit(50)
-                    ]
+                const res = await window.databases.listDocuments(
+                    window.APPWRITE_DB_ID, window.COL_ARTICLES,
+                    [ window.Query.equal('submitterId', profileUserId),
+                      window.Query.equal('status', 'published'),
+                      window.Query.orderDesc('$createdAt'),
+                      window.Query.limit(50) ]
                 );
-
-                document.getElementById('postCount').textContent = response.total;
-
-                // Calculate total views
-                const totalViews = response.documents.reduce((sum, doc) => sum + (doc.views || 0), 0);
+                document.getElementById('postCount').textContent = res.total;
+                const totalViews = res.documents.reduce((s, d) => s + (d.views || 0), 0);
                 document.getElementById('viewCount').textContent = totalViews.toLocaleString();
 
-                const postsGrid = document.getElementById('postsGrid');
-                if (response.documents.length === 0) {
-                    document.getElementById('emptyPosts').style.display = 'block';
-                    return;
-                }
+                const grid = document.getElementById('postsGrid');
+                if (!res.documents.length) { document.getElementById('emptyPosts').style.display = 'block'; return; }
 
-                postsGrid.innerHTML = response.documents.map(article => {
-                    const imageUrl = article.imageFileId
-                       ? `${window.APPWRITE_ENDPOINT}/storage/buckets/${window.APPWRITE_BUCKET_ID}/files/${article.imageFileId}/view?project=${window.APPWRITE_PROJECT_ID}`
-                        : article.imageUrl || '';
-
+                grid.innerHTML = res.documents.map(a => {
+                    const img = a.imageFileId
+                        ? window.storage.getFileViewUrl(window.APPWRITE_BUCKET_ID, a.imageFileId)
+                        : (a.youtube_id ? `https://img.youtube.com/vi/${a.youtube_id}/maxresdefault.jpg` : '');
                     return `
-                        <a href="article.html?id=${article.$id}" class="post-card">
-                            ${imageUrl? `<img src="${imageUrl}" alt="${escapeHtml(article.title)}">` : ''}
+                        <a href="article.html?id=${a.$id}" class="post-card">
+                            ${img ? `<img src="${img}" alt="${esc(a.title)}" onerror="this.style.display='none'">` : ''}
                             <div class="post-card-content">
-                                <h3>${escapeHtml(article.title)}</h3>
-                                <p>${truncateText(article.content, 120)}</p>
+                                <h3>${esc(a.title)}</h3>
+                                <p>${truncate(a.content, 120)}</p>
                                 <div class="post-card-meta">
-                                    <span>${formatDate(article.$createdAt)}</span>
-                                    <span>${(article.views || 0).toLocaleString()} views</span>
+                                    <span>${formatDate(a.$createdAt)}</span>
+                                    <span>${(a.views || 0).toLocaleString()} views</span>
                                 </div>
                             </div>
-                        </a>
-                    `;
+                        </a>`;
                 }).join('');
-
             } catch (error) {
                 console.error('Load posts error:', error);
                 document.getElementById('emptyPosts').style.display = 'block';
             }
         }
 
-        // Edit Profile
         function openEditModal() {
-            document.getElementById('editName').value = profileUserData.name || '';
-            const avatarUrl = profileUserData.prefs?.avatar || '';
-            document.getElementById('avatarPreview').src = avatarUrl || 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="100" height="100"%3E%3Crect fill="%23ddd" width="100" height="100"/%3E%3C/svg%3E';
+            document.getElementById('editName').value = profileData.displayName || profileData.userName || '';
+            document.getElementById('editBio').value = profileData.bio || '';
+            const a = (profileData.avatarUrl && profileData.avatarUrl !== 'null') ? profileData.avatarUrl : '';
+            document.getElementById('avatarPreview').src = a || 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="100" height="100"%3E%3Crect fill="%23ddd" width="100" height="100"/%3E%3C/svg%3E';
             document.getElementById('editModal').classList.add('active');
         }
-
-        function closeEditModal() {
-            document.getElementById('editModal').classList.remove('active');
-        }
-
+        function closeEditModal() { document.getElementById('editModal').classList.remove('active'); }
         function previewAvatar(e) {
             const file = e.target.files[0];
             if (file) {
-                const reader = new FileReader();
-                reader.onload = (e) => {
-                    document.getElementById('avatarPreview').src = e.target.result;
-                };
-                reader.readAsDataURL(file);
+                const r = new FileReader();
+                r.onload = ev => document.getElementById('avatarPreview').src = ev.target.result;
+                r.readAsDataURL(file);
             }
         }
 
         async function saveProfile(e) {
             e.preventDefault();
             const saveBtn = document.getElementById('saveBtn');
-            saveBtn.disabled = true;
-            saveBtn.textContent = 'Saving...';
-
+            saveBtn.disabled = true; saveBtn.textContent = 'Saving...';
             try {
                 const newName = document.getElementById('editName').value.trim();
+                const newBio = document.getElementById('editBio').value.trim();
                 const avatarFile = document.getElementById('avatarInput').files[0];
 
-                let avatarUrl = profileUserData.prefs?.avatar || '';
-
-                // Upload avatar if changed
+                let avatarUrl = profileData.avatarUrl || '';
                 if (avatarFile) {
-                    const upload = await window.storage.createFile(
-                        window.APPWRITE_BUCKET_ID,
-                        window.ID.unique(),
-                        avatarFile
-                    );
-                    avatarUrl = `${window.APPWRITE_ENDPOINT}/storage/buckets/${window.APPWRITE_BUCKET_ID}/files/${upload.$id}/view?project=${window.APPWRITE_PROJECT_ID}`;
+                    const upload = await window.storage.createFile(window.APPWRITE_BUCKET_ID, 'unique()', avatarFile);
+                    avatarUrl = window.storage.getFileViewUrl(window.APPWRITE_BUCKET_ID, upload.$id);
                 }
 
-                // Update name
-                await window.account.updateName(newName);
+                // Save to profiles collection (create if missing)
+                await window.upsertProfile(currentUser.$id, {
+                    displayName: newName,
+                    userName: newName,
+                    bio: newBio,
+                    avatarUrl: avatarUrl || 'null'
+                });
 
-                // Update prefs with avatar
-                await window.account.updatePrefs({ avatar: avatarUrl });
+                // Keep account name in sync too
+                try { await window.account.updateName(newName); } catch {}
 
-                // Reload profile
-                profileUserData = await window.account.get();
+                profileData = await window.getProfile(currentUser.$id);
                 renderProfile();
                 closeEditModal();
                 alert('Profile updated successfully!');
-
             } catch (error) {
                 console.error('Save profile error:', error);
                 alert('Failed to update profile: ' + error.message);
             } finally {
-                saveBtn.disabled = false;
-                saveBtn.textContent = 'Save Changes';
+                saveBtn.disabled = false; saveBtn.textContent = 'Save Changes';
             }
         }
 
-        // Utilities
         function getInitials(name) {
             if (!name) return '?';
-            const parts = name.trim().split(/\s+/);
-            if (parts.length === 1) return parts[0].charAt(0).toUpperCase();
-            return (parts[0].charAt(0) + parts[parts.length - 1].charAt(0)).toUpperCase();
+            const p = name.trim().split(/\s+/);
+            return p.length === 1 ? p[0][0].toUpperCase() : (p[0][0]+p[p.length-1][0]).toUpperCase();
         }
-
-        function escapeHtml(text) {
-            const div = document.createElement('div');
-            div.textContent = text || '';
-            return div.innerHTML;
+        function esc(t) { const d=document.createElement('div'); d.textContent=t||''; return d.innerHTML; }
+        function truncate(html, max) {
+            const d = document.createElement('div'); d.innerHTML = html || '';
+            const t = d.textContent || '';
+            return t.length > max ? t.slice(0, max) + '...' : t;
         }
+        function formatDate(s) { try { return new Date(s).toLocaleDateString('en-US',{year:'numeric',month:'short',day:'numeric'}); } catch { return ''; } }
 
-        function truncateText(htmlStr, maxLength) {
-            const div = document.createElement('div');
-            div.innerHTML = htmlStr || '';
-            const text = div.textContent || div.innerText || '';
-            return text.length > maxLength? text.substring(0, maxLength) + '...' : text;
-        }
-
-        function formatDate(dateString) {
-            try {
-                return new Date(dateString).toLocaleDateString('en-US', {
-                    year: 'numeric', month: 'short', day: 'numeric'
-                });
-            } catch(e) { return 'Date unknown'; }
-        }
-
-        // Start
         init();
     </script>
 </body>
