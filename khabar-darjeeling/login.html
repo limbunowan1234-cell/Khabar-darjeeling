@@ -169,11 +169,15 @@
         </div>
     </div>
 
-    <script src="js/appwrite.js?v=129"></script>
+    <script src="js/appwrite.js?v=131"></script>
     <script>
+        // Guard: make sure appwrite.js actually loaded (catches stale cache)
+        if (!window.account || typeof window.account.createEmailPasswordSession !== 'function') {
+            alert('Could not load app scripts. Please fully refresh (close tab and reopen, or clear cache).');
+        }
+
         const ENDPOINT = window.ENDPOINT;
         const PROJECT  = window.PROJECT;
-        const AH = { 'X-Appwrite-Project': PROJECT, 'Content-Type': 'application/json' };
 
         // ── Dark mode ──────────────────────────────────────────────
         if (localStorage.getItem('theme') === 'dark') document.body.classList.add('dark-mode');
@@ -235,13 +239,14 @@
                 setTimeout(() => location.href = 'index.html', 1200);
             } catch (err) {
                 btn.disabled = false;
-                const m = (err.message || '').toLowerCase();
+                const m = (err.message || String(err) || '').toLowerCase();
                 setFeedback('error',
                     m.includes('invalid') || m.includes('password') ? 'Incorrect email or password.' :
                     m.includes('not found')                         ? 'No account found with this email.' :
-                    'Unable to log in. Please try again.'
+                    m.includes('failed') || m.includes('network')   ? 'Network error — check connection / try again.' :
+                    ('Login failed: ' + (err.message || 'unknown'))
                 );
-                console.error('Login error:', err);
+                console.error('Login error detail:', err, err.message, err.name);
             }
         };
 
