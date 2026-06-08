@@ -1,83 +1,54 @@
 <!DOCTYPE html>
 <html lang="ne">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
   <title>खबर दार्जिलिंग</title>
-  <link rel="stylesheet" href="css/style.css?v=702">
-  <link rel="stylesheet" href="css/responsive.css?v=702">
+  <link rel="stylesheet" href="css/style.css?v=703">
+  <link rel="stylesheet" href="css/responsive.css?v=703">
 </head>
 <body>
-  <div id="loader" class="loader">Loading...</div>
+  <header class="navbar"><div class="container" style="display:flex;justify-content:space-between;align-items:center">
+    <a class="logo" href="/">खबर दार्जिलिंग</a>
+    <nav style="display:flex;gap:8px">
+      <a href="login.html" id="loginBtn" class="btn-login">Login</a>
+      <div id="userActions" style="display:none;gap:8px">
+        <a href="post.html" style="background:#c41e3a;color:#fff;padding:8px 14px;border-radius:6px;text-decoration:none;font-size:14px">✍️ Post</a>
+        <a href="admin.html" id="adminBtn" style="background:#000;color:#fff;padding:8px 14px;border-radius:6px;text-decoration:none;font-size:14px;display:none">⚙️ Admin</a>
+        <button id="logoutBtn" style="background:#f0f2f5;border:1px solid #ddd;padding:8px 12px;border-radius:6px;font-size:14px">Logout</button>
+      </div>
+    </nav>
+  </div></header>
 
-  <header class="navbar">
-    <div class="container" style="display:flex;justify-content:space-between;align-items:center">
-      <a class="logo" href="/">खबर दार्जिलिंग</a>
-      <nav style="display:flex;gap:8px;align-items:center">
-        <a href="login.html" id="loginBtn" class="btn-login">Login</a>
-        
-        <div id="userActions" style="display:none;gap:8px;align-items:center">
-          <a href="post.html" id="postBtn" style="background:#c41e3a;color:#fff;padding:8px 14px;border-radius:6px;font-weight:600;text-decoration:none;font-size:14px">✍️ Post</a>
-          <a href="admin.html" id="adminBtn" style="background:#000;color:#fff;padding:8px 14px;border-radius:6px;font-weight:600;text-decoration:none;font-size:14px;display:none">⚙️ Admin</a>
-          <button id="logoutBtn" style="background:#f0f2f5;border:1px solid #ddd;padding:8px 12px;border-radius:6px;font-size:14px;cursor:pointer">Logout</button>
-        </div>
-      </nav>
-    </div>
-  </header>
-
-  <div class="breaking-bar">
-    <div class="container">
-      <span class="breaking-tag">Breaking</span>
-      <span id="ticker"></span>
-    </div>
-  </div>
-
-  <main class="container">
-    <section id="featured"></section>
-    <section id="grid" class="news-grid"></section>
-  </main>
-
+  <div class="breaking-bar"><div class="container"><span class="breaking-tag">Breaking</span><span id="ticker"></span></div></div>
+  <main class="container"><section id="featured"></section><section id="grid" class="news-grid"></section></main>
   <script src="js/app.js?v=700"></script>
   
   <script>
-  (async () => {
-    const ENDPOINT = 'https://nyc.cloud.appwrite.io/v1';
-    const PROJECT = 'khabardarjeeling';
-    const ADMIN_EMAIL = 'nowanad@gmail.com';
+  (async()=>{
+    const jwt = localStorage.getItem('kd_jwt');
+    const email = localStorage.getItem('kd_email');
+    if(!jwt) return;
     
-    try {
-      const r = await fetch(`${ENDPOINT}/account`, {
-        method: 'GET',
-        credentials: 'include',
-        mode: 'cors',
-        headers: {'X-Appwrite-Project': PROJECT}
+    try{
+      const r = await fetch('https://nyc.cloud.appwrite.io/v1/account',{
+        headers:{'X-Appwrite-Project':'khabardarjeeling','X-Appwrite-JWT':jwt}
       });
-      
-      if (!r.ok) return; // not logged in
-      
+      if(!r.ok) throw 0;
       const user = await r.json();
-      alert('Logged in as: ' + user.email); // temporary debug
       
-      document.getElementById('loginBtn').style.display = 'none';
-      document.getElementById('userActions').style.display = 'flex';
-      
-      if ((user.email||'').toLowerCase().trim() === ADMIN_EMAIL) {
-        document.getElementById('adminBtn').style.display = 'inline-block';
+      document.getElementById('loginBtn').style.display='none';
+      document.getElementById('userActions').style.display='flex';
+      if((user.email||email).toLowerCase()==='nowanad@gmail.com'){
+        document.getElementById('adminBtn').style.display='inline-block';
       }
-      
-      document.getElementById('logoutBtn').onclick = async () => {
-        await fetch(`${ENDPOINT}/account/sessions/current`, {
-          method: 'DELETE',
-          credentials: 'include',
-          headers: {'X-Appwrite-Project': PROJECT}
-        });
+      document.getElementById('logoutBtn').onclick=()=>{
+        localStorage.removeItem('kd_jwt');
+        localStorage.removeItem('kd_email');
         location.reload();
       };
-      
-    } catch (e) {
-      console.error(e);
+    }catch(e){
+      localStorage.removeItem('kd_jwt');
     }
   })();
   </script>
-</body>
-</html>
+</body></html>
