@@ -6,117 +6,87 @@
     <title>Create Post • खबर दार्जिलिंग</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
-        :root {
-            --brand-red: #c41e3a;
-            --brand-red-dark: #a01830;
-            --text-dark: #1c1e21;
-            --bg-gray: #f0f2f5;
-            --border-color: #dddfe2;
-            --text-light: #f5f6f7;
+        :root { --brand-red:#c41e3a;--brand-red-dark:#a01830;--text-dark:#1c1e21;--bg-gray:#f0f2f5;--border-color:#dddfe2;--text-light:#f5f6f7; }
+        * { box-sizing:border-box;margin:0;padding:0;font-family:'Poppins',sans-serif; }
+        body { background-color:var(--bg-gray);color:var(--text-dark);transition:background-color 0.3s,color 0.3s; }
+        .container { max-width:800px;margin:0 auto;padding:0 16px; }
+        .navbar { background:#fff;border-bottom:1px solid var(--border-color);padding:12px 0;position:sticky;top:0;z-index:100; }
+        .navbar-content { display:flex;justify-content:space-between;align-items:center; }
+        .nav-logo { display:flex;align-items:center;gap:12px;text-decoration:none; }
+        .nav-logo img { height:45px;width:45px;border-radius:50%; }
+        .nav-logo h1 { font-size:20px;color:var(--brand-red); }
+        .nav-links { display:flex;gap:16px;align-items:center; }
+        .nav-links a { text-decoration:none;color:var(--text-dark);font-weight:500;font-size:14px; }
+        .nav-links a:hover { color:var(--brand-red); }
+        .theme-toggle { background:none;border:none;font-size:20px;cursor:pointer; }
+        .gatekeeper { position:fixed;top:0;left:0;width:100%;height:100%;background:var(--bg-gray);display:flex;flex-direction:column;justify-content:center;align-items:center;z-index:9999; }
+        .gatekeeper.hide { display:none; }
+        .spinner { width:40px;height:40px;border:4px solid rgba(196,30,58,0.1);border-left-color:var(--brand-red);border-radius:50%;animation:spin 1s linear infinite; }
+        @keyframes spin { to { transform:rotate(360deg); } }
+        .post-container { background:#fff;border-radius:8px;margin:24px 0;padding:32px;box-shadow:0 2px 4px rgba(0,0,0,0.1); }
+        .page-header { margin-bottom:24px;padding-bottom:16px;border-bottom:2px solid var(--brand-red); }
+        .page-header h1 { font-size:28px;margin-bottom:8px; }
+        .page-header p { color:#606770;font-size:14px; }
+        .author-box { display:flex;align-items:center;gap:12px;padding:16px;background:#f5f6f7;border-radius:8px;margin-bottom:24px; }
+        .author-avatar { width:48px;height:48px;border-radius:50%;object-fit:cover;border:2px solid var(--brand-red); }
+        .author-initials { width:48px;height:48px;border-radius:50%;background:var(--brand-red);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:18px; }
+        .author-details h3 { font-size:16px;margin-bottom:2px; }
+        .author-details p { font-size:13px;color:#606770; }
+        .form-group { margin-bottom:20px; }
+        .form-group label { display:block;margin-bottom:8px;font-weight:600;font-size:14px; }
+        .form-group label.required::after { content:' *';color:var(--brand-red); }
+        .form-group input[type="text"], .form-group input[type="url"], .form-group textarea, .form-group select {
+            width:100%;padding:12px;border:1px solid var(--border-color);border-radius:6px;font-size:14px;font-family:inherit;
         }
-        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Poppins', sans-serif; }
-        body { background-color: var(--bg-gray); color: var(--text-dark); transition: background-color 0.3s, color 0.3s; }
-
-     .container { max-width: 800px; margin: 0 auto; padding: 0 16px; }
-
-        /* Navbar */
-     .navbar { background: #fff; border-bottom: 1px solid var(--border-color); padding: 12px 0; position: sticky; top: 0; z-index: 100; }
-     .navbar-content { display: flex; justify-content: space-between; align-items: center; }
-     .nav-logo { display: flex; align-items: center; gap: 12px; text-decoration: none; }
-     .nav-logo img { height: 45px; width: 45px; border-radius: 50%; }
-     .nav-logo h1 { font-size: 20px; color: var(--brand-red); }
-     .nav-links { display: flex; gap: 16px; align-items: center; }
-     .nav-links a { text-decoration: none; color: var(--text-dark); font-weight: 500; font-size: 14px; }
-     .nav-links a:hover { color: var(--brand-red); }
-     .theme-toggle { background: none; border: none; font-size: 20px; cursor: pointer; }
-
-        /* Gatekeeper */
-     .gatekeeper { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: var(--bg-gray); display: flex; flex-direction: column; justify-content: center; align-items: center; z-index: 9999; }
-     .gatekeeper.hide { display: none; }
-     .spinner { width: 40px; height: 40px; border: 4px solid rgba(196, 30, 58, 0.1); border-left-color: var(--brand-red); border-radius: 50%; animation: spin 1s linear infinite; }
-        @keyframes spin { to { transform: rotate(360deg); } }
-
-        /* Main Form */
-     .post-container { background: #fff; border-radius: 8px; margin: 24px 0; padding: 32px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
-     .page-header { margin-bottom: 24px; padding-bottom: 16px; border-bottom: 2px solid var(--brand-red); }
-     .page-header h1 { font-size: 28px; margin-bottom: 8px; }
-     .page-header p { color: #606770; font-size: 14px; }
-
-        /* User Info */
-     .author-box { display: flex; align-items: center; gap: 12px; padding: 16px; background: #f5f6f7; border-radius: 8px; margin-bottom: 24px; }
-     .author-avatar { width: 48px; height: 48px; border-radius: 50%; object-fit: cover; border: 2px solid var(--brand-red); }
-     .author-initials { width: 48px; height: 48px; border-radius: 50%; background: var(--brand-red); color: #fff; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 18px; }
-     .author-details h3 { font-size: 16px; margin-bottom: 2px; }
-     .author-details p { font-size: 13px; color: #606770; }
-
-        /* Form */
-     .form-group { margin-bottom: 20px; }
-     .form-group label { display: block; margin-bottom: 8px; font-weight: 600; font-size: 14px; }
-     .form-group label.required::after { content: ' *'; color: var(--brand-red); }
-     .form-group input[type="text"],.form-group input[type="url"],.form-group textarea,.form-group select {
-            width: 100%; padding: 12px; border: 1px solid var(--border-color); border-radius: 6px; font-size: 14px; font-family: inherit;
-        }
-     .form-group input:focus,.form-group textarea:focus,.form-group select:focus { outline: none; border-color: var(--brand-red); }
-     .form-group textarea { min-height: 200px; resize: vertical; }
-     .form-help { font-size: 12px; color: #606770; margin-top: 6px; }
-     .char-counter { text-align: right; font-size: 12px; color: #606770; margin-top: 4px; }
-     .char-counter.error { color: var(--brand-red); }
-
-        /* Image Upload */
-     .image-upload-box { border: 2px dashed var(--border-color); border-radius: 8px; padding: 24px; text-align: center; cursor: pointer; transition: all 0.2s; }
-     .image-upload-box:hover { border-color: var(--brand-red); background: #fafafa; }
-     .image-upload-box.dragover { border-color: var(--brand-red); background: rgba(196, 30, 58, 0.05); }
-     .upload-icon { font-size: 48px; margin-bottom: 12px; }
-     .image-preview { max-width: 100%; max-height: 300px; border-radius: 8px; margin-top: 16px; display: none; }
-     .image-preview.show { display: block; }
-     .remove-image { margin-top: 12px; padding: 8px 16px; background: #e4e6eb; border: none; border-radius: 6px; cursor: pointer; font-size: 13px; }
-     .remove-image:hover { background: #d8dadf; }
-
-        /* Checkbox */
-     .checkbox-group { display: flex; align-items: center; gap: 10px; }
-     .checkbox-group input[type="checkbox"] { width: 18px; height: 18px; cursor: pointer; }
-
-        /* Buttons */
-     .form-actions { display: flex; gap: 12px; margin-top: 32px; padding-top: 24px; border-top: 1px solid var(--border-color); }
-     .btn { padding: 12px 24px; border-radius: 6px; font-weight: 600; font-size: 15px; cursor: pointer; border: none; transition: all 0.2s; }
-     .btn-primary { background: var(--brand-red); color: #fff; flex: 1; }
-     .btn-primary:hover { background: var(--brand-red-dark); }
-     .btn-primary:disabled { opacity: 0.5; cursor: not-allowed; }
-     .btn-secondary { background: #e4e6eb; color: var(--text-dark); }
-     .btn-secondary:hover { background: #d8dadf; }
-
-     .status-message { margin-top: 16px; padding: 12px; border-radius: 6px; text-align: center; font-size: 14px; font-weight: 500; display: none; }
-     .status-message.success { background: #e8f5e9; color: #2e7d32; display: block; }
-     .status-message.error { background: #ffebee; color: var(--brand-red); display: block; }
-
-        /* Dark Mode */
-        body.dark-mode { background-color: #18191a; color: var(--text-light); }
-        body.dark-mode.navbar { background: #242526; border-bottom-color: #3a3b3c; }
-        body.dark-mode.nav-links a { color: var(--text-light); }
-        body.dark-mode.post-container { background: #242526; }
-        body.dark-mode.author-box { background: #3a3b3c; }
-        body.dark-mode.form-group input, body.dark-mode.form-group textarea, body.dark-mode.form-group select { background: #3a3b3c; border-color: #4e4f50; color: var(--text-light); }
-        body.dark-mode.image-upload-box { border-color: #4e4f50; }
-        body.dark-mode.image-upload-box:hover { background: #3a3b3c; }
-        body.dark-mode.btn-secondary { background: #3a3b3c; color: var(--text-light); }
-        body.dark-mode.form-help, body.dark-mode.char-counter, body.dark-mode.author-details p { color: #b0b3b8; }
-        body.dark-mode.form-actions { border-color: #3a3b3c; }
-
-        @media (max-width: 768px) {
-         .post-container { padding: 20px; margin: 16px 0; }
-         .form-actions { flex-direction: column; }
-         .btn { width: 100%; }
+        .form-group input:focus, .form-group textarea:focus, .form-group select:focus { outline:none;border-color:var(--brand-red); }
+        .form-group textarea { min-height:200px;resize:vertical; }
+        .form-help { font-size:12px;color:#606770;margin-top:6px; }
+        .char-counter { text-align:right;font-size:12px;color:#606770;margin-top:4px; }
+        .char-counter.error { color:var(--brand-red); }
+        .image-upload-box { border:2px dashed var(--border-color);border-radius:8px;padding:24px;text-align:center;cursor:pointer;transition:all 0.2s; }
+        .image-upload-box:hover { border-color:var(--brand-red);background:#fafafa; }
+        .image-upload-box.dragover { border-color:var(--brand-red);background:rgba(196,30,58,0.05); }
+        .upload-icon { font-size:48px;margin-bottom:12px; }
+        .image-preview { max-width:100%;max-height:300px;border-radius:8px;margin-top:16px;display:none; }
+        .image-preview.show { display:block; }
+        .remove-image { margin-top:12px;padding:8px 16px;background:#e4e6eb;border:none;border-radius:6px;cursor:pointer;font-size:13px; }
+        .remove-image:hover { background:#d8dadf; }
+        .checkbox-group { display:flex;align-items:center;gap:10px; }
+        .checkbox-group input[type="checkbox"] { width:18px;height:18px;cursor:pointer; }
+        .form-actions { display:flex;gap:12px;margin-top:32px;padding-top:24px;border-top:1px solid var(--border-color); }
+        .btn { padding:12px 24px;border-radius:6px;font-weight:600;font-size:15px;cursor:pointer;border:none;transition:all 0.2s; }
+        .btn-primary { background:var(--brand-red);color:#fff;flex:1; }
+        .btn-primary:hover { background:var(--brand-red-dark); }
+        .btn-primary:disabled { opacity:0.5;cursor:not-allowed; }
+        .btn-secondary { background:#e4e6eb;color:var(--text-dark); }
+        .btn-secondary:hover { background:#d8dadf; }
+        .status-message { margin-top:16px;padding:12px;border-radius:6px;text-align:center;font-size:14px;font-weight:500;display:none; }
+        .status-message.success { background:#e8f5e9;color:#2e7d32;display:block; }
+        .status-message.error { background:#ffebee;color:var(--brand-red);display:block; }
+        body.dark-mode { background-color:#18191a;color:var(--text-light); }
+        body.dark-mode .navbar { background:#242526;border-bottom-color:#3a3b3c; }
+        body.dark-mode .nav-links a { color:var(--text-light); }
+        body.dark-mode .post-container { background:#242526; }
+        body.dark-mode .author-box { background:#3a3b3c; }
+        body.dark-mode .form-group input, body.dark-mode .form-group textarea, body.dark-mode .form-group select { background:#3a3b3c;border-color:#4e4f50;color:var(--text-light); }
+        body.dark-mode .image-upload-box { border-color:#4e4f50; }
+        body.dark-mode .image-upload-box:hover { background:#3a3b3c; }
+        body.dark-mode .btn-secondary { background:#3a3b3c;color:var(--text-light); }
+        body.dark-mode .form-help, body.dark-mode .char-counter, body.dark-mode .author-details p { color:#b0b3b8; }
+        body.dark-mode .form-actions { border-color:#3a3b3c; }
+        @media (max-width:768px) {
+          .post-container { padding:20px;margin:16px 0; }
+          .form-actions { flex-direction:column; }
+          .btn { width:100%; }
         }
     </style>
 </head>
 <body>
-    <!-- Gatekeeper -->
     <div class="gatekeeper" id="gatekeeper">
         <div class="spinner"></div>
-        <p style="margin-top: 16px; font-weight: 600;">Checking authentication...</p>
+        <p style="margin-top:16px;font-weight:600;">Checking authentication...</p>
     </div>
 
-    <!-- Navbar -->
     <nav class="navbar">
         <div class="container">
             <div class="navbar-content">
@@ -133,15 +103,13 @@
         </div>
     </nav>
 
-    <!-- Main Content -->
-    <div class="container" id="mainContent" style="display: none;">
+    <div class="container" id="mainContent" style="display:none;">
         <div class="post-container">
             <div class="page-header">
-                <h1>Publish News Article</h1>
+                <h1 id="pageTitle">Publish News Article</h1>
                 <p>Share your story with the Darjeeling community. Posts go live immediately.</p>
             </div>
 
-            <!-- Author Info -->
             <div class="author-box">
                 <div id="authorAvatarContainer"></div>
                 <div class="author-details">
@@ -150,7 +118,6 @@
                 </div>
             </div>
 
-            <!-- Form -->
             <form id="postForm" onsubmit="submitPost(event)">
                 <div class="form-group">
                     <label for="title" class="required">Article Title</label>
@@ -178,6 +145,11 @@
                 </div>
 
                 <div class="form-group">
+                    <label for="location">Location</label>
+                    <input type="text" id="location" placeholder="e.g. Darjeeling" value="Darjeeling">
+                </div>
+
+                <div class="form-group">
                     <label for="content" class="required">Article Content</label>
                     <textarea id="content" required placeholder="Write your article here... Minimum 100 characters"></textarea>
                     <div class="char-counter"><span id="contentCount">0</span> characters</div>
@@ -188,24 +160,24 @@
                     <label>Featured Image</label>
                     <div class="image-upload-box" id="uploadBox" onclick="document.getElementById('imageInput').click()">
                         <div class="upload-icon">📷</div>
-                        <p style="font-weight: 600; margin-bottom: 4px;">Click to upload image</p>
-                        <p style="font-size: 13px; color: #606770;">PNG, JPG up to 10MB</p>
-                        <input type="file" id="imageInput" accept="image/*" style="display: none;" onchange="handleImageSelect(event)">
+                        <p style="font-weight:600;margin-bottom:4px;">Click to upload image</p>
+                        <p style="font-size:13px;color:#606770;">PNG, JPG up to 10MB</p>
+                        <input type="file" id="imageInput" accept="image/*" style="display:none;" onchange="handleImageSelect(event)">
                     </div>
                     <img id="imagePreview" class="image-preview" alt="Preview">
-                    <button type="button" class="remove-image" id="removeImageBtn" style="display: none;" onclick="removeImage()">Remove Image</button>
+                    <button type="button" class="remove-image" id="removeImageBtn" style="display:none;" onclick="removeImage()">Remove Image</button>
                 </div>
 
                 <div class="form-group">
                     <label for="youtubeId">YouTube Video ID (Optional)</label>
                     <input type="text" id="youtubeId" placeholder="e.g., dQw4w9WgXcQ">
-                    <div class="form-help">If you have a YouTube video, paste just the ID from the URL</div>
+                    <div class="form-help">Paste just the 11-character ID from the YouTube URL</div>
                 </div>
 
                 <div class="form-group">
                     <div class="checkbox-group">
                         <input type="checkbox" id="isBreaking">
-                        <label for="isBreaking" style="margin: 0; cursor: pointer;">Mark as Breaking News</label>
+                        <label for="isBreaking" style="margin:0;cursor:pointer;">Mark as Breaking News</label>
                     </div>
                     <div class="form-help">Breaking news appears in the ticker at the top of homepage</div>
                 </div>
@@ -213,13 +185,13 @@
                 <div class="form-group">
                     <div class="checkbox-group">
                         <input type="checkbox" id="isFeatured">
-                        <label for="isFeatured" style="margin: 0; cursor: pointer;">Feature this article</label>
+                        <label for="isFeatured" style="margin:0;cursor:pointer;">Feature this article</label>
                     </div>
                     <div class="form-help">Featured articles show in the Featured Story section</div>
                 </div>
 
                 <div class="form-actions">
-                    <button type="button" class="btn btn-secondary" onclick="window.location.href='index.html'">Cancel</button>
+                    <button type="button" class="btn btn-secondary" onclick="location.href='index.html'">Cancel</button>
                     <button type="submit" class="btn btn-primary" id="submitBtn">Publish Now</button>
                 </div>
 
@@ -228,12 +200,13 @@
         </div>
     </div>
 
-    <script src="js/appwrite.js"></script>
+    <script src="js/appwrite.js?v=127"></script>
     <script>
         let currentUser = null;
         let selectedImage = null;
+        let editId = new URLSearchParams(location.search).get('edit');
+        let editingDoc = null;
 
-        // Theme toggle
         if (localStorage.getItem('theme') === 'dark') {
             document.body.classList.add('dark-mode');
             document.getElementById('themeToggle').textContent = '☀️';
@@ -241,59 +214,79 @@
         document.getElementById('themeToggle').addEventListener('click', () => {
             document.body.classList.toggle('dark-mode');
             const isDark = document.body.classList.contains('dark-mode');
-            localStorage.setItem('theme', isDark? 'dark' : 'light');
-            document.getElementById('themeToggle').textContent = isDark? '☀️' : '🌙';
+            localStorage.setItem('theme', isDark ? 'dark' : 'light');
+            document.getElementById('themeToggle').textContent = isDark ? '☀️' : '🌙';
         });
 
-        // Auth gate
         async function checkAuth() {
             try {
                 currentUser = await window.account.get();
                 document.getElementById('profileLink').href = `profile.html?userId=${currentUser.$id}`;
-                loadUserInfo();
+                await loadUserInfo();
                 document.getElementById('gatekeeper').classList.add('hide');
                 document.getElementById('mainContent').style.display = 'block';
+                if (editId) loadForEdit();
             } catch (e) {
-                window.location.href = 'login.html';
+                location.href = 'login.html';
             }
         }
 
-        function loadUserInfo() {
+        async function loadUserInfo() {
             document.getElementById('authorName').textContent = currentUser.name;
-            const avatarContainer = document.getElementById('authorAvatarContainer');
-            if (currentUser.prefs?.avatar) {
-                avatarContainer.innerHTML = `<img src="${currentUser.prefs.avatar}" class="author-avatar" alt="${currentUser.name}">`;
-            } else {
-                const initials = getInitials(currentUser.name);
-                avatarContainer.innerHTML = `<div class="author-initials">${initials}</div>`;
+            // Get avatar from profiles collection
+            let avatar = '';
+            const prof = await window.getProfile(currentUser.$id);
+            if (prof?.avatarUrl && prof.avatarUrl !== 'null') avatar = prof.avatarUrl;
+
+            const c = document.getElementById('authorAvatarContainer');
+            if (avatar) c.innerHTML = `<img src="${avatar}" class="author-avatar" alt="${currentUser.name}">`;
+            else c.innerHTML = `<div class="author-initials">${getInitials(currentUser.name)}</div>`;
+        }
+
+        async function loadForEdit() {
+            try {
+                editingDoc = await window.databases.getDocument(window.APPWRITE_DB_ID, window.COL_ARTICLES, editId);
+                document.getElementById('pageTitle').textContent = 'Edit Article';
+                document.getElementById('submitBtn').textContent = 'Save Changes';
+                document.getElementById('title').value = editingDoc.title || '';
+                document.getElementById('category').value = editingDoc.category || '';
+                document.getElementById('location').value = editingDoc.location || 'Darjeeling';
+                document.getElementById('content').value = editingDoc.content || '';
+                document.getElementById('youtubeId').value = editingDoc.youtube_id || '';
+                document.getElementById('isBreaking').checked = !!editingDoc.isBreaking;
+                document.getElementById('isFeatured').checked = !!editingDoc.isFeatured;
+                document.getElementById('titleCount').textContent = (editingDoc.title || '').length;
+                document.getElementById('contentCount').textContent = (editingDoc.content || '').length;
+                if (editingDoc.imageFileId) {
+                    const url = window.storage.getFileViewUrl(window.APPWRITE_BUCKET_ID, editingDoc.imageFileId);
+                    document.getElementById('imagePreview').src = url;
+                    document.getElementById('imagePreview').classList.add('show');
+                    document.getElementById('uploadBox').style.display = 'none';
+                    document.getElementById('removeImageBtn').style.display = 'inline-block';
+                }
+            } catch (e) {
+                showStatus('Could not load article for editing.', 'error');
             }
         }
 
-        // Character counters
-        document.getElementById('title').addEventListener('input', (e) => {
+        document.getElementById('title').addEventListener('input', e => {
             document.getElementById('titleCount').textContent = e.target.value.length;
         });
-        document.getElementById('content').addEventListener('input', (e) => {
-            const count = e.target.value.length;
-            const counter = document.getElementById('contentCount');
-            counter.textContent = count;
-            counter.className = count < 100? 'char-counter error' : 'char-counter';
+        document.getElementById('content').addEventListener('input', e => {
+            const c = e.target.value.length;
+            const el = document.getElementById('contentCount');
+            el.textContent = c;
+            el.className = c < 100 ? 'char-counter error' : 'char-counter';
         });
 
-        // Image upload
         function handleImageSelect(e) {
             const file = e.target.files[0];
             if (!file) return;
-
-            if (file.size > 10 * 1024 * 1024) {
-                alert('Image must be less than 10MB');
-                return;
-            }
-
+            if (file.size > 10 * 1024 * 1024) { alert('Image must be less than 10MB'); return; }
             selectedImage = file;
             const reader = new FileReader();
-            reader.onload = (e) => {
-                document.getElementById('imagePreview').src = e.target.result;
+            reader.onload = ev => {
+                document.getElementById('imagePreview').src = ev.target.result;
                 document.getElementById('imagePreview').classList.add('show');
                 document.getElementById('removeImageBtn').style.display = 'inline-block';
                 document.getElementById('uploadBox').style.display = 'none';
@@ -303,24 +296,18 @@
 
         function removeImage() {
             selectedImage = null;
+            if (editingDoc) editingDoc.imageFileId = null;
             document.getElementById('imageInput').value = '';
             document.getElementById('imagePreview').classList.remove('show');
             document.getElementById('removeImageBtn').style.display = 'none';
             document.getElementById('uploadBox').style.display = 'block';
         }
 
-        // Drag & drop
         const uploadBox = document.getElementById('uploadBox');
-        uploadBox.addEventListener('dragover', (e) => {
-            e.preventDefault();
-            uploadBox.classList.add('dragover');
-        });
-        uploadBox.addEventListener('dragleave', () => {
-            uploadBox.classList.remove('dragover');
-        });
-        uploadBox.addEventListener('drop', (e) => {
-            e.preventDefault();
-            uploadBox.classList.remove('dragover');
+        uploadBox.addEventListener('dragover', e => { e.preventDefault(); uploadBox.classList.add('dragover'); });
+        uploadBox.addEventListener('dragleave', () => uploadBox.classList.remove('dragover'));
+        uploadBox.addEventListener('drop', e => {
+            e.preventDefault(); uploadBox.classList.remove('dragover');
             const file = e.dataTransfer.files[0];
             if (file && file.type.startsWith('image/')) {
                 document.getElementById('imageInput').files = e.dataTransfer.files;
@@ -328,94 +315,88 @@
             }
         });
 
-        // Submit post - NO APPROVAL, PUBLISH DIRECTLY
         async function submitPost(e) {
             e.preventDefault();
             const submitBtn = document.getElementById('submitBtn');
-            const statusMsg = document.getElementById('statusMessage');
-
             const title = document.getElementById('title').value.trim();
             const content = document.getElementById('content').value.trim();
             const category = document.getElementById('category').value;
+            const location_ = document.getElementById('location').value.trim() || 'Darjeeling';
             const youtubeId = document.getElementById('youtubeId').value.trim();
             const isBreaking = document.getElementById('isBreaking').checked;
             const isFeatured = document.getElementById('isFeatured').checked;
 
-            if (content.length < 100) {
-                showStatus('Content must be at least 100 characters', 'error');
-                return;
-            }
+            if (content.length < 100) { showStatus('Content must be at least 100 characters', 'error'); return; }
 
             submitBtn.disabled = true;
-            submitBtn.textContent = 'Publishing...';
-            statusMsg.className = 'status-message';
-            statusMsg.style.display = 'none';
+            submitBtn.textContent = editId ? 'Saving...' : 'Publishing...';
 
             try {
-                let imageFileId = null;
+                // Avatar from profiles
+                let avatar = 'null';
+                const prof = await window.getProfile(currentUser.$id);
+                if (prof?.avatarUrl && prof.avatarUrl !== 'null') avatar = prof.avatarUrl;
 
-                // Upload image if selected
+                let imageFileId = editingDoc ? editingDoc.imageFileId : null;
                 if (selectedImage) {
                     showStatus('Uploading image...', 'success');
-                    const upload = await window.storage.createFile(
-                        window.APPWRITE_BUCKET_ID,
-                        window.ID.unique(),
-                        selectedImage
-                    );
+                    const upload = await window.storage.createFile(window.APPWRITE_BUCKET_ID, 'unique()', selectedImage);
                     imageFileId = upload.$id;
                 }
 
-                showStatus('Publishing article...', 'success');
+                const data = {
+                    title, content, category, location: location_,
+                    imageFileId: imageFileId || null,
+                    youtube_id: youtubeId || null,
+                    isBreaking, isFeatured
+                };
 
-                // Create document with status: 'published' - NO APPROVAL NEEDED
-                const doc = await window.databases.createDocument(
-                    window.APPWRITE_DB_ID,
-                    window.APPWRITE_COLLECTION_ID,
-                    window.ID.unique(),
-                    {
-                        title: title,
-                        content: content,
-                        category: category,
-                        imageFileId: imageFileId,
-                        youtube_id: youtubeId || null,
-                        submitterId: currentUser.$id,
-                        submitterName: currentUser.name,
-                        submitterAvatar: currentUser.prefs?.avatar || null,
-                        status: 'published', // PUBLISHED IMMEDIATELY
-                        isBreaking: isBreaking,
-                        isFeatured: isFeatured,
-                        views: 0
-                    }
-                );
-
-                showStatus('✓ Article published successfully! Redirecting...', 'success');
-                setTimeout(() => {
-                    window.location.href = `article.html?id=${doc.$id}`;
-                }, 1500);
-
+                if (editId) {
+                    showStatus('Saving changes...', 'success');
+                    await window.databases.updateDocument(window.APPWRITE_DB_ID, window.COL_ARTICLES, editId, data);
+                    showStatus('✓ Article updated! Redirecting...', 'success');
+                    setTimeout(() => location.href = `article.html?id=${editId}`, 1200);
+                } else {
+                    showStatus('Publishing article...', 'success');
+                    const doc = await window.databases.createDocument(
+                        window.APPWRITE_DB_ID, window.COL_ARTICLES, 'unique()',
+                        {
+                            ...data,
+                            authorName: currentUser.name,
+                            authorEmail: currentUser.email,
+                            submitterId: currentUser.$id,
+                            submitterName: currentUser.name,
+                            submitterAvatar: avatar,
+                            submitterEmail: currentUser.email,
+                            status: 'published',
+                            submittedAt: new Date().toISOString(),
+                            publishedAt: new Date().toISOString(),
+                            views: 0
+                        }
+                    );
+                    showStatus('✓ Article published! Redirecting...', 'success');
+                    setTimeout(() => location.href = `article.html?id=${doc.$id}`, 1200);
+                }
             } catch (error) {
                 console.error('Submit error:', error);
-                showStatus('Failed to publish: ' + error.message, 'error');
+                showStatus('Failed: ' + error.message, 'error');
                 submitBtn.disabled = false;
-                submitBtn.textContent = 'Publish Now';
+                submitBtn.textContent = editId ? 'Save Changes' : 'Publish Now';
             }
         }
 
-        function showStatus(message, type) {
-            const statusMsg = document.getElementById('statusMessage');
-            statusMsg.textContent = message;
-            statusMsg.className = `status-message ${type}`;
-            statusMsg.style.display = 'block';
+        function showStatus(m, t) {
+            const el = document.getElementById('statusMessage');
+            el.textContent = m;
+            el.className = `status-message ${t}`;
+            el.style.display = 'block';
         }
-
         function getInitials(name) {
             if (!name) return '?';
-            const parts = name.trim().split(/\s+/);
-            if (parts.length === 1) return parts[0].charAt(0).toUpperCase();
-            return (parts[0].charAt(0) + parts[parts.length - 1].charAt(0)).toUpperCase();
+            const p = name.trim().split(/\s+/);
+            return p.length === 1 ? p[0][0].toUpperCase() : (p[0][0]+p[p.length-1][0]).toUpperCase();
         }
 
-        // Start
         checkAuth();
     </script>
 </body>
