@@ -233,15 +233,10 @@
                 <div class="nav-right" style="display:flex;gap:12px;align-items:center;flex-wrap:wrap;">
                     <div class="user-search-wrapper">
                         <div class="search-row">
-                            <input type="text" id="userSearch" placeholder="Search users..." autocomplete="off" aria-label="Search users">
+                            <input type="text" id="userSearch" placeholder="Search users by name..." autocomplete="off" aria-label="Search users">
                             <button onclick="doUserSearch()" aria-label="Search">🔍</button>
                         </div>
                         <div id="userSearchResults"></div>
-                    </div>
-
-                    <div class="search-row">
-                        <input type="text" id="searchInput" placeholder="Search news..." aria-label="Search news">
-                        <button onclick="doNewsSearch()" aria-label="Search news">🔍</button>
                     </div>
 
                     <button class="theme-toggle" id="themeToggle" aria-label="Toggle dark mode">🌙</button>
@@ -311,7 +306,7 @@
         }
     </script>
 
-    <script src="js/appwrite.js?v=129"></script>
+    <script src="js/appwrite.js?v=131"></script>
     <script src="https://cdn.jsdelivr.net/npm/eruda"></script>
     <script>try { if (typeof eruda !== 'undefined') eruda.init(); } catch(e) {}</script>
 
@@ -501,28 +496,6 @@
             }));
         }
 
-        /* ── NEWS SEARCH ── */
-        const searchInput = document.getElementById('searchInput');
-        searchInput.addEventListener('keydown', e => { if (e.key === 'Enter') doNewsSearch(); });
-        window.doNewsSearch = function() {
-            const q = searchInput.value.toLowerCase().trim();
-            if (!q) {
-                document.querySelectorAll('#newsGrid .news-card').forEach(c => c.style.display = '');
-                document.getElementById('mainSectionTitle').textContent = 'Latest News';
-                return;
-            }
-            let found = 0;
-            document.querySelectorAll('#newsGrid .news-card').forEach(card => {
-                const title   = card.querySelector('h3')?.textContent.toLowerCase() || '';
-                const content = card.querySelector('p')?.textContent.toLowerCase() || '';
-                const author  = card.querySelector('.author-name')?.textContent.toLowerCase() || '';
-                const visible = title.includes(q) || content.includes(q) || author.includes(q);
-                card.style.display = visible ? '' : 'none';
-                if (visible) found++;
-            });
-            document.getElementById('mainSectionTitle').textContent = `Search: "${searchInput.value}" (${found} results)`;
-        };
-
         /* ── USER SEARCH (by display name from profiles collection) ── */
         const userSearchInput   = document.getElementById('userSearch');
         const userSearchResults = document.getElementById('userSearchResults');
@@ -531,31 +504,58 @@
         window.doUserSearch = async function() {
             const query = userSearchInput.value.trim();
             userSearchResults.style.display = 'none';
-            if (query.length < 2) return;
+            if (query.length < 1) return;
 
             userSearchResults.innerHTML = '<div style="padding:12px;color:#999;font-size:13px;">Searching...</div>';
             userSearchResults.style.display = 'block';
 
+            const q = query.toLowerCase();
+            let results = [];
+
+            // Strategy 1: fulltext search on displayName (works if index exists)
             try {
-                // Search the profiles collection by displayName
                 const res = await window.databases.listDocuments(
                     window.APPWRITE_DB_ID, window.COL_PROFILES,
                     [ window.Query.search('displayName', query), window.Query.limit(10) ]
                 );
-                renderUserResults(res.documents.map(p => ({
-                    uid: p.userId, name: p.displayName || p.userName, avatar: p.avatarUrl
-                })));
-            } catch(err) {
-                // Fallback: search authors among loaded articles
+                results = res.documents.map(p => ({ uid: p.userId, name: p.displayName || p.userName, avatar: p.avatarUrl }));
+            } catch (err) {
+                console.warn('Fulltext search unavailable, using client filter:', err.message);
+            }
+
+            // Strategy 2: if no results (or index missing), fetch profiles and filter locally
+            if (results.length === 0) {
+                try {
+                    const all = await window.databases.listDocuments(
+                        window.APPWRITE_DB_ID, window.COL_PROFILES,
+                        [ window.Query.limit(100) ]
+                    );
+                    results = all.documents
+                        .filter(p => {
+                            const dn = (p.displayName || '').toLowerCase();
+                            const un = (p.userName || '').toLowerCase();
+                            return dn.includes(q) || un.includes(q);
+                        })
+                        .slice(0, 10)
+                        .map(p => ({ uid: p.userId, name: p.displayName || p.userName, avatar: p.avatarUrl }));
+                } catch (err2) {
+                    console.warn('Profile list failed:', err2.message);
+                }
+            }
+
+            // Strategy 3: also include article authors as a last resort
+            if (results.length === 0) {
                 const map = new Map();
-                allArticles.forEach(a => {
+                (allArticles || []).forEach(a => {
                     const name = a.submitterName || a.authorName || '';
-                    if (name.toLowerCase().includes(query.toLowerCase()) && a.submitterId) {
-                        if (!map.has(a.submitterId)) map.set(a.submitterId, { uid: a.submitterId, name, avatar: a.submitterAvatar });
+                    if (name.toLowerCase().includes(q) && a.submitterId && !map.has(a.submitterId)) {
+                        map.set(a.submitterId, { uid: a.submitterId, name, avatar: a.submitterAvatar });
                     }
                 });
-                renderUserResults(Array.from(map.values()));
+                results = Array.from(map.values());
             }
+
+            renderUserResults(results);
         };
 
         function renderUserResults(users) {
