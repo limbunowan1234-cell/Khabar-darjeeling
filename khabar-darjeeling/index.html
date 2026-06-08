@@ -4,8 +4,8 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>खबर दार्जिलिंग</title>
-  <link rel="stylesheet" href="css/style.css?v=701">
-  <link rel="stylesheet" href="css/responsive.css?v=701">
+  <link rel="stylesheet" href="css/style.css?v=702">
+  <link rel="stylesheet" href="css/responsive.css?v=702">
 </head>
 <body>
   <div id="loader" class="loader">Loading...</div>
@@ -14,10 +14,8 @@
     <div class="container" style="display:flex;justify-content:space-between;align-items:center">
       <a class="logo" href="/">खबर दार्जिलिंग</a>
       <nav style="display:flex;gap:8px;align-items:center">
-        <!-- Logged-out state -->
         <a href="login.html" id="loginBtn" class="btn-login">Login</a>
         
-        <!-- Logged-in state (hidden by default) -->
         <div id="userActions" style="display:none;gap:8px;align-items:center">
           <a href="post.html" id="postBtn" style="background:#c41e3a;color:#fff;padding:8px 14px;border-radius:6px;font-weight:600;text-decoration:none;font-size:14px">✍️ Post</a>
           <a href="admin.html" id="adminBtn" style="background:#000;color:#fff;padding:8px 14px;border-radius:6px;font-weight:600;text-decoration:none;font-size:14px;display:none">⚙️ Admin</a>
@@ -41,7 +39,6 @@
 
   <script src="js/app.js?v=700"></script>
   
-  <!-- Login state checker -->
   <script>
   (async () => {
     const ENDPOINT = 'https://nyc.cloud.appwrite.io/v1';
@@ -50,23 +47,24 @@
     
     try {
       const r = await fetch(`${ENDPOINT}/account`, {
+        method: 'GET',
         credentials: 'include',
+        mode: 'cors',
         headers: {'X-Appwrite-Project': PROJECT}
       });
-      if (!r.ok) return;
+      
+      if (!r.ok) return; // not logged in
       
       const user = await r.json();
+      alert('Logged in as: ' + user.email); // temporary debug
       
-      // Switch to logged-in view
       document.getElementById('loginBtn').style.display = 'none';
       document.getElementById('userActions').style.display = 'flex';
       
-      // Show admin only for you
       if ((user.email||'').toLowerCase().trim() === ADMIN_EMAIL) {
         document.getElementById('adminBtn').style.display = 'inline-block';
       }
       
-      // Logout handler
       document.getElementById('logoutBtn').onclick = async () => {
         await fetch(`${ENDPOINT}/account/sessions/current`, {
           method: 'DELETE',
@@ -75,8 +73,9 @@
         });
         location.reload();
       };
+      
     } catch (e) {
-      // Not logged in - keep login button
+      console.error(e);
     }
   })();
   </script>
