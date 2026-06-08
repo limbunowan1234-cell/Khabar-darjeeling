@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Profile • खबर दार्जिलिंग</title>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
         :root {
             --brand-red: #c41e3a;
@@ -12,952 +12,440 @@
             --text-dark: #1c1e21;
             --bg-gray: #f0f2f5;
             --border-color: #dddfe2;
-            --card-bg: #ffffff;
             --text-light: #f5f6f7;
-            --muted: #606770;
         }
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Poppins', sans-serif; }
-        body { background-color: var(--bg-gray); color: var(--text-dark); transition: background-color 0.3s, color 0.3s; min-height: 100vh; }
-        
-        /* Header */
-        .header { background: var(--card-bg); box-shadow: 0 2px 8px rgba(0,0,0,0.1); padding: 12px 24px; position: sticky; top: 0; z-index: 100; transition: background-color 0.3s; }
-        .header-content { display: flex; align-items: center; justify-content: space-between; max-width: 1200px; margin: 0 auto; }
-        .header-logo { display: flex; align-items: center; gap: 12px; text-decoration: none; }
-        .header-logo-img { width: 40px; height: 40px; object-fit: cover; border-radius: 50%; border: 2px solid var(--brand-red); }
-        .header-logo-text { color: var(--brand-red); font-size: 20px; font-weight: 700; }
-        .header-logo-sub { color: var(--muted); font-size: 11px; font-weight: 500; }
-        body.dark-mode .header-logo-sub { color: #b0b3b8; }
-        
-        .header-actions { display: flex; gap: 10px; align-items: center; }
-        .btn { padding: 10px 18px; font-size: 14px; font-weight: 600; border-radius: 6px; cursor: pointer; border: none; transition: all 0.2s; text-decoration: none; display: inline-flex; align-items: center; gap: 6px; }
-        .btn-primary { background: var(--brand-red); color: white; }
-        .btn-primary:hover { background: var(--brand-red-dark); }
-        .btn-secondary { background: var(--bg-gray); color: var(--text-dark); border: 1px solid var(--border-color); }
-        .btn-secondary:hover { background: #e8eaed; }
-        body.dark-mode .btn-secondary { background: #3a3b3c; border-color: #4e4f50; color: var(--text-light); }
-        body.dark-mode .btn-secondary:hover { background: #4e4f50; }
-        .btn-outline { background: transparent; border: 2px solid var(--brand-red); color: var(--brand-red); }
-        .btn-outline:hover { background: var(--brand-red); color: white; }
-        .btn:disabled { opacity: 0.5; cursor: not-allowed; }
-        
-        /* Dark mode toggle */
-        .dark-mode-toggle { background: var(--card-bg); border: 2px solid var(--border-color); border-radius: 50%; width: 40px; height: 40px; cursor: pointer; display: flex; align-items: center; justify-content: center; box-shadow: 0 2px 8px rgba(0,0,0,0.15); transition: all 0.3s; }
-        .dark-mode-toggle:hover { transform: scale(1.1); }
-        body.dark-mode .dark-mode-toggle { background: #242526; border-color: #3a3b3c; }
-        .dark-mode-toggle svg { width: 20px; height: 20px; }
-        .dark-mode-toggle .sun-icon { display: none; fill: var(--brand-red); }
-        .dark-mode-toggle .moon-icon { display: block; fill: var(--muted); }
-        body.dark-mode .dark-mode-toggle .sun-icon { display: block; fill: var(--brand-red); }
-        body.dark-mode .dark-mode-toggle .moon-icon { display: none; fill: var(--text-light); }
-        
-        /* Main Container */
-        .container { max-width: 900px; margin: 0 auto; padding: 24px 16px; }
-        
-        /* Profile Card */
-        .profile-card { background: var(--card-bg); border-radius: 16px; overflow: hidden; box-shadow: 0 4px 18px rgba(0,0,0,0.08); transition: background-color 0.3s, box-shadow 0.3s; }
-        body.dark-mode .profile-card { background: #242526; box-shadow: 0 4px 24px rgba(0,0,0,0.4); }
-        
-        /* Cover */
-        .cover { height: 180px; background: linear-gradient(135deg, var(--brand-red), #8b1025); background-size: cover; background-position: center; position: relative; }
-        
-        /* Avatar */
-        .avatar { width: 120px; height: 120px; border-radius: 50%; border: 5px solid var(--card-bg); background: var(--brand-red); background-size: cover; background-position: center; position: absolute; left: 24px; bottom: -60px; display: flex; align-items: center; justify-content: center; font-size: 36px; font-weight: 700; color: white; box-shadow: 0 4px 12px rgba(0,0,0,0.15); }
-        
-        /* Edit Profile Button */
-        .edit-profile-btn { position: absolute; right: 16px; top: 16px; background: rgba(0,0,0,0.6); color: white; border: 1px solid rgba(255,255,255,0.3); padding: 8px 14px; border-radius: 8px; cursor: pointer; font-size: 13px; font-weight: 600; backdrop-filter: blur(10px); transition: all 0.2s; }
-        .edit-profile-btn:hover { background: rgba(0,0,0,0.8); }
-        
-        /* Profile Content */
-        .profile-content { padding: 76px 24px 24px; }
-        .profile-name { font-size: 30px; font-weight: 800; color: var(--text-dark); margin-bottom: 4px; }
-        body.dark-mode .profile-name { color: var(--text-light); }
-        .profile-username { color: var(--muted); margin-bottom: 8px; font-size: 16px; }
-        .profile-joined { color: var(--muted); font-size: 14px; margin-bottom: 16px; }
-        .profile-bio { line-height: 1.6; font-size: 15px; white-space: pre-wrap; margin-bottom: 20px; color: var(--text-dark); }
-        body.dark-mode .profile-bio { color: var(--text-light); }
-        
-        /* Profile Actions */
-        .profile-actions { display: flex; gap: 10px; margin: 20px 0; flex-wrap: wrap; }
-        .action-btn { padding: 10px 18px; border: 1px solid var(--border-color); background: var(--bg-gray); color: var(--text-dark); border-radius: 8px; cursor: pointer; font-size: 14px; font-weight: 600; display: inline-flex; align-items: center; gap: 6px; transition: all 0.2s; }
-        body.dark-mode .action-btn { background: #3a3b3c; border-color: #4e4f50; color: var(--text-light); }
-        .action-btn:hover { border-color: var(--brand-red); background: rgba(196, 30, 58, 0.08); }
-        .action-btn.liked { background: var(--brand-red); color: white; border-color: var(--brand-red); }
-        
-        /* Stats Grid */
-        .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 12px; margin: 20px 0; }
-        .stat-box { padding: 16px; border: 1px solid var(--border-color); border-radius: 12px; background: rgba(196, 30, 58, 0.04); text-align: center; transition: background-color 0.3s; }
-        body.dark-mode .stat-box { background: rgba(196, 30, 58, 0.08); border-color: #4e4f50; }
-        .stat-number { font-size: 26px; font-weight: 800; color: var(--brand-red); margin-bottom: 4px; }
-        .stat-label { font-size: 12px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.04em; font-weight: 600; }
-        
-        /* Section Title */
-        .section-title { font-size: 20px; font-weight: 700; margin: 30px 0 16px; color: var(--text-dark); }
-        body.dark-mode .section-title { color: var(--text-light); }
-        
-        /* Articles Grid */
-        .articles-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 16px; }
-        .article-card { background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 12px; overflow: hidden; cursor: pointer; transition: all 0.3s; }
-        body.dark-mode .article-card { background: #242526; border-color: #4e4f50; }
-        .article-card:hover { transform: translateY(-4px); box-shadow: 0 8px 24px rgba(0,0,0,0.12); }
-        body.dark-mode .article-card:hover { box-shadow: 0 8px 24px rgba(0,0,0,0.3); }
-        .article-image { width: 100%; height: 160px; object-fit: cover; }
-        .article-content { padding: 14px; }
-        .article-title { font-size: 16px; font-weight: 700; color: var(--brand-red); margin-bottom: 8px; line-height: 1.4; text-decoration: none; display: block; }
-        .article-title:hover { text-decoration: underline; }
-        .article-meta { font-size: 12px; color: var(--muted); display: flex; justify-content: space-between; flex-wrap: wrap; gap: 6px; }
-        
-        /* Comments */
-        .comment-box { margin-top: 20px; padding: 16px; border: 1px solid var(--border-color); border-radius: 12px; background: var(--bg-gray); transition: background-color 0.3s; }
-        body.dark-mode .comment-box { background: #3a3b3c; border-color: #4e4f50; }
-        .comment-input { width: 100%; padding: 12px; border: 1px solid var(--border-color); border-radius: 8px; background: var(--card-bg); color: var(--text-dark); font-family: inherit; font-size: 14px; resize: vertical; min-height: 60px; margin-bottom: 10px; outline: none; transition: all 0.2s; }
-        body.dark-mode .comment-input { background: #242526; border-color: #4e4f50; color: var(--text-light); }
-        .comment-input:focus { border-color: var(--brand-red); box-shadow: 0 0 0 2px rgba(196, 30, 58, 0.2); }
-        .comments-list { margin-top: 20px; }
-        .comment-item { padding: 12px; border-bottom: 1px solid var(--border-color); display: flex; gap: 12px; transition: background-color 0.3s; }
-        body.dark-mode .comment-item { border-bottom-color: #4e4f50; }
-        .comment-item:last-child { border-bottom: none; }
-        .comment-avatar { width: 40px; height: 40px; border-radius: 50%; background: var(--brand-red); color: white; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 14px; flex-shrink: 0; background-size: cover; background-position: center; }
-        .comment-content { flex: 1; }
-        .comment-author { font-weight: 600; font-size: 14px; margin-bottom: 4px; color: var(--text-dark); }
-        body.dark-mode .comment-author { color: var(--text-light); }
-        .comment-text { font-size: 14px; line-height: 1.5; color: var(--text-dark); }
-        body.dark-mode .comment-text { color: var(--text-light); }
-        .comment-time { font-size: 12px; color: var(--muted); margin-top: 4px; }
-        
-        /* Loading */
-        .loading { text-align: center; padding: 60px 20px; color: var(--muted); }
-        .loading-spinner { width: 48px; height: 48px; border: 4px solid var(--border-color); border-top-color: var(--brand-red); border-radius: 50%; animation: spin 1s linear infinite; margin: 0 auto 16px; }
-        @keyframes spin { to { transform: rotate(360deg); } }
-        
-        /* 404 & Alerts */
-        .not-found { text-align: center; padding: 60px 24px; }
-        .not-found-icon { font-size: 72px; margin-bottom: 16px; }
-        .not-found h2 { font-size: 28px; color: var(--text-dark); margin-bottom: 8px; }
-        body.dark-mode .not-found h2 { color: var(--text-light); }
-        .not-found p { color: var(--muted); margin-bottom: 24px; }
-        
-        .empty-state { text-align: center; padding: 40px; color: var(--muted); }
-        .empty-icon { font-size: 48px; margin-bottom: 12px; }
-        
-        .alert { padding: 14px 16px; border-radius: 10px; margin-top: 18px; display: none; }
-        .alert.error { background: #ffe1e5; color: #8b1025; border: 1px solid #ffb9c5; }
-        .alert.success { background: #d4edda; color: #155724; border: 1px solid #c3e6cb; }
-        
+        body { background-color: var(--bg-gray); color: var(--text-dark); transition: background-color 0.3s, color 0.3s; }
+
+       .container { max-width: 1100px; margin: 0 auto; padding: 0 16px; }
+
+        /* Navbar */
+       .navbar { background: #fff; border-bottom: 1px solid var(--border-color); padding: 12px 0; position: sticky; top: 0; z-index: 100; }
+       .navbar-content { display: flex; justify-content: space-between; align-items: center; }
+       .nav-logo { display: flex; align-items: center; gap: 12px; text-decoration: none; }
+       .nav-logo img { height: 45px; width: 45px; border-radius: 50%; }
+       .nav-logo h1 { font-size: 20px; color: var(--brand-red); }
+       .nav-links { display: flex; gap: 12px; align-items: center; }
+       .nav-links a { text-decoration: none; color: var(--text-dark); font-weight: 500; font-size: 14px; }
+       .nav-links a:hover { color: var(--brand-red); }
+
+        /* Profile Header */
+       .profile-header { background: #fff; border-radius: 8px; margin: 24px 0; padding: 32px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+       .profile-top { display: flex; gap: 24px; align-items: flex-start; flex-wrap: wrap; }
+       .profile-avatar { width: 120px; height: 120px; border-radius: 50%; object-fit: cover; border: 3px solid var(--brand-red); flex-shrink: 0; }
+       .profile-avatar-initials { width: 120px; height: 120px; border-radius: 50%; background: var(--brand-red); color: #fff; display: flex; align-items: center; justify-content: center; font-size: 42px; font-weight: 700; flex-shrink: 0; }
+       .profile-info { flex: 1; min-width: 250px; }
+       .profile-info h1 { font-size: 28px; margin-bottom: 8px; }
+       .profile-meta { color: #606770; font-size: 14px; margin-bottom: 16px; }
+       .profile-badges { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 16px; }
+       .badge { background: var(--brand-red); color: #fff; padding: 4px 12px; border-radius: 12px; font-size: 12px; font-weight: 600; }
+       .profile-stats { display: flex; gap: 32px; margin-top: 20px; padding-top: 20px; border-top: 1px solid var(--border-color); }
+       .stat-item { text-align: center; }
+       .stat-number { font-size: 24px; font-weight: 700; color: var(--brand-red); }
+       .stat-label { font-size: 13px; color: #606770; margin-top: 4px; }
+       .profile-actions { display: flex; gap: 12px; margin-top: 16px; flex-wrap: wrap; }
+       .btn { padding: 10px 20px; border-radius: 6px; font-weight: 600; font-size: 14px; cursor: pointer; border: none; transition: all 0.2s; text-decoration: none; display: inline-block; }
+       .btn-primary { background: var(--brand-red); color: #fff; }
+       .btn-primary:hover { background: var(--brand-red-dark); }
+       .btn-secondary { background: #e4e6eb; color: var(--text-dark); }
+       .btn-secondary:hover { background: #d8dadf; }
+
         /* Edit Modal */
-        .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 1000; align-items: center; justify-content: center; }
-        .modal.active { display: flex; }
-        .modal-content { background: var(--card-bg); border-radius: 16px; padding: 32px; max-width: 500px; width: 90%; max-height: 80vh; overflow-y: auto; box-shadow: 0 8px 32px rgba(0,0,0,0.3); }
-        body.dark-mode .modal-content { background: #242526; }
-        .modal-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 24px; }
-        .modal-title { font-size: 22px; font-weight: 700; color: var(--text-dark); }
-        body.dark-mode .modal-title { color: var(--text-light); }
-        .modal-close { background: transparent; border: none; font-size: 28px; cursor: pointer; color: var(--text-dark); }
-        body.dark-mode .modal-close { color: var(--text-light); }
-        .modal-close:hover { color: var(--brand-red); }
-        
-        .form-group { margin-bottom: 20px; }
-        .form-label { font-size: 14px; font-weight: 600; color: var(--text-dark); margin-bottom: 8px; display: block; }
-        body.dark-mode .form-label { color: var(--text-light); }
-        .form-input, .form-textarea { width: 100%; padding: 12px; font-size: 14px; border: 1px solid var(--border-color); border-radius: 8px; background: var(--bg-gray); color: var(--text-dark); outline: none; transition: all 0.2s; }
-        body.dark-mode .form-input, body.dark-mode .form-textarea { background: #3a3b3c; border-color: #4e4f50; color: var(--text-light); }
-        .form-input:focus, .form-textarea:focus { border-color: var(--brand-red); box-shadow: 0 0 0 2px rgba(196, 30, 58, 0.2); }
-        .form-textarea { resize: vertical; min-height: 100px; }
-        
-        .avatar-upload { display: flex; align-items: center; gap: 16px; flex-wrap: wrap; }
-        .avatar-preview { width: 80px; height: 80px; object-fit: cover; border-radius: 50%; border: 3px solid var(--brand-red); }
-        .file-input { flex: 1; min-width: 200px; }
-        
-        .feedback { margin-top: 16px; text-align: center; font-size: 14px; font-weight: 500; min-height: 20px; }
-        .feedback.success { color: #2e7d32; }
-        .feedback.error { color: var(--brand-red); }
-        
-        /* Responsive */
-        @media (max-width: 640px) {
-            .avatar { width: 96px; height: 96px; bottom: -48px; font-size: 28px; }
-            .profile-content { padding-top: 62px; }
-            .profile-name { font-size: 24px; }
-            .stats-grid { grid-template-columns: 1fr 1fr; }
-            .header-logo-text { font-size: 16px; }
-            .container { padding: 16px 12px; }
+       .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 1000; align-items: center; justify-content: center; }
+       .modal.active { display: flex; }
+       .modal-content { background: #fff; border-radius: 8px; padding: 24px; max-width: 500px; width: 90%; max-height: 90vh; overflow-y: auto; }
+       .modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+       .modal-header h2 { font-size: 20px; }
+       .modal-close { background: none; border: none; font-size: 28px; cursor: pointer; color: #606770; }
+       .form-group { margin-bottom: 16px; }
+       .form-group label { display: block; margin-bottom: 6px; font-weight: 500; font-size: 14px; }
+       .form-group input { width: 100%; padding: 12px; border: 1px solid var(--border-color); border-radius: 6px; font-size: 14px; }
+       .form-group input:focus { outline: none; border-color: var(--brand-red); }
+       .avatar-preview { width: 100px; height: 100px; border-radius: 50%; object-fit: cover; margin: 12px auto; display: block; }
+
+        /* Posts Grid */
+       .posts-section { background: #fff; border-radius: 8px; padding: 24px; margin-bottom: 24px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+       .section-title { font-size: 20px; margin-bottom: 20px; padding-bottom: 12px; border-bottom: 2px solid var(--brand-red); }
+       .posts-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 20px; }
+       .post-card { border: 1px solid var(--border-color); border-radius: 8px; overflow: hidden; transition: transform 0.2s, box-shadow 0.2s; text-decoration: none; color: inherit; display: flex; flex-direction: column; }
+       .post-card:hover { transform: translateY(-4px); box-shadow: 0 4px 12px rgba(0,0,0,0.15); }
+       .post-card img { width: 100%; height: 180px; object-fit: cover; }
+       .post-card-content { padding: 16px; flex: 1; display: flex; flex-direction: column; }
+       .post-card h3 { font-size: 16px; margin-bottom: 8px; line-height: 1.3; }
+       .post-card p { font-size: 13px; color: #606770; flex: 1; margin-bottom: 12px; }
+       .post-card-meta { display: flex; justify-content: space-between; font-size: 12px; color: #90949c; padding-top: 12px; border-top: 1px solid var(--border-color); }
+
+       .empty-state { text-align: center; padding: 40px; color: #606770; }
+       .loader { text-align: center; padding: 40px; }
+       .spinner { width: 40px; height: 40px; border: 4px solid rgba(196, 30, 58, 0.1); border-left-color: var(--brand-red); border-radius: 50%; animation: spin 1s linear infinite; margin: 0 auto; }
+        @keyframes spin { to { transform: rotate(360deg); } }
+
+        /* Dark Mode */
+        body.dark-mode { background-color: #18191a; color: var(--text-light); }
+        body.dark-mode.navbar { background: #242526; border-bottom-color: #3a3b3c; }
+        body.dark-mode.nav-links a { color: var(--text-light); }
+        body.dark-mode.profile-header, body.dark-mode.posts-section, body.dark-mode.modal-content { background: #242526; }
+        body.dark-mode.profile-meta, body.dark-mode.post-card p, body.dark-mode.stat-label { color: #b0b3b8; }
+        body.dark-mode.profile-stats, body.dark-mode.post-card-meta { border-color: #3a3b3c; }
+        body.dark-mode.post-card { border-color: #3a3b3c; background: #242526; }
+        body.dark-mode.btn-secondary { background: #3a3b3c; color: var(--text-light); }
+        body.dark-mode.form-group input { background: #3a3b3c; border-color: #4e4f50; color: var(--text-light); }
+
+        /* Dark mode toggle */
+       .theme-toggle { background: none; border: none; font-size: 20px; cursor: pointer; padding: 5px; }
+
+        @media (max-width: 768px) {
+           .profile-top { flex-direction: column; align-items: center; text-align: center; }
+           .profile-stats { justify-content: center; }
+           .posts-grid { grid-template-columns: 1fr; }
         }
     </style>
 </head>
 <body>
-    <!-- Header -->
-    <header class="header">
-        <div class="header-content">
-            <a href="index.html" class="header-logo">
-                <img src="assets/logo.png" alt="Khabar Darjeeling" class="header-logo-img">
-                <div>
-                    <div class="header-logo-text">खबर दार्जिलिंग</div>
-                    <div class="header-logo-sub">Hamro Khabar, Hami Lekhaw</div>
+    <!-- Navbar -->
+    <nav class="navbar">
+        <div class="container">
+            <div class="navbar-content">
+                <a href="index.html" class="nav-logo">
+                    <img src="assets/logo.png" alt="Logo">
+                    <h1>खबर दार्जिलिंग</h1>
+                </a>
+                <div class="nav-links">
+                    <a href="index.html">Home</a>
+                    <button class="theme-toggle" id="themeToggle">🌙</button>
                 </div>
-            </a>
-            <div class="header-actions">
-                <button class="dark-mode-toggle" id="darkModeToggle" aria-label="Toggle dark mode">
-                    <svg class="sun-icon" viewBox="0 0 24 24"><path d="M12 7c-2.76 0-5 2.24-5 5s2.24 5 5 5 5-2.24 5-5-2.24-5-5-5zM2 13h2c.55 0 1-.45 1-1s-.45-1-1-1H2c-.55 0-1 .45-1 1s.45 1 1 1zm18 0h2c.55 0 1-.45 1-1s-.45-1-1-1h-2c-.55 0-1 .45-1 1s.45 1 1 1zM11 2v2c0 .55.45 1 1 1s1-.45 1-1V2c0-.55-.45-1-1-1s-1 .45-1 1zm0 18v2c0 .55.45 1 1 1s1-.45 1-1v-2c0-.55-.45-1-1-1s-1 .45-1 1zM5.99 4.58c-.39-.39-1.03-.39-1.41 0-.39.39-.39 1.03 0 1.41l1.06 1.06c.39.39 1.03.39 1.41 0s.39-1.03 0-1.41L5.99 4.58zm12.37 12.37c-.39-.39-1.03-.39-1.41 0-.39.39-.39 1.03 0 1.41l1.06 1.06c.39.39 1.03.39 1.41 0 .39-.39.39-1.03 0-1.41l-1.06-1.06zm1.06-10.96c.39-.39.39-1.03 0-1.41-.39-.39-1.03-.39-1.41 0l-1.06 1.06c-.39.39-.39 1.03 0 1.41s1.03.39 1.41 0l1.06-1.06zM7.05 18.36c.39-.39.39-1.03 0-1.41-.39-.39-1.03-.39-1.41 0l-1.06 1.06c-.39.39-.39 1.03 0 1.41s1.03.39 1.41 0l1.06-1.06z"/></svg>
-                    <svg class="moon-icon" viewBox="0 0 24 24"><path d="M12 3c-4.96 0-9 4.04-9 9s4.04 9 9 9 9-4.04 9-9-4.04-9-9-9zm0 16c-3.86 0-7-3.14-7-7s3.14-7 7-7 7 3.14 7 7-3.14 7-7 7z"/></svg>
-                </button>
-                <a href="index.html" class="btn btn-secondary">Home</a>
-                <button class="btn btn-secondary" id="logoutBtn">Logout</button>
             </div>
         </div>
-    </header>
+    </nav>
 
-    <!-- Main Container -->
-    <div class="container">
-        <!-- Alert -->
-        <div id="alertBox" class="alert"></div>
+    <!-- Loader -->
+    <div class="loader" id="pageLoader">
+        <div class="spinner"></div>
+        <p style="margin-top: 16px;">Loading profile...</p>
+    </div>
 
-        <!-- Not Found -->
-        <div id="notFound" class="not-found hidden">
-            <div class="not-found-icon">😕</div>
-            <h2>Profile Not Found</h2>
-            <p>The user you're looking for doesn't exist or has been removed.</p>
-            <a href="index.html" class="btn btn-primary">Back to Home</a>
-        </div>
-
-        <!-- Loading -->
-        <div id="loading" class="loading">
-            <div class="loading-spinner"></div>
-            <p>Loading profile...</p>
-        </div>
-
-        <!-- Profile Card -->
-        <div id="profileCard" class="profile-card hidden">
-            <div class="cover">
-                <button class="edit-profile-btn hidden" id="editProfileBtn">✏️ Edit Profile</button>
-                <div id="profileAvatar" class="avatar">?</div>
+    <!-- Main Content -->
+    <div class="container" id="profileContent" style="display: none;">
+        <!-- Profile Header -->
+        <div class="profile-header">
+            <div class="profile-top">
+                <div id="avatarContainer"></div>
+                <div class="profile-info">
+                    <h1 id="profileName">Loading...</h1>
+                    <div class="profile-meta" id="profileMeta"></div>
+                    <div class="profile-badges" id="profileBadges"></div>
+                    <div class="profile-actions" id="profileActions"></div>
+                    <div class="profile-stats">
+                        <div class="stat-item">
+                            <div class="stat-number" id="postCount">0</div>
+                            <div class="stat-label">Posts</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-number" id="viewCount">0</div>
+                            <div class="stat-label">Total Views</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-number" id="joinDate">-</div>
+                            <div class="stat-label">Joined</div>
+                        </div>
+                    </div>
+                </div>
             </div>
-            
-            <div class="profile-content">
-                <h1 id="profileName" class="profile-name">Name</h1>
-                <p id="profileUsername" class="profile-username">@username</p>
-                <p id="profileJoined" class="profile-joined">Joined date</p>
-                <p id="profileBio" class="profile-bio"></p>
-                
-                <!-- Actions -->
-                <div class="profile-actions">
-                    <button class="action-btn" id="likeBtn">
-                        <span id="likeIcon">🤍</span> <span id="likeText">Like</span> (<span id="likeCount">0</span>)
-                    </button>
-                    <button class="action-btn" id="followBtn">
-                        <span id="followIcon">👤</span> <span id="followText">Follow</span>
-                    </button>
-                    <button class="action-btn" id="shareProfileBtn">🔗 Share</button>
-                    <button class="action-btn" id="whatsappShareBtn">WhatsApp</button>
-                </div>
-                
-                <!-- Stats -->
-                <div class="stats-grid">
-                    <div class="stat-box">
-                        <div id="totalPosts" class="stat-number">0</div>
-                        <div class="stat-label">Posts</div>
-                    </div>
-                    <div class="stat-box">
-                        <div id="totalViews" class="stat-number">0</div>
-                        <div class="stat-label">Views</div>
-                    </div>
-                    <div class="stat-box">
-                        <div id="profileLikes" class="stat-number">0</div>
-                        <div class="stat-label">Likes</div>
-                    </div>
-                    <div class="stat-box">
-                        <div id="profileComments" class="stat-number">0</div>
-                        <div class="stat-label">Comments</div>
-                    </div>
-                </div>
-                
-                <!-- Articles -->
-                <h3 class="section-title">Articles</h3>
-                <div id="articlesGrid" class="articles-grid"></div>
-                <div id="emptyArticles" class="empty-state hidden">
-                    <div class="empty-icon">📝</div>
-                    <p>No articles published yet.</p>
-                </div>
-                
-                <!-- Comments -->
-                <h3 class="section-title">Comments</h3>
-                <div class="comment-box">
-                    <textarea class="comment-input" id="commentInput" placeholder="Write a comment..."></textarea>
-                    <button class="btn btn-primary" id="postCommentBtn">Post Comment</button>
-                    <div id="commentsList" class="comments-list"></div>
-                </div>
+        </div>
+
+        <!-- Posts Section -->
+        <div class="posts-section">
+            <h2 class="section-title">Published Articles</h2>
+            <div class="posts-grid" id="postsGrid"></div>
+            <div class="empty-state" id="emptyPosts" style="display: none;">
+                <p>No articles published yet.</p>
             </div>
         </div>
     </div>
 
     <!-- Edit Profile Modal -->
-    <div id="editModal" class="modal">
+    <div class="modal" id="editModal">
         <div class="modal-content">
             <div class="modal-header">
-                <h2 class="modal-title">Edit Profile</h2>
-                <button class="modal-close" onclick="closeModal()">×</button>
+                <h2>Edit Profile</h2>
+                <button class="modal-close" onclick="closeEditModal()">&times;</button>
             </div>
-            
-            <form id="editForm" onsubmit="handleEditSubmit(event)">
+            <form onsubmit="saveProfile(event)">
                 <div class="form-group">
-                    <label class="form-label">Display Name</label>
-                    <input type="text" id="editName" class="form-input" required maxlength="50">
+                    <label>Profile Picture</label>
+                    <img id="avatarPreview" class="avatar-preview" src="" alt="Preview">
+                    <input type="file" id="avatarInput" accept="image/*" onchange="previewAvatar(event)">
                 </div>
-                
                 <div class="form-group">
-                    <label class="form-label">Bio</label>
-                    <textarea id="editBio" class="form-textarea" maxlength="200" placeholder="Tell us about yourself..."></textarea>
+                    <label>Full Name</label>
+                    <input type="text" id="editName" required>
                 </div>
-                
-                <div class="form-group">
-                    <label class="form-label">Avatar Photo</label>
-                    <div class="avatar-upload">
-                        <img id="avatarPreview" src="" alt="Preview" class="avatar-preview">
-                        <input type="file" id="avatarFile" class="form-input file-input" accept="image/*">
-                    </div>
-                </div>
-                
-                <div style="display: flex; gap: 12px; margin-top: 24px;">
-                    <button type="submit" id="saveBtn" class="btn btn-primary" style="flex: 1;">Save Changes</button>
-                    <button type="button" class="btn btn-secondary" onclick="closeModal()" style="flex: 1;">Cancel</button>
-                </div>
+                <button type="submit" class="btn btn-primary" style="width: 100%;" id="saveBtn">Save Changes</button>
             </form>
-            
-            <p id="editFeedback" class="feedback"></p>
         </div>
     </div>
 
-    <script type="module">
-        import { Client, Account, Databases, Storage, ID, Query } from "https://cdn.jsdelivr.net/npm/appwrite@14.0.1/+esm";
-
-        const client = new Client()
-            .setEndpoint('https://nyc.cloud.appwrite.io/v1')
-            .setProject('khabardarjeeling');
-
-        const account = new Account(client);
-        const databases = new Databases(client);
-        const storage = new Storage(client);
-
-        // Global objects
-        window.account = account;
-        window.databases = databases;
-        window.Query = Query;
-        window.ID = ID;
-
-        // Constants
-        const DB_ID = 'Khabar_db';
-        const PROFILE_COLLECTION = 'profiles';
-        const POSTS_COLLECTION = 'posts';
-        const LIKES_COLLECTION = 'profile_likes';
-        const COMMENTS_COLLECTION = 'profile_comments';
-        const FOLLOW_COLLECTION = 'follows';
-        const AVATAR_BUCKET = 'avatars';
-
-        // State
+    <script src="js/appwrite.js"></script>
+    <script>
         let currentUser = null;
-        let profileUser = null;
+        let profileUserId = null;
+        let profileUserData = null;
         let isOwnProfile = false;
-        let hasLiked = false;
-        let isFollowing = false;
 
-        // Initialize dark mode
+        // Theme toggle
         if (localStorage.getItem('theme') === 'dark') {
             document.body.classList.add('dark-mode');
+            document.getElementById('themeToggle').textContent = '☀️';
         }
-
-        // Dark mode toggle
-        document.getElementById('darkModeToggle').addEventListener('click', function() {
+        document.getElementById('themeToggle').addEventListener('click', () => {
             document.body.classList.toggle('dark-mode');
             const isDark = document.body.classList.contains('dark-mode');
-            localStorage.setItem('theme', isDark ? 'dark' : 'light');
+            localStorage.setItem('theme', isDark? 'dark' : 'light');
+            document.getElementById('themeToggle').textContent = isDark? '☀️' : '🌙';
         });
 
         // Get userId from URL
-        function getUserIdFromURL() {
-            const urlParams = new URLSearchParams(window.location.search);
-            return urlParams.get('id') || urlParams.get('userId') || urlParams.get('user');
-        }
+        const urlParams = new URLSearchParams(window.location.search);
+        profileUserId = urlParams.get('userId');
 
-        // Helper functions
-        function showAlert(message, type = 'info') {
-            const alert = document.getElementById('alertBox');
-            alert.textContent = message;
-            alert.className = `alert ${type}`;
-            alert.style.display = 'block';
-            if (type !== 'error') {
-                setTimeout(() => alert.style.display = 'none', 3000);
-            }
-        }
-
-        function getInitials(name) {
-            return (name || '?').split(' ').filter(Boolean).map(x => x[0]).join('').toUpperCase().slice(0, 2) || '?';
-        }
-
-        function formatDate(dateString) {
-            if (!dateString) return '—';
-            const date = new Date(dateString);
-            if (isNaN(date.getTime())) return String(dateString);
-            return date.toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' });
-        }
-
-        function timeAgo(dateString) {
-            const seconds = Math.floor((new Date() - new Date(dateString)) / 1000);
-            if (seconds < 60) return 'just now';
-            const intervals = { year: 31536000, month: 2592000, week: 604800, day: 86400, hour: 3600, minute: 60 };
-            for (const [unit, secondsInUnit] of Object.entries(intervals)) {
-                const interval = Math.floor(seconds / secondsInUnit);
-                if (interval >= 1) return `${interval} ${unit}${interval > 1 ? 's' : ''} ago`;
-            }
-            return 'just now';
-        }
-
-        function getAvatarUrl(userId) {
+        // Initialize
+        async function init() {
             try {
-                return storage.getFilePreview(AVATAR_BUCKET, `${userId}_avatar`);
-            } catch {
-                return 'assets/default-avatar.png';
-            }
-        }
-
-        // UI Update functions
-        function showLoading() {
-            document.getElementById('loading').classList.remove('hidden');
-            document.getElementById('profileCard').classList.add('hidden');
-            document.getElementById('notFound').classList.add('hidden');
-        }
-
-        function showProfile() {
-            document.getElementById('loading').classList.add('hidden');
-            document.getElementById('profileCard').classList.remove('hidden');
-        }
-
-        function showNotFound() {
-            document.getElementById('loading').classList.add('hidden');
-            document.getElementById('notFound').classList.remove('hidden');
-        }
-
-        // Load current user
-        async function loadCurrentUser() {
-            try {
-                currentUser = await account.get();
-                return currentUser;
-            } catch {
-                currentUser = null;
-                return null;
-            }
-        }
-
-        // Load profile user
-        async function loadProfileUser(userId) {
-            try {
-                const result = await databases.listDocuments(DB_ID, PROFILE_COLLECTION, [
-                    Query.equal('userId', userId),
-                    Query.limit(1)
-                ]);
-                if (result.documents.length === 0) {
-                    // Try by username
-                    const result2 = await databases.listDocuments(DB_ID, PROFILE_COLLECTION, [
-                        Query.equal('userName', userId),
-                        Query.limit(1)
-                    ]);
-                    return result2.documents[0] || null;
+                // Check if logged in
+                try {
+                    currentUser = await window.account.get();
+                } catch (e) {
+                    // Not logged in
                 }
-                return result.documents[0];
-            } catch (error) {
-                console.error('Error loading profile:', error);
-                return null;
-            }
-        }
 
-        // Check if following
-        async function checkFollowing() {
-            if (!currentUser || !profileUser || isOwnProfile) {
-                isFollowing = false;
-                return;
-            }
-            try {
-                const result = await databases.listDocuments(DB_ID, FOLLOW_COLLECTION, [
-                    Query.equal('followerId', currentUser.id),
-                    Query.equal('followedUserId', profileUser.userId),
-                    Query.limit(1)
-                ]);
-                isFollowing = result.documents.length > 0;
-            } catch {
-                isFollowing = false;
-            }
-        }
-
-        // Follow/Unfollow
-        window.handleFollow = async function() {
-            if (!currentUser) {
-                showAlert('Please log in to follow users', 'error');
-                return;
-            }
-            if (isOwnProfile) {
-                showAlert("You can't follow your own profile", 'error');
-                return;
-            }
-
-            try {
-                if (isFollowing) {
-                    // Unfollow
-                    const result = await databases.listDocuments(DB_ID, FOLLOW_COLLECTION, [
-                        Query.equal('followerId', currentUser.id),
-                        Query.equal('followedUserId', profileUser.userId),
-                        Query.limit(1)
-                    ]);
-                    if (result.documents.length > 0) {
-                        await databases.deleteDocument(DB_ID, FOLLOW_COLLECTION, result.documents[0].$id);
+                // If no userId in URL, use current user or redirect
+                if (!profileUserId) {
+                    if (currentUser) {
+                        profileUserId = currentUser.$id;
+                    } else {
+                        window.location.href = 'login.html';
+                        return;
                     }
-                    isFollowing = false;
-                    showAlert('Unfollowed successfully', 'success');
-                } else {
-                    // Follow
-                    await databases.createDocument(DB_ID, FOLLOW_COLLECTION, ID.unique(), {
-                        followerId: currentUser.id,
-                        followedUserId: profileUser.userId,
-                        followedAt: new Date().toISOString()
-                    });
-                    isFollowing = true;
-                    showAlert('Following successfully!', 'success');
                 }
-                updateFollowButton();
+
+                isOwnProfile = currentUser && currentUser.$id === profileUserId;
+
+                // Load profile
+                await loadProfile();
+                await loadUserPosts();
+
+                document.getElementById('pageLoader').style.display = 'none';
+                document.getElementById('profileContent').style.display = 'block';
+
             } catch (error) {
-                console.error('Follow error:', error);
-                showAlert('Failed to update follow status', 'error');
+                console.error('Init error:', error);
+                document.getElementById('pageLoader').innerHTML = '<p style="color:red;">Failed to load profile. User may not exist.</p>';
             }
         }
 
-        // Update follow button
-        function updateFollowButton() {
-            const btn = document.getElementById('followBtn');
-            const icon = document.getElementById('followIcon');
-            const text = document.getElementById('followText');
-
-            if (isFollowing) {
-                icon.textContent = '✓';
-                text.textContent = 'Following';
-                btn.classList.add('liked');
+        async function loadProfile() {
+            // For now, we can only get current user details
+            // To get other users, you'd need an Appwrite Function with users.list()
+            if (isOwnProfile) {
+                profileUserData = currentUser;
             } else {
-                icon.textContent = '👤';
-                text.textContent = 'Follow';
-                btn.classList.remove('liked');
+                // Placeholder - in production use Appwrite Function to get user by ID
+                profileUserData = {
+                    $id: profileUserId,
+                    name: 'User ' + profileUserId.substring(0, 8),
+                    email: 'user@example.com',
+                    $createdAt: new Date().toISOString(),
+                    labels: []
+                };
             }
+
+            renderProfile();
         }
 
-        // Like profile
-        window.handleLike = async function() {
-            if (!currentUser) {
-                showAlert('Please log in to like profiles', 'error');
-                return;
+        function renderProfile() {
+            // Avatar
+            const avatarContainer = document.getElementById('avatarContainer');
+            if (profileUserData.prefs?.avatar) {
+                avatarContainer.innerHTML = `<img src="${profileUserData.prefs.avatar}" class="profile-avatar" alt="${profileUserData.name}">`;
+            } else {
+                const initials = getInitials(profileUserData.name);
+                avatarContainer.innerHTML = `<div class="profile-avatar-initials">${initials}</div>`;
             }
+
+            // Name & Meta
+            document.getElementById('profileName').textContent = profileUserData.name || 'User';
+            document.title = `${profileUserData.name} • खबर दार्जिलिंग`;
+
+            const joinDate = new Date(profileUserData.$createdAt).toLocaleDateString('en-US', { year: 'numeric', month: 'long' });
+            document.getElementById('profileMeta').textContent = `Joined ${joinDate}`;
+            document.getElementById('joinDate').textContent = joinDate;
+
+            // Badges
+            const badgesEl = document.getElementById('profileBadges');
+            badgesEl.innerHTML = '';
+            if (profileUserData.labels && profileUserData.labels.length > 0) {
+                profileUserData.labels.forEach(label => {
+                    badgesEl.innerHTML += `<span class="badge">${label.toUpperCase()}</span>`;
+                });
+            }
+
+            // Actions
+            const actionsEl = document.getElementById('profileActions');
             if (isOwnProfile) {
-                showAlert("You can't like your own profile", 'error');
-                return;
-            }
-
-            try {
-                if (hasLiked) {
-                    // Unlike
-                    const result = await databases.listDocuments(DB_ID, LIKES_COLLECTION, [
-                        Query.equal('profileId', profileUser.$id),
-                        Query.equal('userId', currentUser.id),
-                        Query.limit(1)
-                    ]);
-                    if (result.documents.length > 0) {
-                        await databases.deleteDocument(DB_ID, LIKES_COLLECTION, result.documents[0].$id);
-                    }
-                    hasLiked = false;
-                    document.getElementById('likeCount').textContent = 
-                        parseInt(document.getElementById('likeCount').textContent) - 1;
-                } else {
-                    // Like
-                    await databases.createDocument(DB_ID, LIKES_COLLECTION, ID.unique(), {
-                        profileId: profileUser.$id,
-                        userId: currentUser.id
-                    });
-                    hasLiked = true;
-                    document.getElementById('likeCount').textContent = 
-                        parseInt(document.getElementById('likeCount').textContent) + 1;
-                }
-                document.getElementById('profileLikes').textContent = 
-                    document.getElementById('likeCount').textContent;
-
-                // Update button
-                const btn = document.getElementById('likeBtn');
-                const icon = document.getElementById('likeIcon');
-                const text = document.getElementById('likeText');
-                if (hasLiked) {
-                    btn.classList.add('liked');
-                    icon.textContent = '❤️';
-                    text.textContent = 'Liked';
-                } else {
-                    btn.classList.remove('liked');
-                    icon.textContent = '🤍';
-                    text.textContent = 'Like';
-                }
-            } catch (error) {
-                console.error('Like error:', error);
-                showAlert('Failed to update like', 'error');
+                actionsEl.innerHTML = `<button class="btn btn-primary" onclick="openEditModal()">Edit Profile</button>`;
+            } else if (currentUser) {
+                actionsEl.innerHTML = `<button class="btn btn-secondary" onclick="alert('Follow feature coming soon!')">Follow</button>`;
             }
         }
 
-        // Share profile
-        window.shareProfile = function() {
-            const url = `${window.location.origin}/profile.html?id=${profileUser.userId}`;
-            navigator.clipboard.writeText(url);
-            showAlert('Profile link copied to clipboard!', 'success');
-        }
-
-        window.shareWhatsApp = function() {
-            const url = `${window.location.origin}/profile.html?id=${profileUser.userId}`;
-            const text = `Check out ${profileUser.displayName}'s profile on Khabar Darjeeling`;
-            window.open(`https://wa.me/?text=${encodeURIComponent(text + ' ' + url)}`, '_blank');
-        }
-
-        // Load articles
-        async function loadArticles() {
+        async function loadUserPosts() {
             try {
-                const posts = await databases.listDocuments(DB_ID, POSTS_COLLECTION, [
-                    Query.equal('submitterId', profileUser.userId),
-                    Query.equal('status', 'published'),
-                    Query.orderDesc('$createdAt'),
-                    Query.limit(100)
-                ]);
+                const response = await window.databases.listDocuments(
+                    window.APPWRITE_DB_ID,
+                    window.APPWRITE_COLLECTION_ID,
+                    [
+                        window.Query.equal('submitterId', profileUserId),
+                        window.Query.equal('status', 'published'),
+                        window.Query.orderDesc('$createdAt'),
+                        window.Query.limit(50)
+                    ]
+                );
 
-                const grid = document.getElementById('articlesGrid');
-                const empty = document.getElementById('emptyArticles');
+                document.getElementById('postCount').textContent = response.total;
 
-                if (posts.documents.length === 0) {
-                    grid.innerHTML = '';
-                    empty.classList.remove('hidden');
-                    return [];
-                }
+                // Calculate total views
+                const totalViews = response.documents.reduce((sum, doc) => sum + (doc.views || 0), 0);
+                document.getElementById('viewCount').textContent = totalViews.toLocaleString();
 
-                empty.classList.add('hidden');
-                grid.innerHTML = posts.documents.map(post => {
-                    const image = post.image ? 
-                        storage.getFilePreview(AVATAR_BUCKET, post.image) : 
-                        'assets/default-article.png';
-                    
-                    return `
-                        <div class="article-card" onclick="window.location.href='article.html?id=${post.$id}'">
-                            <img src="${image}" alt="${post.title}" class="article-image">
-                            <div class="article-content">
-                                <h4 class="article-title">${post.title}</h4>
-                                <div class="article-meta">
-                                    <span>📅 ${formatDate(post.$createdAt)}</span>
-                                    <span>👁 ${post.views || 0} views</span>
-                                </div>
-                            </div>
-                        </div>
-                    `;
-                }).join('');
-
-                return posts.documents;
-            } catch (error) {
-                console.error('Error loading articles:', error);
-                return [];
-            }
-        }
-
-        // Load comments
-        async function loadComments() {
-            try {
-                const result = await databases.listDocuments(DB_ID, COMMENTS_COLLECTION, [
-                    Query.equal('profileId', profileUser.$id),
-                    Query.orderDesc('$createdAt'),
-                    Query.limit(50)
-                ]);
-
-                const list = document.getElementById('commentsList');
-
-                if (result.documents.length === 0) {
-                    list.innerHTML = '<p style="color:var(--muted);text-align:center;padding:20px;">No comments yet. Be the first!</p>';
+                const postsGrid = document.getElementById('postsGrid');
+                if (response.documents.length === 0) {
+                    document.getElementById('emptyPosts').style.display = 'block';
                     return;
                 }
 
-                list.innerHTML = result.documents.map(comment => {
-                    const avatarUrl = comment.avatarUrl || '';
+                postsGrid.innerHTML = response.documents.map(article => {
+                    const imageUrl = article.imageFileId
+                       ? `${window.APPWRITE_ENDPOINT}/storage/buckets/${window.APPWRITE_BUCKET_ID}/files/${article.imageFileId}/view?project=${window.APPWRITE_PROJECT_ID}`
+                        : article.imageUrl || '';
+
                     return `
-                        <div class="comment-item">
-                            <div class="comment-avatar" ${avatarUrl ? `style="background-image:url('${avatarUrl}');background-size:cover;"` : ''}>
-                                ${avatarUrl ? '' : getInitials(comment.userName)}
+                        <a href="article.html?id=${article.$id}" class="post-card">
+                            ${imageUrl? `<img src="${imageUrl}" alt="${escapeHtml(article.title)}">` : ''}
+                            <div class="post-card-content">
+                                <h3>${escapeHtml(article.title)}</h3>
+                                <p>${truncateText(article.content, 120)}</p>
+                                <div class="post-card-meta">
+                                    <span>${formatDate(article.$createdAt)}</span>
+                                    <span>${(article.views || 0).toLocaleString()} views</span>
+                                </div>
                             </div>
-                            <div class="comment-content">
-                                <div class="comment-author">${comment.userName}</div>
-                                <div class="comment-text">${comment.text}</div>
-                                <div class="comment-time">${timeAgo(comment.$createdAt)}</div>
-                            </div>
-                        </div>
+                        </a>
                     `;
                 }).join('');
+
             } catch (error) {
-                console.error('Comments error:', error);
+                console.error('Load posts error:', error);
+                document.getElementById('emptyPosts').style.display = 'block';
             }
         }
 
-        // Post comment
-        window.postComment = async function() {
-            if (!currentUser) {
-                showAlert('Please log in to comment', 'error');
-                return;
-            }
-
-            const text = document.getElementById('commentInput').value.trim();
-            if (!text) {
-                showAlert('Comment cannot be empty', 'error');
-                return;
-            }
-
-            try {
-                await databases.createDocument(DB_ID, COMMENTS_COLLECTION, ID.unique(), {
-                    profileId: profileUser.$id,
-                    userId: currentUser.id,
-                    userName: currentUser.name || 'User',
-                    text: text,
-                    avatarUrl: ''
-                });
-
-                document.getElementById('commentInput').value = '';
-                showAlert('Comment posted!', 'success');
-                await loadComments();
-
-                // Update comment count
-                const current = parseInt(document.getElementById('profileComments').textContent);
-                document.getElementById('profileComments').textContent = current + 1;
-            } catch (error) {
-                console.error('Comment error:', error);
-                showAlert('Failed to post comment', 'error');
-            }
-        }
-
-        // Edit modal functions
-        window.openModal = function() {
+        // Edit Profile
+        function openEditModal() {
+            document.getElementById('editName').value = profileUserData.name || '';
+            const avatarUrl = profileUserData.prefs?.avatar || '';
+            document.getElementById('avatarPreview').src = avatarUrl || 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="100" height="100"%3E%3Crect fill="%23ddd" width="100" height="100"/%3E%3C/svg%3E';
             document.getElementById('editModal').classList.add('active');
-            document.getElementById('editName').value = profileUser.displayName || '';
-            document.getElementById('editBio').value = profileUser.bio || '';
-            document.getElementById('avatarPreview').src = getAvatarUrl(profileUser.userId);
-            document.getElementById('editFeedback').textContent = '';
-            document.getElementById('editFeedback').className = 'feedback';
         }
 
-        window.closeModal = function() {
+        function closeEditModal() {
             document.getElementById('editModal').classList.remove('active');
         }
 
-        window.handleEditSubmit = async function(e) {
-            e.preventDefault();
-
-            const name = document.getElementById('editName').value.trim();
-            const bio = document.getElementById('editBio').value.trim();
-            const avatarFile = document.getElementById('avatarFile').files[0];
-            const feedback = document.getElementById('editFeedback');
-            const saveBtn = document.getElementById('saveBtn');
-
-            if (!name) {
-                feedback.textContent = 'Name is required.';
-                feedback.className = 'feedback error';
-                return;
+        function previewAvatar(e) {
+            const file = e.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    document.getElementById('avatarPreview').src = e.target.result;
+                };
+                reader.readAsDataURL(file);
             }
+        }
 
+        async function saveProfile(e) {
+            e.preventDefault();
+            const saveBtn = document.getElementById('saveBtn');
             saveBtn.disabled = true;
-            feedback.textContent = 'Saving...';
-            feedback.className = 'feedback';
+            saveBtn.textContent = 'Saving...';
 
             try {
-                let updates = { displayName: name, bio: bio };
+                const newName = document.getElementById('editName').value.trim();
+                const avatarFile = document.getElementById('avatarInput').files[0];
 
-                // Upload avatar if selected
+                let avatarUrl = profileUserData.prefs?.avatar || '';
+
+                // Upload avatar if changed
                 if (avatarFile) {
-                    const avatarId = `${currentUser.id}_avatar`;
-
-                    // Try to delete existing
-                    try {
-                        await storage.getFile(AVATAR_BUCKET, avatarId);
-                        await storage.deleteFile(AVATAR_BUCKET, avatarId);
-                    } catch (notFound) {
-                        // File doesn't exist
-                    }
-
-                    // Upload new
-                    await storage.createFile(AVATAR_BUCKET, avatarId, avatarFile);
-                    updates.avatarUrl = avatarId;
+                    const upload = await window.storage.createFile(
+                        window.APPWRITE_BUCKET_ID,
+                        window.ID.unique(),
+                        avatarFile
+                    );
+                    avatarUrl = `${window.APPWRITE_ENDPOINT}/storage/buckets/${window.APPWRITE_BUCKET_ID}/files/${upload.$id}/view?project=${window.APPWRITE_PROJECT_ID}`;
                 }
 
-                // Update profile
-                await databases.updateDocument(DB_ID, PROFILE_COLLECTION, profileUser.$id, updates);
+                // Update name
+                await window.account.updateName(newName);
 
-                // Update local state
-                profileUser.displayName = name;
-                profileUser.bio = bio;
+                // Update prefs with avatar
+                await window.account.updatePrefs({ avatar: avatarUrl });
 
-                feedback.textContent = '✓ Profile updated successfully!';
-                feedback.className = 'feedback success';
-
-                setTimeout(() => {
-                    closeModal();
-                    updateProfileUI();
-                    document.getElementById('editName').value = '';
-                    document.getElementById('editBio').value = '';
-                    document.getElementById('avatarFile').value = '';
-                }, 1500);
+                // Reload profile
+                profileUserData = await window.account.get();
+                renderProfile();
+                closeEditModal();
+                alert('Profile updated successfully!');
 
             } catch (error) {
-                console.error('Edit error:', error);
-                feedback.textContent = 'Failed to update profile.';
-                feedback.className = 'feedback error';
+                console.error('Save profile error:', error);
+                alert('Failed to update profile: ' + error.message);
             } finally {
                 saveBtn.disabled = false;
+                saveBtn.textContent = 'Save Changes';
             }
         }
 
-        // Update profile UI
-        function updateProfileUI() {
-            const avatar = document.getElementById('profileAvatar');
-            const name = document.getElementById('profileName');
-            const username = document.getElementById('profileUsername');
-            const joined = document.getElementById('profileJoined');
-            const bio = document.getElementById('profileBio');
-            const editBtn = document.getElementById('editProfileBtn');
-
-            avatar.textContent = getInitials(profileUser.displayName);
-            avatar.style.backgroundImage = '';
-            if (profileUser.avatarUrl) {
-                avatar.style.backgroundImage = `url('${getAvatarUrl(profileUser.userId)}')`;
-                avatar.textContent = '';
-            }
-
-            name.textContent = profileUser.displayName || 'Unknown User';
-            username.textContent = '@' + (profileUser.userName || 'user');
-            joined.textContent = 'Joined ' + formatDate(profileUser.joinedAT);
-            bio.textContent = profileUser.bio || '';
-
-            // Show/hide edit button
-            if (isOwnProfile) {
-                editBtn.classList.remove('hidden');
-            } else {
-                editBtn.classList.add('hidden');
-            }
+        // Utilities
+        function getInitials(name) {
+            if (!name) return '?';
+            const parts = name.trim().split(/\s+/);
+            if (parts.length === 1) return parts[0].charAt(0).toUpperCase();
+            return (parts[0].charAt(0) + parts[parts.length - 1].charAt(0)).toUpperCase();
         }
 
-        // Main load function
-        async function loadProfile() {
-            showLoading();
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text || '';
+            return div.innerHTML;
+        }
 
+        function truncateText(htmlStr, maxLength) {
+            const div = document.createElement('div');
+            div.innerHTML = htmlStr || '';
+            const text = div.textContent || div.innerText || '';
+            return text.length > maxLength? text.substring(0, maxLength) + '...' : text;
+        }
+
+        function formatDate(dateString) {
             try {
-                // Load current user
-                await loadCurrentUser();
-
-                // Get target user ID
-                const userIdFromURL = getUserIdFromURL();
-                let targetUserId = userIdFromURL || (currentUser ? currentUser.id : null);
-
-                if (!targetUserId) {
-                    showAlert('Please log in to view profiles', 'error');
-                    showNotFound();
-                    return;
-                }
-
-                // Load profile
-                profileUser = await loadProfileUser(targetUserId);
-
-                if (!profileUser) {
-                    showNotFound();
-                    return;
-                }
-
-                // Check if own profile
-                isOwnProfile = currentUser && currentUser.id === profileUser.userId;
-
-                // Check follow status
-                await checkFollowing();
-                updateFollowButton();
-
-                // Load articles
-                const articles = await loadArticles();
-
-                // Calculate stats
-                let totalViews = articles.reduce((sum, post) => sum + (post.views || 0), 0);
-                document.getElementById('totalPosts').textContent = articles.length;
-                document.getElementById('totalViews').textContent = totalViews;
-
-                // Load likes
-                try {
-                    const likes = await databases.listDocuments(DB_ID, LIKES_COLLECTION, [
-                        Query.equal('profileId', profileUser.$id),
-                        Query.limit(1)
-                    ]);
-                    document.getElementById('profileLikes').textContent = likes.total;
-                    document.getElementById('likeCount').textContent = likes.total;
-
-                    if (currentUser) {
-                        const userLike = await databases.listDocuments(DB_ID, LIKES_COLLECTION, [
-                            Query.equal('profileId', profileUser.$id),
-                            Query.equal('userId', currentUser.id),
-                            Query.limit(1)
-                        ]);
-                        hasLiked = userLike.documents.length > 0;
-                        if (hasLiked) {
-                            document.getElementById('likeBtn').classList.add('liked');
-                            document.getElementById('likeIcon').textContent = '❤️';
-                            document.getElementById('likeText').textContent = 'Liked';
-                        }
-                    }
-                } catch (e) {
-                    // Collection may not exist
-                    document.getElementById('profileLikes').textContent = '0';
-                    document.getElementById('likeCount').textContent = '0';
-                }
-
-                // Load comments count
-                try {
-                    const comments = await databases.listDocuments(DB_ID, COMMENTS_COLLECTION, [
-                        Query.equal('profileId', profileUser.$id),
-                        Query.limit(1)
-                    ]);
-                    document.getElementById('profileComments').textContent = comments.total;
-                } catch {
-                    document.getElementById('profileComments').textContent = '0';
-                }
-
-                // Load comments
-                await loadComments();
-
-                // Update UI
-                updateProfileUI();
-                showProfile();
-
-            } catch (error) {
-                console.error('Profile load error:', error);
-                showNotFound();
-            }
+                return new Date(dateString).toLocaleDateString('en-US', {
+                    year: 'numeric', month: 'short', day: 'numeric'
+                });
+            } catch(e) { return 'Date unknown'; }
         }
 
-        // Event listeners
-        document.getElementById('logoutBtn').addEventListener('click', async function() {
-            if (!confirm('Sign out?')) return;
-            try {
-                await account.deleteSession('current');
-                window.location.href = 'login.html';
-            } catch (error) {
-                showAlert('Failed to sign out', 'error');
-            }
-        });
-
-        document.getElementById('likeBtn').addEventListener('click', handleLike);
-        document.getElementById('followBtn').addEventListener('click', handleFollow);
-        document.getElementById('shareProfileBtn').addEventListener('click', shareProfile);
-        document.getElementById('whatsappShareBtn').addEventListener('click', shareWhatsApp);
-        document.getElementById('postCommentBtn').addEventListener('click', postComment);
-        document.getElementById('editProfileBtn').addEventListener('click', openModal);
-
-        // Close modal on outside click
-        document.getElementById('editModal').addEventListener('click', function(e) {
-            if (e.target === document.getElementById('editModal')) {
-                closeModal();
-            }
-        });
-
-        // Load profile
-        loadProfile();
+        // Start
+        init();
     </script>
 </body>
 </html>
