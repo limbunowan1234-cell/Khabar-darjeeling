@@ -1,12 +1,7 @@
-// js/appwrite.js — NO SDK, direct fetch only
+// js/appwrite.js — NO SDK, direct fetch. Token-based auth (Safari-safe).
 window.ENDPOINT = 'https://nyc.cloud.appwrite.io/v1';
 window.PROJECT  = 'khabardarjeeling';
-window.HEADERS  = {
-  'X-Appwrite-Project': window.PROJECT,
-  'Content-Type': 'application/json'
-};
 
-// ── Legacy aliases (some pages used these names) ──
 window.APPWRITE_ENDPOINT   = window.ENDPOINT;
 window.APPWRITE_PROJECT_ID = window.PROJECT;
 
@@ -20,6 +15,18 @@ window.COL_LIKES              = 'likes';
 window.COL_COMMENTS           = 'comments';
 window.COL_PROFILE_LIKES      = 'profile_likes';
 window.COL_PROFILE_COMMENTS   = 'profile_comments';
+
+// ── Auth header builder ──
+// Safari/iOS blocks Appwrite's 3rd-party session cookie, so we store the session
+// secret in localStorage and send it as X-Appwrite-Session on every request.
+function authHeaders(extra) {
+  const h = { 'X-Appwrite-Project': window.PROJECT };
+  const sess = localStorage.getItem('kd_session');
+  if (sess) h['X-Appwrite-Session'] = sess;
+  if (extra) Object.assign(h, extra);
+  return h;
+}
+window.getAuthHeaders = authHeaders;
 
 // ── Query helpers (Appwrite 14 / Cloud — JSON object format) ──
 window.Query = {
@@ -37,9 +44,8 @@ window.Query = {
   contains:         (k, v) => JSON.stringify({ method: 'contains',         attribute: k, values: [v] }),
 };
 
-// Unique ID generator (Appwrite-safe, <=36 chars, valid chars only)
+// Unique ID generator
 window.uniqueId = () => 'u' + Date.now() + Math.random().toString(36).slice(2, 9);
-// Alias so old `window.ID.unique()` calls keep working
 window.ID = { unique: () => window.uniqueId() };
 
 // ── Databases API ──
@@ -47,67 +53,47 @@ window.databases = {
   listDocuments: async (dbId, colId, queries = []) => {
     const qs  = queries.map(q => `queries[]=${encodeURIComponent(q)}`).join('&');
     const url = `${window.ENDPOINT}/databases/${dbId}/collections/${colId}/documents${qs ? '?' + qs : ''}`;
-    const res = await fetch(url, {
-      headers: { 'X-Appwrite-Project': window.PROJECT },
-      credentials: 'include'
-    });
+    const res = await fetch(url, { headers: authHeaders(), credentials: 'include' });
     if (!res.ok) throw Object.assign(new Error('listDocuments failed'), { code: res.status });
     return res.json();
   },
-
   getDocument: async (dbId, colId, docId) => {
     const url = `${window.ENDPOINT}/databases/${dbId}/collections/${colId}/documents/${docId}`;
-    const res = await fetch(url, {
-      headers: { 'X-Appwrite-Project': window.PROJECT },
-      credentials: 'include'
-    });
+    const res = await fetch(url, { headers: authHeaders(), credentials: 'include' });
     if (!res.ok) throw Object.assign(new Error('getDocument failed'), { code: res.status });
     return res.json();
   },
-
   createDocument: async (dbId, colId, docId, data) => {
     const url = `${window.ENDPOINT}/databases/${dbId}/collections/${colId}/documents`;
     const res = await fetch(url, {
       method: 'POST',
-      headers: { ...window.HEADERS, 'X-Appwrite-Project': window.PROJECT },
+      headers: authHeaders({ 'Content-Type': 'application/json' }),
       credentials: 'include',
       body: JSON.stringify({ documentId: docId || 'unique()', data })
     });
-    if (!res.ok) {
-      const e = await res.json().catch(() => ({}));
-      throw Object.assign(new Error(e.message || 'createDocument failed'), { code: res.status });
-    }
+    if (!res.ok) { const e = await res.json().catch(() => ({})); throw Object.assign(new Error(e.message || 'createDocument failed'), { code: res.status }); }
     return res.json();
   },
-
   updateDocument: async (dbId, colId, docId, data) => {
     const url = `${window.ENDPOINT}/databases/${dbId}/collections/${colId}/documents/${docId}`;
     const res = await fetch(url, {
       method: 'PATCH',
-      headers: { ...window.HEADERS, 'X-Appwrite-Project': window.PROJECT },
+      headers: authHeaders({ 'Content-Type': 'application/json' }),
       credentials: 'include',
       body: JSON.stringify({ data })
     });
-    if (!res.ok) {
-      const e = await res.json().catch(() => ({}));
-      throw Object.assign(new Error(e.message || 'updateDocument failed'), { code: res.status });
-    }
+    if (!res.ok) { const e = await res.json().catch(() => ({})); throw Object.assign(new Error(e.message || 'updateDocument failed'), { code: res.status }); }
     return res.json();
   },
-
   deleteDocument: async (dbId, colId, docId) => {
     const url = `${window.ENDPOINT}/databases/${dbId}/collections/${colId}/documents/${docId}`;
-    const res = await fetch(url, {
-      method: 'DELETE',
-      headers: { 'X-Appwrite-Project': window.PROJECT },
-      credentials: 'include'
-    });
+    const res = await fetch(url, { method: 'DELETE', headers: authHeaders(), credentials: 'include' });
     if (!res.ok) throw Object.assign(new Error('deleteDocument failed'), { code: res.status });
     return true;
   }
 };
 
-// ── Storage API (file upload via multipart) ──
+// ── Storage API ──
 window.storage = {
   createFile: async (bucketId, fileId, file) => {
     const form = new FormData();
@@ -116,27 +102,18 @@ window.storage = {
     const url = `${window.ENDPOINT}/storage/buckets/${bucketId}/files`;
     const res = await fetch(url, {
       method: 'POST',
-      headers: { 'X-Appwrite-Project': window.PROJECT },  // no Content-Type — browser sets multipart boundary
+      headers: authHeaders(),   // no Content-Type — browser sets multipart boundary
       credentials: 'include',
       body: form
     });
-    if (!res.ok) {
-      const e = await res.json().catch(() => ({}));
-      throw Object.assign(new Error(e.message || 'File upload failed'), { code: res.status });
-    }
+    if (!res.ok) { const e = await res.json().catch(() => ({})); throw Object.assign(new Error(e.message || 'File upload failed'), { code: res.status }); }
     return res.json();
   },
-
   getFileViewUrl: (bucketId, fileId) =>
     `${window.ENDPOINT}/storage/buckets/${bucketId}/files/${fileId}/view?project=${window.PROJECT}`,
-
   deleteFile: async (bucketId, fileId) => {
     const url = `${window.ENDPOINT}/storage/buckets/${bucketId}/files/${fileId}`;
-    const res = await fetch(url, {
-      method: 'DELETE',
-      headers: { 'X-Appwrite-Project': window.PROJECT },
-      credentials: 'include'
-    });
+    const res = await fetch(url, { method: 'DELETE', headers: authHeaders(), credentials: 'include' });
     return res.ok;
   }
 };
@@ -144,52 +121,94 @@ window.storage = {
 // ── Account API ──
 window.account = {
   get: async () => {
-    const res = await fetch(`${window.ENDPOINT}/account`, {
-      headers: { 'X-Appwrite-Project': window.PROJECT },
-      credentials: 'include'
-    });
+    const res = await fetch(`${window.ENDPOINT}/account`, { headers: authHeaders(), credentials: 'include' });
     if (!res.ok) throw new Error('Not authenticated');
     return res.json();
   },
-
+  // Create email/password session, store its secret for Safari-safe auth
+  createEmailPasswordSession: async (email, password) => {
+    const res = await fetch(`${window.ENDPOINT}/account/sessions/email`, {
+      method: 'POST',
+      headers: authHeaders({ 'Content-Type': 'application/json' }),
+      credentials: 'include',
+      body: JSON.stringify({ email, password })
+    });
+    const data = await res.json();
+    if (!res.ok) throw Object.assign(new Error(data.message || 'Login failed'), { code: res.status });
+    // The `secret` lets us authenticate without relying on the blocked cookie
+    if (data.secret) localStorage.setItem('kd_session', data.secret);
+    else if (data.$id) localStorage.setItem('kd_session', data.$id);
+    return data;
+  },
+  create: async (userId, email, password, name) => {
+    const res = await fetch(`${window.ENDPOINT}/account`, {
+      method: 'POST',
+      headers: authHeaders({ 'Content-Type': 'application/json' }),
+      credentials: 'include',
+      body: JSON.stringify({ userId: userId || 'unique()', email, password, name })
+    });
+    const data = await res.json();
+    if (!res.ok) throw Object.assign(new Error(data.message || 'Signup failed'), { code: res.status });
+    return data;
+  },
+  createRecovery: async (email, url) => {
+    const res = await fetch(`${window.ENDPOINT}/account/recovery`, {
+      method: 'POST',
+      headers: authHeaders({ 'Content-Type': 'application/json' }),
+      credentials: 'include',
+      body: JSON.stringify({ email, url })
+    });
+    const data = await res.json();
+    if (!res.ok) throw Object.assign(new Error(data.message || 'Recovery failed'), { code: res.status });
+    return data;
+  },
+  updateRecovery: async (userId, secret, password) => {
+    const res = await fetch(`${window.ENDPOINT}/account/recovery`, {
+      method: 'PUT',
+      headers: authHeaders({ 'Content-Type': 'application/json' }),
+      credentials: 'include',
+      body: JSON.stringify({ userId, secret, password, passwordAgain: password })
+    });
+    const data = await res.json();
+    if (!res.ok) throw Object.assign(new Error(data.message || 'Reset failed'), { code: res.status });
+    return data;
+  },
   updateName: async (name) => {
     const res = await fetch(`${window.ENDPOINT}/account/name`, {
       method: 'PATCH',
-      headers: { ...window.HEADERS, 'X-Appwrite-Project': window.PROJECT },
+      headers: authHeaders({ 'Content-Type': 'application/json' }),
       credentials: 'include',
       body: JSON.stringify({ name })
     });
     if (!res.ok) throw new Error('updateName failed');
     return res.json();
   },
-
   updatePrefs: async (prefs) => {
     const res = await fetch(`${window.ENDPOINT}/account/prefs`, {
       method: 'PATCH',
-      headers: { ...window.HEADERS, 'X-Appwrite-Project': window.PROJECT },
+      headers: authHeaders({ 'Content-Type': 'application/json' }),
       credentials: 'include',
       body: JSON.stringify({ prefs })
     });
     if (!res.ok) throw new Error('updatePrefs failed');
     return res.json();
   },
-
   deleteSession: async (sessionId = 'current') => {
     const res = await fetch(`${window.ENDPOINT}/account/sessions/${sessionId}`, {
-      method: 'DELETE',
-      headers: { 'X-Appwrite-Project': window.PROJECT },
-      credentials: 'include'
+      method: 'DELETE', headers: authHeaders(), credentials: 'include'
     });
+    localStorage.removeItem('kd_session');   // always clear local token
     return res.ok;
   }
 };
 
 window.logout = async () => {
   try { await window.account.deleteSession('current'); } catch {}
+  localStorage.removeItem('kd_session');
   location.href = 'login.html';
 };
 
-// ── Profile helpers (profiles collection: userId, displayName, userName, bio, avatarUrl, coverUrl, joinedAT) ──
+// ── Profile helpers ──
 window.getProfile = async (userId) => {
   try {
     const res = await window.databases.listDocuments(
@@ -199,14 +218,10 @@ window.getProfile = async (userId) => {
     return res.documents[0] || null;
   } catch { return null; }
 };
-
-// Create or update a user's profile row
 window.upsertProfile = async (userId, fields) => {
   const existing = await window.getProfile(userId);
   if (existing) {
-    return window.databases.updateDocument(
-      window.APPWRITE_DB_ID, window.COL_PROFILES, existing.$id, fields
-    );
+    return window.databases.updateDocument(window.APPWRITE_DB_ID, window.COL_PROFILES, existing.$id, fields);
   }
   return window.databases.createDocument(
     window.APPWRITE_DB_ID, window.COL_PROFILES, 'unique()',
