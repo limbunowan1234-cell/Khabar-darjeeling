@@ -1,0 +1,33 @@
+<!DOCTYPE html><html><head><meta name="viewport" content="width=device-width,initial-scale=1"><title>Debug</title>
+<style>body{font-family:system-ui;padding:20px;background:#f5f5f5}button{width:100%;padding:16px;margin:8px 0;border:none;border-radius:8px;font-size:16px;background:#c41e3a;color:#fff}pre{background:#fff;padding:12px;border-radius:8px;overflow:auto;font-size:12px}</style>
+</head><body>
+<h2>🔍 Khabar Darjeeling Debug</h2>
+<button onclick="check()">1. Check Login Status</button>
+<button onclick="forceShow()">2. Force Show Buttons</button>
+<button onclick="clearLogin()">3. Clear Login</button>
+<pre id="out">Tap a button...</pre>
+
+<script>
+async function check(){
+ const jwt=localStorage.getItem('kd_jwt');
+ const email=localStorage.getItem('kd_email');
+ let out=`JWT: ${jwt?jwt.substring(0,30)+'...':'NONE'}\nEmail: ${email||'NONE'}\n\n`;
+ if(!jwt){document.getElementById('out').textContent=out+'❌ NOT LOGGED IN';return;}
+ try{
+  const r=await fetch('https://nyc.cloud.appwrite.io/v1/account',{headers:{'X-Appwrite-Project':'khabardarjeeling','X-Appwrite-JWT':jwt}});
+  const u=await r.json();
+  out+=`✅ LOGGED IN AS: ${u.email}\nName: ${u.name}\nID: ${u.$id}`;
+ }catch(e){out+='❌ TOKEN INVALID';}
+ document.getElementById('out').textContent=out;
+}
+function forceShow(){
+ localStorage.setItem('kd_email','nowanad@gmail.com');
+ alert('Now go to homepage - buttons should appear');
+ location.href='/';
+}
+function clearLogin(){
+ localStorage.clear();
+ alert('Cleared');
+}
+</script>
+</body></html>
