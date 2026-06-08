@@ -1,5 +1,5 @@
-// js/appwrite.js — NO SDK, direct fetch. Token-based auth (Safari-safe).
-window.ENDPOINT = 'https://nyc.cloud.appwrite.io/v1';
+// js/appwrite.js — NO SDK, direct fetch. First-party domain = clean cookie auth.
+window.ENDPOINT = 'https://api.khabardarjeeling.space/v1';
 window.PROJECT  = 'khabardarjeeling';
 
 window.APPWRITE_ENDPOINT   = window.ENDPOINT;
@@ -16,17 +16,11 @@ window.COL_COMMENTS           = 'comments';
 window.COL_PROFILE_LIKES      = 'profile_likes';
 window.COL_PROFILE_COMMENTS   = 'profile_comments';
 
-// ── Auth header builder ──
-// Safari/iOS blocks Appwrite's 3rd-party session cookie, so we store the session
-// secret in localStorage and send it as X-Appwrite-Session on every request.
-function authHeaders(extra) {
-  const h = { 'X-Appwrite-Project': window.PROJECT };
-  const sess = localStorage.getItem('kd_session');
-  if (sess) h['X-Appwrite-Session'] = sess;
-  if (extra) Object.assign(h, extra);
-  return h;
-}
-window.getAuthHeaders = authHeaders;
+// Headers: Appwrite is now first-party, so the session cookie works.
+// credentials:'include' carries it on every request.
+const H  = { 'X-Appwrite-Project': window.PROJECT };
+const HJ = { 'X-Appwrite-Project': window.PROJECT, 'Content-Type': 'application/json' };
+window.HEADERS = HJ;
 
 // ── Query helpers (Appwrite 14 / Cloud — JSON object format) ──
 window.Query = {
@@ -44,7 +38,6 @@ window.Query = {
   contains:         (k, v) => JSON.stringify({ method: 'contains',         attribute: k, values: [v] }),
 };
 
-// Unique ID generator
 window.uniqueId = () => 'u' + Date.now() + Math.random().toString(36).slice(2, 9);
 window.ID = { unique: () => window.uniqueId() };
 
@@ -53,22 +46,20 @@ window.databases = {
   listDocuments: async (dbId, colId, queries = []) => {
     const qs  = queries.map(q => `queries[]=${encodeURIComponent(q)}`).join('&');
     const url = `${window.ENDPOINT}/databases/${dbId}/collections/${colId}/documents${qs ? '?' + qs : ''}`;
-    const res = await fetch(url, { headers: authHeaders(), credentials: 'include' });
+    const res = await fetch(url, { headers: H, credentials: 'include' });
     if (!res.ok) throw Object.assign(new Error('listDocuments failed'), { code: res.status });
     return res.json();
   },
   getDocument: async (dbId, colId, docId) => {
     const url = `${window.ENDPOINT}/databases/${dbId}/collections/${colId}/documents/${docId}`;
-    const res = await fetch(url, { headers: authHeaders(), credentials: 'include' });
+    const res = await fetch(url, { headers: H, credentials: 'include' });
     if (!res.ok) throw Object.assign(new Error('getDocument failed'), { code: res.status });
     return res.json();
   },
   createDocument: async (dbId, colId, docId, data) => {
     const url = `${window.ENDPOINT}/databases/${dbId}/collections/${colId}/documents`;
     const res = await fetch(url, {
-      method: 'POST',
-      headers: authHeaders({ 'Content-Type': 'application/json' }),
-      credentials: 'include',
+      method: 'POST', headers: HJ, credentials: 'include',
       body: JSON.stringify({ documentId: docId || 'unique()', data })
     });
     if (!res.ok) { const e = await res.json().catch(() => ({})); throw Object.assign(new Error(e.message || 'createDocument failed'), { code: res.status }); }
@@ -77,9 +68,7 @@ window.databases = {
   updateDocument: async (dbId, colId, docId, data) => {
     const url = `${window.ENDPOINT}/databases/${dbId}/collections/${colId}/documents/${docId}`;
     const res = await fetch(url, {
-      method: 'PATCH',
-      headers: authHeaders({ 'Content-Type': 'application/json' }),
-      credentials: 'include',
+      method: 'PATCH', headers: HJ, credentials: 'include',
       body: JSON.stringify({ data })
     });
     if (!res.ok) { const e = await res.json().catch(() => ({})); throw Object.assign(new Error(e.message || 'updateDocument failed'), { code: res.status }); }
@@ -87,7 +76,7 @@ window.databases = {
   },
   deleteDocument: async (dbId, colId, docId) => {
     const url = `${window.ENDPOINT}/databases/${dbId}/collections/${colId}/documents/${docId}`;
-    const res = await fetch(url, { method: 'DELETE', headers: authHeaders(), credentials: 'include' });
+    const res = await fetch(url, { method: 'DELETE', headers: H, credentials: 'include' });
     if (!res.ok) throw Object.assign(new Error('deleteDocument failed'), { code: res.status });
     return true;
   }
@@ -101,10 +90,7 @@ window.storage = {
     form.append('file', file);
     const url = `${window.ENDPOINT}/storage/buckets/${bucketId}/files`;
     const res = await fetch(url, {
-      method: 'POST',
-      headers: authHeaders(),   // no Content-Type — browser sets multipart boundary
-      credentials: 'include',
-      body: form
+      method: 'POST', headers: H, credentials: 'include', body: form
     });
     if (!res.ok) { const e = await res.json().catch(() => ({})); throw Object.assign(new Error(e.message || 'File upload failed'), { code: res.status }); }
     return res.json();
@@ -113,7 +99,7 @@ window.storage = {
     `${window.ENDPOINT}/storage/buckets/${bucketId}/files/${fileId}/view?project=${window.PROJECT}`,
   deleteFile: async (bucketId, fileId) => {
     const url = `${window.ENDPOINT}/storage/buckets/${bucketId}/files/${fileId}`;
-    const res = await fetch(url, { method: 'DELETE', headers: authHeaders(), credentials: 'include' });
+    const res = await fetch(url, { method: 'DELETE', headers: H, credentials: 'include' });
     return res.ok;
   }
 };
@@ -121,30 +107,22 @@ window.storage = {
 // ── Account API ──
 window.account = {
   get: async () => {
-    const res = await fetch(`${window.ENDPOINT}/account`, { headers: authHeaders(), credentials: 'include' });
+    const res = await fetch(`${window.ENDPOINT}/account`, { headers: H, credentials: 'include' });
     if (!res.ok) throw new Error('Not authenticated');
     return res.json();
   },
-  // Create email/password session, store its secret for Safari-safe auth
   createEmailPasswordSession: async (email, password) => {
     const res = await fetch(`${window.ENDPOINT}/account/sessions/email`, {
-      method: 'POST',
-      headers: authHeaders({ 'Content-Type': 'application/json' }),
-      credentials: 'include',
+      method: 'POST', headers: HJ, credentials: 'include',
       body: JSON.stringify({ email, password })
     });
     const data = await res.json();
     if (!res.ok) throw Object.assign(new Error(data.message || 'Login failed'), { code: res.status });
-    // The `secret` lets us authenticate without relying on the blocked cookie
-    if (data.secret) localStorage.setItem('kd_session', data.secret);
-    else if (data.$id) localStorage.setItem('kd_session', data.$id);
     return data;
   },
   create: async (userId, email, password, name) => {
     const res = await fetch(`${window.ENDPOINT}/account`, {
-      method: 'POST',
-      headers: authHeaders({ 'Content-Type': 'application/json' }),
-      credentials: 'include',
+      method: 'POST', headers: HJ, credentials: 'include',
       body: JSON.stringify({ userId: userId || 'unique()', email, password, name })
     });
     const data = await res.json();
@@ -153,9 +131,7 @@ window.account = {
   },
   createRecovery: async (email, url) => {
     const res = await fetch(`${window.ENDPOINT}/account/recovery`, {
-      method: 'POST',
-      headers: authHeaders({ 'Content-Type': 'application/json' }),
-      credentials: 'include',
+      method: 'POST', headers: HJ, credentials: 'include',
       body: JSON.stringify({ email, url })
     });
     const data = await res.json();
@@ -164,9 +140,7 @@ window.account = {
   },
   updateRecovery: async (userId, secret, password) => {
     const res = await fetch(`${window.ENDPOINT}/account/recovery`, {
-      method: 'PUT',
-      headers: authHeaders({ 'Content-Type': 'application/json' }),
-      credentials: 'include',
+      method: 'PUT', headers: HJ, credentials: 'include',
       body: JSON.stringify({ userId, secret, password, passwordAgain: password })
     });
     const data = await res.json();
@@ -175,9 +149,7 @@ window.account = {
   },
   updateName: async (name) => {
     const res = await fetch(`${window.ENDPOINT}/account/name`, {
-      method: 'PATCH',
-      headers: authHeaders({ 'Content-Type': 'application/json' }),
-      credentials: 'include',
+      method: 'PATCH', headers: HJ, credentials: 'include',
       body: JSON.stringify({ name })
     });
     if (!res.ok) throw new Error('updateName failed');
@@ -185,9 +157,7 @@ window.account = {
   },
   updatePrefs: async (prefs) => {
     const res = await fetch(`${window.ENDPOINT}/account/prefs`, {
-      method: 'PATCH',
-      headers: authHeaders({ 'Content-Type': 'application/json' }),
-      credentials: 'include',
+      method: 'PATCH', headers: HJ, credentials: 'include',
       body: JSON.stringify({ prefs })
     });
     if (!res.ok) throw new Error('updatePrefs failed');
@@ -195,16 +165,14 @@ window.account = {
   },
   deleteSession: async (sessionId = 'current') => {
     const res = await fetch(`${window.ENDPOINT}/account/sessions/${sessionId}`, {
-      method: 'DELETE', headers: authHeaders(), credentials: 'include'
+      method: 'DELETE', headers: H, credentials: 'include'
     });
-    localStorage.removeItem('kd_session');   // always clear local token
     return res.ok;
   }
 };
 
 window.logout = async () => {
   try { await window.account.deleteSession('current'); } catch {}
-  localStorage.removeItem('kd_session');
   location.href = 'login.html';
 };
 
