@@ -16,44 +16,45 @@
         }
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Poppins', sans-serif; }
         body { background-color: var(--bg-gray); display: flex; flex-direction: column; justify-content: center; align-items: center; min-height: 100vh; color: var(--text-dark); transition: background-color 0.3s, color 0.3s; }
-        
+
         .login-wrapper { width: 100%; max-width: 396px; padding: 16px; }
-        
+
         .brand-header { text-align: center; margin-bottom: 24px; display: flex; flex-direction: column; align-items: center; }
-        .brand-logo { height: 75px; width: 75px; object-fit: cover; border-radius: 50%; margin-bottom: 12px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); border: 2px solid #ffffff; }
+        .brand-logo { height: 75px; width: 75px; object-fit: cover; border-radius: 50%; margin-bottom: 12px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); border: 2px solid #ffffff; }
         .brand-header h1 { color: var(--brand-red); font-size: 34px; font-weight: 700; letter-spacing: -0.5px; margin-bottom: 2px; }
         .brand-header p { color: #606770; font-size: 14px; font-weight: 600; letter-spacing: 0.5px; }
-        
-        .card { background: #ffffff; border-radius: 8px; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1), 0 8px 16px rgba(0, 0, 0, 0.1); padding: 24px; width: 100%; transition: background-color 0.3s, box-shadow 0.3s; }
-        
+
+        .card { background: #ffffff; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1), 0 8px 16px rgba(0,0,0,0.1); padding: 24px; width: 100%; transition: background-color 0.3s, box-shadow 0.3s; }
+
         .form-control { width: 100%; margin-bottom: 14px; position: relative; }
         .form-control input { width: 100%; padding: 14px 12px; font-size: 14px; border: 1px solid var(--border-color); border-radius: 6px; background: #f5f6f7; color: var(--text-dark); outline: none; transition: all 0.2s; }
-        .form-control input:focus { border-color: var(--brand-red); background: #ffffff; box-shadow: 0 0 0 2px rgba(196, 30, 58, 0.2); }
-        
-        .password-toggle { position: absolute; right: 12px; top: 50%; transform: translateY(-50%); cursor: pointer; color: #606770; font-size: 14px; user-select: none; padding: 4px 8px; background: transparent; border: none; }
-        .password-toggle:hover { color: var(--brand-red); }
-        
+        .form-control input:focus { border-color: var(--brand-red); background: #ffffff; box-shadow: 0 0 0 2px rgba(196,30,58,0.2); }
+
+        .password-toggle { position: absolute; right: 12px; top: 50%; transform: translateY(-50%); cursor: pointer; font-size: 16px; user-select: none; padding: 4px 8px; background: transparent; border: none; }
+        .password-toggle:hover { opacity: 0.7; }
+
         .btn-submit { width: 100%; padding: 12px; font-size: 16px; font-weight: 600; color: #ffffff; background-color: var(--brand-red); border: none; border-radius: 6px; cursor: pointer; margin-top: 6px; transition: background-color 0.2s; }
         .btn-submit:hover { background-color: var(--brand-red-dark); }
         .btn-submit:disabled { opacity: 0.5; cursor: not-allowed; }
-        
+
         .forgot-link { display: block; text-align: center; margin-top: 14px; font-size: 13px; color: var(--brand-red); text-decoration: none; cursor: pointer; font-weight: 500; }
         .forgot-link:hover { text-decoration: underline; }
-        
+
         .back-home { display: block; text-align: center; margin-top: 20px; font-size: 14px; color: #606770; text-decoration: none; font-weight: 500; }
         .back-home:hover { color: var(--brand-red); }
-        
+
         .toggle-box { text-align: center; margin-top: 20px; padding-top: 20px; border-top: 1px solid var(--border-color); font-size: 14px; color: #606770; }
         .toggle-link { color: var(--brand-red); font-weight: 600; text-decoration: none; cursor: pointer; }
-        
+        .toggle-link:hover { text-decoration: underline; }
+
         .status-feedback { margin-top: 16px; text-align: center; font-size: 13px; font-weight: 500; min-height: 20px; }
         .status-feedback.success { color: #2e7d32; }
         .status-feedback.error { color: var(--brand-red); }
-        
-        .instruction-text { color: #606770; font-size: 13px; line-height: 1.4; text-align: center; margin-bottom: 16px; }
-        
-        .hidden { display: none!important; }
-        
+
+        .instruction-text { color: #606770; font-size: 13px; line-height: 1.6; text-align: center; margin-bottom: 16px; }
+
+        .hidden { display: none !important; }
+
         /* Dark Mode */
         body.dark-mode { background-color: #121212; color: var(--text-light); }
         body.dark-mode .card { background: #242526; box-shadow: 0 4px 12px rgba(0,0,0,0.3); border-top: 1px solid #3a3b3c; }
@@ -63,10 +64,10 @@
         body.dark-mode .brand-logo { border-color: #242526; }
         body.dark-mode .brand-header p { color: #b0b3b8; }
         body.dark-mode .instruction-text { color: #b0b3b8; }
-        body.dark-mode .password-toggle { color: #b0b3b8; }
         body.dark-mode .back-home { color: #b0b3b8; }
-        
-        /* Dark mode toggle button */
+        body.dark-mode .toggle-box { color: #b0b3b8; }
+
+        /* Dark mode toggle */
         .dark-mode-toggle { position: fixed; top: 20px; right: 20px; background: #ffffff; border: 2px solid var(--border-color); border-radius: 50%; width: 44px; height: 44px; cursor: pointer; display: flex; align-items: center; justify-content: center; box-shadow: 0 2px 8px rgba(0,0,0,0.15); transition: all 0.3s; }
         .dark-mode-toggle:hover { transform: scale(1.1); box-shadow: 0 4px 12px rgba(0,0,0,0.2); }
         body.dark-mode .dark-mode-toggle { background: #242526; border-color: #3a3b3c; }
@@ -74,14 +75,14 @@
         .dark-mode-toggle .sun-icon { display: none; fill: var(--brand-red); }
         .dark-mode-toggle .moon-icon { display: block; fill: #606770; }
         body.dark-mode .dark-mode-toggle .sun-icon { display: block; fill: var(--brand-red); }
-        body.dark-mode .dark-mode-toggle .moon-icon { display: none; fill: var(--text-light); }
-        
+        body.dark-mode .dark-mode-toggle .moon-icon { display: none; }
+
         /* Gatekeeper Loader */
         .gatekeeper-loader { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: var(--bg-gray); display: flex; flex-direction: column; justify-content: center; align-items: center; z-index: 9999; transition: opacity 0.4s, background-color 0.3s; }
         .gatekeeper-loader.hide { opacity: 0; pointer-events: none; }
         body.dark-mode .gatekeeper-loader { background: #121212; }
         .loader-spinner { width: 56px; height: 56px; border: 5px solid var(--border-color); border-top-color: var(--brand-red); border-radius: 50%; animation: spin 1s linear infinite; }
-        body.dark-mode .loader-spinner { border: 5px solid #3a3b3c; border-top-color: var(--brand-red); }
+        body.dark-mode .loader-spinner { border-color: #3a3b3c; border-top-color: var(--brand-red); }
         @keyframes spin { to { transform: rotate(360deg); } }
         .loader-text { margin-top: 20px; font-size: 16px; font-weight: 600; color: var(--text-dark); }
         body.dark-mode .loader-text { color: var(--text-light); }
@@ -89,6 +90,7 @@
     </style>
 </head>
 <body>
+
     <!-- Gatekeeper Loader -->
     <div class="gatekeeper-loader" id="gatekeeperLoader">
         <img src="assets/logo.png" alt="Khabar Darjeeling" class="loader-logo">
@@ -110,6 +112,7 @@
         </div>
 
         <div class="card">
+
             <!-- LOGIN FORM -->
             <form id="loginForm" onsubmit="handleLogin(event)">
                 <div class="form-control">
@@ -117,9 +120,7 @@
                 </div>
                 <div class="form-control">
                     <input type="password" id="loginPassword" placeholder="Password" required autocomplete="current-password">
-                    <button type="button" class="password-toggle" onclick="togglePassword('loginPassword')" aria-label="Show password">
-                        👁
-                    </button>
+                    <button type="button" class="password-toggle" onclick="togglePassword('loginPassword', this)" aria-label="Show password">👁</button>
                 </div>
                 <button type="submit" id="loginBtn" class="btn-submit">Log In</button>
                 <span class="forgot-link" onclick="switchMode('forgot')">Forgot Password?</span>
@@ -128,7 +129,7 @@
                 </div>
             </form>
 
-            <!-- SIGNUP FORM - 2 PASSWORDS -->
+            <!-- SIGNUP FORM -->
             <form id="signupForm" class="hidden" onsubmit="handleSignup(event)">
                 <div class="form-control">
                     <input type="text" id="signupName" placeholder="Full name" required autocomplete="name">
@@ -138,15 +139,11 @@
                 </div>
                 <div class="form-control">
                     <input type="password" id="signupPassword" placeholder="Create password (min 8 chars)" minlength="8" required autocomplete="new-password">
-                    <button type="button" class="password-toggle" onclick="togglePassword('signupPassword')" aria-label="Show password">
-                        👁
-                    </button>
+                    <button type="button" class="password-toggle" onclick="togglePassword('signupPassword', this)" aria-label="Show password">👁</button>
                 </div>
                 <div class="form-control">
                     <input type="password" id="signupPasswordConfirm" placeholder="Confirm password" minlength="8" required autocomplete="new-password">
-                    <button type="button" class="password-toggle" onclick="togglePassword('signupPasswordConfirm')" aria-label="Show password">
-                        👁
-                    </button>
+                    <button type="button" class="password-toggle" onclick="togglePassword('signupPasswordConfirm', this)" aria-label="Show password">👁</button>
                 </div>
                 <button type="submit" id="signupBtn" class="btn-submit">Create Account</button>
                 <div class="toggle-box">
@@ -167,185 +164,184 @@
             </form>
 
             <p id="feedback" class="status-feedback"></p>
-            
             <a href="index.html" class="back-home">← Back to Home</a>
+
         </div>
     </div>
 
     <script src="js/appwrite.js"></script>
     <script>
-        // Initialize dark mode from localStorage
-        if (localStorage.getItem('theme') === 'dark') {
-            document.body.classList.add('dark-mode');
-        }
+        const ENDPOINT = window.ENDPOINT;
+        const PROJECT  = window.PROJECT;
+        const AH = { 'X-Appwrite-Project': PROJECT, 'Content-Type': 'application/json' };
 
-        // Dark mode toggle
-        document.getElementById('darkModeToggle').addEventListener('click', function() {
+        // ── Dark mode ──────────────────────────────────────────────
+        if (localStorage.getItem('theme') === 'dark') document.body.classList.add('dark-mode');
+        document.getElementById('darkModeToggle').addEventListener('click', () => {
             document.body.classList.toggle('dark-mode');
-            const isDark = document.body.classList.contains('dark-mode');
-            localStorage.setItem('theme', isDark ? 'dark' : 'light');
+            localStorage.setItem('theme', document.body.classList.contains('dark-mode') ? 'dark' : 'light');
         });
 
-        // Gatekeeper loader - hide after auth check
+        // ── Gatekeeper: redirect if already logged in ──────────────
         const gatekeeper = document.getElementById('gatekeeperLoader');
-        
-        // Check if already logged in
+        // Safety fallback — always reveal page within 3s
+        const gatekeeperTimeout = setTimeout(() => gatekeeper.classList.add('hide'), 3000);
+
         async function checkAuth() {
             try {
-                await window.account.get();
-                // User is logged in, redirect immediately
-                window.location.href = 'index.html';
-            } catch (e) {
-                // Not logged in, show login form
-                gatekeeper.classList.add('hide');
-            }
+                const r = await fetch(`${ENDPOINT}/account`, {
+                    headers: { 'X-Appwrite-Project': PROJECT },
+                    credentials: 'include'
+                });
+                if (r.ok) { location.href = 'index.html'; return; }
+            } catch {}
+            clearTimeout(gatekeeperTimeout);
+            gatekeeper.classList.add('hide');
         }
-        
         checkAuth();
 
+        // ── Helpers ────────────────────────────────────────────────
+        function setFeedback(type, msg) {
+            const f = document.getElementById('feedback');
+            f.className = 'status-feedback ' + (type || '');
+            f.textContent = msg || '';
+        }
+
         window.switchMode = function(mode) {
-            const forms = ['loginForm', 'signupForm', 'forgotForm'];
-            forms.forEach(f => document.getElementById(f).classList.add('hidden'));
-            document.getElementById('feedback').textContent = "";
-            document.getElementById('feedback').className = "status-feedback";
-            if(mode === 'login') document.getElementById('loginForm').classList.remove('hidden');
-            if(mode === 'signup') document.getElementById('signupForm').classList.remove('hidden');
-            if(mode === 'forgot') document.getElementById('forgotForm').classList.remove('hidden');
-        }
+            ['loginForm', 'signupForm', 'forgotForm'].forEach(id =>
+                document.getElementById(id).classList.add('hidden'));
+            setFeedback('', '');
+            const map = { login: 'loginForm', signup: 'signupForm', forgot: 'forgotForm' };
+            document.getElementById(map[mode]).classList.remove('hidden');
+        };
 
-        window.togglePassword = function(fieldId) {
-            const field = document.getElementById(fieldId);
-            const toggle = field.nextElementSibling;
-            if (field.type === 'password') {
-                field.type = 'text';
-                toggle.textContent = '🙈';
-            } else {
-                field.type = 'password';
-                toggle.textContent = '👁';
-            }
-        }
+        window.togglePassword = function(fieldId, btn) {
+            const f = document.getElementById(fieldId);
+            f.type = f.type === 'password' ? 'text' : 'password';
+            btn.textContent = f.type === 'password' ? '👁' : '🙈';
+        };
 
-        window.handleSignup = async function(e) {
-            e.preventDefault();
-            const name = document.getElementById('signupName').value.trim();
-            const email = document.getElementById('signupEmail').value.trim();
-            const password = document.getElementById('signupPassword').value;
-            const passwordConfirm = document.getElementById('signupPasswordConfirm').value;
-            const feedback = document.getElementById('feedback');
-            const btn = document.getElementById('signupBtn');
-
-            if (name.length < 2) {
-                feedback.style.color = "var(--brand-red)";
-                feedback.className = "status-feedback error";
-                feedback.textContent = "Please enter a valid name.";
-                return;
-            }
-            if (password !== passwordConfirm) {
-                feedback.style.color = "var(--brand-red)";
-                feedback.className = "status-feedback error";
-                feedback.textContent = "Passwords do not match.";
-                return;
-            }
-            if (password.length < 8) {
-                feedback.style.color = "var(--brand-red)";
-                feedback.className = "status-feedback error";
-                feedback.textContent = "Password must be at least 8 characters.";
-                return;
-            }
-            
-            btn.disabled = true;
-            feedback.style.color = "var(--brand-red)";
-            feedback.className = "status-feedback error";
-            feedback.textContent = "Creating account...";
-
-            try {
-                // Create user account
-                await window.account.create(window.ID.unique(), email, password, name);
-                
-                // Auto login after signup
-                await window.account.createEmailPasswordSession(email, password);
-
-                feedback.style.color = "#2e7d32";
-                feedback.className = "status-feedback success";
-                feedback.textContent = "✓ Account created! Redirecting...";
-                setTimeout(() => { window.location.href = "index.html"; }, 1500);
-                
-            } catch (error) {
-                btn.disabled = false;
-                feedback.style.color = "var(--brand-red)";
-                feedback.className = "status-feedback error";
-                let errorMsg = "Could not create account.";
-                if (error.message.includes('already exists')) {
-                    errorMsg = "This email is already registered. Please log in.";
-                } else if (error.message.includes('invalid')) {
-                    errorMsg = "Invalid email format.";
-                }
-                feedback.textContent = errorMsg;
-                console.error('Signup error:', error);
-            }
-        }
-
+        // ── Login ──────────────────────────────────────────────────
         window.handleLogin = async function(e) {
             e.preventDefault();
-            const email = document.getElementById('loginEmail').value.trim();
+            const email    = document.getElementById('loginEmail').value.trim();
             const password = document.getElementById('loginPassword').value;
-            const feedback = document.getElementById('feedback');
-            const btn = document.getElementById('loginBtn');
+            const btn      = document.getElementById('loginBtn');
 
-            feedback.style.color = "var(--brand-red)";
-            feedback.className = "status-feedback error";
-            feedback.textContent = "Verifying...";
             btn.disabled = true;
+            setFeedback('', 'Verifying...');
 
             try {
-                await window.account.createEmailPasswordSession(email, password);
-                feedback.style.color = "#2e7d32";
-                feedback.className = "status-feedback success";
-                feedback.textContent = "✓ Login successful! Redirecting...";
-                setTimeout(() => { window.location.href = "index.html"; }, 1200);
-            } catch (error) {
-                btn.disabled = false;
-                feedback.style.color = "var(--brand-red)";
-                feedback.className = "status-feedback error";
-                let errorMsg = "Unable to log in.";
-                if (error.message.includes('password')) {
-                    errorMsg = "Incorrect password.";
-                } else if (error.message.includes('not found')) {
-                    errorMsg = "No account found with this email.";
-                } else if (error.message.includes('invalid')) {
-                    errorMsg = "Invalid email or password.";
-                }
-                feedback.textContent = errorMsg;
-                console.error('Login error:', error);
-            }
-        }
+                const r = await fetch(`${ENDPOINT}/account/sessions/email`, {
+                    method: 'POST',
+                    headers: AH,
+                    credentials: 'include',
+                    body: JSON.stringify({ email, password })
+                });
+                const data = await r.json();
+                if (!r.ok) throw new Error(data.message || 'Login failed');
 
+                setFeedback('success', '✓ Login successful! Redirecting...');
+                setTimeout(() => location.href = 'index.html', 1200);
+            } catch (err) {
+                btn.disabled = false;
+                const m = (err.message || '').toLowerCase();
+                setFeedback('error',
+                    m.includes('invalid') || m.includes('password') ? 'Incorrect email or password.' :
+                    m.includes('not found')                         ? 'No account found with this email.' :
+                    'Unable to log in. Please try again.'
+                );
+                console.error('Login error:', err);
+            }
+        };
+
+        // ── Signup ─────────────────────────────────────────────────
+        window.handleSignup = async function(e) {
+            e.preventDefault();
+            const name     = document.getElementById('signupName').value.trim();
+            const email    = document.getElementById('signupEmail').value.trim();
+            const password = document.getElementById('signupPassword').value;
+            const confirm  = document.getElementById('signupPasswordConfirm').value;
+            const btn      = document.getElementById('signupBtn');
+
+            if (name.length < 2)     return setFeedback('error', 'Please enter a valid name.');
+            if (password !== confirm) return setFeedback('error', 'Passwords do not match.');
+            if (password.length < 8) return setFeedback('error', 'Password must be at least 8 characters.');
+
+            btn.disabled = true;
+            setFeedback('', 'Creating account...');
+
+            // Generate a valid Appwrite user ID (max 36 chars, alphanumeric + . _ -)
+            const userId = 'u' + Date.now() + Math.random().toString(36).slice(2, 7);
+
+            try {
+                // Step 1: Create account
+                const r = await fetch(`${ENDPOINT}/account`, {
+                    method: 'POST',
+                    headers: AH,
+                    body: JSON.stringify({ userId, email, password, name })
+                });
+                const data = await r.json();
+                if (!r.ok) throw new Error(data.message || 'Could not create account');
+
+                // Step 2: Auto-login
+                const s = await fetch(`${ENDPOINT}/account/sessions/email`, {
+                    method: 'POST',
+                    headers: AH,
+                    credentials: 'include',
+                    body: JSON.stringify({ email, password })
+                });
+                if (!s.ok) {
+                    // Account created but session failed — redirect to login
+                    setFeedback('success', '✓ Account created! Please log in.');
+                    setTimeout(() => switchMode('login'), 1500);
+                    return;
+                }
+
+                setFeedback('success', '✓ Account created! Redirecting...');
+                setTimeout(() => location.href = 'index.html', 1200);
+            } catch (err) {
+                btn.disabled = false;
+                const m = (err.message || '').toLowerCase();
+                setFeedback('error',
+                    m.includes('already') ? 'This email is already registered. Please log in.' :
+                    m.includes('invalid') ? 'Invalid email format.' :
+                    err.message || 'Could not create account.'
+                );
+                console.error('Signup error:', err);
+            }
+        };
+
+        // ── Forgot Password ────────────────────────────────────────
         window.handleForgotPassword = async function(e) {
             e.preventDefault();
             const email = document.getElementById('forgotEmail').value.trim();
-            const feedback = document.getElementById('feedback');
-            const btn = document.getElementById('forgotBtn');
+            const btn   = document.getElementById('forgotBtn');
 
-            feedback.style.color = "var(--brand-red)";
-            feedback.className = "status-feedback error";
-            feedback.textContent = "Sending reset link...";
             btn.disabled = true;
+            setFeedback('', 'Sending reset link...');
 
             try {
-                await window.account.createRecovery(email, window.location.origin + '/reset-password.html');
-                feedback.style.color = "#2e7d32";
-                feedback.className = "status-feedback success";
-                feedback.textContent = "✓ Reset link sent! Check your email.";
+                const r = await fetch(`${ENDPOINT}/account/recovery`, {
+                    method: 'POST',
+                    headers: AH,
+                    body: JSON.stringify({
+                        email,
+                        url: location.origin + '/reset-password.html'
+                    })
+                });
+                const data = await r.json();
+                if (!r.ok) throw new Error(data.message || 'Failed to send');
+
+                setFeedback('success', '✓ Reset link sent! Check your email.');
+                setTimeout(() => switchMode('login'), 3000);
+            } catch (err) {
+                setFeedback('error', 'Failed to send reset link. Email may not exist.');
+                console.error('Forgot password error:', err);
+            } finally {
                 btn.disabled = false;
-                setTimeout(() => { switchMode('login'); }, 3000);
-            } catch (error) {
-                btn.disabled = false;
-                feedback.style.color = "var(--brand-red)";
-                feedback.className = "status-feedback error";
-                feedback.textContent = "Failed to send reset link. Email may not exist.";
-                console.error('Forgot password error:', error);
             }
-        }
+        };
     </script>
 </body>
 </html>
