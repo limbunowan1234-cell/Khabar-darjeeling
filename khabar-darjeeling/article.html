@@ -1,48 +1,84 @@
 <!DOCTYPE html>
-<html lang="ne">
+<html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Article - Khabar Darjeeling</title>
-  <link rel="stylesheet" href="css/style.css">
+  <title>Article • Khabar Darjeeling</title>
+  <link rel="stylesheet" href="css/style.css?v=127">
+  <link rel="icon" type="image/png" href="assets/logo.png">
   <meta name="theme-color" content="#c41e3a">
   <style>
-   .article-header{margin-bottom:24px}
-   .article-title{font-size:28px;line-height:1.3;margin:12px 0;color:#1a1a1a}
-   .article-meta{display:flex;flex-wrap:wrap;gap:16px;color:#666;font-size:14px;margin:16px 0;padding:16px 0;border-top:1px solid #eee;border-bottom:1px solid #eee}
-   .meta-item{display:flex;align-items:center;gap:6px}
-   .article-image{width:100%;max-height:500px;object-fit:cover;border-radius:12px;margin:20px 0}
-   .article-content{font-size:17px;line-height:1.8;color:#333;white-space:pre-wrap}
-   .article-actions{display:flex;flex-wrap:wrap;gap:10px;margin:24px 0;padding:20px 0;border-top:2px solid #f0f0f0;border-bottom:2px solid #f0f0f0}
-   .action-btn{background:#f5f5f5;border:none;padding:10px 18px;border-radius:24px;font-size:15px;cursor:pointer;display:flex;align-items:center;gap:6px;font-weight:500;transition:all.2s}
-   .action-btn:hover{background:#e8e8e8;transform:translateY(-1px)}
-   .action-btn.liked{background:#ffebee;color:#c41e3a}
-   .view-count{margin-left:auto;color:#666;font-size:14px;display:flex;align-items:center;gap:4px}
-   .comments-section{margin-top:32px}
-   .comment-box{display:flex;gap:10px;margin:16px 0}
-   .comment-input{flex:1;padding:12px;border:1px solid #ddd;border-radius:24px;font-size:15px}
-   .comment{padding:16px 0;border-bottom:1px solid #f5f5f5}
-   .comment-author{font-weight:600;color:#1a1a1a}
-   .comment-date{color:#999;font-size:12px;margin-left:8px}
-   .comment-text{margin:6px 0 0 0;color:#333;line-height:1.5}
-   .back-btn{display:inline-flex;align-items:center;gap:6px;color:#666;text-decoration:none;margin-bottom:20px;font-size:14px}
-   .back-btn:hover{color:#c41e3a}
-    @media(max-width:768px){.article-title{font-size:22px}.article-actions{justify-content:center}.view-count{width:100%;justify-content:center;margin:10px 0 0 0}}
+    body.dark-mode { background:#121212;color:#e0e0e0; }
+    .article-header { margin-bottom:24px; }
+    .article-title { font-size:28px;line-height:1.3;margin:12px 0;color:#1a1a1a; }
+    body.dark-mode .article-title { color:#fff; }
+    .article-meta {
+      display:flex;flex-wrap:wrap;gap:16px;color:#666;font-size:14px;
+      margin:16px 0;padding:16px 0;border-top:1px solid #eee;border-bottom:1px solid #eee;
+    }
+    body.dark-mode .article-meta { color:#aaa;border-color:#333; }
+    .meta-item { display:flex;align-items:center;gap:6px; }
+    .meta-item a { color:inherit;text-decoration:none;font-weight:600; }
+    .meta-item a:hover { color:#c41e3a; }
+    .article-image { width:100%;max-height:500px;object-fit:cover;border-radius:12px;margin:20px 0; }
+    .article-video { width:100%;aspect-ratio:16/9;border-radius:12px;margin:20px 0;border:none; }
+    .article-content { font-size:17px;line-height:1.8;color:#333;white-space:pre-wrap; }
+    body.dark-mode .article-content { color:#ddd; }
+    .article-actions {
+      display:flex;flex-wrap:wrap;gap:10px;margin:24px 0;padding:20px 0;
+      border-top:2px solid #f0f0f0;border-bottom:2px solid #f0f0f0;
+    }
+    body.dark-mode .article-actions { border-color:#2a2a2a; }
+    .action-btn {
+      background:#f5f5f5;border:none;padding:10px 18px;border-radius:24px;
+      font-size:15px;cursor:pointer;display:flex;align-items:center;gap:6px;
+      font-weight:500;transition:all .2s;color:#333;
+    }
+    body.dark-mode .action-btn { background:#2a2a2a;color:#ddd; }
+    .action-btn:hover { background:#e8e8e8;transform:translateY(-1px); }
+    body.dark-mode .action-btn:hover { background:#333; }
+    .action-btn.liked { background:#ffebee;color:#c41e3a; }
+    body.dark-mode .action-btn.liked { background:#3a1a1f;color:#ff6b6b; }
+    .action-btn:disabled { opacity:0.6;cursor:not-allowed; }
+    .view-count { margin-left:auto;color:#666;font-size:14px;display:flex;align-items:center;gap:4px; }
+    body.dark-mode .view-count { color:#999; }
+    .comments-section { margin-top:32px; }
+    .comment-box { display:flex;gap:10px;margin:16px 0; }
+    .comment-input { flex:1;padding:12px;border:1px solid #ddd;border-radius:24px;font-size:15px;font-family:inherit; }
+    body.dark-mode .comment-input { background:#2a2a2a;border-color:#444;color:#fff; }
+    .comment { padding:16px 0;border-bottom:1px solid #f5f5f5;display:flex;gap:12px; }
+    body.dark-mode .comment { border-color:#2a2a2a; }
+    .comment-avatar { width:36px;height:36px;border-radius:50%;background:#c41e3a;color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:13px;flex-shrink:0; }
+    .comment-avatar img { width:100%;height:100%;border-radius:50%;object-fit:cover; }
+    .comment-author { font-weight:600;color:#1a1a1a; }
+    body.dark-mode .comment-author { color:#fff; }
+    .comment-date { color:#999;font-size:12px;margin-left:8px; }
+    .comment-text { margin:6px 0 0;color:#333;line-height:1.5; }
+    body.dark-mode .comment-text { color:#ddd; }
+    .back-btn { display:inline-flex;align-items:center;gap:6px;color:#666;text-decoration:none;margin-bottom:20px;font-size:14px; }
+    .back-btn:hover { color:#c41e3a; }
+    body.dark-mode .back-btn { color:#aaa; }
+    @media(max-width:768px){
+      .article-title { font-size:22px; }
+      .article-actions { justify-content:center; }
+      .view-count { width:100%;justify-content:center;margin:10px 0 0; }
+    }
+    @keyframes spin { to { transform:rotate(360deg); } }
   </style>
 </head>
 <body>
   <header class="header" style="position:sticky;top:0;z-index:100;background:#fff;box-shadow:0 2px 8px rgba(0,0,0,.05)">
-    <div class="container header-inner" style="padding:12px 20px">
-      <a href="/" class="logo" style="text-decoration:none;color:inherit"><h1 style="font-size:20px;margin:0">🏔️ Khabar Darjeeling</h1></a>
-      <div class="header-actions">
-        <a href="/" class="btn btn-outline">Home</a>
-      </div>
+    <div class="container header-inner" style="padding:12px 20px;display:flex;justify-content:space-between;align-items:center;">
+      <a href="index.html" class="logo" style="text-decoration:none;color:inherit;display:flex;align-items:center;gap:8px;">
+        <img src="assets/logo.png" style="height:36px;width:36px;border-radius:50%;object-fit:cover;">
+        <h1 style="font-size:18px;margin:0;color:#c41e3a;">खबर दार्जिलिंग</h1>
+      </a>
+      <a href="index.html" class="btn btn-outline">Home</a>
     </div>
   </header>
 
-  <main class="container" style="max-width:800px;padding:20px">
-    <a href="/" class="back-btn">← Back to News</a>
-
+  <main class="container" style="max-width:800px;padding:20px;margin:0 auto;">
+    <a href="index.html" class="back-btn">← Back to News</a>
     <article id="articleContainer">
       <div style="text-align:center;padding:60px 20px">
         <div style="width:40px;height:40px;border:3px solid #f3f3f3;border-top:3px solid #c41e3a;border-radius:50%;animation:spin 1s linear infinite;margin:0 auto"></div>
@@ -51,165 +87,286 @@
     </article>
   </main>
 
-  <script src="https://cdn.jsdelivr.net/npm/appwrite@15.0.0"></script>
-  <script src="js/config.js"></script>
+  <script src="js/appwrite.js?v=127"></script>
   <script>
+    // Theme
+    if (localStorage.getItem('theme') === 'dark') document.body.classList.add('dark-mode');
+
     const ENDPOINT = 'https://nyc.cloud.appwrite.io/v1';
-    const PROJECT = 'khabardarjeeling';
-    const DB = 'khabardarjeeling_db';
-    const COL = 'articles';
+    const PROJECT  = 'khabardarjeeling';
 
-    const urlParams = new URLSearchParams(window.location.search);
-    const articleId = urlParams.get('id');
-    const session = localStorage.getItem('kd_jwt');
-    const H = session? {'X-Appwrite-Project':PROJECT,'X-Appwrite-Session':session} : {'X-Appwrite-Project':PROJECT};
+    const articleId = new URLSearchParams(location.search).get('id');
     let currentArticle = null;
+    let currentUser    = null;
+    let userHasLiked   = false;
+    let likeRowId      = null;   // the $id of this user's like row
 
-    async function loadArticle(){
-      if(!articleId){ document.getElementById('articleContainer').innerHTML='<p>Article not found</p>'; return; }
+    function esc(t){ const d=document.createElement('div'); d.textContent=t||''; return d.innerHTML; }
+    function initials(name){
+      if(!name) return 'U';
+      const p=name.trim().split(/\s+/);
+      return p.length===1 ? p[0][0].toUpperCase() : (p[0][0]+p[p.length-1][0]).toUpperCase();
+    }
 
+    async function start() {
+      // wait for appwrite.js
+      let tries = 0;
+      while ((!window.databases || !window.account) && tries < 40) {
+        await new Promise(r => setTimeout(r, 100)); tries++;
+      }
+      try { currentUser = await window.account.get(); } catch { currentUser = null; }
+      loadArticle();
+    }
+
+    async function loadArticle() {
+      if (!articleId) {
+        document.getElementById('articleContainer').innerHTML = '<p style="text-align:center;padding:40px;">Article not found.</p>';
+        return;
+      }
       try {
-        const res = await fetch(`${ENDPOINT}/databases/${DB}/collections/${COL}/documents/${articleId}`,{headers:H});
-        const article = await res.json();
+        const article = await window.databases.getDocument(window.APPWRITE_DB_ID, window.COL_ARTICLES, articleId);
         currentArticle = article;
+        document.title = article.title + ' • Khabar Darjeeling';
 
-        document.title = article.title + ' - Khabar Darjeeling';
+        // Media: youtube embed > image
+        let mediaHtml = '';
+        if (article.youtube_id) {
+          mediaHtml = `<iframe class="article-video" src="https://www.youtube.com/embed/${esc(article.youtube_id)}" allowfullscreen></iframe>`;
+        } else if (article.imageFileId && !['Text','null','undefined',''].includes(String(article.imageFileId))) {
+          const src = String(article.imageFileId).startsWith('http')
+            ? article.imageFileId
+            : `${ENDPOINT}/storage/buckets/${window.APPWRITE_BUCKET_ID}/files/${article.imageFileId}/view?project=${PROJECT}`;
+          mediaHtml = `<img src="${src}" alt="${esc(article.title)}" class="article-image" onerror="this.style.display='none'">`;
+        }
 
-        const imageUrl = article.imageFileId? `${ENDPOINT}/storage/buckets/article_images/files/${article.imageFileId}/preview?project=${PROJECT}&width=1200` : '';
-        const pubDate = new Date(article.publishedAt).toLocaleDateString('en-IN',{day:'numeric',month:'long',year:'numeric'});
+        const pubDate = new Date(article.publishedAt || article.submittedAt || article.$createdAt)
+          .toLocaleDateString('en-IN', { day:'numeric', month:'long', year:'numeric' });
+
+        const authorName = article.submitterName || article.authorName || 'Staff Reporter';
+        const authorId   = article.submitterId;
+        const authorEl   = authorId
+          ? `<a href="profile.html?userId=${authorId}">${esc(authorName)}</a>`
+          : `<strong>${esc(authorName)}</strong>`;
 
         document.getElementById('articleContainer').innerHTML = `
           <div class="article-header">
-            <span style="background:#c41e3a;color:#fff;padding:4px 12px;border-radius:4px;font-size:12px;font-weight:600;text-transform:uppercase">${article.category}</span>
-            <h1 class="article-title">${article.title}</h1>
-
+            <span style="background:#c41e3a;color:#fff;padding:4px 12px;border-radius:4px;font-size:12px;font-weight:600;text-transform:uppercase">${esc(article.category)}</span>
+            <h1 class="article-title">${esc(article.title)}</h1>
             <div class="article-meta">
-              <div class="meta-item">👤 <strong>${article.authorName}</strong></div>
+              <div class="meta-item">👤 ${authorEl}</div>
               <div class="meta-item">📅 ${pubDate}</div>
-              <div class="meta-item">📍 ${article.location || 'Darjeeling'}</div>
+              <div class="meta-item">📍 ${esc(article.location || 'Darjeeling')}</div>
             </div>
           </div>
 
-          ${imageUrl? `<img src="${imageUrl}" alt="${article.title}" class="article-image">` : ''}
+          ${mediaHtml}
 
-          <div class="article-content">${article.content}</div>
+          <div class="article-content">${esc(article.content)}</div>
 
           <div class="article-actions">
-            <button id="likeBtn" class="action-btn">❤️ <span id="likeCount">${article.likes||0}</span></button>
+            <button id="likeBtn" class="action-btn">🤍 <span id="likeCount">0</span></button>
             <button id="shareBtn" class="action-btn">🔗 Share</button>
             <button id="commentBtn" class="action-btn">💬 <span id="commentCount">0</span></button>
-            <div class="view-count">👁️ <span id="viewCount">${article.views||0}</span> views</div>
+            <div class="view-count">👁️ <span id="viewCount">${article.views || 0}</span> views</div>
           </div>
 
-          <div id="commentsSection" class="comments-section" style="display:none">
-            <h3 style="margin-bottom:16px">Comments</h3>
+          <div id="commentsSection" class="comments-section">
+            <h3 style="margin-bottom:16px" id="comments">Comments</h3>
             <div class="comment-box">
-              <input id="commentInput" class="comment-input" placeholder="Add a comment..." ${!session?'disabled':''}>
-              <button onclick="postComment()" class="btn btn-primary" ${!session?'disabled':''}>Post</button>
+              <input id="commentInput" class="comment-input" placeholder="${currentUser ? 'Add a comment...' : 'Login to comment'}" ${currentUser ? '' : 'disabled'}>
+              <button onclick="postComment()" class="btn btn-primary" id="postBtn" ${currentUser ? '' : 'disabled'}>Post</button>
             </div>
-            ${!session? '<p style="color:#999;font-size:13px;text-align:center">Login to comment</p>' : ''}
+            ${currentUser ? '' : '<p style="color:#999;font-size:13px;text-align:center"><a href="login.html" style="color:#c41e3a;">Login</a> to comment</p>'}
             <div id="commentsList" style="margin-top:20px"></div>
           </div>
         `;
 
-        // Increment view
         incrementView();
         setupActions();
+        loadLikes();
         loadComments();
 
-      } catch(e){
-        document.getElementById('articleContainer').innerHTML = `<p style="color:red;text-align:center;padding:40px">Error loading article</p>`;
+        // Auto-scroll if URL has #comments
+        if (location.hash === '#comments') {
+          setTimeout(() => document.getElementById('comments')?.scrollIntoView({ behavior:'smooth' }), 400);
+        }
+      } catch(err) {
+        console.error('Article load error:', err);
+        document.getElementById('articleContainer').innerHTML = '<p style="color:red;text-align:center;padding:40px">Error loading article.</p>';
       }
     }
 
-    async function incrementView(){
+    async function incrementView() {
       try {
-        const newViews = (currentArticle.views||0)+1;
-        await fetch(`${ENDPOINT}/databases/${DB}/collections/${COL}/documents/${articleId}`,{
-          method:'PATCH',
-          headers:{...H,'Content-Type':'application/json'},
-          body:JSON.stringify({data:{views:newViews}})
-        });
+        const newViews = (currentArticle.views || 0) + 1;
+        await window.databases.updateDocument(window.APPWRITE_DB_ID, window.COL_ARTICLES, articleId, { views: newViews });
         document.getElementById('viewCount').textContent = newViews;
-      } catch(e){}
+        currentArticle.views = newViews;
+      } catch(e) { /* views are non-critical */ }
     }
 
-    function setupActions(){
-      // Like
-      document.getElementById('likeBtn').onclick = async ()=>{
-        if(!session){ location.href='/login.html'; return; }
+    /* ── LIKES (from `likes` collection) ── */
+    async function loadLikes() {
+      try {
+        // Total like count for this article
+        const all = await window.databases.listDocuments(
+          window.APPWRITE_DB_ID, window.COL_LIKES,
+          [ window.Query.equal('articleId', articleId), window.Query.limit(1000) ]
+        );
+        document.getElementById('likeCount').textContent = all.total;
+
+        // Has the current user liked?
+        if (currentUser) {
+          const mine = all.documents.find(d => d.userId === currentUser.$id);
+          if (mine) { userHasLiked = true; likeRowId = mine.$id; markLiked(true); }
+        }
+      } catch(e) { console.warn('loadLikes failed:', e); }
+    }
+
+    function markLiked(liked) {
+      const btn = document.getElementById('likeBtn');
+      const count = document.getElementById('likeCount');
+      if (liked) { btn.classList.add('liked'); btn.querySelector('span') || null; btn.innerHTML = `❤️ <span id="likeCount">${count.textContent}</span>`; }
+      else { btn.classList.remove('liked'); btn.innerHTML = `🤍 <span id="likeCount">${count.textContent}</span>`; }
+    }
+
+    function setupActions() {
+      // LIKE
+      document.getElementById('likeBtn').onclick = async () => {
+        if (!currentUser) { location.href = 'login.html'; return; }
         const btn = document.getElementById('likeBtn');
         btn.disabled = true;
+        const countEl = document.getElementById('likeCount');
+        let count = parseInt(countEl.textContent) || 0;
+
         try {
-          const me = await fetch(`${ENDPOINT}/account`,{headers:H}).then(r=>r.json());
-          const newLikes = (currentArticle.likes||0)+1;
-          await fetch(`${ENDPOINT}/databases/${DB}/collections/${COL}/documents/${articleId}`,{
-            method:'PATCH', headers:{...H,'Content-Type':'application/json'},
-            body:JSON.stringify({data:{likes:newLikes}})
-          });
-          document.getElementById('likeCount').textContent = newLikes;
-          btn.classList.add('liked');
-          currentArticle.likes = newLikes;
-        } catch(e){ alert('Already liked or error'); }
+          if (userHasLiked && likeRowId) {
+            // Unlike
+            await window.databases.deleteDocument(window.APPWRITE_DB_ID, window.COL_LIKES, likeRowId);
+            userHasLiked = false; likeRowId = null;
+            count = Math.max(0, count - 1);
+            btn.classList.remove('liked');
+            btn.innerHTML = `🤍 <span id="likeCount">${count}</span>`;
+          } else {
+            // Like
+            const row = await window.databases.createDocument(
+              window.APPWRITE_DB_ID, window.COL_LIKES, 'unique()',
+              { articleId, userId: currentUser.$id }
+            );
+            userHasLiked = true; likeRowId = row.$id;
+            count = count + 1;
+            btn.classList.add('liked');
+            btn.innerHTML = `❤️ <span id="likeCount">${count}</span>`;
+          }
+        } catch(e) {
+          console.error('Like failed:', e);
+          alert('Could not update like. Please try again.');
+        }
         btn.disabled = false;
       };
 
-      // Share
-      document.getElementById('shareBtn').onclick = ()=>{
-        if(navigator.share){
-          navigator.share({title:currentArticle.title,text:currentArticle.title,url:location.href});
+      // SHARE
+      document.getElementById('shareBtn').onclick = () => {
+        if (navigator.share) {
+          navigator.share({ title: currentArticle.title, url: location.href }).catch(()=>{});
         } else {
           navigator.clipboard.writeText(location.href);
           const btn = document.getElementById('shareBtn');
           const orig = btn.innerHTML;
           btn.innerHTML = '✓ Copied!';
-          setTimeout(()=>btn.innerHTML=orig,2000);
+          setTimeout(() => btn.innerHTML = orig, 2000);
         }
       };
 
-      // Comment toggle
-      document.getElementById('commentBtn').onclick = ()=>{
-        const sec = document.getElementById('commentsSection');
-        sec.style.display = sec.style.display==='none'?'block':'none';
+      // COMMENT toggle — just scroll to comments
+      document.getElementById('commentBtn').onclick = () => {
+        document.getElementById('comments')?.scrollIntoView({ behavior:'smooth' });
+        document.getElementById('commentInput')?.focus();
       };
     }
 
-    async function loadComments(){
+    /* ── COMMENTS (from `comments` collection) ── */
+    async function loadComments() {
       try {
-        const q = encodeURIComponent(JSON.stringify({method:'equal',attribute:'articleId',values:[articleId]}));
-        const res = await fetch(`${ENDPOINT}/databases/${DB}/collections/article_comments/documents?queries[]=${q}&queries[]=${encodeURIComponent(JSON.stringify({method:'orderDesc',attribute:'$createdAt'}))}`,{headers:H}).then(r=>r.json());
+        const res = await window.databases.listDocuments(
+          window.APPWRITE_DB_ID, window.COL_COMMENTS,
+          [ window.Query.equal('articleId', articleId),
+            window.Query.orderDesc('$createdAt'),
+            window.Query.limit(100) ]
+        );
         document.getElementById('commentCount').textContent = res.total;
-        document.getElementById('commentsList').innerHTML = res.documents.map(c=>`
-          <div class="comment">
-            <div><span class="comment-author">${c.userName}</span><span class="comment-date">${new Date(c.createdAt).toLocaleDateString()}</span></div>
-            <p class="comment-text">${c.comment}</p>
-          </div>
-        `).join('') || '<p style="color:#999;text-align:center;padding:20px">No comments yet. Be first!</p>';
-      } catch(e){}
+
+        const list = document.getElementById('commentsList');
+        if (!res.documents.length) {
+          list.innerHTML = '<p style="color:#999;text-align:center;padding:20px">No comments yet. Be the first!</p>';
+          return;
+        }
+        list.innerHTML = res.documents.map(c => {
+          const name   = c.authorName || 'Anonymous';
+          const avatar = c.avatarUrl;
+          const date   = new Date(c.createdAt || c.$createdAt).toLocaleDateString('en-IN', { day:'numeric', month:'short', year:'numeric' });
+          const avatarEl = (avatar && avatar !== 'null' && avatar !== '')
+            ? `<div class="comment-avatar"><img src="${avatar}" onerror="this.parentElement.textContent='${initials(name)}'"></div>`
+            : `<div class="comment-avatar">${initials(name)}</div>`;
+          return `
+            <div class="comment">
+              ${avatarEl}
+              <div style="flex:1;">
+                <div><span class="comment-author">${esc(name)}</span><span class="comment-date">${date}</span></div>
+                <p class="comment-text">${esc(c.commentText || c.comment || '')}</p>
+              </div>
+            </div>`;
+        }).join('');
+      } catch(e) {
+        console.warn('loadComments failed:', e);
+      }
     }
 
-    async function postComment(){
+    window.postComment = async function() {
       const input = document.getElementById('commentInput');
-      const text = input.value.trim();
-      if(!text ||!session) return;
+      const text  = input.value.trim();
+      if (!text || !currentUser) return;
+
+      const btn = document.getElementById('postBtn');
+      btn.disabled = true;
 
       try {
-        const me = await fetch(`${ENDPOINT}/account`,{headers:H}).then(r=>r.json());
-        await fetch(`${ENDPOINT}/databases/${DB}/collections/article_comments/documents`,{
-          method:'POST',
-          headers:{...H,'Content-Type':'application/json'},
-          body:JSON.stringify({documentId:'unique()',data:{
-            articleId, userId:me.$id, userName:me.name||me.email.split('@')[0],
-            comment:text, createdAt:new Date().toISOString()
-          }})
-        });
-        input.value='';
-        loadComments();
-      } catch(e){ alert('Error posting comment'); }
-    }
+        // Try to get the user's profile for avatar + display name
+        let displayName = currentUser.name || currentUser.email.split('@')[0];
+        let avatarUrl = '';
+        try {
+          const prof = await window.databases.listDocuments(
+            window.APPWRITE_DB_ID, window.COL_PROFILES,
+            [ window.Query.equal('userId', currentUser.$id), window.Query.limit(1) ]
+          );
+          if (prof.documents.length) {
+            displayName = prof.documents[0].displayName || displayName;
+            avatarUrl   = prof.documents[0].avatarUrl || '';
+          }
+        } catch(e) { /* profile optional */ }
 
-    loadArticle();
+        await window.databases.createDocument(
+          window.APPWRITE_DB_ID, window.COL_COMMENTS, 'unique()',
+          {
+            articleId,
+            userId:      currentUser.$id,
+            authorName:  displayName,
+            userNAme:    displayName,           // your schema has this dup field
+            commentText: text,
+            avatarUrl:   avatarUrl || 'null',
+            createdAt:   new Date().toISOString()
+          }
+        );
+        input.value = '';
+        loadComments();
+      } catch(e) {
+        console.error('Post comment failed:', e);
+        alert('Error posting comment. Please try again.');
+      }
+      btn.disabled = false;
+    };
+
+    start();
   </script>
-  <style>@keyframes spin{0%{transform:rotate(0)}100%{transform:rotate(360deg)}}</style>
 </body>
 </html>
