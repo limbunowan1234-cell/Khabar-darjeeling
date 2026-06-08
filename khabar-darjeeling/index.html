@@ -4,16 +4,26 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>खबर दार्जिलिंग</title>
-  <link rel="stylesheet" href="css/style.css?v=700">
-  <link rel="stylesheet" href="css/responsive.css?v=700">
+  <link rel="stylesheet" href="css/style.css?v=701">
+  <link rel="stylesheet" href="css/responsive.css?v=701">
 </head>
 <body>
   <div id="loader" class="loader">Loading...</div>
 
   <header class="navbar">
-    <div class="container">
+    <div class="container" style="display:flex;justify-content:space-between;align-items:center">
       <a class="logo" href="/">खबर दार्जिलिंग</a>
-      <nav><a href="login.html" class="btn-login">Login</a></nav>
+      <nav style="display:flex;gap:8px;align-items:center">
+        <!-- Logged-out state -->
+        <a href="login.html" id="loginBtn" class="btn-login">Login</a>
+        
+        <!-- Logged-in state (hidden by default) -->
+        <div id="userActions" style="display:none;gap:8px;align-items:center">
+          <a href="post.html" id="postBtn" style="background:#c41e3a;color:#fff;padding:8px 14px;border-radius:6px;font-weight:600;text-decoration:none;font-size:14px">✍️ Post</a>
+          <a href="admin.html" id="adminBtn" style="background:#000;color:#fff;padding:8px 14px;border-radius:6px;font-weight:600;text-decoration:none;font-size:14px;display:none">⚙️ Admin</a>
+          <button id="logoutBtn" style="background:#f0f2f5;border:1px solid #ddd;padding:8px 12px;border-radius:6px;font-size:14px;cursor:pointer">Logout</button>
+        </div>
+      </nav>
     </div>
   </header>
 
@@ -30,5 +40,45 @@
   </main>
 
   <script src="js/app.js?v=700"></script>
+  
+  <!-- Login state checker -->
+  <script>
+  (async () => {
+    const ENDPOINT = 'https://nyc.cloud.appwrite.io/v1';
+    const PROJECT = 'khabardarjeeling';
+    const ADMIN_EMAIL = 'nowanad@gmail.com';
+    
+    try {
+      const r = await fetch(`${ENDPOINT}/account`, {
+        credentials: 'include',
+        headers: {'X-Appwrite-Project': PROJECT}
+      });
+      if (!r.ok) return;
+      
+      const user = await r.json();
+      
+      // Switch to logged-in view
+      document.getElementById('loginBtn').style.display = 'none';
+      document.getElementById('userActions').style.display = 'flex';
+      
+      // Show admin only for you
+      if ((user.email||'').toLowerCase().trim() === ADMIN_EMAIL) {
+        document.getElementById('adminBtn').style.display = 'inline-block';
+      }
+      
+      // Logout handler
+      document.getElementById('logoutBtn').onclick = async () => {
+        await fetch(`${ENDPOINT}/account/sessions/current`, {
+          method: 'DELETE',
+          credentials: 'include',
+          headers: {'X-Appwrite-Project': PROJECT}
+        });
+        location.reload();
+      };
+    } catch (e) {
+      // Not logged in - keep login button
+    }
+  })();
+  </script>
 </body>
 </html>
