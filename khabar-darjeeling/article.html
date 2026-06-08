@@ -21,7 +21,11 @@
     .meta-item a { color:inherit;text-decoration:none;font-weight:600; }
     .meta-item a:hover { color:#c41e3a; }
     .article-image { width:100%;max-height:500px;object-fit:cover;border-radius:12px;margin:20px 0; }
-    .article-video { width:100%;aspect-ratio:16/9;border-radius:12px;margin:20px 0;border:none; }
+    .article-video { width:100%;aspect-ratio:16/9;border-radius:12px;margin:20px 0 8px;border:none; }
+    .video-wrap { width:100%; margin:20px 0 8px; }
+    .video-wrap .article-video { margin:0; }
+    .watch-yt-link { display:inline-flex; align-items:center; gap:6px; color:#c41e3a; font-weight:600; font-size:13px; text-decoration:none; margin:0 0 16px; }
+    .watch-yt-link:hover { text-decoration:underline; }
     .article-content { font-size:17px;line-height:1.8;color:#333;white-space:pre-wrap; }
     body.dark-mode .article-content { color:#ddd; }
     .article-actions {
@@ -87,7 +91,7 @@
     </article>
   </main>
 
-  <script src="js/appwrite.js?v=129"></script>
+  <script src="js/appwrite.js?v=131"></script>
   <script>
     // Theme
     if (localStorage.getItem('theme') === 'dark') document.body.classList.add('dark-mode');
@@ -128,10 +132,21 @@
         currentArticle = article;
         document.title = article.title + ' • Khabar Darjeeling';
 
-        // Media: youtube embed > image
+        // Media: youtube embed (with always-present YouTube link) > image
         let mediaHtml = '';
         if (article.youtube_id) {
-          mediaHtml = `<iframe class="article-video" src="https://www.youtube.com/embed/${esc(article.youtube_id)}" allowfullscreen></iframe>`;
+          const vid = esc(article.youtube_id);
+          mediaHtml = `
+            <div class="video-wrap">
+              <iframe class="article-video"
+                      src="https://www.youtube.com/embed/${vid}"
+                      title="${esc(article.title)}"
+                      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                      allowfullscreen></iframe>
+            </div>
+            <a class="watch-yt-link" href="https://www.youtube.com/watch?v=${vid}" target="_blank" rel="noopener">
+              ▶ Video not playing? Watch on YouTube
+            </a>`;
         } else if (article.imageFileId && !['Text','null','undefined',''].includes(String(article.imageFileId))) {
           const src = String(article.imageFileId).startsWith('http')
             ? article.imageFileId
