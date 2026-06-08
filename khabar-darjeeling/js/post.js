@@ -4,51 +4,55 @@ const DB = 'khabardarjeeling_db';
 const COL = 'articles';
 const BUCKET = 'article_images';
 
-const jwt = localStorage.getItem('kd_jwt');
-if (!jwt) {
+const session = localStorage.getItem('kd_jwt');
+if (!session) {
   alert('Please login first');
   location.href = '/login.html';
 }
 
 const H = {
   'X-Appwrite-Project': PROJECT,
-  'X-Appwrite-JWT': jwt,
-  'Content-Type': 'application/json'
+  'X-Appwrite-Session': session
 };
 
-const api = (path, opts={}) => fetch(`${ENDPOINT}${path}`, {...opts, headers:{...H,...(opts.headers||{})}});
+const api = (path, opts={}) => fetch(`${ENDPOINT}${path}`, {
+ ...opts,
+  headers: {...H, 'Content-Type':'application/json',...(opts.headers||{})}
+});
 
 document.getElementById('postForm')?.addEventListener('submit', async (e) => {
   e.preventDefault();
-  const btn = e.target.querySelector('button');
+  const btn = e.target.querySelector('button[type="submit"]');
   btn.disabled = true;
   btn.textContent = 'Posting...';
 
   try {
-    // Get user info
-    const me = await api('/account').then(r=>r.json());
+    const me = await fetch(`${ENDPOINT}/account`, {headers:H}).then(r=>r.json());
 
     const title = document.getElementById('title').value.trim();
     const content = document.getElementById('content').value.trim();
     const category = document.getElementById('category').value;
-    const location = document.getElementById('location').value;
+    const locationVal = document.getElementById('location').value;
     const file = document.getElementById('image').files[0];
 
-    if (!file) throw new Error('Select an image');
+    if(!title ||!content ||!file) throw new Error('Fill all fields');
 
-    // 1. Upload image
+    // Upload image
     const fd = new FormData();
     fd.append('fileId', 'unique()');
     fd.append('file', file);
-    const up = await fetch(`${ENDPOINT}/storage/buckets/${BUCKET}/files`, {
+    const upRes = await fetch(`${ENDPOINT}/storage/buckets/${BUCKET}/files`, {
       method:'POST',
-      headers:{'X-Appwrite-Project':PROJECT,'X-Appwrite-JWT':jwt},
+      headers: {'X-Appwrite-Project': PROJECT, 'X-Appwrite-Session': session},
       body: fd
-    }).then(r=>r.json());
+    });
+    if(!upRes.ok) throw new Error('Image upload failed');
+    const up = await upRes.json();
 
-    // 2. Create article
+    // Create article
     const doc = {
-      title, content, category, location,
+      title, content, category,
+      location: locationVal,
       imageFileId: up.$id,
       authorName: me.name || me.email.split('@')[0],
       authorId: me.$id,
@@ -56,10 +60,16 @@ document.getElementById('postForm')?.addEventListener('submit', async (e) => {
       publishedAt: new Date().toISOString()
     };
 
-    await api(`/databases/${DB}/collections/${COL}/documents`, {
+    const createRes = await api(`/databases/${DB}/collections/${COL}/documents`, {
       method:'POST',
-      body: JSON.stringify({documentId:'unique()', data:doc, permissions:["read(\"any\")"]})
+      body: JSON.stringify({
+        documentId: 'unique()',
+        data: doc,
+        permissions: ['read("any")']
+      })
     });
+
+    if(!createRes.ok) throw new Error('Failed to save article');
 
     alert('✅ Posted! Waiting for admin approval');
     location.href = '/';
