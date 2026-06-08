@@ -169,7 +169,7 @@
         </div>
     </div>
 
-    <script src="js/appwrite.js"></script>
+    <script src="js/appwrite.js?v=128"></script>
     <script>
         const ENDPOINT = window.ENDPOINT;
         const PROJECT  = window.PROJECT;
@@ -189,11 +189,9 @@
 
         async function checkAuth() {
             try {
-                const r = await fetch(`${ENDPOINT}/account`, {
-                    headers: { 'X-Appwrite-Project': PROJECT },
-                    credentials: 'include'
-                });
-                if (r.ok) { location.href = 'index.html'; return; }
+                await window.account.get();   // uses stored session token
+                location.href = 'index.html';
+                return;
             } catch {}
             clearTimeout(gatekeeperTimeout);
             gatekeeper.classList.add('hide');
@@ -232,15 +230,7 @@
             setFeedback('', 'Verifying...');
 
             try {
-                const r = await fetch(`${ENDPOINT}/account/sessions/email`, {
-                    method: 'POST',
-                    headers: AH,
-                    credentials: 'include',
-                    body: JSON.stringify({ email, password })
-                });
-                const data = await r.json();
-                if (!r.ok) throw new Error(data.message || 'Login failed');
-
+                await window.account.createEmailPasswordSession(email, password);
                 setFeedback('success', '✓ Login successful! Redirecting...');
                 setTimeout(() => location.href = 'index.html', 1200);
             } catch (err) {
@@ -276,23 +266,12 @@
 
             try {
                 // Step 1: Create account
-                const r = await fetch(`${ENDPOINT}/account`, {
-                    method: 'POST',
-                    headers: AH,
-                    body: JSON.stringify({ userId, email, password, name })
-                });
-                const data = await r.json();
-                if (!r.ok) throw new Error(data.message || 'Could not create account');
+                await window.account.create('unique()', email, password, name);
 
-                // Step 2: Auto-login
-                const s = await fetch(`${ENDPOINT}/account/sessions/email`, {
-                    method: 'POST',
-                    headers: AH,
-                    credentials: 'include',
-                    body: JSON.stringify({ email, password })
-                });
-                if (!s.ok) {
-                    // Account created but session failed — redirect to login
+                // Step 2: Auto-login (stores session token)
+                try {
+                    await window.account.createEmailPasswordSession(email, password);
+                } catch (loginErr) {
                     setFeedback('success', '✓ Account created! Please log in.');
                     setTimeout(() => switchMode('login'), 1500);
                     return;
@@ -322,17 +301,7 @@
             setFeedback('', 'Sending reset link...');
 
             try {
-                const r = await fetch(`${ENDPOINT}/account/recovery`, {
-                    method: 'POST',
-                    headers: AH,
-                    body: JSON.stringify({
-                        email,
-                        url: location.origin + '/reset-password.html'
-                    })
-                });
-                const data = await r.json();
-                if (!r.ok) throw new Error(data.message || 'Failed to send');
-
+                await window.account.createRecovery(email, location.origin + '/reset-password.html');
                 setFeedback('success', '✓ Reset link sent! Check your email.');
                 setTimeout(() => switchMode('login'), 3000);
             } catch (err) {
