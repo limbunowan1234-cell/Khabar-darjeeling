@@ -21,8 +21,8 @@
     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8402633423386929" crossorigin="anonymous"></script>
 
     <title>खबर दार्जिलिंग - Your Trusted News Source</title>
-    <link rel="stylesheet" href="css/style.css?v=124">
-    <link rel="stylesheet" href="css/responsive.css?v=124">
+    <link rel="stylesheet" href="css/style.css?v=125">
+    <link rel="stylesheet" href="css/responsive.css?v=125">
 
     <style>
         /* ===== GATEKEEPER LOADER ===== */
@@ -33,7 +33,7 @@
             font-family: sans-serif; transition: opacity 0.3s ease;
         }
         body.dark-mode #gatekeeperLoader { background: #1a1a1a; color: #ffffff; }
-        .spinner {
+       .spinner {
             width: 40px; height: 40px; border: 4px solid rgba(196, 30, 58, 0.1);
             border-left-color: #c41e3a; border-radius: 50%; animation: spin 1s linear infinite;
             margin-bottom: 15px;
@@ -41,32 +41,32 @@
         @keyframes spin { to { transform: rotate(360deg); } }
 
         /* ===== MEDIA / VIDEO ===== */
-        .media-container {
+       .media-container {
             position: relative; width: 100%; overflow: hidden; background: #000;
         }
-        .media-container img { width: 100%; height: auto; display: block; }
-        .play-button-overlay {
+       .media-container img { width: 100%; height: auto; display: block; }
+       .play-button-overlay {
             position: absolute; top: 0; left: 0; width: 100%; height: 100%;
             display: flex; align-items: center; justify-content: center;
             background: rgba(0,0,0,0.3); opacity: 0;
             transition: opacity 0.3s ease, background 0.3s ease; cursor: pointer;
         }
-        .news-card:hover .play-button-overlay { opacity: 1; background: rgba(0,0,0,0.5); }
-        .play-button {
+       .news-card:hover.play-button-overlay { opacity: 1; background: rgba(0,0,0,0.5); }
+       .play-button {
             width: 70px; height: 70px; border-radius: 50%;
             background: rgba(255,255,255,0.95); display: flex;
             align-items: center; justify-content: center;
             box-shadow: 0 8px 24px rgba(0,0,0,0.3);
             transition: transform 0.3s ease, box-shadow 0.3s ease; z-index: 10;
         }
-        .news-card:hover .play-button { transform: scale(1.15); box-shadow: 0 12px 32px rgba(0,0,0,0.4); }
-        .play-button::after {
+       .news-card:hover.play-button { transform: scale(1.15); box-shadow: 0 12px 32px rgba(0,0,0,0.4); }
+       .play-button::after {
             content: ''; width: 0; height: 0;
             border-left: 18px solid #c41e3a;
             border-top: 12px solid transparent; border-bottom: 12px solid transparent;
             margin-left: 4px;
         }
-        .video-badge {
+       .video-badge {
             position: absolute; top: 10px; right: 10px;
             background: rgba(196,30,58,0.95); color: white;
             padding: 4px 10px; border-radius: 4px; font-size: 11px;
@@ -75,73 +75,73 @@
         }
 
         /* ===== BREAKING TICKER ===== */
-        .breaking-ticker { background: #c41e3a; color: #fff; padding: 8px 0; }
-        .breaking-label {
+       .breaking-ticker { background: #c41e3a; color: #fff; padding: 8px 0; }
+       .breaking-label {
             background: #900; padding: 8px 15px;
             font-weight: 700; font-size: 14px; white-space: nowrap;
         }
-        .ticker-content a {
+       .ticker-content a {
             color: #fff; text-decoration: none;
             display: inline-block; padding: 0 40px; font-weight: 500;
         }
-        .ticker-content a:hover { text-decoration: underline; }
+       .ticker-content a:hover { text-decoration: underline; }
 
         /* ===== AUTHOR ===== */
-        .article-author {
+       .article-author {
             display: flex; align-items: center; gap: 8px;
             margin-top: 12px; padding-top: 12px;
             border-top: 1px solid #eee; font-size: 13px; color: #666;
         }
-        body.dark-mode .article-author { border-top-color: #333; color: #aaa; }
-        .author-avatar, .author-initials {
+        body.dark-mode.article-author { border-top-color: #333; color: #aaa; }
+       .author-avatar,.author-initials {
             width: 28px; height: 28px; border-radius: 50%; flex-shrink: 0;
         }
-        .author-avatar { object-fit: cover; border: 1px solid #ddd; }
-        body.dark-mode .author-avatar { border-color: #444; }
-        .author-initials {
+       .author-avatar { object-fit: cover; border: 1px solid #ddd; }
+        body.dark-mode.author-avatar { border-color: #444; }
+       .author-initials {
             background: #c41e3a; color: #fff;
             display: flex; align-items: center; justify-content: center;
             font-weight: 700; font-size: 12px; text-transform: uppercase;
         }
-        .author-name { font-weight: 600; color: #333; }
-        body.dark-mode .author-name { color: #ddd; }
-        .featured-text .article-author { margin-top: 15px; border-top: none; padding-top: 0; }
+       .author-name { font-weight: 600; color: #333; }
+        body.dark-mode.author-name { color: #ddd; }
+       .featured-text.article-author { margin-top: 15px; border-top: none; padding-top: 0; }
 
         /* ===== TOP LISTS ===== */
-        .top-lists-section { padding: 40px 0; background: #fafafa; }
-        body.dark-mode .top-lists-section { background: #1a1a1a; }
-        .top-lists-grid {
+       .top-lists-section { padding: 40px 0; background: #fafafa; }
+        body.dark-mode.top-lists-section { background: #1a1a1a; }
+       .top-lists-grid {
             display: grid; grid-template-columns: repeat(auto-fit, minmax(300px,1fr));
             gap: 25px; margin-top: 25px;
         }
-        .top-list-card {
+       .top-list-card {
             background: #fff; border-radius: 8px; padding: 20px;
             box-shadow: 0 2px 8px rgba(0,0,0,0.05);
         }
-        body.dark-mode .top-list-card { background: #222; }
-        .top-list-card h4 {
+        body.dark-mode.top-list-card { background: #222; }
+       .top-list-card h4 {
             color: #c41e3a; margin-bottom: 15px; font-size: 18px;
             display: flex; align-items: center; gap: 8px;
         }
-        .top-list-item {
+       .top-list-item {
             display: flex; gap: 12px; padding: 12px 0;
             border-bottom: 1px solid #eee; text-decoration: none; color: inherit;
         }
-        body.dark-mode .top-list-item { border-color: #333; }
-        .top-list-item:last-child { border-bottom: none; }
-        .top-list-item:hover { background: #f9f9f9; }
-        body.dark-mode .top-list-item:hover { background: #2a2a2a; }
-        .top-rank { font-size: 20px; font-weight: 700; color: #c41e3a; min-width: 25px; }
-        .top-list-content h5 { font-size: 14px; margin: 0 0 4px; line-height: 1.3; }
-        .top-list-meta { font-size: 12px; color: #666; }
-        body.dark-mode .top-list-meta { color: #999; }
-        .views-badge {
+        body.dark-mode.top-list-item { border-color: #333; }
+       .top-list-item:last-child { border-bottom: none; }
+       .top-list-item:hover { background: #f9f9f9; }
+        body.dark-mode.top-list-item:hover { background: #2a2a2a; }
+       .top-rank { font-size: 20px; font-weight: 700; color: #c41e3a; min-width: 25px; }
+       .top-list-content h5 { font-size: 14px; margin: 0 0 4px; line-height: 1.3; }
+       .top-list-meta { font-size: 12px; color: #666; }
+        body.dark-mode.top-list-meta { color: #999; }
+       .views-badge {
             background: #c41e3a; color: white; padding: 2px 6px;
             border-radius: 3px; font-size: 11px; font-weight: 600;
         }
 
         /* ===== USER SEARCH ===== */
-        .user-search-wrapper { position: relative; }
+       .user-search-wrapper { position: relative; }
         #userSearch {
             padding: 8px 12px; border: 1px solid #ddd; border-radius: 6px;
             width: 180px; font-size: 14px; transition: border-color 0.3s;
@@ -155,83 +155,83 @@
             overflow-y: auto; z-index: 1000; box-shadow: 0 4px 12px rgba(0,0,0,0.1);
         }
         body.dark-mode #userSearchResults { background: #2a2a2a; border-color: #444; }
-        .user-search-item {
+       .user-search-item {
             padding: 10px 12px; border-bottom: 1px solid #eee;
             cursor: pointer; font-size: 14px; transition: background 0.2s;
             display: flex; align-items: center; gap: 8px;
         }
-        body.dark-mode .user-search-item { border-color: #333; }
-        .user-search-item:last-child { border-bottom: none; }
-        .user-search-item:hover { background: #f5f5f5; }
-        body.dark-mode .user-search-item:hover { background: #333; }
-        .user-search-avatar {
+        body.dark-mode.user-search-item { border-color: #333; }
+       .user-search-item:last-child { border-bottom: none; }
+       .user-search-item:hover { background: #f5f5f5; }
+        body.dark-mode.user-search-item:hover { background: #333; }
+       .user-search-avatar {
             width: 32px; height: 32px; border-radius: 50%;
             background: #c41e3a; color: white;
             display: flex; align-items: center; justify-content: center;
             font-weight: 700; font-size: 12px; flex-shrink: 0;
         }
-        .user-search-info { flex: 1; }
-        .user-search-name { font-weight: 600; color: #333; }
-        body.dark-mode .user-search-name { color: #ddd; }
-        .user-search-label { font-size: 11px; color: #666; }
-        body.dark-mode .user-search-label { color: #999; }
+       .user-search-info { flex: 1; }
+       .user-search-name { font-weight: 600; color: #333; }
+        body.dark-mode.user-search-name { color: #ddd; }
+       .user-search-label { font-size: 11px; color: #666; }
+        body.dark-mode.user-search-label { color: #999; }
 
         /* ===== NAV AUTH BUTTONS ===== */
-        .nav-auth-btn {
+       .nav-auth-btn {
             padding: 7px 14px; border-radius: 6px; font-size: 14px;
             font-weight: 600; cursor: pointer; text-decoration: none;
             border: none; font-family: inherit; transition: background 0.2s, color 0.2s;
             display: inline-flex; align-items: center; gap: 5px;
         }
-        .btn-profile {
+       .btn-profile {
             background: transparent; color: #c41e3a;
             border: 2px solid #c41e3a;
         }
-        .btn-profile:hover { background: #c41e3a; color: #fff; }
-        body.dark-mode .btn-profile { color: #ff6b6b; border-color: #ff6b6b; }
-        body.dark-mode .btn-profile:hover { background: #ff6b6b; color: #1a1a1a; }
-        .btn-admin {
+       .btn-profile:hover { background: #c41e3a; color: #fff; }
+        body.dark-mode.btn-profile { color: #ff6b6b; border-color: #ff6b6b; }
+        body.dark-mode.btn-profile:hover { background: #ff6b6b; color: #1a1a1a; }
+       .btn-admin {
             background: #c41e3a; color: #fff; border: 2px solid #c41e3a;
         }
-        .btn-admin:hover { background: #a01830; border-color: #a01830; }
-        .btn-logout {
+       .btn-admin:hover { background: #a01830; border-color: #a01830; }
+       .btn-logout {
             background: transparent; color: #888; border: 2px solid #ccc;
         }
-        .btn-logout:hover { background: #f5f5f5; border-color: #aaa; color: #444; }
-        body.dark-mode .btn-logout { color: #aaa; border-color: #555; }
-        body.dark-mode .btn-logout:hover { background: #2a2a2a; }
-        .btn-login {
+       .btn-logout:hover { background: #f5f5f5; border-color: #aaa; color: #444; }
+        body.dark-mode.btn-logout { color: #aaa; border-color: #555; }
+        body.dark-mode.btn-logout:hover { background: #2a2a2a; }
+       .btn-login {
             background: #c41e3a; color: #fff; border: 2px solid #c41e3a;
         }
-        .btn-login:hover { background: #a01830; border-color: #a01830; }
+       .btn-login:hover { background: #a01830; border-color: #a01830; }
 
         /* ===== DARK MODE TOGGLE ===== */
-        .theme-toggle {
+       .theme-toggle {
             background: none; border: none; font-size: 20px;
             cursor: pointer; padding: 5px; border-radius: 50%;
             transition: transform 0.3s; line-height: 1;
         }
-        .theme-toggle:hover { transform: rotate(20deg); }
+       .theme-toggle:hover { transform: rotate(20deg); }
 
         /* ===== FEATURED CARD ===== */
-        .featured-content { position: relative; }
-        .featured-content.media-container { border-radius: 8px 8px 0 0; }
+       .featured-content { position: relative; }
+       .featured-content.media-container { border-radius: 8px 8px 0 0; }
 
         /* ===== RESPONSIVE ===== */
         @media (max-width: 768px) {
-            .nav-right { flex-wrap: wrap; gap: 8px !important; }
+           .nav-right { flex-wrap: wrap; gap: 8px!important; }
             #userSearch { width: 140px; font-size: 13px; }
-            .breaking-label { font-size: 12px; padding: 8px 10px; }
-            .ticker-content a { padding: 0 25px; font-size: 14px; }
-            #authButtons { flex-wrap: wrap; gap: 6px !important; }
-            .nav-auth-btn { font-size: 12px; padding: 5px 10px; }
+           .breaking-label { font-size: 12px; padding: 8px 10px; }
+           .ticker-content a { padding: 0 25px; font-size: 14px; }
+            #authButtons { flex-wrap: wrap; gap: 6px!important; }
+           .nav-auth-btn { font-size: 12px; padding: 5px 10px; }
         }
 
         /* ===== DARK MODE GLOBAL ===== */
         body.dark-mode { background: #121212; color: #e0e0e0; }
-        body.dark-mode .top-lists-section { background: #1a1a1a; }
-        body.dark-mode .top-list-card { background: #222; }
-        body.dark-mode .top-list-item { color: #e0e0e0; }
+        body.dark-mode.top-lists-section { background: #1a1a1a; }
+        body.dark-mode.top-list-card { background: #222; }
+        body.dark-mode.top-list-item { color: #e0e0e0; }
     </style>
 </head>
 <body>
@@ -377,11 +377,11 @@
     <!-- APPWRITE SDK -->
     <script src="https://cdn.jsdelivr.net/npm/appwrite@14.0.1/dist/iife/sdk.min.js"></script>
     <!-- YOUR APPWRITE INIT (sets window.account, window.databases, window.Query, window.APPWRITE_DB_ID, window.APPWRITE_COLLECTION_ID) -->
-    <script src="js/appwrite.js?v=124"></script>
+    <script src="js/appwrite.js?v=125"></script>
 
     <!-- ERUDA DEV TOOLS (optional) -->
     <script src="https://cdn.jsdelivr.net/npm/eruda"></script>
-    <script>try { if (typeof eruda !== 'undefined') eruda.init(); } catch(e) {}</script>
+    <script>try { if (typeof eruda!== 'undefined') eruda.init(); } catch(e) {}</script>
 
     <!-- MAIN APP SCRIPT -->
     <script>
@@ -389,7 +389,7 @@
         'use strict';
 
         /* ─── CONFIG ─── */
-        const ENDPOINT   = 'https://nyc.cloud.appwrite.io/v1';
+        const ENDPOINT = 'https://nyc.cloud.appwrite.io/v1';
         const PROJECT_ID = 'khabardarjeeling';
 
         /* ─── THEME INIT (before render to avoid flash) ─── */
@@ -422,7 +422,7 @@
             const div = document.createElement('div');
             div.innerHTML = htmlStr || '';
             const text = div.textContent || div.innerText || '';
-            return text.length > maxLength ? text.substring(0, maxLength) + '...' : text;
+            return text.length > maxLength? text.substring(0, maxLength) + '...' : text;
         }
 
         function formatDate(dateString) {
@@ -441,7 +441,7 @@
         }
 
         function getYouTubeThumbnail(youtubeId) {
-            return youtubeId ? `https://img.youtube.com/vi/${youtubeId}/maxresdefault.jpg` : null;
+            return youtubeId? `https://img.youtube.com/vi/${youtubeId}/maxresdefault.jpg` : null;
         }
 
         function getAppwriteImageUrl(article) {
@@ -461,7 +461,7 @@
         }
 
         function generateMediaHtml(media, article, heightPx = 200) {
-            if (!media || !media.url) return '';
+            if (!media ||!media.url) return '';
             const imgTag = `<img src="${media.url}" alt="${escapeHtml(article.title)}" loading="lazy" style="width:100%;height:${heightPx}px;object-fit:cover;border-radius:8px 8px 0 0;" onerror="this.style.display='none'">`;
             if (media.type === 'video') {
                 return `
@@ -475,16 +475,16 @@
         }
 
         function generateAuthorHtml(article) {
-            const authorName   = article.submitterName || article.authorName || 'Staff Reporter';
+            const authorName = article.submitterName || article.authorName || 'Staff Reporter';
             const authorAvatar = article.submitterAvatar;
-            const authorId     = article.submitterId;
+            const authorId = article.submitterId;
 
             const nameHtml = authorId
-                ? `By <a href="profile.html?userId=${authorId}" style="text-decoration:none;color:inherit;"><span class="author-name">${escapeHtml(authorName)}</span></a>`
+               ? `By <a href="profile.html?userId=${authorId}" style="text-decoration:none;color:inherit;"><span class="author-name">${escapeHtml(authorName)}</span></a>`
                 : `By <span class="author-name">${escapeHtml(authorName)}</span>`;
 
-            const avatarHtml = (authorAvatar && authorAvatar !== '' && authorAvatar !== 'null')
-                ? `<img src="${authorAvatar}" alt="${escapeHtml(authorName)}" class="author-avatar"
+            const avatarHtml = (authorAvatar && authorAvatar!== '' && authorAvatar!== 'null')
+               ? `<img src="${authorAvatar}" alt="${escapeHtml(authorName)}" class="author-avatar"
                         onerror="this.outerHTML='<div class=\\'author-initials\\'>${getInitials(authorName)}</div>'">`
                 : `<div class="author-initials">${getInitials(authorName)}</div>`;
 
@@ -495,13 +495,13 @@
         document.getElementById('themeToggle').addEventListener('click', () => {
             document.body.classList.toggle('dark-mode');
             const isDark = document.body.classList.contains('dark-mode');
-            localStorage.setItem('theme', isDark ? 'dark' : 'light');
-            document.getElementById('themeToggle').textContent = isDark ? '☀️' : '🌙';
+            localStorage.setItem('theme', isDark? 'dark' : 'light');
+            document.getElementById('themeToggle').textContent = isDark? '☀️' : '🌙';
         });
 
         /* ─── MOBILE HAMBURGER ─── */
         const navToggle = document.getElementById('navToggle');
-        const navMenu   = document.getElementById('navMenu');
+        const navMenu = document.getElementById('navMenu');
         if (navToggle && navMenu) {
             navToggle.addEventListener('click', () => {
                 navMenu.classList.toggle('active');
@@ -521,61 +521,72 @@
         if (searchInput) {
             searchInput.addEventListener('input', (e) => {
                 const q = e.target.value.toLowerCase().trim();
-                document.querySelectorAll('#newsGrid .news-card').forEach(card => {
-                    const title   = card.querySelector('h3')?.textContent.toLowerCase() || '';
+                document.querySelectorAll('#newsGrid.news-card').forEach(card => {
+                    const title = card.querySelector('h3')?.textContent.toLowerCase() || '';
                     const content = card.querySelector('p')?.textContent.toLowerCase() || '';
-                    card.style.display = (!q || title.includes(q) || content.includes(q)) ? '' : 'none';
+                    card.style.display = (!q || title.includes(q) || content.includes(q))? '' : 'none';
                 });
             });
         }
 
-        /* ─── AUTH & BUTTON LOGIC ─── */
+        /* ─── AUTH & BUTTON LOGIC - FIXED WITH NULL CHECKS ─── */
         async function checkAuthAndRender() {
             // Small delay so appwrite.js finishes setup
             await new Promise(r => setTimeout(r, 150));
 
             const authButtons = document.getElementById('authButtons');
-            const mobileAuth  = document.getElementById('mobileAuthContainer');
+            const mobileAuth = document.getElementById('mobileAuthContainer');
 
             try {
                 const user = await window.account.get();
 
                 // ── LOGGED IN ──
                 const profileUrl = `profile.html?userId=${user.$id}`;
-                const isAdmin    = user.labels && user.labels.includes('admin');
+                const isAdmin = user.labels && user.labels.includes('admin');
 
-                // Desktop auth buttons
-                authButtons.innerHTML = `
-                    <a href="${profileUrl}" class="nav-auth-btn btn-profile" title="My Profile">👤 Profile</a>
-                    ${isAdmin ? `<a href="admin.html" class="nav-auth-btn btn-admin" title="Admin Panel">⚙️ Admin</a>` : ''}
-                    <button class="nav-auth-btn btn-logout" id="logoutBtn" title="Logout">Logout</button>
-                `;
+                // Desktop auth buttons - CHECK IF ELEMENT EXISTS
+                if (authButtons) {
+                    authButtons.innerHTML = `
+                        <a href="${profileUrl}" class="nav-auth-btn btn-profile" title="My Profile">👤 Profile</a>
+                        ${isAdmin? `<a href="admin.html" class="nav-auth-btn btn-admin" title="Admin Panel">⚙️ Admin</a>` : ''}
+                        <button class="nav-auth-btn btn-logout" id="logoutBtn" title="Logout">Logout</button>
+                    `;
 
-                // Mobile auth links inside nav menu
-                mobileAuth.innerHTML = `
-                    <a href="${profileUrl}">👤 Profile</a>
-                    ${isAdmin ? `<a href="admin.html">⚙️ Admin Panel</a>` : ''}
-                `;
-
-                // Logout handler
-                document.getElementById('logoutBtn').addEventListener('click', async () => {
-                    try {
-                        await window.account.deleteSession('current');
-                        window.location.reload();
-                    } catch(err) {
-                        console.error('Logout failed:', err);
-                        // Force reload anyway — session may already be invalid
-                        window.location.reload();
+                    // Logout handler - check if button exists
+                    const logoutBtn = document.getElementById('logoutBtn');
+                    if (logoutBtn) {
+                        logoutBtn.addEventListener('click', async () => {
+                            try {
+                                await window.account.deleteSession('current');
+                                window.location.reload();
+                            } catch(err) {
+                                console.error('Logout failed:', err);
+                                // Force reload anyway — session may already be invalid
+                                window.location.reload();
+                            }
+                        });
                     }
-                });
+                }
+
+                // Mobile auth links inside nav menu - CHECK IF ELEMENT EXISTS
+                if (mobileAuth) {
+                    mobileAuth.innerHTML = `
+                        <a href="${profileUrl}">👤 Profile</a>
+                        ${isAdmin? `<a href="admin.html">⚙️ Admin Panel</a>` : ''}
+                    `;
+                }
 
             } catch(e) {
                 // ── LOGGED OUT ──
-                authButtons.innerHTML = `<a href="login.html" class="nav-auth-btn btn-login">Login</a>`;
-                mobileAuth.innerHTML  = `<a href="login.html">Login</a>`;
+                if (authButtons) {
+                    authButtons.innerHTML = `<a href="login.html" class="nav-auth-btn btn-login">Login</a>`;
+                }
+                if (mobileAuth) {
+                    mobileAuth.innerHTML = `<a href="login.html">Login</a>`;
+                }
             }
 
-            // Hide gatekeeper loader
+            // Hide gatekeeper loader - CHECK IF ELEMENT EXISTS
             const loader = document.getElementById('gatekeeperLoader');
             if (loader) {
                 loader.style.opacity = '0';
@@ -587,64 +598,66 @@
         }
 
         /* ─── USER SEARCH (fallback: searches authors visible on page) ─── */
-        const userSearchInput   = document.getElementById('userSearch');
+        const userSearchInput = document.getElementById('userSearch');
         const userSearchResults = document.getElementById('userSearchResults');
         let userSearchTimeout;
 
-        userSearchInput.addEventListener('input', (e) => {
-            const query = e.target.value.trim();
-            clearTimeout(userSearchTimeout);
-            if (query.length < 2) {
-                userSearchResults.style.display = 'none';
-                return;
-            }
-            userSearchTimeout = setTimeout(() => {
-                // Collect unique authors from the rendered page
-                const usersFound = new Map();
-                document.querySelectorAll('.author-name').forEach(el => {
-                    const name = el.textContent.trim();
-                    const anchor = el.closest('a[href*="profile.html"]');
-                    if (name.toLowerCase().includes(query.toLowerCase()) && anchor) {
-                        if (!usersFound.has(name)) {
-                            usersFound.set(name, anchor.href);
-                        }
-                    }
-                });
-
-                if (usersFound.size > 0) {
-                    userSearchResults.innerHTML = Array.from(usersFound.entries()).map(([name, href]) => `
-                        <div class="user-search-item" onclick="window.location.href='${href}'">
-                            <div class="user-search-avatar">${getInitials(name)}</div>
-                            <div class="user-search-info">
-                                <div class="user-search-name">${escapeHtml(name)}</div>
-                                <div class="user-search-label">View Profile</div>
-                            </div>
-                        </div>`).join('');
-                } else {
-                    userSearchResults.innerHTML = `
-                        <div style="padding:12px;color:#666;font-size:13px;line-height:1.5;">
-                            No users found on this page.<br>
-                            <small style="color:#999;">Full search requires an Appwrite Function with <code>users.list()</code>.</small>
-                        </div>`;
+        if (userSearchInput) {
+            userSearchInput.addEventListener('input', (e) => {
+                const query = e.target.value.trim();
+                clearTimeout(userSearchTimeout);
+                if (query.length < 2) {
+                    userSearchResults.style.display = 'none';
+                    return;
                 }
-                userSearchResults.style.display = 'block';
-            }, 300);
-        });
+                userSearchTimeout = setTimeout(() => {
+                    // Collect unique authors from the rendered page
+                    const usersFound = new Map();
+                    document.querySelectorAll('.author-name').forEach(el => {
+                        const name = el.textContent.trim();
+                        const anchor = el.closest('a[href*="profile.html"]');
+                        if (name.toLowerCase().includes(query.toLowerCase()) && anchor) {
+                            if (!usersFound.has(name)) {
+                                usersFound.set(name, anchor.href);
+                            }
+                        }
+                    });
 
-        document.addEventListener('click', (e) => {
-            if (!userSearchInput.contains(e.target) && !userSearchResults.contains(e.target)) {
-                userSearchResults.style.display = 'none';
-            }
-        });
+                    if (usersFound.size > 0) {
+                        userSearchResults.innerHTML = Array.from(usersFound.entries()).map(([name, href]) => `
+                            <div class="user-search-item" onclick="window.location.href='${href}'">
+                                <div class="user-search-avatar">${getInitials(name)}</div>
+                                <div class="user-search-info">
+                                    <div class="user-search-name">${escapeHtml(name)}</div>
+                                    <div class="user-search-label">View Profile</div>
+                                </div>
+                            </div>`).join('');
+                    } else {
+                        userSearchResults.innerHTML = `
+                            <div style="padding:12px;color:#666;font-size:13px;line-height:1.5;">
+                                No users found on this page.<br>
+                                <small style="color:#999;">Full search requires an Appwrite Function with <code>users.list()</code>.</small>
+                            </div>`;
+                    }
+                    userSearchResults.style.display = 'block';
+                }, 300);
+            });
+
+            document.addEventListener('click', (e) => {
+                if (!userSearchInput.contains(e.target) &&!userSearchResults.contains(e.target)) {
+                    userSearchResults.style.display = 'none';
+                }
+            });
+        }
 
         /* ─── LOAD HOMEPAGE DATA ─── */
         async function loadHomepage() {
             const appwriteDatabase = window.databases;
-            const QueryAPI         = window.Query;
-            const dbId             = window.APPWRITE_DB_ID;
-            const collectionId     = window.APPWRITE_COLLECTION_ID;
+            const QueryAPI = window.Query;
+            const dbId = window.APPWRITE_DB_ID;
+            const collectionId = window.APPWRITE_COLLECTION_ID;
 
-            if (!appwriteDatabase || !QueryAPI || !dbId || !collectionId) {
+            if (!appwriteDatabase ||!QueryAPI ||!dbId ||!collectionId) {
                 document.getElementById('newsGrid').innerHTML =
                     '<p style="color:red;padding:20px;">⚠️ Configuration Error: Appwrite SDK not initialized. Check appwrite.js.</p>';
                 return;
@@ -672,7 +685,7 @@
         }
 
         function renderHomepageView(articles) {
-            document.title   = 'खबर दार्जिलिंग - Your Trusted News Source';
+            document.title = 'खबर दार्जिलिंग - Your Trusted News Source';
             document.getElementById('mainSectionTitle').textContent = 'Latest News';
             showHomepageSections();
 
@@ -681,8 +694,8 @@
             if (featuredArticles.length === 0) featuredArticles = [articles[0]];
             else featuredArticles = featuredArticles.slice(0, 3);
 
-            const featuredIds  = new Set(featuredArticles.map(a => a.$id));
-            const gridArticles = articles.filter(a => !featuredIds.has(a.$id)).slice(0, 10);
+            const featuredIds = new Set(featuredArticles.map(a => a.$id));
+            const gridArticles = articles.filter(a =>!featuredIds.has(a.$id)).slice(0, 10);
 
             renderBreakingTicker(articles);
             renderFeaturedStory(featuredArticles);
@@ -698,7 +711,7 @@
 
         function renderBreakingTicker(articles) {
             const tickerEl = document.getElementById('breakingTicker');
-            if (!tickerEl || !articles.length) return;
+            if (!tickerEl ||!articles.length) return;
             tickerEl.innerHTML = articles.slice(0, 8).map(a =>
                 `<a href="article.html?id=${a.$id}">🔴 ${escapeHtml(a.title)}</a>`
             ).join('');
@@ -710,12 +723,12 @@
 
             if (featuredArray.length === 1) {
                 // Single featured article — large layout
-                const article    = featuredArray[0];
-                const media      = getMediaSource(article);
-                const mediaHtml  = media ? generateMediaHtml(media, article, 380) : '';
-                const content    = article.content ? truncateText(article.content, 250) : '';
+                const article = featuredArray[0];
+                const media = getMediaSource(article);
+                const mediaHtml = media? generateMediaHtml(media, article, 380) : '';
+                const content = article.content? truncateText(article.content, 250) : '';
                 const authorHtml = generateAuthorHtml(article);
-                const textStyle  = media ? '' : 'width:100%;';
+                const textStyle = media? '' : 'width:100%;';
 
                 featuredEl.style = '';
                 featuredEl.innerHTML = `
@@ -733,134 +746,4 @@
                     </a>`;
             } else {
                 // Multiple featured articles — card grid
-                featuredEl.style.cssText = 'display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:20px;background:transparent;box-shadow:none;padding:0;';
-                featuredEl.innerHTML = featuredArray.map(article => {
-                    const media      = getMediaSource(article);
-                    const mediaHtml  = media ? generateMediaHtml(media, article, 200) : '';
-                    const content    = article.content ? truncateText(article.content, 120) : '';
-                    const authorHtml = generateAuthorHtml(article);
-                    return `
-                        <a href="article.html?id=${article.$id}"
-                           style="text-decoration:none;color:inherit;background:#fff;border-radius:8px;box-shadow:0 2px 10px rgba(0,0,0,0.07);display:flex;flex-direction:column;overflow:hidden;">
-                            ${mediaHtml}
-                            <div style="padding:20px;display:flex;flex-direction:column;flex-grow:1;">
-                                <h3 style="margin:0 0 10px;font-size:1.1rem;line-height:1.3;">${escapeHtml(article.title)}</h3>
-                                <p style="color:#555;flex-grow:1;font-size:0.9rem;margin:0 0 10px;">${content}</p>
-                                ${authorHtml}
-                                <div style="display:flex;justify-content:space-between;align-items:center;margin-top:12px;border-top:1px solid #eee;padding-top:12px;">
-                                    <span class="date">${formatDate(article.$createdAt)}</span>
-                                    <span style="color:#c41e3a;font-weight:600;font-size:0.9rem;">Read &rarr;</span>
-                                </div>
-                            </div>
-                        </a>`;
-                }).join('');
-            }
-        }
-
-        function renderNewsGrid(articles) {
-            const gridEl = document.getElementById('newsGrid');
-            if (!gridEl) return;
-            if (!articles.length) {
-                gridEl.innerHTML = '<p style="padding:20px;color:#666;">No additional articles found.</p>';
-                return;
-            }
-            gridEl.innerHTML = articles.map(article => {
-                const media      = getMediaSource(article);
-                const mediaHtml  = media ? generateMediaHtml(media, article, 200) : '';
-                const content    = article.content ? truncateText(article.content, 150) : '';
-                const authorHtml = generateAuthorHtml(article);
-                return `
-                    <a href="article.html?id=${article.$id}" class="news-card" style="text-decoration:none;color:inherit;display:flex;flex-direction:column;">
-                        ${mediaHtml}
-                        <div class="news-card-content" style="display:flex;flex-direction:column;flex-grow:1;padding:16px;">
-                            <h3 style="margin:0 0 8px;font-size:1rem;line-height:1.3;">${escapeHtml(article.title)}</h3>
-                            <p style="flex-grow:1;font-size:0.88rem;color:#555;margin:0 0 8px;">${content}</p>
-                            ${authorHtml}
-                            <div style="display:flex;justify-content:space-between;align-items:center;margin-top:8px;">
-                                <span class="date" style="font-size:12px;color:#999;">${formatDate(article.$createdAt)}</span>
-                                <span style="color:#c41e3a;font-weight:600;font-size:0.85rem;">Read more &rarr;</span>
-                            </div>
-                        </div>
-                    </a>`;
-            }).join('');
-        }
-
-        /* ─── TOP LISTS ─── */
-        async function loadTopLists() {
-            const now        = new Date();
-            const todayStart = new Date(now.getFullYear(), now.getMonth(), now.getDate()).toISOString();
-            const weekStart  = new Date(now.getTime() - 7  * 24 * 60 * 60 * 1000).toISOString();
-            const monthStart = new Date(now.getTime() - 30 * 24 * 60 * 60 * 1000).toISOString();
-
-            loadTopList('topDailyList',   todayStart, 5);
-            loadTopList('topWeeklyList',  weekStart,  5);
-            loadTopList('topMonthlyList', monthStart, 5);
-        }
-
-        async function loadTopList(elementId, sinceDate, limit) {
-            const el = document.getElementById(elementId);
-            if (!el) return;
-            el.innerHTML = '<p style="color:#999;font-size:13px;">Loading...</p>';
-            try {
-                const response = await window.databases.listDocuments(
-                    window.APPWRITE_DB_ID,
-                    window.APPWRITE_COLLECTION_ID,
-                    [
-                        window.Query.equal('status', 'published'),
-                        window.Query.greaterThanEqual('$createdAt', sinceDate),
-                        window.Query.orderDesc('views'),
-                        window.Query.limit(limit)
-                    ]
-                );
-                if (!response.documents.length) {
-                    el.innerHTML = '<p style="color:#999;font-size:13px;">No posts yet</p>';
-                    return;
-                }
-                el.innerHTML = response.documents.map((article, idx) => `
-                    <a href="article.html?id=${article.$id}" class="top-list-item">
-                        <div class="top-rank">${idx + 1}</div>
-                        <div class="top-list-content">
-                            <h5>${escapeHtml(article.title)}</h5>
-                            <div class="top-list-meta">
-                                ${escapeHtml(article.submitterName || 'Staff')} &bull;
-                                <span class="views-badge">${(article.views || 0).toLocaleString()} views</span>
-                            </div>
-                        </div>
-                    </a>`).join('');
-            } catch(error) {
-                console.error(`Top list [${elementId}] error:`, error);
-                el.innerHTML = '<p style="color:#999;font-size:13px;">Unable to load</p>';
-            }
-        }
-
-        /* ─── EMPTY / ERROR STATES ─── */
-        function handleEmptyState() {
-            document.getElementById('featuredStory').innerHTML  = '<p style="padding:20px;color:#666;">No articles published yet.</p>';
-            document.getElementById('breakingTicker').innerHTML = 'No breaking news at the moment.';
-            document.getElementById('newsGrid').innerHTML       = '<p style="padding:20px;color:#666;">No articles published yet.</p>';
-            ['topDailyList','topWeeklyList','topMonthlyList'].forEach(id => {
-                const el = document.getElementById(id);
-                if (el) el.innerHTML = '<p style="color:#999;font-size:13px;">No posts yet</p>';
-            });
-        }
-
-        function handleError(error) {
-            const code = error?.code || '';
-            let message = 'Failed to load articles. Please refresh.';
-            if (code === 401) message = 'Authentication error. Please refresh.';
-            if (code === 404) message = 'Database or collection not found. Check your Appwrite config.';
-            const el = document.getElementById('newsGrid');
-            if (el) el.innerHTML = `<p style="color:#d32f2f;padding:20px;">⚠️ ${message}</p>`;
-        }
-
-        /* ─── KICK OFF ─── */
-        waitForAppwrite(checkAuthAndRender);
-
-    })();
-    </script>
-
-</body>
-</html>
-
-
-Can you give a preview of it
+                featuredEl.style.css
