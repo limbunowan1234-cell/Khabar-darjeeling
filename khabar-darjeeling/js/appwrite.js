@@ -6,26 +6,93 @@ window.HEADERS  = {
   'Content-Type': 'application/json'
 };
 
-window.APPWRITE_DB_ID       = 'Khabar_db';
-window.APPWRITE_COLLECTION_ID = 'articles';
-window.APPWRITE_BUCKET_ID   = 'article-image';
+// ── Database + collection IDs ──
+window.APPWRITE_DB_ID            = 'Khabar_db';
+window.APPWRITE_COLLECTION_ID    = 'articles';        // main articles
+window.APPWRITE_BUCKET_ID        = 'article-image';
+window.COL_ARTICLES              = 'articles';
+window.COL_PROFILES              = 'profiles';
+window.COL_LIKES                 = 'likes';           // articleId + userId (one row per like)
+window.COL_COMMENTS              = 'comments';        // articleId, authorName, commentText, userId...
+window.COL_PROFILE_LIKES         = 'profile_likes';
+window.COL_PROFILE_COMMENTS      = 'profile_comments';
 
+// ── Query helpers (Appwrite REST string format) ──
 window.Query = {
-  equal:     (k, v) => `equal("${k}","${v}")`,
-  orderDesc: (k)    => `orderDesc("${k}")`,
-  limit:     (n)    => `limit(${n})`
+  equal:            (k, v) => `equal("${k}",["${v}"])`,
+  notEqual:         (k, v) => `notEqual("${k}",["${v}"])`,
+  orderDesc:        (k)    => `orderDesc("${k}")`,
+  orderAsc:         (k)    => `orderAsc("${k}")`,
+  limit:            (n)    => `limit(${n})`,
+  offset:           (n)    => `offset(${n})`,
+  greaterThan:      (k, v) => `greaterThan("${k}","${v}")`,
+  greaterThanEqual: (k, v) => `greaterThanEqual("${k}","${v}")`,
+  lessThan:         (k, v) => `lessThan("${k}","${v}")`,
+  lessThanEqual:    (k, v) => `lessThanEqual("${k}","${v}")`,
+  search:           (k, v) => `search("${k}","${v}")`,
+  contains:         (k, v) => `contains("${k}","${v}")`,
 };
 
+// ── Databases API ──
 window.databases = {
   listDocuments: async (dbId, colId, queries = []) => {
     const qs  = queries.map(q => `queries[]=${encodeURIComponent(q)}`).join('&');
-    const url = `${window.ENDPOINT}/databases/${dbId}/collections/${colId}/documents?${qs}`;
-    const res = await fetch(url, { headers: { 'X-Appwrite-Project': window.PROJECT } });
+    const url = `${window.ENDPOINT}/databases/${dbId}/collections/${colId}/documents${qs ? '?' + qs : ''}`;
+    const res = await fetch(url, {
+      headers: { 'X-Appwrite-Project': window.PROJECT },
+      credentials: 'include'
+    });
+    if (!res.ok) throw Object.assign(new Error('listDocuments failed'), { code: res.status });
     return res.json();
+  },
+
+  getDocument: async (dbId, colId, docId) => {
+    const url = `${window.ENDPOINT}/databases/${dbId}/collections/${colId}/documents/${docId}`;
+    const res = await fetch(url, {
+      headers: { 'X-Appwrite-Project': window.PROJECT },
+      credentials: 'include'
+    });
+    if (!res.ok) throw Object.assign(new Error('getDocument failed'), { code: res.status });
+    return res.json();
+  },
+
+  createDocument: async (dbId, colId, docId, data) => {
+    const url = `${window.ENDPOINT}/databases/${dbId}/collections/${colId}/documents`;
+    const res = await fetch(url, {
+      method: 'POST',
+      headers: { ...window.HEADERS, 'X-Appwrite-Project': window.PROJECT },
+      credentials: 'include',
+      body: JSON.stringify({ documentId: docId || 'unique()', data })
+    });
+    if (!res.ok) throw Object.assign(new Error('createDocument failed'), { code: res.status });
+    return res.json();
+  },
+
+  updateDocument: async (dbId, colId, docId, data) => {
+    const url = `${window.ENDPOINT}/databases/${dbId}/collections/${colId}/documents/${docId}`;
+    const res = await fetch(url, {
+      method: 'PATCH',
+      headers: { ...window.HEADERS, 'X-Appwrite-Project': window.PROJECT },
+      credentials: 'include',
+      body: JSON.stringify({ data })
+    });
+    if (!res.ok) throw Object.assign(new Error('updateDocument failed'), { code: res.status });
+    return res.json();
+  },
+
+  deleteDocument: async (dbId, colId, docId) => {
+    const url = `${window.ENDPOINT}/databases/${dbId}/collections/${colId}/documents/${docId}`;
+    const res = await fetch(url, {
+      method: 'DELETE',
+      headers: { 'X-Appwrite-Project': window.PROJECT },
+      credentials: 'include'
+    });
+    if (!res.ok) throw Object.assign(new Error('deleteDocument failed'), { code: res.status });
+    return true;
   }
 };
 
-// Real auth check using session cookie
+// ── Account API ──
 window.account = {
   get: async () => {
     const res = await fetch(`${window.ENDPOINT}/account`, {
@@ -36,36 +103,19 @@ window.account = {
     return res.json();
   },
   deleteSession: async (sessionId = 'current') => {
-    await fetch(`${window.ENDPOINT}/account/sessions/${sessionId}`, {
+    const res = await fetch(`${window.ENDPOINT}/account/sessions/${sessionId}`, {
       method: 'DELETE',
       headers: { 'X-Appwrite-Project': window.PROJECT },
       credentials: 'include'
     });
+    return res.ok;
   }
 };
-
-// Auth buttons + gatekeeper for index.html
-document.addEventListener('DOMContentLoaded', async () => {
-  const authButtons = document.getElementById('authButtons');
-
-  if (authButtons) {
-    try {
-      const user = await window.account.get();
-      authButtons.innerHTML = `
-        <span style="font-size:13px;color:#606770;margin-right:8px">Hi, ${user.name.split(' ')[0]}</span>
-        <button onclick="window.logout()" style="background:#c41e3a;color:#fff;padding:6px 12px;border-radius:4px;border:none;cursor:pointer;font-size:13px">Logout</button>
-      `;
-    } catch {
-      authButtons.innerHTML = `
-        <a href="login.html" style="background:#c41e3a;color:#fff;padding:6px 12px;border-radius:4px;text-decoration:none;font-size:13px">Login</a>
-      `;
-    }
-  }
-
-  setTimeout(() => document.getElementById('gatekeeperLoader')?.remove(), 300);
-});
 
 window.logout = async () => {
   try { await window.account.deleteSession('current'); } catch {}
   location.href = 'login.html';
 };
+
+// Unique ID generator (Appwrite-safe, <=36 chars)
+window.uniqueId = () => 'u' + Date.now() + Math.random().toString(36).slice(2, 9);
