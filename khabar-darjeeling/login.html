@@ -10,17 +10,18 @@ async function login(){
  const e=document.getElementById('email').value, p=document.getElementById('password').value, btn=document.getElementById('btn'), err=document.getElementById('error');
  btn.disabled=true; btn.textContent='Logging in...'; err.style.display='none';
  try{
-  // 1. Create session (sets cookie, but we won't rely on it)
-  let r=await fetch('https://nyc.cloud.appwrite.io/v1/account/sessions/email',{method:'POST',credentials:'include',headers:{'Content-Type':'application/json','X-Appwrite-Project':'khabardarjeeling'},body:JSON.stringify({email:e,password:p})});
-  if(!r.ok) throw new Error('Wrong email/password');
+  const r=await fetch('https://nyc.cloud.appwrite.io/v1/account/sessions/email',{
+    method:'POST',
+    headers:{'Content-Type':'application/json','X-Appwrite-Project':'khabardarjeeling'},
+    body:JSON.stringify({email:e,password:p})
+  });
+  if(!r.ok){const d=await r.json();throw new Error(d.message||'Login failed');}
+  const session=await r.json();
   
-  // 2. Create JWT token (works without cookies)
-  r=await fetch('https://nyc.cloud.appwrite.io/v1/account/jwts',{method:'POST',credentials:'include',headers:{'Content-Type':'application/json','X-Appwrite-Project':'khabardarjeeling'},body:JSON.stringify({})});
-  const jwt=await r.json();
-  
-  // 3. Save token locally
-  localStorage.setItem('kd_jwt', jwt.jwt);
+  // SAVE THE SESSION SECRET (works without cookies)
+  localStorage.setItem('kd_jwt', session.secret || session.$id);
   localStorage.setItem('kd_email', e);
+  localStorage.setItem('kd_userid', session.userId);
   
   location.href='/';
  }catch(ex){err.textContent=ex.message;err.style.display='block';btn.disabled=false;btn.textContent='Login';}
