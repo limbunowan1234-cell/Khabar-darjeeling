@@ -220,7 +220,7 @@
 
             const ac = document.getElementById('avatarContainer');
             ac.innerHTML = avatar
-               ? `<img src="${avatar}" class="profile-avatar" alt="${esc(name)}" onerror="this.outerHTML='<div class=\\'profile-avatar-initials\\'>${getInitials(name)}</div>'">`
+               ? `<img src="${avatar}" class="profile-avatar" alt="${esc(name)}" onerror="this.outerHTML='<div class=\'profile-avatar-initials\'>${getInitials(name)}</div>'">`
                 : `<div class="profile-avatar-initials">${getInitials(name)}</div>`;
 
             document.getElementById('profileName').textContent = name;
@@ -235,7 +235,7 @@
             if (isOwnProfile) {
                 actions.innerHTML = `
                     <button class="btn btn-secondary" onclick="openEditModal()">Edit Profile</button>
-                    <a href="create.html" class="btn btn-primary">+ Create Post</a>
+                    <a href="post.html" class="btn btn-primary">+ Create Post</a>
                 `;
             } else {
                 actions.innerHTML = '';
