@@ -21,20 +21,20 @@ window.COL_COMMENTS           = 'comments';
 window.COL_PROFILE_LIKES      = 'profile_likes';
 window.COL_PROFILE_COMMENTS   = 'profile_comments';
 
-// ── Query helpers ──
+// ── Query helpers (Appwrite 14 / Cloud — JSON object format) ──
 window.Query = {
-  equal:            (k, v) => `equal("${k}",["${v}"])`,
-  notEqual:         (k, v) => `notEqual("${k}",["${v}"])`,
-  orderDesc:        (k)    => `orderDesc("${k}")`,
-  orderAsc:         (k)    => `orderAsc("${k}")`,
-  limit:            (n)    => `limit(${n})`,
-  offset:           (n)    => `offset(${n})`,
-  greaterThan:      (k, v) => `greaterThan("${k}","${v}")`,
-  greaterThanEqual: (k, v) => `greaterThanEqual("${k}","${v}")`,
-  lessThan:         (k, v) => `lessThan("${k}","${v}")`,
-  lessThanEqual:    (k, v) => `lessThanEqual("${k}","${v}")`,
-  search:           (k, v) => `search("${k}","${v}")`,
-  contains:         (k, v) => `contains("${k}","${v}")`,
+  equal:            (k, v) => JSON.stringify({ method: 'equal',            attribute: k, values: Array.isArray(v) ? v : [v] }),
+  notEqual:         (k, v) => JSON.stringify({ method: 'notEqual',         attribute: k, values: Array.isArray(v) ? v : [v] }),
+  orderDesc:        (k)    => JSON.stringify({ method: 'orderDesc',        attribute: k }),
+  orderAsc:         (k)    => JSON.stringify({ method: 'orderAsc',         attribute: k }),
+  limit:            (n)    => JSON.stringify({ method: 'limit',            values: [n] }),
+  offset:           (n)    => JSON.stringify({ method: 'offset',           values: [n] }),
+  greaterThan:      (k, v) => JSON.stringify({ method: 'greaterThan',      attribute: k, values: [v] }),
+  greaterThanEqual: (k, v) => JSON.stringify({ method: 'greaterThanEqual', attribute: k, values: [v] }),
+  lessThan:         (k, v) => JSON.stringify({ method: 'lessThan',         attribute: k, values: [v] }),
+  lessThanEqual:    (k, v) => JSON.stringify({ method: 'lessThanEqual',    attribute: k, values: [v] }),
+  search:           (k, v) => JSON.stringify({ method: 'search',           attribute: k, values: [v] }),
+  contains:         (k, v) => JSON.stringify({ method: 'contains',         attribute: k, values: [v] }),
 };
 
 // Unique ID generator (Appwrite-safe, <=36 chars, valid chars only)
