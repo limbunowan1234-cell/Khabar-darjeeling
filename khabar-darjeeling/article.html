@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Article • Khabar Darjeeling</title>
-  <link rel="stylesheet" href="css/style.css?v=127">
+  <link rel="stylesheet" href="css/style.css?v=128">
   <link rel="icon" type="image/png" href="assets/logo.png">
   <meta name="theme-color" content="#c41e3a">
   <style>
@@ -91,7 +91,7 @@
     </article>
   </main>
 
-  <script src="js/appwrite.js?v=131"></script>
+  <script src="js/appwrite.js?v=133"></script>
   <script>
     // Theme
     if (localStorage.getItem('theme') === 'dark') document.body.classList.add('dark-mode');
@@ -255,15 +255,24 @@
         let count = parseInt(countEl.textContent) || 0;
 
         try {
-          if (userHasLiked && likeRowId) {
-            // Unlike
-            await window.databases.deleteDocument(window.APPWRITE_DB_ID, window.COL_LIKES, likeRowId);
+          // Always check the real state first (don't trust a stale likeRowId,
+          // e.g. when the user liked this article from the homepage)
+          const existing = await window.databases.listDocuments(
+            window.APPWRITE_DB_ID, window.COL_LIKES,
+            [ window.Query.equal('articleId', articleId),
+              window.Query.equal('userId', currentUser.$id),
+              window.Query.limit(1) ]
+          );
+
+          if (existing.documents.length) {
+            // Already liked → unlike
+            await window.databases.deleteDocument(window.APPWRITE_DB_ID, window.COL_LIKES, existing.documents[0].$id);
             userHasLiked = false; likeRowId = null;
             count = Math.max(0, count - 1);
             btn.classList.remove('liked');
             btn.innerHTML = `🤍 <span id="likeCount">${count}</span>`;
           } else {
-            // Like
+            // Not liked → like
             const row = await window.databases.createDocument(
               window.APPWRITE_DB_ID, window.COL_LIKES, 'unique()',
               { articleId, userId: currentUser.$id }
@@ -274,8 +283,8 @@
             btn.innerHTML = `❤️ <span id="likeCount">${count}</span>`;
           }
         } catch(e) {
-          console.error('Like failed:', e);
-          alert('Could not update like. Please try again.');
+          console.error('Like failed:', e, e && e.message, e && e.code);
+          alert('Could not update like: ' + ((e && e.message) || 'unknown error'));
         }
         btn.disabled = false;
       };
