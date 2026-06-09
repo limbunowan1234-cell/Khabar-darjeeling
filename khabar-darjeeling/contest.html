@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Story Contest 2026 • खबर दार्जिलिंग</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{ --red:#c41e3a; --red-dark:#a01830; --bg:#f0f2f5; --text:#1c1e21; }
+  *{box-sizing:border-box;margin:0;padding:0;font-family:'Poppins',sans-serif;}
+  body{background:var(--bg);color:var(--text);}
+  body.dark-mode{background:#121212;color:#f5f6f7;}
+
+  .topbar{background:#fff;padding:14px 16px;display:flex;align-items:center;justify-content:space-between;box-shadow:0 2px 6px rgba(0,0,0,0.08);position:sticky;top:0;z-index:50;}
+  body.dark-mode .topbar{background:#242526;}
+  .topbar .brand{display:flex;align-items:center;gap:10px;text-decoration:none;color:inherit;}
+  .topbar .brand img{height:44px;width:44px;border-radius:50%;object-fit:cover;}
+  .topbar .brand span{font-weight:700;color:var(--red);font-size:1.1rem;}
+  .topbar a.home{color:var(--red);font-weight:600;text-decoration:none;font-size:0.95rem;}
+
+  /* Hero banner (custom image with text baked in) */
+  .hero-banner{position:relative;width:100%;background:linear-gradient(135deg,var(--red),var(--red-dark));}
+  .hero-banner img{display:block;width:100%;height:auto;max-height:520px;object-fit:cover;}
+  .hero-banner.img-failed img{display:none;}
+  .hero-fallback{display:none;color:#fff;padding:40px 20px;text-align:center;}
+  .hero-banner.img-failed .hero-fallback{display:block;}
+  .hero-fallback .badge{display:inline-block;background:rgba(255,255,255,0.2);padding:5px 14px;border-radius:20px;font-size:0.78rem;font-weight:600;letter-spacing:0.5px;margin-bottom:14px;}
+  .hero-fallback h1{font-size:1.9rem;font-weight:800;line-height:1.2;margin-bottom:8px;}
+  .hero-fallback .sponsor{font-size:0.95rem;opacity:0.95;margin-bottom:16px;font-weight:500;}
+  .hero-fallback .theme{font-size:1.05rem;font-weight:600;background:rgba(0,0,0,0.15);display:inline-block;padding:10px 18px;border-radius:10px;margin-bottom:20px;}
+  .hero-fallback .prize{font-size:2.4rem;font-weight:800;margin:6px 0;}
+  .hero-fallback .prize small{display:block;font-size:0.85rem;font-weight:500;opacity:0.9;letter-spacing:1px;}
+  .hero-btns{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;padding:18px 20px;background:linear-gradient(135deg,var(--red),var(--red-dark));}
+
+  /* Old hero (kept for reference, unused) */
+  .hero{background:linear-gradient(135deg,var(--red),var(--red-dark));color:#fff;padding:40px 20px;text-align:center;}
+  .hero .badge{display:inline-block;background:rgba(255,255,255,0.2);padding:5px 14px;border-radius:20px;font-size:0.78rem;font-weight:600;letter-spacing:0.5px;margin-bottom:14px;}
+  .hero h1{font-size:1.9rem;font-weight:800;line-height:1.2;margin-bottom:8px;}
+  .hero .sponsor{font-size:0.95rem;opacity:0.95;margin-bottom:16px;font-weight:500;}
+  .hero .theme{font-size:1.05rem;font-weight:600;background:rgba(0,0,0,0.15);display:inline-block;padding:10px 18px;border-radius:10px;margin-bottom:20px;}
+  .hero .prize{font-size:2.4rem;font-weight:800;margin:6px 0;}
+  .hero .prize small{display:block;font-size:0.85rem;font-weight:500;opacity:0.9;letter-spacing:1px;}
+  .btn{padding:13px 26px;border-radius:30px;font-weight:700;font-size:1rem;text-decoration:none;border:none;cursor:pointer;display:inline-block;}
+  .btn-white{background:#fff;color:var(--red);}
+  .btn-outline{background:transparent;color:#fff;border:2px solid #fff;}
+
+  .wrap{max-width:1100px;margin:0 auto;padding:24px 16px;}
+
+  /* Info cards */
+  .info-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:14px;margin-bottom:30px;}
+  .info-card{background:#fff;border-radius:12px;padding:18px;text-align:center;box-shadow:0 2px 8px rgba(0,0,0,0.06);}
+  body.dark-mode .info-card{background:#242526;}
+  .info-card .icon{font-size:1.8rem;margin-bottom:6px;}
+  .info-card h4{font-size:0.78rem;text-transform:uppercase;color:#999;letter-spacing:0.5px;margin-bottom:6px;}
+  .info-card p{font-size:1rem;font-weight:600;}
+
+  .section-title{font-size:1.5rem;font-weight:800;margin:10px 0 18px;display:flex;align-items:center;gap:10px;}
+  .section-title::before{content:'';width:5px;height:26px;background:var(--red);border-radius:3px;}
+
+  .rules-box{background:#fff;border-radius:12px;padding:20px;margin-bottom:30px;box-shadow:0 2px 8px rgba(0,0,0,0.06);line-height:1.7;}
+  body.dark-mode .rules-box{background:#242526;}
+  .rules-box .contact{margin-top:14px;padding-top:14px;border-top:1px solid #eee;font-size:0.92rem;}
+  body.dark-mode .rules-box .contact{border-color:#3a3b3c;}
+
+  /* Gallery */
+  .gallery-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:18px;}
+  .entry-card{background:#fff;border-radius:14px;overflow:hidden;box-shadow:0 3px 10px rgba(0,0,0,0.08);display:flex;flex-direction:column;position:relative;transition:transform 0.15s;}
+  .entry-card:hover{transform:translateY(-3px);}
+  body.dark-mode .entry-card{background:#242526;}
+  .entry-card .rank-badge{position:absolute;top:10px;left:10px;background:var(--red);color:#fff;font-weight:800;font-size:0.85rem;width:34px;height:34px;border-radius:50%;display:flex;align-items:center;justify-content:center;z-index:2;box-shadow:0 2px 6px rgba(0,0,0,0.3);}
+  .entry-card .rank-badge.gold{background:#f5c518;color:#222;}
+  .entry-card .rank-badge.silver{background:#c0c0c0;color:#222;}
+  .entry-card .rank-badge.bronze{background:#cd7f32;}
+  .entry-media{width:100%;height:170px;object-fit:cover;background:#000;display:block;}
+  .entry-media-placeholder{width:100%;height:170px;background:linear-gradient(135deg,#c41e3a,#a01830);display:flex;align-items:center;justify-content:center;color:#fff;font-size:2rem;}
+  .entry-body{padding:14px;display:flex;flex-direction:column;flex-grow:1;}
+  .entry-body h3{font-size:1.02rem;line-height:1.3;margin-bottom:6px;}
+  .entry-body .excerpt{font-size:0.85rem;color:#666;flex-grow:1;margin-bottom:10px;line-height:1.45;}
+  body.dark-mode .entry-body .excerpt{color:#b0b3b8;}
+  .entry-author{font-size:0.8rem;color:#888;margin-bottom:10px;display:flex;align-items:center;gap:6px;}
+  .entry-author img{width:22px;height:22px;border-radius:50%;object-fit:cover;}
+  .entry-stats{display:flex;gap:14px;padding-top:10px;border-top:1px solid #eee;font-size:0.82rem;color:#555;}
+  body.dark-mode .entry-stats{border-color:#3a3b3c;color:#b0b3b8;}
+  .entry-stats .stat{display:flex;align-items:center;gap:4px;}
+  .entry-stats .vote-btn{cursor:pointer;border:none;background:none;font-size:0.82rem;color:#555;display:flex;align-items:center;gap:4px;padding:0;}
+  body.dark-mode .entry-stats .vote-btn{color:#b0b3b8;}
+  .entry-stats .vote-btn.voted{color:var(--red);font-weight:600;}
+  .entry-link{position:absolute;inset:0;z-index:1;}
+  .entry-stats, .rank-badge{z-index:2;position:relative;}
+
+  .sort-bar{display:flex;gap:10px;margin-bottom:18px;flex-wrap:wrap;align-items:center;}
+  .sort-bar span{font-size:0.85rem;color:#999;}
+  .sort-btn{padding:7px 16px;border-radius:20px;border:1px solid #ddd;background:#fff;cursor:pointer;font-size:0.85rem;font-weight:500;}
+  body.dark-mode .sort-btn{background:#3a3b3c;border-color:#4e4f50;color:#f5f6f7;}
+  .sort-btn.active{background:var(--red);color:#fff;border-color:var(--red);}
+
+  .loading{text-align:center;padding:40px;color:#999;}
+  .live-dot{display:inline-block;width:8px;height:8px;background:#22c55e;border-radius:50%;margin-right:5px;animation:pulse 1.5s infinite;}
+  @keyframes pulse{0%,100%{opacity:1;}50%{opacity:0.3;}}
+</style>
+</head>
+<body>
+<div class="topbar">
+  <a href="index.html" class="brand"><img src="assets/logo.png" alt="logo"><span>खबर दार्जिलिंग</span></a>
+  <a href="index.html" class="home">← Home</a>
+</div>
+
+<div class="hero-banner">
+  <img src="assets/contest-hero.jpg" alt="Khabar Darjeeling Story Contest 2026 — ₹10,000 Prize Pool, sponsored by Kaim Jitwal. Theme: Life After Election. Deadline July 31."
+       onerror="this.closest('.hero-banner').classList.add('img-failed')">
+  <!-- Fallback hero (shows only if image fails to load) -->
+  <div class="hero-fallback">
+    <div class="badge">✍️ WRITING CONTEST</div>
+    <h1>Khabar Darjeeling Story Contest 2026</h1>
+    <div class="sponsor">Sponsored by <strong>Kaim Jitwal</strong></div>
+    <div class="theme">📖 Theme: Stories about Life After Election</div>
+    <div class="prize">₹10,000<small>TOTAL PRIZE POOL</small></div>
+  </div>
+  <div class="hero-btns">
+    <a href="post.html" class="btn btn-white">✍️ Submit Your Story</a>
+    <a href="#gallery" class="btn btn-outline">📚 View Entries</a>
+  </div>
+</div>
+
+<div class="wrap">
+  <div class="info-grid">
+    <div class="info-card"><div class="icon">🏆</div><h4>Prize Pool</h4><p>₹10,000</p></div>
+    <div class="info-card"><div class="icon">📅</div><h4>Deadline</h4><p>July 31, 2026</p></div>
+    <div class="info-card"><div class="icon">🎉</div><h4>Results</h4><p>Aug 15, 2026</p></div>
+    <div class="info-card"><div class="icon">📝</div><h4>Entry Rules</h4><p>No Limits!</p></div>
+  </div>
+
+  <h2 class="section-title">How to Enter</h2>
+  <div class="rules-box">
+    <p><strong>Theme:</strong> Write a story about <strong>life after the election</strong> — your perspective, experiences, observations, or imagination.</p>
+    <p style="margin-top:10px;"><strong>Rules:</strong> There are no rules and no limitations! Anyone can post. Write freely and share your story.</p>
+    <p style="margin-top:10px;"><strong>How to submit:</strong> Create your profile, then tap <strong>"Submit Your Story"</strong>, write your entry, and check the <strong>"Contest Entry"</strong> box before posting.</p>
+    <p style="margin-top:10px;"><strong>Winners:</strong> Announced on <strong>August 15, 2026</strong> on our homepage.</p>
+    <div class="contact">
+      <strong>📞 Questions?</strong> Call 7557061046 / 7583914380 &nbsp;|&nbsp; ✉️ <a href="mailto:nowanad@gmail.com" style="color:var(--red);">nowanad@gmail.com</a>
+    </div>
+  </div>
+
+  <h2 class="section-title" id="gallery"><span class="live-dot"></span>Live Entries &amp; Ranking</h2>
+  <div class="sort-bar">
+    <span>Sort by:</span>
+    <button class="sort-btn active" data-sort="votes" onclick="setSort('votes',this)">❤️ Most Votes</button>
+    <button class="sort-btn" data-sort="views" onclick="setSort('views',this)">👁️ Most Views</button>
+    <button class="sort-btn" data-sort="newest" onclick="setSort('newest',this)">🆕 Newest</button>
+  </div>
+  <div id="galleryGrid" class="gallery-grid"><div class="loading">Loading entries…</div></div>
+</div>
+
+<script src="js/appwrite.js?v=132"></script>
+<script>
+  if (localStorage.getItem('theme') === 'dark') document.body.classList.add('dark-mode');
+
+  let currentUser = null;
+  let entries = [];
+  let currentSort = 'votes';
+
+  const esc = t => { const d=document.createElement('div'); d.textContent=t||''; return d.innerHTML; };
+  const truncate = (t,n) => { t=t||''; return t.length>n ? t.slice(0,n).trim()+'…' : t; };
+  const fmtDate = d => new Date(d).toLocaleDateString('en-IN',{day:'numeric',month:'short',year:'numeric'});
+
+  function getLikedLocal(){ try{return JSON.parse(localStorage.getItem('kd_liked')||'{}');}catch{return {};} }
+  function setLikedLocal(o){ localStorage.setItem('kd_liked', JSON.stringify(o)); }
+
+  async function init(){
+    try { currentUser = await window.account.get(); } catch { currentUser = null; }
+    await loadEntries();
+  }
+
+  async function loadEntries(){
+    const grid = document.getElementById('galleryGrid');
+    try {
+      // Fetch contest entries (isContestEntry = true), published
+      const res = await window.databases.listDocuments(
+        window.APPWRITE_DB_ID, window.COL_ARTICLES,
+        [ window.Query.equal('isContestEntry', true),
+          window.Query.equal('status', 'published'),
+          window.Query.orderDesc('$createdAt'),
+          window.Query.limit(100) ]
+      );
+      entries = res.documents;
+
+      if (!entries.length) {
+        grid.innerHTML = '<p class="loading">No entries yet — be the first to <a href="post.html" style="color:var(--red);">submit your story</a>!</p>';
+        return;
+      }
+
+      // Load live vote counts for each entry (from likes collection)
+      await Promise.all(entries.map(async e => {
+        try {
+          const likes = await window.databases.listDocuments(
+            window.APPWRITE_DB_ID, window.COL_LIKES,
+            [ window.Query.equal('articleId', e.$id), window.Query.limit(1) ]
+          );
+          e._votes = likes.total != null ? likes.total : (likes.documents ? likes.documents.length : 0);
+        } catch { e._votes = 0; }
+        try {
+          const comments = await window.databases.listDocuments(
+            window.APPWRITE_DB_ID, window.COL_COMMENTS,
+            [ window.Query.equal('articleId', e.$id), window.Query.limit(1) ]
+          );
+          e._comments = comments.total != null ? comments.total : 0;
+        } catch { e._comments = 0; }
+      }));
+
+      renderGallery();
+    } catch(err) {
+      console.error('Contest load error:', err);
+      // If the field doesn't exist yet, give a helpful message
+      grid.innerHTML = '<p class="loading">Could not load entries. If you just set up the contest, make sure the <strong>isContestEntry</strong> field exists in the articles collection.</p>';
+    }
+  }
+
+  function sortEntries(){
+    const arr = [...entries];
+    if (currentSort === 'votes')   arr.sort((a,b)=>(b._votes||0)-(a._votes||0));
+    if (currentSort === 'views')   arr.sort((a,b)=>(b.views||0)-(a.views||0));
+    if (currentSort === 'newest')  arr.sort((a,b)=> new Date(b.$createdAt)-new Date(a.$createdAt));
+    return arr;
+  }
+
+  function mediaForEntry(e){
+    if (e.youtube_id) return `<img class="entry-media" src="https://img.youtube.com/vi/${esc(e.youtube_id)}/hqdefault.jpg" alt="${esc(e.title)}" onerror="this.src='https://i.ytimg.com/vi/${esc(e.youtube_id)}/hqdefault.jpg'">`;
+    if (e.imageFileId && !['Text','null','undefined',''].includes(String(e.imageFileId))) {
+      const src = String(e.imageFileId).startsWith('http') ? e.imageFileId
+        : `${window.ENDPOINT}/storage/buckets/${window.APPWRITE_BUCKET_ID}/files/${e.imageFileId}/view?project=${window.PROJECT}`;
+      return `<img class="entry-media" src="${src}" alt="${esc(e.title)}" onerror="this.parentElement.querySelector('.entry-media-fallback')?.style.removeProperty('display'); this.style.display='none'">`;
+    }
+    return `<div class="entry-media-placeholder">📖</div>`;
+  }
+
+  function renderGallery(){
+    const grid = document.getElementById('galleryGrid');
+    const arr = sortEntries();
+    grid.innerHTML = arr.map((e,i) => {
+      const liked = !!getLikedLocal()[e.$id];
+      // Rank badge only meaningful when sorting by votes
+      let rankClass = '';
+      if (currentSort === 'votes') {
+        if (i===0) rankClass='gold'; else if (i===1) rankClass='silver'; else if (i===2) rankClass='bronze';
+      }
+      const rankBadge = currentSort === 'votes' ? `<div class="rank-badge ${rankClass}">${i+1}</div>` : '';
+      const author = esc(e.submitterName || e.authorName || 'Anonymous');
+      const avatar = (e.submitterAvatar && e.submitterAvatar !== 'null')
+        ? `<img src="${esc(e.submitterAvatar)}" alt="" onerror="this.style.display='none'">` : '👤';
+      return `
+        <div class="entry-card">
+          ${rankBadge}
+          <a href="article.html?id=${e.$id}" class="entry-link" aria-label="${esc(e.title)}"></a>
+          ${mediaForEntry(e)}
+          <div class="entry-body">
+            <h3>${esc(e.title)}</h3>
+            <p class="excerpt">${truncate(e.content,110)}</p>
+            <div class="entry-author">${avatar} ${author} • ${fmtDate(e.$createdAt)}</div>
+            <div class="entry-stats">
+              <button class="vote-btn ${liked?'voted':''}" onclick="vote(event,'${e.$id}',this)">
+                ${liked?'❤️':'🤍'} <span class="vcount">${e._votes||0}</span>
+              </button>
+              <span class="stat">👁️ ${(e.views||0).toLocaleString()}</span>
+              <span class="stat">💬 ${e._comments||0}</span>
+            </div>
+          </div>
+        </div>`;
+    }).join('');
+  }
+
+  window.setSort = function(sort, btn){
+    currentSort = sort;
+    document.querySelectorAll('.sort-btn').forEach(b=>b.classList.remove('active'));
+    btn.classList.add('active');
+    renderGallery();
+  };
+
+  // Vote = like (reuses likes collection, one row per user per entry)
+  window.vote = async function(e, id, btn){
+    e.preventDefault(); e.stopPropagation();
+    if (!currentUser){ if(confirm('Please log in to vote. Go to login?')) location.href='login.html'; return; }
+
+    const liked = getLikedLocal();
+    const isLiked = !!liked[id];
+    const entry = entries.find(x=>x.$id===id);
+    const countEl = btn.querySelector('.vcount');
+
+    // optimistic
+    if (isLiked){ btn.classList.remove('voted'); btn.childNodes[0].textContent='🤍 '; if(entry) entry._votes=Math.max(0,(entry._votes||1)-1); }
+    else { btn.classList.add('voted'); btn.childNodes[0].textContent='❤️ '; if(entry) entry._votes=(entry._votes||0)+1; }
+    if(countEl && entry) countEl.textContent = entry._votes;
+
+    try {
+      if (isLiked){
+        const ex = await window.databases.listDocuments(window.APPWRITE_DB_ID, window.COL_LIKES,
+          [ window.Query.equal('articleId',id), window.Query.equal('userId',currentUser.$id), window.Query.limit(1) ]);
+        if (ex.documents.length) await window.databases.deleteDocument(window.APPWRITE_DB_ID, window.COL_LIKES, ex.documents[0].$id);
+        delete liked[id];
+      } else {
+        await window.databases.createDocument(window.APPWRITE_DB_ID, window.COL_LIKES, 'unique()',
+          { articleId:id, userId:currentUser.$id });
+        liked[id]=true;
+      }
+      setLikedLocal(liked);
+      // Re-rank live if sorting by votes
+      if (currentSort==='votes') renderGallery();
+    } catch(err){
+      console.warn('Vote failed:', err);
+    }
+  };
+
+  init();
+</script>
+</body>
+</html>
