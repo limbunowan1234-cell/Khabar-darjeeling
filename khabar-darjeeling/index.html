@@ -338,7 +338,7 @@
         }
     </script>
 
-    <script src="js/appwrite.js?v=132"></script>
+    <script src="js/appwrite.js?v=133"></script>
     <script src="https://cdn.jsdelivr.net/npm/eruda"></script>
     <script>try { if (typeof eruda !== 'undefined') eruda.init(); } catch(e) {}</script>
 
@@ -742,7 +742,7 @@
         let gridShownCount = 0;
         const GRID_BATCH = 8;
 
-        function showMoreNews() {
+        window.showMoreNews = function showMoreNews() {
             const el = document.getElementById('newsGrid');
             if (!el) return;
             if (!gridAllArticles.length) {
@@ -754,7 +754,7 @@
             el.insertAdjacentHTML('beforeend', next.map(newsCardHtml).join(''));
             gridShownCount += next.length;
             updateLoadMoreBtn();
-        }
+        };
 
         function updateLoadMoreBtn() {
             const btn = document.getElementById('loadMoreBtn');
