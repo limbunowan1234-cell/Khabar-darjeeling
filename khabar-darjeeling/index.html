@@ -16,8 +16,8 @@
     <link rel="apple-touch-icon" href="assets/logo.png">
     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8402633423386929" crossorigin="anonymous"></script>
     <title>खबर दार्जिलिंग - Your Trusted News Source</title>
-    <link rel="stylesheet" href="css/style.css?v=127">
-    <link rel="stylesheet" href="css/responsive.css?v=127">
+    <link rel="stylesheet" href="css/style.css?v=128">
+    <link rel="stylesheet" href="css/responsive.css?v=128">
     <style>
         #gatekeeperLoader {
             position:fixed;top:0;left:0;width:100vw;height:100vh;
@@ -77,9 +77,11 @@
             border-top:1px solid #eee;font-size:13px;color:#666;
         }
         body.dark-mode .article-author { border-top-color:#333;color:#aaa; }
-        .author-avatar,.author-initials { width:28px;height:28px;border-radius:50%;flex-shrink:0; }
+        .author-avatar,.author-initials { width:28px !important;height:28px !important;border-radius:50%;flex-shrink:0;max-width:28px !important;max-height:28px !important; }
         .author-avatar { object-fit:cover;border:1px solid #ddd; }
         body.dark-mode .author-avatar { border-color:#444; }
+        /* Safety: never let an avatar image inside a card blow up */
+        .article-author img { width:28px !important;height:28px !important;max-width:28px !important;max-height:28px !important;object-fit:cover;border-radius:50%; }
         .author-initials {
             background:#c41e3a;color:#fff;display:flex;
             align-items:center;justify-content:center;
