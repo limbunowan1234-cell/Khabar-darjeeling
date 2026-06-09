@@ -385,6 +385,11 @@
                         }
                     );
                     showStatus('✓ Article published! Redirecting...', 'success');
+                    // Notify admin Discord channel (non-blocking)
+                    notifyDiscord({
+                        title, author: currentUser.name, location: location_, category,
+                        isContestEntry, isBreaking, isFeatured, articleId: doc.$id
+                    });
                     setTimeout(() => location.href = `article.html?id=${doc.$id}`, 1200);
                 }
             } catch (error) {
@@ -400,6 +405,39 @@
             el.textContent = m;
             el.className = `status-message ${t}`;
             el.style.display = 'block';
+        }
+
+        // ── Discord admin notification ──
+        const DISCORD_WEBHOOK = 'https://discord.com/api/webhooks/1511823519166759023/gaOpmYw3IqkOMdLg3uIwrNASCSFYQrDSJQ-ZFcVQLl6A6fseFFKrmNo350qHkiZeGx7W';
+        async function notifyDiscord(info) {
+            if (!DISCORD_WEBHOOK || DISCORD_WEBHOOK.includes('PASTE_')) return;
+            const yn = b => b ? '✅ Yes' : '—';
+            const articleUrl = `${location.origin}/article.html?id=${info.articleId}`;
+            const embed = {
+                title: '🚨 New Article Submitted for Review!',
+                color: 12852794, // #c41e3a
+                fields: [
+                    { name: '🗞️ Headline',  value: info.title || '—' },
+                    { name: '👤 Author',    value: info.author || '—', inline: true },
+                    { name: '📍 Location',  value: info.location || '—', inline: true },
+                    { name: '📁 Category',  value: info.category || '—', inline: true },
+                    { name: '🏆 Contest Entry', value: yn(info.isContestEntry), inline: true },
+                    { name: '🔥 Breaking',  value: yn(info.isBreaking), inline: true },
+                    { name: '⭐ Featured',   value: yn(info.isFeatured), inline: true },
+                    { name: '🔗 Read',      value: articleUrl }
+                ],
+                footer: { text: 'Khabar Darjeeling Portal Control System' },
+                timestamp: new Date().toISOString()
+            };
+            try {
+                await fetch(DISCORD_WEBHOOK, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ embeds: [embed] })
+                });
+            } catch (e) {
+                console.warn('Discord notify failed (non-critical):', e);
+            }
         }
         function getInitials(name) {
             if (!name) return '?';
