@@ -48,6 +48,10 @@
         .badge.published { background:#e8f5e9;color:#2e7d32; }
         .badge.breaking { background:#ffebee;color:var(--brand-red); }
         .badge.featured { background:#fff3e0;color:#e65100; }
+        .badge.contest { background:#fff8e1;color:#b8860b; }
+        .badge.winner { background:#fde7f3;color:#c2185b; }
+        .btn-winner { background:#fff8e1;color:#b8860b; }
+        .btn-winner:hover { background:#ffecb3; }
         .actions { display:flex;gap:8px;flex-wrap:wrap; }
         .btn-action { padding:6px 12px;border:none;border-radius:4px;font-size:12px;font-weight:600;cursor:pointer;transition:all 0.2s; }
         .btn-edit { background:#e3f2fd;color:#1565c0; }
@@ -111,6 +115,7 @@
                 <div class="stat-card"><div class="stat-number" id="totalViews">0</div><div class="stat-label">Total Views</div></div>
                 <div class="stat-card"><div class="stat-number" id="breakingCount">0</div><div class="stat-label">Breaking News</div></div>
                 <div class="stat-card"><div class="stat-number" id="featuredCount">0</div><div class="stat-label">Featured</div></div>
+                <div class="stat-card" style="border-left-color:#f5c518;"><div class="stat-number" id="contestCount" style="color:#b8860b;">0</div><div class="stat-label">🏆 Contest Entries</div></div>
             </div>
         </div>
 
@@ -118,6 +123,7 @@
             <button class="tab active" onclick="switchTab('all', event)">All Articles</button>
             <button class="tab" onclick="switchTab('breaking', event)">Breaking News</button>
             <button class="tab" onclick="switchTab('featured', event)">Featured</button>
+            <button class="tab" onclick="switchTab('contest', event)">🏆 Contest</button>
         </div>
 
         <div class="search-bar">
@@ -136,7 +142,7 @@
         <div class="empty-state" id="emptyState" style="display:none;"><p>No articles found.</p></div>
     </div>
 
-    <script src="js/appwrite.js?v=129"></script>
+    <script src="js/appwrite.js?v=132"></script>
     <script>
         let currentUser = null;
         let allPosts = [];
@@ -180,6 +186,7 @@
                 allPosts = response.documents;
                 updateStats();
                 renderPosts();
+                loadContestVotes();  // fetch vote counts for contest entries in background
             } catch (error) {
                 console.error('Load posts error:', error);
                 document.getElementById('postsTableBody').innerHTML = '<div class="empty-state"><p style="color:red;">Failed to load articles</p></div>';
@@ -192,6 +199,7 @@
             document.getElementById('totalViews').textContent = totalViews.toLocaleString();
             document.getElementById('breakingCount').textContent = allPosts.filter(p => p.isBreaking).length;
             document.getElementById('featuredCount').textContent = allPosts.filter(p => p.isFeatured).length;
+            document.getElementById('contestCount').textContent = allPosts.filter(p => p.isContestEntry).length;
         }
 
         function renderPosts() {
@@ -200,30 +208,51 @@
             let filtered = allPosts;
             if (currentTab === 'breaking') filtered = allPosts.filter(p => p.isBreaking);
             if (currentTab === 'featured') filtered = allPosts.filter(p => p.isFeatured);
+            if (currentTab === 'contest') {
+                filtered = allPosts.filter(p => p.isContestEntry)
+                                   .sort((a,b) => (b._votes||0) - (a._votes||0));
+            }
             const term = document.getElementById('searchInput').value.toLowerCase();
             if (term) filtered = filtered.filter(p => p.title.toLowerCase().includes(term));
 
             if (!filtered.length) { tbody.innerHTML = ''; emptyState.style.display = 'block'; return; }
             emptyState.style.display = 'none';
 
-            tbody.innerHTML = filtered.map(post => {
+            tbody.innerHTML = filtered.map((post, idx) => {
                 const imageUrl = post.imageFileId
                     ? window.storage.getFileViewUrl(window.APPWRITE_BUCKET_ID, post.imageFileId)
                     : 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="60" height="60"%3E%3Crect fill="%23ddd" width="60" height="60"/%3E%3C/svg%3E';
                 const badges = [];
                 if (post.isBreaking) badges.push('<span class="badge breaking">BREAKING</span>');
                 if (post.isFeatured) badges.push('<span class="badge featured">FEATURED</span>');
+                if (post.isContestEntry) badges.push('<span class="badge contest">🏆 CONTEST</span>');
+                if (post.isWinner) badges.push('<span class="badge winner">👑 WINNER</span>');
+
+                // On contest tab, show rank + votes
+                let contestInfo = '';
+                if (currentTab === 'contest') {
+                    const rankMedal = idx===0?'🥇':idx===1?'🥈':idx===2?'🥉':`#${idx+1}`;
+                    contestInfo = `<div class="post-meta" style="margin-top:4px;font-weight:600;color:#c41e3a;">${rankMedal} • ❤️ ${post._votes != null ? post._votes : '…'} votes</div>`;
+                }
+
+                // Winner toggle button only meaningful for contest entries
+                const winnerBtn = post.isContestEntry
+                    ? `<button class="btn-action btn-winner" onclick="toggleWinner('${post.$id}', ${!post.isWinner})">${post.isWinner ? '★ Unset Winner' : '☆ Mark Winner'}</button>`
+                    : '';
+
                 return `
                     <div class="table-row">
                         <div><img src="${imageUrl}" class="post-thumb" alt="${escapeHtml(post.title)}" onerror="this.style.display='none'"></div>
                         <div>
                             <div class="post-title">${escapeHtml(post.title)}</div>
                             <div class="post-meta">By ${escapeHtml(post.submitterName || 'Unknown')} • ${formatDate(post.$createdAt)}</div>
+                            ${contestInfo}
                             ${badges.join(' ')}
                         </div>
                         <div>${escapeHtml(post.category || 'General')}</div>
                         <div>${(post.views || 0).toLocaleString()}</div>
                         <div class="actions">
+                            ${winnerBtn}
                             <button class="btn-action btn-feature" onclick="toggleFeatured('${post.$id}', ${!post.isFeatured})">${post.isFeatured ? 'Unfeature' : 'Feature'}</button>
                             <button class="btn-action btn-edit" onclick="editPost('${post.$id}')">Edit</button>
                             <button class="btn-action btn-delete" onclick="deletePost('${post.$id}', '${escapeHtml(post.title).replace(/'/g,"\\'")}')">Delete</button>
@@ -245,6 +274,36 @@
                 await window.databases.updateDocument(window.APPWRITE_DB_ID, window.COL_ARTICLES, postId, { isFeatured: newValue });
                 await loadPosts();
             } catch (error) { alert('Failed to update: ' + error.message); }
+        }
+
+        // Mark / unmark an entry as contest winner
+        async function toggleWinner(postId, newValue) {
+            try {
+                await window.databases.updateDocument(window.APPWRITE_DB_ID, window.COL_ARTICLES, postId, { isWinner: newValue });
+                // update locally without full reload
+                const p = allPosts.find(x => x.$id === postId);
+                if (p) p.isWinner = newValue;
+                renderPosts();
+            } catch (error) {
+                alert('Failed to update winner. Make sure the "isWinner" field exists in Appwrite.\n\n' + error.message);
+            }
+        }
+
+        // Fetch vote counts for all contest entries, then refresh the view
+        async function loadContestVotes() {
+            const entries = allPosts.filter(p => p.isContestEntry);
+            if (!entries.length) return;
+            await Promise.all(entries.map(async e => {
+                try {
+                    const likes = await window.databases.listDocuments(
+                        window.APPWRITE_DB_ID, window.COL_LIKES,
+                        [ window.Query.equal('articleId', e.$id), window.Query.limit(1) ]
+                    );
+                    e._votes = likes.total != null ? likes.total : 0;
+                } catch { e._votes = 0; }
+            }));
+            // re-render if currently on contest tab (so ranks/votes show)
+            if (currentTab === 'contest') renderPosts();
         }
         function editPost(postId) { location.href = `post.html?edit=${postId}`; }
         async function deletePost(postId, title) {
