@@ -375,17 +375,15 @@
             articleId,
             userId:      currentUser.$id,
             authorName:  displayName,
-            userNAme:    displayName,           // your schema has this dup field
             commentText: text,
-            avatarUrl:   avatarUrl || 'null',
             createdAt:   new Date().toISOString()
           }
         );
         input.value = '';
         loadComments();
       } catch(e) {
-        console.error('Post comment failed:', e);
-        alert('Error posting comment. Please try again.');
+        console.error('Post comment failed:', e, e && e.message, e && e.code);
+        alert('Error posting comment: ' + ((e && e.message) || 'unknown error'));
       }
       btn.disabled = false;
     };
