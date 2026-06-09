@@ -38,6 +38,7 @@
         .btn { padding:10px 20px;border-radius:6px;font-weight:600;font-size:14px;cursor:pointer;border:none;transition:all 0.2s;text-decoration:none;display:inline-block; }
         .btn-primary { background:var(--brand-red);color:#fff; }
         .btn-primary:hover { background:var(--brand-red-dark); }
+        .btn-primary:disabled { background:#ccc;cursor:not-allowed; }
         .btn-secondary { background:#e4e6eb;color:var(--text-dark); }
         .btn-secondary:hover { background:#d8dadf; }
         .modal { display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.5);z-index:1000;align-items:center;justify-content:center; }
@@ -51,7 +52,10 @@
         .form-group input, .form-group textarea { width:100%;padding:12px;border:1px solid var(--border-color);border-radius:6px;font-size:14px;font-family:inherit; }
         .form-group textarea { min-height:80px;resize:vertical; }
         .form-group input:focus, .form-group textarea:focus { outline:none;border-color:var(--brand-red); }
-        .avatar-preview { width:100px;height:100px;border-radius:50%;object-fit:cover;margin:12px auto;display:block; }
+        .avatar-preview { width:100px;height:100px;border-radius:50%;object-fit:cover;margin:12px auto;display:block;cursor:pointer;border:2px solid var(--border-color);transition:border-color 0.2s; }
+        .avatar-preview:hover { border-color:var(--brand-red); }
+        .upload-hint { font-size:12px;color:#606770;margin-top:8px;text-align:center; }
+        .upload-status { margin-top:8px;font-size:13px;text-align:center;min-height:20px; }
         .posts-section { background:#fff;border-radius:8px;padding:24px;margin-bottom:24px;box-shadow:0 2px 4px rgba(0,0,0,0.1); }
         .section-title { font-size:20px;margin-bottom:20px;padding-bottom:12px;border-bottom:2px solid var(--brand-red); }
         .posts-grid { display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:20px; }
@@ -138,8 +142,10 @@
             <form onsubmit="saveProfile(event)">
                 <div class="form-group">
                     <label>Profile Picture</label>
-                    <img id="avatarPreview" class="avatar-preview" src="" alt="Preview">
-                    <input type="file" id="avatarInput" accept="image/*" onchange="previewAvatar(event)">
+                    <img id="avatarPreview" class="avatar-preview" src="" alt="Preview" onclick="document.getElementById('avatarInput').click()">
+                    <p class="upload-hint">👆 Click image to change</p>
+                    <input type="file" id="avatarInput" accept="image/*" onchange="previewAvatar(event)" style="display:none;">
+                    <div class="upload-status" id="uploadStatus"></div>
                 </div>
                 <div class="form-group">
                     <label>Display Name</label>
@@ -158,8 +164,9 @@
     <script>
         let currentUser = null;
         let profileUserId = null;
-        let profileData = null;   // row from profiles collection (or synthesized)
+        let profileData = null;
         let isOwnProfile = false;
+        let selectedAvatarFile = null;
 
         if (localStorage.getItem('theme') === 'dark') {
             document.body.classList.add('dark-mode');
@@ -196,12 +203,10 @@
         }
 
         async function loadProfile() {
-            // Read from profiles collection
             const prof = await window.getProfile(profileUserId);
             if (prof) {
                 profileData = prof;
             } else if (isOwnProfile && currentUser) {
-                // No profile row yet — synthesize from account; create on first save
                 profileData = {
                     userId: currentUser.$id,
                     displayName: currentUser.name,
@@ -235,7 +240,7 @@
 
             const actions = document.getElementById('profileActions');
             if (isOwnProfile) {
-                actions.innerHTML = `<button class="btn btn-primary" onclick="openEditModal()">Edit Profile</button>`;
+                actions.innerHTML = `<button type="button" class="btn btn-primary" onclick="openEditModal()">Edit Profile</button>`;
             } else {
                 actions.innerHTML = '';
             }
@@ -280,12 +285,10 @@
             }
         }
 
-        // Compute this user's BEST contest rank and show a badge.
         async function loadContestRank() {
             const badges = document.getElementById('profileBadges');
             if (!badges) return;
             try {
-                // 1. Get all published contest entries
                 const res = await window.databases.listDocuments(
                     window.APPWRITE_DB_ID, window.COL_ARTICLES,
                     [ window.Query.equal('isContestEntry', true),
@@ -293,13 +296,11 @@
                       window.Query.limit(100) ]
                 );
                 const entries = res.documents || [];
-                if (!entries.length) return;  // no contest running / no entries
+                if (!entries.length) return;
 
-                // Does this user even have an entry? If not, no badge.
                 const userHasEntry = entries.some(e => e.submitterId === profileUserId);
                 if (!userHasEntry) return;
 
-                // 2. Count votes for each entry
                 await Promise.all(entries.map(async e => {
                     try {
                         const likes = await window.databases.listDocuments(
@@ -310,10 +311,8 @@
                     } catch { e._votes = 0; }
                 }));
 
-                // 3. Rank all entries by votes (desc)
                 entries.sort((a, b) => (b._votes || 0) - (a._votes || 0));
 
-                // 4. Find this user's best (highest) position
                 let bestRank = Infinity, bestVotes = 0;
                 entries.forEach((e, i) => {
                     if (e.submitterId === profileUserId && (i + 1) < bestRank) {
@@ -323,7 +322,6 @@
                 });
                 if (bestRank === Infinity) return;
 
-                // 5. Show the badge
                 const medal = bestRank === 1 ? '🥇' : bestRank === 2 ? '🥈' : bestRank === 3 ? '🥉' : '🏆';
                 const rankColor = bestRank <= 3 ? '#c41e3a' : '#666';
                 badges.innerHTML = `
@@ -336,43 +334,88 @@
                     </a>`;
             } catch (err) {
                 console.warn('Contest rank skipped:', err.message);
-                // If isContestEntry field doesn't exist yet, just show nothing.
             }
         }
 
         function openEditModal() {
+            selectedAvatarFile = null;
             document.getElementById('editName').value = profileData.displayName || profileData.userName || '';
             document.getElementById('editBio').value = profileData.bio || '';
             const a = (profileData.avatarUrl && profileData.avatarUrl !== 'null') ? profileData.avatarUrl : '';
             document.getElementById('avatarPreview').src = a || 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="100" height="100"%3E%3Crect fill="%23ddd" width="100" height="100"/%3E%3C/svg%3E';
+            document.getElementById('uploadStatus').textContent = '';
             document.getElementById('editModal').classList.add('active');
         }
-        function closeEditModal() { document.getElementById('editModal').classList.remove('active'); }
+
+        function closeEditModal() { 
+            document.getElementById('editModal').classList.remove('active'); 
+            selectedAvatarFile = null;
+        }
+
         function previewAvatar(e) {
             const file = e.target.files[0];
-            if (file) {
-                const r = new FileReader();
-                r.onload = ev => document.getElementById('avatarPreview').src = ev.target.result;
-                r.readAsDataURL(file);
+            if (!file) return;
+
+            // Validate file size (max 5MB)
+            if (file.size > 5 * 1024 * 1024) {
+                document.getElementById('uploadStatus').innerHTML = '<span style="color:red;">❌ File too large (max 5MB)</span>';
+                return;
             }
+
+            // Validate file type
+            if (!file.type.startsWith('image/')) {
+                document.getElementById('uploadStatus').innerHTML = '<span style="color:red;">❌ Please select an image file</span>';
+                return;
+            }
+
+            selectedAvatarFile = file;
+            const reader = new FileReader();
+            reader.onload = (ev) => {
+                document.getElementById('avatarPreview').src = ev.target.result;
+                document.getElementById('uploadStatus').innerHTML = '<span style="color:green;">✅ Ready to upload</span>';
+            };
+            reader.onerror = () => {
+                document.getElementById('uploadStatus').innerHTML = '<span style="color:red;">❌ Failed to read file</span>';
+            };
+            reader.readAsDataURL(file);
         }
 
         async function saveProfile(e) {
             e.preventDefault();
             const saveBtn = document.getElementById('saveBtn');
-            saveBtn.disabled = true; saveBtn.textContent = 'Saving...';
+            saveBtn.disabled = true;
+            saveBtn.textContent = 'Saving...';
+
             try {
                 const newName = document.getElementById('editName').value.trim();
                 const newBio = document.getElementById('editBio').value.trim();
-                const avatarFile = document.getElementById('avatarInput').files[0];
-
+                
                 let avatarUrl = profileData.avatarUrl || '';
-                if (avatarFile) {
-                    const upload = await window.storage.createFile(window.APPWRITE_BUCKET_ID, 'unique()', avatarFile);
-                    avatarUrl = window.storage.getFileViewUrl(window.APPWRITE_BUCKET_ID, upload.$id);
+
+                // Upload avatar if selected
+                if (selectedAvatarFile) {
+                    document.getElementById('uploadStatus').innerHTML = '<span style="color:#c41e3a;">⏳ Uploading image...</span>';
+                    
+                    try {
+                        const upload = await window.storage.createFile(
+                            window.APPWRITE_BUCKET_ID,
+                            'unique()',
+                            selectedAvatarFile
+                        );
+                        avatarUrl = window.storage.getFileViewUrl(window.APPWRITE_BUCKET_ID, upload.$id);
+                        document.getElementById('uploadStatus').innerHTML = '<span style="color:green;">✅ Image uploaded</span>';
+                    } catch (uploadErr) {
+                        console.error('Upload error:', uploadErr);
+                        document.getElementById('uploadStatus').innerHTML = `<span style="color:red;">❌ Upload failed: ${uploadErr.message}</span>`;
+                        saveBtn.disabled = false;
+                        saveBtn.textContent = 'Save Changes';
+                        return;
+                    }
                 }
 
-                // Save to profiles collection (create if missing)
+                // Save profile
+                document.getElementById('uploadStatus').innerHTML = '<span style="color:#c41e3a;">⏳ Saving profile...</span>';
+                
                 await window.upsertProfile(currentUser.$id, {
                     displayName: newName,
                     userName: newName,
@@ -380,18 +423,22 @@
                     avatarUrl: avatarUrl || 'null'
                 });
 
-                // Keep account name in sync too
+                // Update account name
                 try { await window.account.updateName(newName); } catch {}
 
                 profileData = await window.getProfile(currentUser.$id);
                 renderProfile();
                 closeEditModal();
-                alert('Profile updated successfully!');
+                document.getElementById('uploadStatus').innerHTML = '';
+                
+                alert('✅ Profile updated successfully!');
             } catch (error) {
                 console.error('Save profile error:', error);
+                document.getElementById('uploadStatus').innerHTML = `<span style="color:red;">❌ Error: ${error.message}</span>`;
                 alert('Failed to update profile: ' + error.message);
             } finally {
-                saveBtn.disabled = false; saveBtn.textContent = 'Save Changes';
+                saveBtn.disabled = false;
+                saveBtn.textContent = 'Save Changes';
             }
         }
 
