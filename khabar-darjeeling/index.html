@@ -80,7 +80,6 @@
         .author-avatar,.author-initials { width:28px !important;height:28px !important;border-radius:50%;flex-shrink:0;max-width:28px !important;max-height:28px !important; }
         .author-avatar { object-fit:cover;border:1px solid #ddd; }
         body.dark-mode .author-avatar { border-color:#444; }
-        /* Safety: never let an avatar image inside a card blow up */
         .article-author img { width:28px !important;height:28px !important;max-width:28px !important;max-height:28px !important;object-fit:cover;border-radius:50%; }
         .author-initials {
             background:#c41e3a;color:#fff;display:flex;
@@ -190,6 +189,38 @@
 
         body.dark-mode { background:#121212;color:#e0e0e0; }
 
+        /* Download APK Banner */
+        .apk-download-banner {
+            background:#fff;
+            padding:14px 0;
+            border-bottom:1px solid #eee;
+        }
+        body.dark-mode .apk-download-banner {
+            background:#1a1a1a;
+            border-bottom-color:#333;
+        }
+        .apk-download-inner {
+            display:flex;align-items:center;gap:16px;flex-wrap:wrap;
+            background:linear-gradient(135deg,#c41e3a,#a01830);
+            border-radius:14px;padding:16px 22px;
+        }
+        .apk-download-icon { font-size:2rem;flex-shrink:0; }
+        .apk-download-text { flex:1;min-width:0; }
+        .apk-download-text strong { color:#fff;font-size:0.98rem;display:block; }
+        .apk-download-text span { color:rgba(255,255,255,0.85);font-size:0.8rem;margin-top:2px;display:block; }
+        .apk-download-btn {
+            background:#fff;color:#c41e3a;
+            padding:10px 20px;border-radius:24px;
+            font-weight:700;font-size:0.88rem;
+            text-decoration:none;white-space:nowrap;
+            flex-shrink:0;transition:opacity 0.2s;
+        }
+        .apk-download-btn:hover { opacity:0.9; }
+        @media (max-width:480px) {
+            .apk-download-inner { padding:14px 16px; }
+            .apk-download-btn { width:100%;text-align:center; }
+        }
+
         @media (max-width:768px) {
             .nav-right { flex-wrap:wrap;gap:8px !important; }
             .search-row input { width:120px;font-size:13px; }
@@ -198,7 +229,6 @@
             #authButtons { flex-wrap:wrap;gap:6px !important; }
             .nav-auth-btn { font-size:12px;padding:5px 10px; }
         }
-        /* Contest strip banner: show image, or fallback box if image missing */
         .contest-strip-banner .contest-strip-fallback { display:none; }
         .contest-strip-banner.img-failed img { display:none; }
         .contest-strip-banner.img-failed .contest-strip-fallback { display:flex; }
@@ -281,6 +311,24 @@
             <div class="hero-buttons">
                 <a href="#latest" class="btn btn-primary">Read Latest</a>
                 <a href="post.html" class="btn btn-secondary">Create Post</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Download APK Banner -->
+    <section class="apk-download-banner">
+        <div class="container">
+            <div class="apk-download-inner">
+                <div class="apk-download-icon">📲</div>
+                <div class="apk-download-text">
+                    <strong>Get the Khabar Darjeeling App</strong>
+                    <span>Download our Android app for faster news • Enable "Install from unknown sources" to install</span>
+                </div>
+                <a href="https://github.com/limbunowan1234-cell/Khabar-darjeeling/releases/download/v1.0.0/KhabarDarjeeling-v1.0.0.2.apk"
+                   class="apk-download-btn"
+                   download="KhabarDarjeeling.apk">
+                    ⬇️ Download APK
+                </a>
             </div>
         </div>
     </section>
@@ -369,7 +417,7 @@
         }
 
         let allArticles = [];
-        let currentUser = null;   // set after auth check
+        let currentUser = null;
 
         function getLikedLocal() { try { return JSON.parse(localStorage.getItem('kd_liked') || '{}'); } catch { return {}; } }
         function setLikedLocal(o) { localStorage.setItem('kd_liked', JSON.stringify(o)); }
@@ -443,21 +491,15 @@
             </div>`;
         }
 
-        /* ── LIKE: writes to the `likes` collection (one row per like) ── */
+        /* ── LIKE ── */
         window.toggleLike = async function(e, articleId, btn) {
             e.preventDefault(); e.stopPropagation();
-
             if (!currentUser) {
-                // Not logged in — send to login
                 if (confirm('Please log in to like articles. Go to login?')) location.href = 'login.html';
                 return;
             }
-
             const liked = getLikedLocal();
             const isLiked = !!liked[articleId];
-            const label = btn.querySelector('.like-label');
-
-            // Optimistic UI flip
             if (isLiked) {
                 btn.classList.remove('liked');
                 btn.innerHTML = `🤍 <span class="like-label">Like</span>`;
@@ -465,10 +507,8 @@
                 btn.classList.add('liked');
                 btn.innerHTML = `❤️ <span class="like-label">Liked</span>`;
             }
-
             try {
                 if (isLiked) {
-                    // Remove like: find the row, delete it
                     const existing = await window.databases.listDocuments(
                         window.APPWRITE_DB_ID, window.COL_LIKES,
                         [ window.Query.equal('articleId', articleId),
@@ -482,7 +522,6 @@
                     }
                     delete liked[articleId];
                 } else {
-                    // Add like
                     await window.databases.createDocument(
                         window.APPWRITE_DB_ID, window.COL_LIKES, 'unique()',
                         { articleId, userId: currentUser.$id }
@@ -492,7 +531,6 @@
                 setLikedLocal(liked);
             } catch(err) {
                 console.warn('Like sync failed:', err);
-                // Revert UI on failure
                 if (isLiked) {
                     btn.classList.add('liked');
                     btn.innerHTML = `❤️ <span class="like-label">Liked</span>`;
@@ -541,7 +579,7 @@
             }));
         }
 
-        /* ── USER SEARCH (by display name from profiles collection) ── */
+        /* ── USER SEARCH ── */
         const userSearchInput   = document.getElementById('userSearch');
         const userSearchResults = document.getElementById('userSearchResults');
         userSearchInput.addEventListener('keydown', e => { if (e.key === 'Enter') doUserSearch(); });
@@ -550,14 +588,10 @@
             const query = userSearchInput.value.trim();
             userSearchResults.style.display = 'none';
             if (query.length < 1) return;
-
             userSearchResults.innerHTML = '<div style="padding:12px;color:#999;font-size:13px;">Searching...</div>';
             userSearchResults.style.display = 'block';
-
             const q = query.toLowerCase();
             let results = [];
-
-            // Strategy 1: fulltext search on displayName (works if index exists)
             try {
                 const res = await window.databases.listDocuments(
                     window.APPWRITE_DB_ID, window.COL_PROFILES,
@@ -567,8 +601,6 @@
             } catch (err) {
                 console.warn('Fulltext search unavailable, using client filter:', err.message);
             }
-
-            // Strategy 2: if no results (or index missing), fetch profiles and filter locally
             if (results.length === 0) {
                 try {
                     const all = await window.databases.listDocuments(
@@ -587,8 +619,6 @@
                     console.warn('Profile list failed:', err2.message);
                 }
             }
-
-            // Strategy 3: also include article authors as a last resort
             if (results.length === 0) {
                 const map = new Map();
                 (allArticles || []).forEach(a => {
@@ -599,7 +629,6 @@
                 });
                 results = Array.from(map.values());
             }
-
             renderUserResults(results);
         };
 
@@ -629,13 +658,11 @@
         async function checkAuthAndRender() {
             const authButtons = document.getElementById('authButtons');
             const mobileAuth  = document.getElementById('mobileAuthContainer');
-
             try {
                 const user    = await window.account.get();
                 currentUser   = user;
                 const profileUrl = `profile.html?userId=${user.$id}`;
                 const isAdmin = user.labels?.includes('admin');
-
                 authButtons.innerHTML = `
                     <a href="${profileUrl}" class="nav-auth-btn btn-profile">👤 Profile</a>
                     ${isAdmin ? `<a href="admin.html" class="nav-auth-btn btn-admin">⚙️ Admin</a>` : ''}
@@ -654,10 +681,8 @@
                 authButtons.innerHTML = `<a href="login.html" class="nav-auth-btn btn-login">Login</a>`;
                 mobileAuth.innerHTML  = `<a href="login.html">Login</a>`;
             }
-
             const loader = document.getElementById('gatekeeperLoader');
             if (loader) { loader.style.opacity = '0'; setTimeout(() => loader.style.display = 'none', 300); }
-
             loadHomepage();
         }
 
@@ -666,7 +691,6 @@
             const db  = window.APPWRITE_DB_ID;
             const col = window.COL_ARTICLES;
             try {
-                // status filter restored — your articles have a `status` field
                 const response = await window.databases.listDocuments(db, col, [
                     window.Query.equal('status', 'published'),
                     window.Query.orderDesc('$createdAt'),
@@ -683,7 +707,7 @@
             }
         }
 
-        /* ── CONTEST ENTRIES (homepage preview) ── */
+        /* ── CONTEST ENTRIES ── */
         async function loadContestEntries() {
             const section = document.getElementById('contestSection');
             const grid = document.getElementById('contestGrid');
@@ -697,8 +721,6 @@
                 ]);
                 let list = res.documents || [];
                 if (!list.length) { section.style.display = 'none'; return; }
-
-                // get live vote counts, then show top 3 by votes
                 await Promise.all(list.map(async e => {
                     try {
                         const likes = await window.databases.listDocuments(window.APPWRITE_DB_ID, window.COL_LIKES,
@@ -708,7 +730,6 @@
                 }));
                 list.sort((a,b)=>(b._votes||0)-(a._votes||0));
                 const top = list.slice(0, 3);
-
                 section.style.display = 'block';
                 grid.innerHTML = top.map((a,i) => {
                     const m = mediaSource(a);
@@ -747,10 +768,9 @@
             renderBreakingTicker(articles);
             renderFeaturedStory(featured);
             document.getElementById('newsGrid').innerHTML = '';
-            showMoreNews();  // shows first batch
+            showMoreNews();
         }
 
-        // Pagination for the Latest News grid
         let gridAllArticles = [];
         let gridShownCount = 0;
         const GRID_BATCH = 8;
@@ -918,34 +938,23 @@
             const closeBtn = document.getElementById('installClose');
             const bannerText = document.getElementById('installBannerText');
             if (!banner) return;
-
-            // Already installed (standalone)? Never show.
             const isStandalone = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone === true;
             if (isStandalone) return;
-
-            // Dismissed recently? Respect that for 7 days.
             const dismissedAt = parseInt(localStorage.getItem('kd_install_dismissed') || '0');
             if (dismissedAt && (Date.now() - dismissedAt) < 7 * 86400000) return;
-
             const isIOS = /iphone|ipad|ipod/i.test(navigator.userAgent);
             let deferredPrompt = null;
-
             function showBanner() { banner.style.display = 'flex'; }
             function hideBanner() { banner.style.display = 'none'; }
-
             closeBtn.addEventListener('click', () => {
                 hideBanner();
                 localStorage.setItem('kd_install_dismissed', String(Date.now()));
             });
-
             if (isIOS) {
-                // iOS Safari can't trigger install — show instructions instead.
                 bannerText.textContent = 'Tap the Share button below, then "Add to Home Screen".';
                 installBtn.style.display = 'none';
-                // Show after a short delay so it's not jarring on load
                 setTimeout(showBanner, 2500);
             } else {
-                // Android/desktop: capture the real install prompt
                 window.addEventListener('beforeinstallprompt', (e) => {
                     e.preventDefault();
                     deferredPrompt = e;
@@ -958,7 +967,6 @@
                     deferredPrompt = null;
                     hideBanner();
                 });
-                // If installed, hide and remember
                 window.addEventListener('appinstalled', () => {
                     hideBanner();
                     localStorage.setItem('kd_install_dismissed', String(Date.now()));
