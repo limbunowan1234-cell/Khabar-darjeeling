@@ -1,0 +1,85 @@
+// Cloudflare Pages Function — Google News Sitemap
+// Served at: https://khabardarjeeling.space/news-sitemap.xml
+//
+// Lists PUBLISHED articles from the last 48 hours (Google News requirement).
+// Uses Appwrite's public REST endpoint (no secret key needed for public reads).
+
+const APPWRITE_ENDPOINT = 'https://nyc.cloud.appwrite.io/v1';
+const PROJECT_ID        = 'khabardarjeeling';
+const DATABASE_ID       = 'Khabar_db';
+const COLLECTION_ID     = 'articles';
+const SITE_URL          = 'https://khabardarjeeling.space';
+const PUBLICATION_NAME  = 'Khabar Darjeeling';
+
+function xmlEscape(s) {
+  return String(s || '')
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&apos;');
+}
+
+export async function onRequest(context) {
+  try {
+    // 48 hours ago, ISO format
+    const cutoff = new Date(Date.now() - 48 * 60 * 60 * 1000).toISOString();
+
+    // Appwrite query params (REST). Filter: status == published AND $createdAt >= cutoff
+    const queries = [
+      JSON.stringify({ method: 'equal', attribute: 'status', values: ['published'] }),
+      JSON.stringify({ method: 'greaterThanEqual', attribute: '$createdAt', values: [cutoff] }),
+      JSON.stringify({ method: 'orderDesc', attribute: '$createdAt' }),
+      JSON.stringify({ method: 'limit', values: [1000] }),
+    ];
+
+    const url = new URL(`${APPWRITE_ENDPOINT}/databases/${DATABASE_ID}/collections/${COLLECTION_ID}/documents`);
+    queries.forEach(q => url.searchParams.append('queries[]', q));
+
+    const res = await fetch(url.toString(), {
+      headers: {
+        'X-Appwrite-Project': PROJECT_ID,
+        'Content-Type': 'application/json',
+      },
+    });
+
+    if (!res.ok) {
+      return new Response(`Appwrite error: ${res.status}`, { status: 502 });
+    }
+
+    const data = await res.json();
+    const articles = data.documents || [];
+
+    const items = articles.map(a => {
+      const pub = new Date(a.publishedAt || a.$createdAt).toISOString();
+      const loc = `${SITE_URL}/article.html?id=${a.$id}`;
+      return `  <url>
+    <loc>${xmlEscape(loc)}</loc>
+    <news:news>
+      <news:publication>
+        <news:name>${xmlEscape(PUBLICATION_NAME)}</news:name>
+        <news:language>en</news:language>
+      </news:publication>
+      <news:publication_date>${pub}</news:publication_date>
+      <news:title>${xmlEscape(a.title)}</news:title>
+    </news:news>
+  </url>`;
+    }).join('\n');
+
+    const xml = `<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        xmlns:news="http://www.google.com/schemas/sitemap-news/0.9">
+${items}
+</urlset>`;
+
+    return new Response(xml, {
+      headers: {
+        'Content-Type': 'application/xml; charset=utf-8',
+        // Cache 10 min at the edge — fresh enough for news, light on Appwrite
+        'Cache-Control': 'public, max-age=600',
+      },
+    });
+  } catch (err) {
+    return new Response(`Sitemap generation failed: ${err.message}`, { status: 500 });
+  }
+}
