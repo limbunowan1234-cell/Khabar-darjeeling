@@ -1,0 +1,35 @@
+name: Generate News Sitemap
+
+on:
+  schedule:
+    - cron: '0 * * * *' # every hour, on the hour
+  workflow_dispatch: # lets you run it manually from the Actions tab
+
+permissions:
+  contents: write
+
+concurrency:
+  group: news-sitemap
+  cancel-in-progress: false
+
+jobs:
+  build-sitemap:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Generate news-sitemap.xml
+        run: node.github/scripts/gen-news-sitemap.mjs
+
+      - name: Commit if changed
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          if! git diff --quiet khabar-darjeeling/news-sitemap.xml; then
+            git add khabar-darjeeling/news-sitemap.xml
+            git commit -m "chore: update news sitemap [skip ci]"
+            git push
+          else
+            echo "No changes to news sitemap."
+          fi
