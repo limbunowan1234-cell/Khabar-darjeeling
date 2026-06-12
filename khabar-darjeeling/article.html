@@ -98,6 +98,7 @@
 
     const ENDPOINT = 'https://api.khabardarjeeling.space/v1';
     const PROJECT  = 'khabardarjeeling';
+    const SITE_URL = 'https://khabardarjeeling.space';
 
     const articleId = new URLSearchParams(location.search).get('id');
     let currentArticle = null;
@@ -110,6 +111,94 @@
       if(!name) return 'U';
       const p=name.trim().split(/\s+/);
       return p.length===1 ? p[0][0].toUpperCase() : (p[0][0]+p[p.length-1][0]).toUpperCase();
+    }
+
+    /* ── NewsArticle Schema (Google News / SEO) ── */
+    function injectNewsSchema(article) {
+      try {
+        // Resolve a usable image URL for the schema
+        let imageUrl = `${SITE_URL}/assets/logo.png`;
+        if (article.youtube_id) {
+          imageUrl = `https://img.youtube.com/vi/${article.youtube_id}/maxresdefault.jpg`;
+        } else if (article.imageFileId && !['Text','null','undefined',''].includes(String(article.imageFileId))) {
+          imageUrl = String(article.imageFileId).startsWith('http')
+            ? article.imageFileId
+            : `${ENDPOINT}/storage/buckets/${window.APPWRITE_BUCKET_ID}/files/${article.imageFileId}/view?project=${PROJECT}`;
+        }
+
+        // Plain-text description from content (first 200 chars, no HTML)
+        const tmp = document.createElement('div');
+        tmp.textContent = article.content || '';
+        const description = (tmp.textContent || '').slice(0, 200).trim();
+
+        const published = new Date(article.publishedAt || article.submittedAt || article.$createdAt).toISOString();
+        const modified  = new Date(article.$updatedAt || article.publishedAt || article.$createdAt).toISOString();
+        const authorName = article.submitterName || article.authorName || 'Staff Reporter';
+        const authorId   = article.submitterId;
+        const pageUrl    = `${SITE_URL}/article.html?id=${article.$id}`;
+
+        const schema = {
+          "@context": "https://schema.org",
+          "@type": "NewsArticle",
+          "mainEntityOfPage": { "@type": "WebPage", "@id": pageUrl },
+          "headline": (article.title || '').slice(0, 110),
+          "description": description,
+          "image": [imageUrl],
+          "datePublished": published,
+          "dateModified": modified,
+          "author": {
+            "@type": "Person",
+            "name": authorName,
+            ...(authorId ? { "url": `${SITE_URL}/profile.html?userId=${authorId}` } : {})
+          },
+          "publisher": {
+            "@type": "Organization",
+            "name": "Khabar Darjeeling",
+            "logo": {
+              "@type": "ImageObject",
+              "url": `${SITE_URL}/assets/logo.png`,
+              "width": 200,
+              "height": 200
+            }
+          },
+          ...(article.category ? { "articleSection": article.category } : {})
+        };
+
+        const tag = document.createElement('script');
+        tag.type = 'application/ld+json';
+        tag.id = 'newsArticleSchema';
+        tag.textContent = JSON.stringify(schema);
+        // Remove any prior schema before adding (in case of re-render)
+        document.getElementById('newsArticleSchema')?.remove();
+        document.head.appendChild(tag);
+
+        // Also set meta description + canonical for SEO
+        let metaDesc = document.querySelector('meta[name="description"]');
+        if (!metaDesc) { metaDesc = document.createElement('meta'); metaDesc.name = 'description'; document.head.appendChild(metaDesc); }
+        metaDesc.content = description;
+
+        let canonical = document.querySelector('link[rel="canonical"]');
+        if (!canonical) { canonical = document.createElement('link'); canonical.rel = 'canonical'; document.head.appendChild(canonical); }
+        canonical.href = pageUrl;
+
+        // Open Graph tags (social sharing + helps news discovery)
+        const ogTags = {
+          'og:type': 'article',
+          'og:title': article.title || '',
+          'og:description': description,
+          'og:image': imageUrl,
+          'og:url': pageUrl,
+          'article:published_time': published,
+          'article:author': authorName
+        };
+        Object.entries(ogTags).forEach(([prop, val]) => {
+          let m = document.querySelector(`meta[property="${prop}"]`);
+          if (!m) { m = document.createElement('meta'); m.setAttribute('property', prop); document.head.appendChild(m); }
+          m.content = val;
+        });
+      } catch(e) {
+        console.warn('Schema injection failed:', e);
+      }
     }
 
     async function start() {
@@ -131,6 +220,9 @@
         const article = await window.databases.getDocument(window.APPWRITE_DB_ID, window.COL_ARTICLES, articleId);
         currentArticle = article;
         document.title = article.title + ' • Khabar Darjeeling';
+
+        // Inject NewsArticle schema as early as possible
+        injectNewsSchema(article);
 
         // Media: youtube embed (with always-present YouTube link) > image
         let mediaHtml = '';
