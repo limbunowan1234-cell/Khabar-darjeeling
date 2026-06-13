@@ -190,35 +190,16 @@
         body.dark-mode { background:#121212;color:#e0e0e0; }
 
         /* Download APK Banner */
-        .apk-download-banner {
-            background:#fff;
-            padding:14px 0;
-            border-bottom:1px solid #eee;
-        }
-        body.dark-mode .apk-download-banner {
-            background:#1a1a1a;
-            border-bottom-color:#333;
-        }
+        .apk-download-banner { padding:14px 0;background:#fff; }
+        body.dark-mode .apk-download-banner { background:#121212; }
         .apk-download-inner {
             display:flex;align-items:center;gap:16px;flex-wrap:wrap;
             background:linear-gradient(135deg,#c41e3a,#a01830);
             border-radius:14px;padding:16px 22px;
         }
-        .apk-download-icon { font-size:2rem;flex-shrink:0; }
-        .apk-download-text { flex:1;min-width:0; }
-        .apk-download-text strong { color:#fff;font-size:0.98rem;display:block; }
-        .apk-download-text span { color:rgba(255,255,255,0.85);font-size:0.8rem;margin-top:2px;display:block; }
         .apk-download-btn {
-            background:#fff;color:#c41e3a;
-            padding:10px 20px;border-radius:24px;
-            font-weight:700;font-size:0.88rem;
-            text-decoration:none;white-space:nowrap;
-            flex-shrink:0;transition:opacity 0.2s;
-        }
-        .apk-download-btn:hover { opacity:0.9; }
-        @media (max-width:480px) {
-            .apk-download-inner { padding:14px 16px; }
-            .apk-download-btn { width:100%;text-align:center; }
+            background:#fff;color:#c41e3a;padding:11px 22px;border-radius:24px;
+            font-weight:700;font-size:0.9rem;text-decoration:none;white-space:nowrap;
         }
 
         @media (max-width:768px) {
@@ -315,21 +296,16 @@
         </div>
     </section>
 
-        <!-- Download APK Banner -->
-    <section style="padding:14px 0;background:#fff;">
+    <!-- Download APK Banner -->
+    <section class="apk-download-banner">
         <div class="container">
-            <div style="display:flex;align-items:center;gap:16px;flex-wrap:wrap;background:linear-gradient(135deg,#c41e3a,#a01830);border-radius:14px;padding:16px 22px;">
+            <div class="apk-download-inner">
                 <div style="font-size:2rem;">📲</div>
                 <div style="flex:1;min-width:200px;">
                     <strong style="color:#fff;font-size:1rem;display:block;">Get the Khabar Darjeeling App</strong>
                     <span style="color:rgba(255,255,255,0.9);font-size:0.82rem;">Download our Android app for faster news</span>
                 </div>
-                <a href="https://github.com/limbunowan1234-cell/Khabar-darjeeling/releases/download/v1.0.0/KhabarDarjeeling-v1.0.0.2.apk" download="KhabarDarjeeling.apk" style="background:#fff;color:#c41e3a;padding:11px 22px;border-radius:24px;font-weight:700;font-size:0.9rem;text-decoration:none;white-space:nowrap;">⬇️ Download APK</a>
-            </div>
-        </div>
-    </section>
-
-                </a>
+                <a href="https://github.com/limbunowan1234-cell/Khabar-darjeeling/releases/download/v1.0.0/KhabarDarjeeling-v1.0.0.2.apk" download="KhabarDarjeeling.apk" class="apk-download-btn">⬇️ Download APK</a>
             </div>
         </div>
     </section>
@@ -979,4 +955,4 @@
     </script>
 
 </body>
-</html> 
+</html>
