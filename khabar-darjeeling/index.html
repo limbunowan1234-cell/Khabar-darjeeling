@@ -305,7 +305,7 @@
                     <strong style="color:#fff;font-size:1rem;display:block;">Get the Khabar Darjeeling App</strong>
                     <span style="color:rgba(255,255,255,0.9);font-size:0.82rem;">Download our Android app for faster news</span>
                 </div>
-                <a href="https://github.com/limbunowan1234-cell/Khabar-darjeeling/releases/download/v1.0.0/KhabarDarjeeling-v1.0.0.2.apk" download="KhabarDarjeeling.apk" class="apk-download-btn">⬇️ Download APK</a>
+                <a href="https://github.com/limbunowan1234-cell/Khabar-darjeeling/releases/download/v1.0.0/KhabarDarjeeling-v1.0.0.2.apk" download="KhabarDarjeeling.apk" class="apk-download-btn" onclick="logApkClick()">⬇️ Download APK</a>
             </div>
         </div>
     </section>
@@ -395,6 +395,16 @@
 
         let allArticles = [];
         let currentUser = null;
+
+        /* ── APK DOWNLOAD CLICK LOGGING ── */
+        window.logApkClick = function () {
+            try {
+                window.databases.createDocument(
+                    window.APPWRITE_DB_ID, 'apk_downloads', 'unique()',
+                    { clickedAt: new Date().toISOString() }
+                ).catch(() => {});   // fire-and-forget; never block the download
+            } catch (e) { /* ignore */ }
+        };
 
         function getLikedLocal() { try { return JSON.parse(localStorage.getItem('kd_liked') || '{}'); } catch { return {}; } }
         function setLikedLocal(o) { localStorage.setItem('kd_liked', JSON.stringify(o)); }
