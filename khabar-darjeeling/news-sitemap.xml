@@ -1,6 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:news="http://www.google.com/schemas/sitemap-news/0.9">
   <url>
+    <loc>https://khabardarjeeling.space/article.html?id=6a2ce924d52094d32ba5</loc>
+    <news:news>
+      <news:publication><news:name>Khabar Darjeeling</news:name><news:language>en</news:language></news:publication>
+      <news:publication_date>2026-06-13T05:22:44.513Z</news:publication_date>
+      <news:title>Breaking News | Major Political Upset in Sukhe-Jorebunglow</news:title>
+    </news:news>
+  </url>
+  <url>
     <loc>https://khabardarjeeling.space/article.html?id=6a2c2febe1e11c70ff5e</loc>
     <news:news>
       <news:publication><news:name>Khabar Darjeeling</news:name><news:language>en</news:language></news:publication>
@@ -70,14 +78,6 @@
       <news:publication><news:name>Khabar Darjeeling</news:name><news:language>en</news:language></news:publication>
       <news:publication_date>2026-06-11T08:02:55.293Z</news:publication_date>
       <news:title>West Bengal Launches &quot;Himalayan Hill Cities&quot; Plan Amid Tourism Surge in Darjeeling Region</news:title>
-    </news:news>
-  </url>
-  <url>
-    <loc>https://khabardarjeeling.space/article.html?id=6a2a175175f859f26edd</loc>
-    <news:news>
-      <news:publication><news:name>Khabar Darjeeling</news:name><news:language>en</news:language></news:publication>
-      <news:publication_date>2026-06-11T02:02:56.529Z</news:publication_date>
-      <news:title>Life After The Election - A Darjeeling Story</news:title>
     </news:news>
   </url>
 </urlset>
