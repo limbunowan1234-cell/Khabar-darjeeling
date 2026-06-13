@@ -72,20 +72,4 @@
       <news:title>North Bengal to South Bengal Connected: New 770km Highway from Darjeeling to Gangasagar Announced उत्तर बंगाल दक्षिण बंगाल सँग जोडिने: दार्जिलिङ बाट गङ्गासागर सम्म ७७० किमी नयाँ हाईवेको घोषणा</news:title>
     </news:news>
   </url>
-  <url>
-    <loc>https://khabardarjeeling.space/article.html?id=6a2b1f03acead131fc9f</loc>
-    <news:news>
-      <news:publication><news:name>Khabar Darjeeling</news:name><news:language>en</news:language></news:publication>
-      <news:publication_date>2026-06-11T20:48:02.120Z</news:publication_date>
-      <news:title>Life After The Election In Darjeeling</news:title>
-    </news:news>
-  </url>
-  <url>
-    <loc>https://khabardarjeeling.space/article.html?id=6a2b06b0bbf71a35f848</loc>
-    <news:news>
-      <news:publication><news:name>Khabar Darjeeling</news:name><news:language>en</news:language></news:publication>
-      <news:publication_date>2026-06-11T19:04:15.579Z</news:publication_date>
-      <news:title>A Cup of Tea and a Question of Change</news:title>
-    </news:news>
-  </url>
 </urlset>
