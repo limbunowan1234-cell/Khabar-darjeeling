@@ -72,6 +72,8 @@
         body.dark-mode .table-row:hover { background:#3a3b3c; }
         body.dark-mode .search-bar input { background:#3a3b3c;border-color:#4e4f50;color:var(--text-light); }
         body.dark-mode .tabs { border-bottom-color:#3a3b3c; }
+        body.dark-mode #apkStatsPanel { background:#242526 !important; }
+        body.dark-mode #apkStatsPanel .apk-stat-box { background:#3a3b3c !important; }
         @media (max-width:1024px) {
           .table-header, .table-row { grid-template-columns:60px 1fr 100px; }
           .table-header div:nth-child(3), .table-header div:nth-child(4),
@@ -140,9 +142,38 @@
         </div>
 
         <div class="empty-state" id="emptyState" style="display:none;"><p>No articles found.</p></div>
+
+        <!-- ===== APK Downloads Panel ===== -->
+        <section id="apkStatsPanel" style="background:#fff;border-radius:8px;padding:24px;margin:24px 0;box-shadow:0 2px 4px rgba(0,0,0,0.1);">
+          <h2 style="color:var(--brand-red);margin:0 0 16px;font-size:22px;display:flex;align-items:center;gap:8px;">📲 APK Downloads</h2>
+          <div style="display:flex;gap:16px;flex-wrap:wrap;margin-bottom:24px;">
+            <div class="apk-stat-box" style="flex:1;min-width:120px;background:#f5f6f7;border-radius:8px;padding:16px;text-align:center;border-left:4px solid var(--brand-red);">
+              <div style="font-size:28px;font-weight:700;color:var(--brand-red);" id="apkGithubCount">—</div>
+              <div style="font-size:12px;color:#606770;margin-top:4px;">GitHub downloads<br><span style="font-size:11px;color:#999;">(actual file downloads)</span></div>
+            </div>
+            <div class="apk-stat-box" style="flex:1;min-width:120px;background:#f5f6f7;border-radius:8px;padding:16px;text-align:center;border-left:4px solid #152a4a;">
+              <div style="font-size:28px;font-weight:700;color:#152a4a;" id="apkClickCount">—</div>
+              <div style="font-size:12px;color:#606770;margin-top:4px;">Total clicks<br><span style="font-size:11px;color:#999;">(from your site)</span></div>
+            </div>
+            <div class="apk-stat-box" style="flex:1;min-width:120px;background:#f5f6f7;border-radius:8px;padding:16px;text-align:center;border-left:4px solid #152a4a;">
+              <div style="font-size:28px;font-weight:700;color:#152a4a;" id="apkWeekCount">—</div>
+              <div style="font-size:12px;color:#606770;margin-top:4px;">This week<br><span style="font-size:11px;color:#999;">(last 7 days)</span></div>
+            </div>
+            <div class="apk-stat-box" style="flex:1;min-width:120px;background:#f5f6f7;border-radius:8px;padding:16px;text-align:center;border-left:4px solid #152a4a;">
+              <div style="font-size:28px;font-weight:700;color:#152a4a;" id="apkMonthCount">—</div>
+              <div style="font-size:12px;color:#606770;margin-top:4px;">This month<br><span style="font-size:11px;color:#999;">(last 30 days)</span></div>
+            </div>
+          </div>
+          <h3 style="font-size:14px;color:#606770;margin:0 0 10px;">Clicks per day (last 30 days)</h3>
+          <div id="apkChart" style="display:flex;align-items:flex-end;gap:3px;height:140px;border-bottom:2px solid var(--border-color);">
+            <div style="color:#999;font-size:13px;">Loading…</div>
+          </div>
+          <div id="apkChartLabels" style="display:flex;gap:3px;margin-top:6px;font-size:9px;color:#999;"></div>
+        </section>
+        <!-- ===== End APK Downloads Panel ===== -->
     </div>
 
-    <script src="js/appwrite.js?v=132"></script>
+    <script src="js/appwrite.js?v=133"></script>
     <script>
         let currentUser = null;
         let allPosts = [];
@@ -170,6 +201,7 @@
                 document.getElementById('gatekeeper').classList.add('hide');
                 document.getElementById('mainContent').style.display = 'block';
                 loadPosts();
+                loadApkStats();
             } catch (e) {
                 location.href = 'login.html';
             }
@@ -316,6 +348,84 @@
         }
         function escapeHtml(t) { const d=document.createElement('div'); d.textContent=t||''; return d.innerHTML; }
         function formatDate(s) { try { return new Date(s).toLocaleDateString('en-US',{year:'numeric',month:'short',day:'numeric'}); } catch { return ''; } }
+
+        /* ── APK DOWNLOADS STATS ── */
+        async function loadApkStats() {
+          const DB = window.APPWRITE_DB_ID;
+          const COL = 'apk_downloads';
+          const REPO = 'limbunowan1234-cell/Khabar-darjeeling';
+          const $ = id => document.getElementById(id);
+
+          // 1. GitHub actual download count
+          try {
+            const r = await fetch(`https://api.github.com/repos/${REPO}/releases`);
+            const releases = await r.json();
+            let total = 0;
+            releases.forEach(rel => (rel.assets || []).forEach(a => {
+              if (a.name && a.name.toLowerCase().endsWith('.apk')) total += (a.download_count || 0);
+            }));
+            $('apkGithubCount').textContent = total.toLocaleString();
+          } catch { $('apkGithubCount').textContent = 'n/a'; }
+
+          // 2. Appwrite click tracking
+          try {
+            let docs = [], offset = 0;
+            while (true) {
+              const res = await window.databases.listDocuments(DB, COL, [
+                window.Query.orderDesc('$createdAt'),
+                window.Query.limit(100),
+                window.Query.offset(offset)
+              ]);
+              docs = docs.concat(res.documents);
+              if (res.documents.length < 100 || offset > 5000) break;
+              offset += 100;
+            }
+
+            const keyOf = d => (d.clickedAt || d.$createdAt || '');
+            const now = Date.now();
+            const weekAgo = now - 7 * 86400000;
+            const monthAgo = now - 30 * 86400000;
+            let week = 0, month = 0;
+            docs.forEach(d => {
+              const t = new Date(keyOf(d)).getTime();
+              if (t >= weekAgo) week++;
+              if (t >= monthAgo) month++;
+            });
+
+            $('apkClickCount').textContent = docs.length.toLocaleString();
+            $('apkWeekCount').textContent = week.toLocaleString();
+            $('apkMonthCount').textContent = month.toLocaleString();
+
+            // 3. Daily chart (last 30 days)
+            const days = {};
+            const today = new Date();
+            for (let i = 29; i >= 0; i--) {
+              const d = new Date(today); d.setDate(today.getDate() - i);
+              days[d.toISOString().slice(0, 10)] = 0;
+            }
+            docs.forEach(d => {
+              const k = keyOf(d).slice(0, 10);
+              if (k in days) days[k]++;
+            });
+
+            const max = Math.max(1, ...Object.values(days));
+            const chart = $('apkChart'), labels = $('apkChartLabels');
+            chart.innerHTML = ''; labels.innerHTML = '';
+            Object.entries(days).forEach(([date, count], idx) => {
+              const bar = document.createElement('div');
+              bar.title = `${date}: ${count} click${count !== 1 ? 's' : ''}`;
+              bar.style.cssText = `flex:1;background:${count ? '#c41e3a' : '#e0e0e0'};height:${Math.max(2, (count / max) * 130)}px;border-radius:3px 3px 0 0;transition:height .3s;`;
+              chart.appendChild(bar);
+              const lbl = document.createElement('div');
+              lbl.style.cssText = 'flex:1;text-align:center;';
+              lbl.textContent = (idx % 5 === 0) ? date.slice(5) : '';
+              labels.appendChild(lbl);
+            });
+          } catch (e) {
+            ['apkClickCount', 'apkWeekCount', 'apkMonthCount'].forEach(id => $(id).textContent = 'n/a');
+            $('apkChart').innerHTML = '<div style="color:#999;font-size:13px;">Could not load click data</div>';
+          }
+        }
 
         checkAdminAuth();
     </script>
