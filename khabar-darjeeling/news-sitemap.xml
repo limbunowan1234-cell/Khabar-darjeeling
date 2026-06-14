@@ -72,12 +72,4 @@
       <news:title>Breaking News | Major Political Upset in Sukhe-Jorebunglow</news:title>
     </news:news>
   </url>
-  <url>
-    <loc>https://khabardarjeeling.space/article.html?id=6a2c2febe1e11c70ff5e</loc>
-    <news:news>
-      <news:publication><news:name>Khabar Darjeeling</news:name><news:language>en</news:language></news:publication>
-      <news:publication_date>2026-06-12T16:12:27.411Z</news:publication_date>
-      <news:title>लिभिङ आउट लाउड युथ परिवार”ले सुकेपोखरीमा मनायो फिफा विश्वकप २०२६ को भव्य र्‍याली</news:title>
-    </news:news>
-  </url>
 </urlset>
