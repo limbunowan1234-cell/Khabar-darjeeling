@@ -208,7 +208,7 @@
         </div>
     </div>
 
-    <script src="js/appwrite.js?v=132"></script>
+    <script src="js/appwrite.js?v=133"></script>
     <script>
         let currentUser = null;
         let selectedImage = null;
@@ -288,11 +288,64 @@
             el.className = c < 100 ? 'char-counter error' : 'char-counter';
         });
 
-        function handleImageSelect(e) {
+        /* ──────────────────────────────────────────────────────────────
+           SILENT IMAGE COMPRESSION
+           Shrinks photos to max 800px (longest side) and ~80% JPEG quality
+           BEFORE upload, so the homepage loads faster and uploads are quicker.
+           Completely invisible to the user. If anything fails, the ORIGINAL
+           photo is used instead — so posting never breaks.
+           ────────────────────────────────────────────────────────────── */
+        function compressImage(file) {
+            return new Promise((resolve) => {
+                try {
+                    // Skip non-images or tiny files (already small) — use as-is
+                    if (!file || !file.type || !file.type.startsWith('image/')) { resolve(file); return; }
+                    if (file.type === 'image/gif') { resolve(file); return; } // keep animation
+                    if (file.size < 150 * 1024) { resolve(file); return; }     // <150KB: not worth it
+
+                    const MAX = 800;        // longest side, in pixels
+                    const QUALITY = 0.8;    // JPEG quality
+
+                    const reader = new FileReader();
+                    reader.onload = (e) => {
+                        const img = new Image();
+                        img.onload = () => {
+                            try {
+                                let { width, height } = img;
+                                if (width > MAX || height > MAX) {
+                                    if (width >= height) { height = Math.round(height * MAX / width); width = MAX; }
+                                    else { width = Math.round(width * MAX / height); height = MAX; }
+                                }
+                                const canvas = document.createElement('canvas');
+                                canvas.width = width; canvas.height = height;
+                                const ctx = canvas.getContext('2d');
+                                // White background so transparent PNGs don't turn black as JPEG
+                                ctx.fillStyle = '#ffffff';
+                                ctx.fillRect(0, 0, width, height);
+                                ctx.drawImage(img, 0, 0, width, height);
+                                canvas.toBlob((blob) => {
+                                    if (!blob || blob.size >= file.size) { resolve(file); return; } // no gain: keep original
+                                    const newName = (file.name || 'photo').replace(/\.[^.]+$/, '') + '.jpg';
+                                    const compressed = new File([blob], newName, { type: 'image/jpeg', lastModified: Date.now() });
+                                    resolve(compressed);
+                                }, 'image/jpeg', QUALITY);
+                            } catch (err) { resolve(file); }
+                        };
+                        img.onerror = () => resolve(file);
+                        img.src = e.target.result;
+                    };
+                    reader.onerror = () => resolve(file);
+                    reader.readAsDataURL(file);
+                } catch (err) { resolve(file); }
+            });
+        }
+
+        async function handleImageSelect(e) {
             const file = e.target.files[0];
             if (!file) return;
             if (file.size > 10 * 1024 * 1024) { alert('Image must be less than 10MB'); return; }
-            selectedImage = file;
+
+            // Show preview instantly from the original (feels fast to the user)
             const reader = new FileReader();
             reader.onload = ev => {
                 document.getElementById('imagePreview').src = ev.target.result;
@@ -301,6 +354,15 @@
                 document.getElementById('uploadBox').style.display = 'none';
             };
             reader.readAsDataURL(file);
+
+            // Compress in the background; fall back to original if it fails
+            selectedImage = file;            // safe default, set immediately
+            try {
+                const compressed = await compressImage(file);
+                selectedImage = compressed;  // swap in the smaller version
+            } catch (err) {
+                selectedImage = file;        // any error: keep original
+            }
         }
 
         function removeImage() {
