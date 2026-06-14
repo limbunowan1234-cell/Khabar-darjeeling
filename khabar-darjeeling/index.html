@@ -202,6 +202,19 @@
             font-weight:700;font-size:0.9rem;text-decoration:none;white-space:nowrap;
         }
 
+        /* Follow on WhatsApp Banner */
+        .wa-follow-banner { padding:0 0 14px;background:#fff; }
+        body.dark-mode .wa-follow-banner { background:#121212; }
+        .wa-follow-inner {
+            display:flex;align-items:center;gap:16px;flex-wrap:wrap;
+            background:linear-gradient(135deg,#25D366,#128C7E);
+            border-radius:14px;padding:16px 22px;
+        }
+        .wa-follow-btn {
+            background:#fff;color:#128C7E;padding:11px 22px;border-radius:24px;
+            font-weight:700;font-size:0.9rem;text-decoration:none;white-space:nowrap;
+        }
+
         @media (max-width:768px) {
             .nav-right { flex-wrap:wrap;gap:8px !important; }
             .search-row input { width:120px;font-size:13px; }
@@ -306,6 +319,20 @@
                     <span style="color:rgba(255,255,255,0.9);font-size:0.82rem;">Download our Android app for faster news</span>
                 </div>
                 <a href="https://github.com/limbunowan1234-cell/Khabar-darjeeling/releases/download/v1.0.0/KhabarDarjeeling-v1.0.0.2.apk" download="KhabarDarjeeling.apk" class="apk-download-btn" onclick="logApkClick()">⬇️ Download APK</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Follow on WhatsApp Banner -->
+    <section class="wa-follow-banner">
+        <div class="container">
+            <div class="wa-follow-inner">
+                <div style="font-size:2rem;">💬</div>
+                <div style="flex:1;min-width:200px;">
+                    <strong style="color:#fff;font-size:1rem;display:block;">Follow us on WhatsApp</strong>
+                    <span style="color:rgba(255,255,255,0.92);font-size:0.82rem;">Get breaking news &amp; road/weather alerts on your phone</span>
+                </div>
+                <a href="https://whatsapp.com/channel/0029VbD933y3LdQQ0g9Z682b" target="_blank" rel="noopener" class="wa-follow-btn">📲 Follow Channel</a>
             </div>
         </div>
     </section>
