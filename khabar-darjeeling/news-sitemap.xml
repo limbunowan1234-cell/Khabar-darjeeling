@@ -1,6 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:news="http://www.google.com/schemas/sitemap-news/0.9">
   <url>
+    <loc>https://khabardarjeeling.space/article.html?id=6a301de4980704c273d5</loc>
+    <news:news>
+      <news:publication><news:name>Khabar Darjeeling</news:name><news:language>en</news:language></news:publication>
+      <news:publication_date>2026-06-15T15:44:36.302Z</news:publication_date>
+      <news:title>Dudhey Temporary Diversion Bridge in Bad Shape</news:title>
+    </news:news>
+  </url>
+  <url>
+    <loc>https://khabardarjeeling.space/article.html?id=6a301d3cbc8fc706e435</loc>
+    <news:news>
+      <news:publication><news:name>Khabar Darjeeling</news:name><news:language>en</news:language></news:publication>
+      <news:publication_date>2026-06-15T15:41:48.466Z</news:publication_date>
+      <news:title>Kurseong Set for Historic CM Visit Tomorrow</news:title>
+    </news:news>
+  </url>
+  <url>
     <loc>https://khabardarjeeling.space/article.html?id=6a2ec2eda9f2c2ce3652</loc>
     <news:news>
       <news:publication><news:name>Khabar Darjeeling</news:name><news:language>en</news:language></news:publication>
@@ -30,46 +46,6 @@
       <news:publication><news:name>Khabar Darjeeling</news:name><news:language>en</news:language></news:publication>
       <news:publication_date>2026-06-14T08:10:55.879Z</news:publication_date>
       <news:title>Public Welfare Camp to Be Held in Lebong Valley 1 Gram Panchayat</news:title>
-    </news:news>
-  </url>
-  <url>
-    <loc>https://khabardarjeeling.space/article.html?id=6a2d79dc976b613806d2</loc>
-    <news:news>
-      <news:publication><news:name>Khabar Darjeeling</news:name><news:language>en</news:language></news:publication>
-      <news:publication_date>2026-06-13T15:39:25.029Z</news:publication_date>
-      <news:title>Five North Bengal Cities to Get Himalayan Hill Cities Upgrade: Darjeeling, Siliguri, Kalimpong, Kurseong, Mirik in Line for Major Infrastructure Boost</news:title>
-    </news:news>
-  </url>
-  <url>
-    <loc>https://khabardarjeeling.space/article.html?id=6a2d780a753d3146f788</loc>
-    <news:news>
-      <news:publication><news:name>Khabar Darjeeling</news:name><news:language>en</news:language></news:publication>
-      <news:publication_date>2026-06-13T15:31:38.550Z</news:publication_date>
-      <news:title>Centrally Funded Himalayan Hill Cities Project: Darjeeling, Kalimpong, Kurseong, Mirik &amp; Siliguri to Get Major Development Boost</news:title>
-    </news:news>
-  </url>
-  <url>
-    <loc>https://khabardarjeeling.space/article.html?id=6a2d513b76f97cee4ef1</loc>
-    <news:news>
-      <news:publication><news:name>Khabar Darjeeling</news:name><news:language>en</news:language></news:publication>
-      <news:publication_date>2026-06-13T12:46:03.965Z</news:publication_date>
-      <news:title>Darjeeling Youth Drug Crisis Surges Beyond Scenic Towns, Officials Warn</news:title>
-    </news:news>
-  </url>
-  <url>
-    <loc>https://khabardarjeeling.space/article.html?id=6a2d48640b0a7b689b6e</loc>
-    <news:news>
-      <news:publication><news:name>Khabar Darjeeling</news:name><news:language>en</news:language></news:publication>
-      <news:publication_date>2026-06-13T12:08:20.189Z</news:publication_date>
-      <news:title>DHR Summer Festival 2026: Heritage Toy Train Transforms into Mobile Cinema at Kurseong</news:title>
-    </news:news>
-  </url>
-  <url>
-    <loc>https://khabardarjeeling.space/article.html?id=6a2ce924d52094d32ba5</loc>
-    <news:news>
-      <news:publication><news:name>Khabar Darjeeling</news:name><news:language>en</news:language></news:publication>
-      <news:publication_date>2026-06-13T05:22:44.513Z</news:publication_date>
-      <news:title>Breaking News | Major Political Upset in Sukhe-Jorebunglow</news:title>
     </news:news>
   </url>
 </urlset>
