@@ -96,20 +96,4 @@
       <news:title>From Alliance to Tension: A Historical Timeline of BJP-GJM Politics in Darjeeling</news:title>
     </news:news>
   </url>
-  <url>
-    <loc>https://khabardarjeeling.space/article.html?id=6a301de4980704c273d5</loc>
-    <news:news>
-      <news:publication><news:name>Khabar Darjeeling</news:name><news:language>en</news:language></news:publication>
-      <news:publication_date>2026-06-15T15:44:36.302Z</news:publication_date>
-      <news:title>Dudhey Temporary Diversion Bridge in Bad Shape</news:title>
-    </news:news>
-  </url>
-  <url>
-    <loc>https://khabardarjeeling.space/article.html?id=6a301d3cbc8fc706e435</loc>
-    <news:news>
-      <news:publication><news:name>Khabar Darjeeling</news:name><news:language>en</news:language></news:publication>
-      <news:publication_date>2026-06-15T15:41:48.466Z</news:publication_date>
-      <news:title>Kurseong Set for Historic CM Visit Tomorrow</news:title>
-    </news:news>
-  </url>
 </urlset>
