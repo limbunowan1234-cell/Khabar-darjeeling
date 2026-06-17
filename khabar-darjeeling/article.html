@@ -257,7 +257,11 @@
         }
 
         const pubDate = new Date(article.publishedAt || article.submittedAt || article.$createdAt)
-          .toLocaleDateString('en-IN', { day:'numeric', month:'long', year:'numeric' });
+          .toLocaleString('en-IN', {
+            day:'numeric', month:'long', year:'numeric',
+            hour:'numeric', minute:'2-digit', hour12:true,
+            timeZone:'Asia/Kolkata'
+          });
 
         const authorName = article.submitterName || article.authorName || 'Staff Reporter';
         const authorId   = article.submitterId;
@@ -439,7 +443,7 @@
         list.innerHTML = res.documents.map(c => {
           const name   = c.authorName || 'Anonymous';
           const avatar = c.avatarUrl;
-          const date   = new Date(c.createdAt || c.$createdAt).toLocaleDateString('en-IN', { day:'numeric', month:'short', year:'numeric' });
+          const date   = new Date(c.createdAt || c.$createdAt).toLocaleString('en-IN', { day:'numeric', month:'short', year:'numeric', hour:'numeric', minute:'2-digit', hour12:true, timeZone:'Asia/Kolkata' });
           const avatarEl = (avatar && avatar !== 'null' && avatar !== '')
             ? `<div class="comment-avatar"><img src="${avatar}" onerror="this.parentElement.textContent='${initials(name)}'"></div>`
             : `<div class="comment-avatar">${initials(name)}</div>`;
