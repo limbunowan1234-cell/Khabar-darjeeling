@@ -1,6 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:news="http://www.google.com/schemas/sitemap-news/0.9">
   <url>
+    <loc>https://khabardarjeeling.space/article.html?id=6a342e5fbb848d6795ed</loc>
+    <news:news>
+      <news:publication><news:name>Khabar Darjeeling</news:name><news:language>en</news:language></news:publication>
+      <news:publication_date>2026-06-18T17:43:58.722Z</news:publication_date>
+      <news:title>A Story of Love, Loss, and the Timeless Hills of Darjeeling</news:title>
+    </news:news>
+  </url>
+  <url>
+    <loc>https://khabardarjeeling.space/article.html?id=6a33f203c184ac313e69</loc>
+    <news:news>
+      <news:publication><news:name>Khabar Darjeeling</news:name><news:language>en</news:language></news:publication>
+      <news:publication_date>2026-06-18T13:26:27.466Z</news:publication_date>
+      <news:title>Darjeeling Traffic Ko Samadhan</news:title>
+    </news:news>
+  </url>
+  <url>
     <loc>https://khabardarjeeling.space/article.html?id=6a329702a8f317c52702</loc>
     <news:news>
       <news:publication><news:name>Khabar Darjeeling</news:name><news:language>en</news:language></news:publication>
@@ -22,22 +38,6 @@
       <news:publication><news:name>Khabar Darjeeling</news:name><news:language>en</news:language></news:publication>
       <news:publication_date>2026-06-17T08:03:07.936Z</news:publication_date>
       <news:title>Life After Election In Kurseong of a Student .</news:title>
-    </news:news>
-  </url>
-  <url>
-    <loc>https://khabardarjeeling.space/article.html?id=6a3177ba70a42cdcb676</loc>
-    <news:news>
-      <news:publication><news:name>Khabar Darjeeling</news:name><news:language>en</news:language></news:publication>
-      <news:publication_date>2026-06-16T16:20:10.206Z</news:publication_date>
-      <news:title>Kurseong MLA Sonam Lama Assures Action on Cinchona Pending Issues</news:title>
-    </news:news>
-  </url>
-  <url>
-    <loc>https://khabardarjeeling.space/article.html?id=6a315e7846b76b8e1cfe</loc>
-    <news:news>
-      <news:publication><news:name>Khabar Darjeeling</news:name><news:language>en</news:language></news:publication>
-      <news:publication_date>2026-06-16T14:32:22.835Z</news:publication_date>
-      <news:title>The Empty Seat</news:title>
     </news:news>
   </url>
 </urlset>
