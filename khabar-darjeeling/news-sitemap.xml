@@ -48,20 +48,4 @@
       <news:title>Darjeeling Traffic Ko Samadhan</news:title>
     </news:news>
   </url>
-  <url>
-    <loc>https://khabardarjeeling.space/article.html?id=6a329702a8f317c52702</loc>
-    <news:news>
-      <news:publication><news:name>Khabar Darjeeling</news:name><news:language>en</news:language></news:publication>
-      <news:publication_date>2026-06-17T12:45:00.684Z</news:publication_date>
-      <news:title>Monsoon Preparedness Report: Darjeeling Hill Stations 2026</news:title>
-    </news:news>
-  </url>
-  <url>
-    <loc>https://khabardarjeeling.space/article.html?id=6a329599ac412466805d</loc>
-    <news:news>
-      <news:publication><news:name>Khabar Darjeeling</news:name><news:language>en</news:language></news:publication>
-      <news:publication_date>2026-06-17T12:38:59.366Z</news:publication_date>
-      <news:title>CM Suvendu Adhikari Pledges 1,000 EFR Jobs for Gorkha Youth, Announces Tourism Push in First Hill Visit</news:title>
-    </news:news>
-  </url>
 </urlset>
