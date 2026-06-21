@@ -1,6 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:news="http://www.google.com/schemas/sitemap-news/0.9">
   <url>
+    <loc>https://khabardarjeeling.space/article.html?id=6a37800a4b0045d7515c</loc>
+    <news:news>
+      <news:publication><news:name>Khabar Darjeeling</news:name><news:language>en</news:language></news:publication>
+      <news:publication_date>2026-06-21T06:08:12.554Z</news:publication_date>
+      <news:title>After the election, hill youths ask: “Where are the jobs</news:title>
+    </news:news>
+  </url>
+  <url>
     <loc>https://khabardarjeeling.space/article.html?id=6a36475b53e482c80bdb</loc>
     <news:news>
       <news:publication><news:name>Khabar Darjeeling</news:name><news:language>en</news:language></news:publication>
@@ -22,38 +30,6 @@
       <news:publication><news:name>Khabar Darjeeling</news:name><news:language>en</news:language></news:publication>
       <news:publication_date>2026-06-19T20:04:10.928Z</news:publication_date>
       <news:title>Darjeeling Again Under Rain Pressure: Fragile Hills, Broken Roads, and the Human Cost</news:title>
-    </news:news>
-  </url>
-  <url>
-    <loc>https://khabardarjeeling.space/article.html?id=6a34f88282fd7445b47a</loc>
-    <news:news>
-      <news:publication><news:name>Khabar Darjeeling</news:name><news:language>en</news:language></news:publication>
-      <news:publication_date>2026-06-19T08:06:26.272Z</news:publication_date>
-      <news:title>Landslide Between Mahanadi and Ghayabari Below Kurseong, Damaging Toy Train Tracks,</news:title>
-    </news:news>
-  </url>
-  <url>
-    <loc>https://khabardarjeeling.space/article.html?id=6a34f6f92749b4deb17a</loc>
-    <news:news>
-      <news:publication><news:name>Khabar Darjeeling</news:name><news:language>en</news:language></news:publication>
-      <news:publication_date>2026-06-19T07:59:52.898Z</news:publication_date>
-      <news:title>✅ Landslide Cleared Near Mahanadi Below #Kurseong; NH-110 Reopened, Travel With Caution. 🚧</news:title>
-    </news:news>
-  </url>
-  <url>
-    <loc>https://khabardarjeeling.space/article.html?id=6a34f4f9b67063a7b511</loc>
-    <news:news>
-      <news:publication><news:name>Khabar Darjeeling</news:name><news:language>en</news:language></news:publication>
-      <news:publication_date>2026-06-19T07:51:21.506Z</news:publication_date>
-      <news:title>Breaking News: Twelve GTA councillors have reportedly resigned from the central committee membership</news:title>
-    </news:news>
-  </url>
-  <url>
-    <loc>https://khabardarjeeling.space/article.html?id=6a34ce0587a5c8bbf570</loc>
-    <news:news>
-      <news:publication><news:name>Khabar Darjeeling</news:name><news:language>en</news:language></news:publication>
-      <news:publication_date>2026-06-19T05:05:09.232Z</news:publication_date>
-      <news:title>Monsoon Brings Fresh Landslide Fear Above Loreto Convent School</news:title>
     </news:news>
   </url>
 </urlset>
