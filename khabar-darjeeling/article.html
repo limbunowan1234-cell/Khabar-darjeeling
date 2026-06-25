@@ -55,8 +55,11 @@
     .comment-box { display:flex;gap:10px;margin:16px 0; }
     .comment-input { flex:1;padding:12px;border:1px solid #ddd;border-radius:24px;font-size:15px;font-family:inherit; }
     body.dark-mode .comment-input { background:#2a2a2a;border-color:#444;color:#fff; }
+    .comment-thread { }
     .comment { padding:16px 0;border-bottom:1px solid #f5f5f5;display:flex;gap:12px; }
     body.dark-mode .comment { border-color:#2a2a2a; }
+    .comment-replies { margin-left:48px; }
+    .comment-replies .comment { border-bottom:none;padding:10px 0; }
     .comment-avatar { width:36px;height:36px;border-radius:50%;background:#c41e3a;color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:13px;flex-shrink:0; }
     .comment-avatar img { width:100%;height:100%;border-radius:50%;object-fit:cover; }
     .comment-author { font-weight:600;color:#1a1a1a; }
@@ -64,6 +67,22 @@
     .comment-date { color:#999;font-size:12px;margin-left:8px; }
     .comment-text { margin:6px 0 0;color:#333;line-height:1.5; }
     body.dark-mode .comment-text { color:#ddd; }
+    .comment-row-actions { display:flex;align-items:center;gap:14px;margin-top:6px; }
+    .comment-mini-btn {
+      background:none;border:none;padding:0;cursor:pointer;font-size:13px;
+      color:#888;font-weight:600;display:flex;align-items:center;gap:4px;
+    }
+    .comment-mini-btn:hover { color:#c41e3a; }
+    .comment-mini-btn.liked { color:#c41e3a; }
+    body.dark-mode .comment-mini-btn { color:#999; }
+    .reply-box { display:flex;gap:8px;margin-top:10px; }
+    .reply-input {
+      flex:1;padding:8px 12px;border:1px solid #ddd;border-radius:20px;
+      font-size:14px;font-family:inherit;
+    }
+    body.dark-mode .reply-input { background:#2a2a2a;border-color:#444;color:#fff; }
+    .reply-mini-post { background:#c41e3a;color:#fff;border:none;padding:7px 16px;border-radius:18px;font-size:13px;font-weight:600;cursor:pointer; }
+    .reply-mini-post:disabled { opacity:.6;cursor:not-allowed; }
     .back-btn { display:inline-flex;align-items:center;gap:6px;color:#666;text-decoration:none;margin-bottom:20px;font-size:14px; }
     .back-btn:hover { color:#c41e3a; }
     body.dark-mode .back-btn { color:#aaa; }
@@ -81,6 +100,7 @@
       .article-title { font-size:22px; }
       .article-actions { justify-content:center; }
       .view-count { width:100%;justify-content:center;margin:10px 0 0; }
+      .comment-replies { margin-left:24px; }
     }
     @keyframes spin { to { transform:rotate(360deg); } }
   </style>
@@ -119,7 +139,14 @@
     let currentArticle = null;
     let currentUser    = null;
     let userHasLiked   = false;
-    let likeRowId      = null;   // the $id of this user's like row
+    let likeRowId      = null;   // the $id of this user's like row (article)
+
+    // commentId -> { liked: bool, rowId: string|null }  -- this user's like state per comment
+    let commentLikeState = {};
+    // commentId -> total like count
+    let commentLikeCounts = {};
+    // all comments for this article, flat list straight from Appwrite
+    let allComments = [];
 
     function esc(t){ const d=document.createElement('div'); d.textContent=t||''; return d.innerHTML; }
     function initials(name){
@@ -340,13 +367,15 @@
       } catch(e) { /* views are non-critical */ }
     }
 
-    /* ── LIKES (from `likes` collection) ── */
+    /* ── ARTICLE LIKES (from `likes` collection, commentId empty) ── */
     async function loadLikes() {
       try {
-        // Total like count for this article
+        // Total like count for this article (commentId must be empty/null — article-level like)
         const all = await window.databases.listDocuments(
           window.APPWRITE_DB_ID, window.COL_LIKES,
-          [ window.Query.equal('articleId', articleId), window.Query.limit(1000) ]
+          [ window.Query.equal('articleId', articleId),
+            window.Query.isNull('commentId'),
+            window.Query.limit(1000) ]
         );
         document.getElementById('likeCount').textContent = all.total;
 
@@ -361,12 +390,12 @@
     function markLiked(liked) {
       const btn = document.getElementById('likeBtn');
       const count = document.getElementById('likeCount');
-      if (liked) { btn.classList.add('liked'); btn.querySelector('span') || null; btn.innerHTML = `❤️ <span id="likeCount">${count.textContent}</span>`; }
+      if (liked) { btn.classList.add('liked'); btn.innerHTML = `❤️ <span id="likeCount">${count.textContent}</span>`; }
       else { btn.classList.remove('liked'); btn.innerHTML = `🤍 <span id="likeCount">${count.textContent}</span>`; }
     }
 
     function setupActions() {
-      // LIKE
+      // LIKE (article)
       document.getElementById('likeBtn').onclick = async () => {
         if (!currentUser) { location.href = 'login.html'; return; }
         const btn = document.getElementById('likeBtn');
@@ -381,6 +410,7 @@
             window.APPWRITE_DB_ID, window.COL_LIKES,
             [ window.Query.equal('articleId', articleId),
               window.Query.equal('userId', currentUser.$id),
+              window.Query.isNull('commentId'),
               window.Query.limit(1) ]
           );
 
@@ -395,7 +425,7 @@
             // Not liked → like
             const row = await window.databases.createDocument(
               window.APPWRITE_DB_ID, window.COL_LIKES, 'unique()',
-              { articleId, userId: currentUser.$id }
+              { articleId, commentId: null, userId: currentUser.$id }
             );
             userHasLiked = true; likeRowId = row.$id;
             count = count + 1;
@@ -429,41 +459,184 @@
       };
     }
 
-    /* ── COMMENTS (from `comments` collection) ── */
+    /* ── COMMENTS (from `comments` collection, supports nested replies + per-comment likes) ── */
+
     async function loadComments() {
       try {
         const res = await window.databases.listDocuments(
           window.APPWRITE_DB_ID, window.COL_COMMENTS,
           [ window.Query.equal('articleId', articleId),
             window.Query.orderDesc('$createdAt'),
-            window.Query.limit(100) ]
+            window.Query.limit(500) ]
         );
+        allComments = res.documents;
         document.getElementById('commentCount').textContent = res.total;
 
-        const list = document.getElementById('commentsList');
-        if (!res.documents.length) {
-          list.innerHTML = '<p style="color:#999;text-align:center;padding:20px">No comments yet. Be the first!</p>';
-          return;
-        }
-        list.innerHTML = res.documents.map(c => {
-          const name   = c.authorName || 'Anonymous';
-          const avatar = c.avatarUrl;
-          const date   = new Date(c.createdAt || c.$createdAt).toLocaleString('en-IN', { day:'numeric', month:'short', year:'numeric', hour:'numeric', minute:'2-digit', hour12:true, timeZone:'Asia/Kolkata' });
-          const avatarEl = (avatar && avatar !== 'null' && avatar !== '')
-            ? `<div class="comment-avatar"><img src="${avatar}" onerror="this.parentElement.textContent='${initials(name)}'"></div>`
-            : `<div class="comment-avatar">${initials(name)}</div>`;
-          return `
-            <div class="comment">
-              ${avatarEl}
-              <div style="flex:1;">
-                <div><span class="comment-author">${esc(name)}</span><span class="comment-date">${date}</span></div>
-                <p class="comment-text">${esc(c.commentText || c.comment || '')}</p>
-              </div>
-            </div>`;
-        }).join('');
+        await loadCommentLikes();
+        renderComments();
       } catch(e) {
         console.warn('loadComments failed:', e);
       }
+    }
+
+    // Pull all like rows for every comment on this article in one go
+    async function loadCommentLikes() {
+      commentLikeState = {};
+      commentLikeCounts = {};
+      if (!allComments.length) return;
+
+      try {
+        // Appwrite doesn't support "IN" easily across all SDK versions, so we
+        // fetch all comment-likes for this article and bucket them client-side.
+        const res = await window.databases.listDocuments(
+          window.APPWRITE_DB_ID, window.COL_LIKES,
+          [ window.Query.equal('articleId', articleId),
+            window.Query.isNotNull('commentId'),
+            window.Query.limit(2000) ]
+        );
+        res.documents.forEach(row => {
+          commentLikeCounts[row.commentId] = (commentLikeCounts[row.commentId] || 0) + 1;
+          if (currentUser && row.userId === currentUser.$id) {
+            commentLikeState[row.commentId] = { liked: true, rowId: row.$id };
+          }
+        });
+      } catch(e) {
+        console.warn('loadCommentLikes failed:', e);
+      }
+    }
+
+    function buildCommentTree() {
+      const byId = {};
+      allComments.forEach(c => byId[c.$id] = { ...c, _children: [] });
+      const roots = [];
+      allComments.forEach(c => {
+        const node = byId[c.$id];
+        if (c.parentCommentId && byId[c.parentCommentId]) {
+          byId[c.parentCommentId]._children.push(node);
+        } else {
+          roots.push(node);
+        }
+      });
+      // children oldest-first reads more naturally as a conversation
+      const sortAsc = arr => arr.sort((a,b) => new Date(a.$createdAt) - new Date(b.$createdAt));
+      Object.values(byId).forEach(n => sortAsc(n._children));
+      return roots;
+    }
+
+    function renderComments() {
+      const list = document.getElementById('commentsList');
+      if (!allComments.length) {
+        list.innerHTML = '<p style="color:#999;text-align:center;padding:20px">No comments yet. Be the first!</p>';
+        return;
+      }
+      const tree = buildCommentTree();
+      list.innerHTML = tree.map(node => renderCommentNode(node, 0)).join('');
+    }
+
+    function renderCommentNode(c, depth) {
+      const name   = c.authorName || 'Anonymous';
+      const avatar = c.avatarUrl;
+      const date   = new Date(c.createdAt || c.$createdAt).toLocaleString('en-IN', { day:'numeric', month:'short', year:'numeric', hour:'numeric', minute:'2-digit', hour12:true, timeZone:'Asia/Kolkata' });
+      const avatarEl = (avatar && avatar !== 'null' && avatar !== '')
+        ? `<div class="comment-avatar"><img src="${avatar}" onerror="this.parentElement.textContent='${initials(name)}'"></div>`
+        : `<div class="comment-avatar">${initials(name)}</div>`;
+
+      const likeCount = commentLikeCounts[c.$id] || 0;
+      const isLiked   = !!(commentLikeState[c.$id] && commentLikeState[c.$id].liked);
+
+      const childrenHtml = (c._children && c._children.length)
+        ? `<div class="comment-replies">${c._children.map(ch => renderCommentNode(ch, depth + 1)).join('')}</div>`
+        : '';
+
+      return `
+        <div class="comment-thread" data-comment-id="${c.$id}">
+          <div class="comment">
+            ${avatarEl}
+            <div style="flex:1;">
+              <div><span class="comment-author">${esc(name)}</span><span class="comment-date">${date}</span></div>
+              <p class="comment-text">${esc(c.commentText || c.comment || '')}</p>
+              <div class="comment-row-actions">
+                <button class="comment-mini-btn ${isLiked ? 'liked' : ''}" onclick="toggleCommentLike('${c.$id}', this)">
+                  ${isLiked ? '❤️' : '🤍'} <span class="mini-like-count">${likeCount}</span>
+                </button>
+                <button class="comment-mini-btn" onclick="toggleReplyBox('${c.$id}')">↩ Reply</button>
+              </div>
+              <div class="reply-box" id="replyBox-${c.$id}" style="display:none;">
+                <input class="reply-input" id="replyInput-${c.$id}" placeholder="${currentUser ? `Reply to ${esc(name)}...` : 'Login to reply'}" ${currentUser ? '' : 'disabled'}>
+                <button class="reply-mini-post" onclick="postReply('${c.$id}')" ${currentUser ? '' : 'disabled'}>Reply</button>
+              </div>
+              ${childrenHtml}
+            </div>
+          </div>
+        </div>`;
+    }
+
+    window.toggleReplyBox = function(commentId) {
+      // close any other open boxes
+      document.querySelectorAll('.reply-box').forEach(b => { if (b.id !== `replyBox-${commentId}`) b.style.display = 'none'; });
+      const box = document.getElementById(`replyBox-${commentId}`);
+      if (!box) return;
+      const opening = box.style.display === 'none';
+      box.style.display = opening ? 'flex' : 'none';
+      if (opening) {
+        if (!currentUser) { location.href = 'login.html'; return; }
+        document.getElementById(`replyInput-${commentId}`)?.focus();
+      }
+    };
+
+    window.toggleCommentLike = async function(commentId, btnEl) {
+      if (!currentUser) { location.href = 'login.html'; return; }
+      btnEl.disabled = true;
+
+      const countSpan = btnEl.querySelector('.mini-like-count');
+      let count = parseInt(countSpan.textContent) || 0;
+
+      try {
+        const existing = await window.databases.listDocuments(
+          window.APPWRITE_DB_ID, window.COL_LIKES,
+          [ window.Query.equal('commentId', commentId),
+            window.Query.equal('userId', currentUser.$id),
+            window.Query.limit(1) ]
+        );
+
+        if (existing.documents.length) {
+          await window.databases.deleteDocument(window.APPWRITE_DB_ID, window.COL_LIKES, existing.documents[0].$id);
+          commentLikeState[commentId] = { liked: false, rowId: null };
+          count = Math.max(0, count - 1);
+          btnEl.classList.remove('liked');
+          btnEl.innerHTML = `🤍 <span class="mini-like-count">${count}</span>`;
+        } else {
+          const row = await window.databases.createDocument(
+            window.APPWRITE_DB_ID, window.COL_LIKES, 'unique()',
+            { articleId, commentId, userId: currentUser.$id }
+          );
+          commentLikeState[commentId] = { liked: true, rowId: row.$id };
+          count = count + 1;
+          btnEl.classList.add('liked');
+          btnEl.innerHTML = `❤️ <span class="mini-like-count">${count}</span>`;
+        }
+        commentLikeCounts[commentId] = count;
+      } catch(e) {
+        console.error('Comment like failed:', e, e && e.message, e && e.code);
+        alert('Could not update like: ' + ((e && e.message) || 'unknown error'));
+      }
+      btnEl.disabled = false;
+    };
+
+    async function getDisplayIdentity() {
+      let displayName = currentUser.name || currentUser.email.split('@')[0];
+      let avatarUrl = '';
+      try {
+        const prof = await window.databases.listDocuments(
+          window.APPWRITE_DB_ID, window.COL_PROFILES,
+          [ window.Query.equal('userId', currentUser.$id), window.Query.limit(1) ]
+        );
+        if (prof.documents.length) {
+          displayName = prof.documents[0].displayName || displayName;
+          avatarUrl   = prof.documents[0].avatarUrl || '';
+        }
+      } catch(e) { /* profile optional */ }
+      return { displayName, avatarUrl };
     }
 
     window.postComment = async function() {
@@ -475,26 +648,15 @@
       btn.disabled = true;
 
       try {
-        // Try to get the user's profile for avatar + display name
-        let displayName = currentUser.name || currentUser.email.split('@')[0];
-        let avatarUrl = '';
-        try {
-          const prof = await window.databases.listDocuments(
-            window.APPWRITE_DB_ID, window.COL_PROFILES,
-            [ window.Query.equal('userId', currentUser.$id), window.Query.limit(1) ]
-          );
-          if (prof.documents.length) {
-            displayName = prof.documents[0].displayName || displayName;
-            avatarUrl   = prof.documents[0].avatarUrl || '';
-          }
-        } catch(e) { /* profile optional */ }
-
+        const { displayName, avatarUrl } = await getDisplayIdentity();
         await window.databases.createDocument(
           window.APPWRITE_DB_ID, window.COL_COMMENTS, 'unique()',
           {
             articleId,
+            parentCommentId: null,
             userId:      currentUser.$id,
             authorName:  displayName,
+            avatarUrl,
             commentText: text,
             createdAt:   new Date().toISOString()
           }
@@ -504,6 +666,38 @@
       } catch(e) {
         console.error('Post comment failed:', e, e && e.message, e && e.code);
         alert('Error posting comment: ' + ((e && e.message) || 'unknown error'));
+      }
+      btn.disabled = false;
+    };
+
+    window.postReply = async function(parentCommentId) {
+      if (!currentUser) { location.href = 'login.html'; return; }
+      const input = document.getElementById(`replyInput-${parentCommentId}`);
+      const text  = input.value.trim();
+      if (!text) return;
+
+      const btn = input.nextElementSibling;
+      btn.disabled = true;
+
+      try {
+        const { displayName, avatarUrl } = await getDisplayIdentity();
+        await window.databases.createDocument(
+          window.APPWRITE_DB_ID, window.COL_COMMENTS, 'unique()',
+          {
+            articleId,
+            parentCommentId,
+            userId:      currentUser.$id,
+            authorName:  displayName,
+            avatarUrl,
+            commentText: text,
+            createdAt:   new Date().toISOString()
+          }
+        );
+        input.value = '';
+        loadComments();
+      } catch(e) {
+        console.error('Post reply failed:', e, e && e.message, e && e.code);
+        alert('Error posting reply: ' + ((e && e.message) || 'unknown error'));
       }
       btn.disabled = false;
     };
