@@ -16,8 +16,8 @@
     <link rel="apple-touch-icon" href="assets/logo.png">
     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8402633423386929" crossorigin="anonymous"></script>
     <title>खबर दार्जिलिंग - Your Trusted News Source</title>
-    <link rel="stylesheet" href="css/style.css?v=128">
-    <link rel="stylesheet" href="css/responsive.css?v=128">
+    <link rel="stylesheet" href="css/style.css?v=129">
+    <link rel="stylesheet" href="css/responsive.css?v=129">
     <style>
         #gatekeeperLoader {
             position:fixed;top:0;left:0;width:100vw;height:100vh;
@@ -68,8 +68,26 @@
 
         .breaking-ticker { background:#c41e3a;color:#fff;padding:8px 0; }
         .breaking-label { background:#900;padding:8px 15px;font-weight:700;font-size:14px;white-space:nowrap; }
-        .ticker-content a { color:#fff;text-decoration:none;display:inline-block;padding:0 40px;font-weight:500; }
-        .ticker-content a:hover { text-decoration:underline; }
+
+        /* ── ADVANCED CSS TICKER (replaces deprecated <marquee>) ── */
+        .ticker-content { overflow:hidden; }
+        .ticker-track {
+            display:inline-flex;
+            white-space:nowrap;
+            will-change:transform;
+            animation:tickerScroll 35s linear infinite;
+        }
+        .ticker-content:hover .ticker-track,
+        .ticker-content:active .ticker-track { animation-play-state:paused; }
+        .ticker-track a {
+            color:#fff;text-decoration:none;padding:0 28px;font-weight:600;
+            display:inline-flex;align-items:center;gap:6px;
+        }
+        .ticker-track a:hover { text-decoration:underline;opacity:0.85; }
+        @keyframes tickerScroll {
+            from { transform:translateX(0); }
+            to   { transform:translateX(-50%); }
+        }
 
         .article-author {
             display:flex;align-items:center;gap:8px;
@@ -219,7 +237,7 @@
             .nav-right { flex-wrap:wrap;gap:8px !important; }
             .search-row input { width:120px;font-size:13px; }
             .breaking-label { font-size:12px;padding:8px 10px; }
-            .ticker-content a { padding:0 25px;font-size:14px; }
+            .ticker-track a { padding:0 18px;font-size:13px; }
             #authButtons { flex-wrap:wrap;gap:6px !important; }
             .nav-auth-btn { font-size:12px;padding:5px 10px; }
         }
@@ -291,10 +309,9 @@
     <section class="breaking-ticker" id="breaking">
         <div class="container" style="display:flex;align-items:center;">
             <span class="breaking-label">BREAKING NEWS</span>
-            <marquee class="ticker-content" id="breakingTicker" scrollamount="5"
-                     onmouseover="this.stop();" onmouseout="this.start();" style="flex-grow:1;">
-                Loading breaking news...
-            </marquee>
+            <div class="ticker-content" style="flex-grow:1;overflow:hidden;">
+                <div class="ticker-track" id="breakingTicker">Loading breaking news...</div>
+            </div>
         </div>
     </section>
 
@@ -834,9 +851,10 @@
         function renderBreakingTicker(articles) {
             const el = document.getElementById('breakingTicker');
             if (!el) return;
-            el.innerHTML = articles.slice(0, 8).map(a =>
+            const items = articles.slice(0, 8).map(a =>
                 `<a href="article.html?id=${a.$id}">🔴 ${esc(a.title)}</a>`
             ).join('');
+            el.innerHTML = items + items;
         }
 
         function renderFeaturedStory(featuredArray) {
