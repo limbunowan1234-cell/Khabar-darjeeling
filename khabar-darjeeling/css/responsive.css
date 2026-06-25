@@ -1,82 +1,94 @@
-/* ==================== RESPONSIVE DESIGN ==================== */
+/* ════════════════════════════════════════════════════════════ */
+/* RESPONSIVE DESIGN - Mobile First */
+/* ════════════════════════════════════════════════════════════ */
 
 /* Tablet (768px and below) */
 @media (max-width: 768px) {
     .container {
-        padding: 0 15px;
+        padding: 0 16px;
     }
 
-    /* MOBILE NAVBAR: Logo left, buttons right, no overlap */
+    /* Mobile navbar layout */
     .navbar-content {
         padding: 10px 0 !important;
         display: flex !important;
-        flex-direction: row !important;
         justify-content: space-between !important;
         align-items: center !important;
-        width: 100% !important;
-        position: relative !important;
     }
 
-    /* Hide desktop nav links by default */
-    .nav-menu {
-        display: none;
-    }
-
-    /* Hamburger button visible on mobile */
+    /* Hamburger menu */
     .nav-toggle {
         display: flex !important;
         flex-direction: column;
         gap: 5px;
         cursor: pointer;
-        padding: 10px;
+        padding: 8px;
+        background: none;
+        border: none;
         z-index: 1001;
     }
 
     .nav-toggle span {
-        width: 25px;
+        width: 24px;
         height: 3px;
-        background: #333;
-        transition: 0.3s;
+        background: var(--text-dark);
+        transition: var(--transition);
         border-radius: 2px;
     }
 
     body.dark-mode .nav-toggle span {
-        background: #fff;
+        background: #e0e0e0;
     }
 
-    /* THIS IS THE KEY FIX: Menu drawer when .active */
+    /* Mobile menu drawer */
+    .nav-menu {
+        display: none !important;
+    }
+
     .nav-menu.active {
         display: block !important;
         position: absolute;
-        top: 70px;
+        top: 64px;
         left: 0;
         right: 0;
-        background-color: white;
+        background: white;
         border-bottom: 1px solid var(--border-color);
         z-index: 999;
-        box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        box-shadow: var(--shadow);
+        animation: slideDown 0.3s ease-out;
+    }
+
+    @keyframes slideDown {
+        from {
+            opacity: 0;
+            transform: translateY(-10px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
     }
 
     body.dark-mode .nav-menu.active {
-        background-color: #2d2d2d;
-        border-bottom-color: #444;
+        background: #1e1e1e;
+        border-bottom-color: #333;
     }
 
     .nav-menu.active .nav-links {
         display: flex !important;
-        flex-direction: column;
-        gap: 0;
-        padding: 0;
-        margin: 0;
+        flex-direction: column !important;
+        gap: 0 !important;
+        padding: 0 !important;
+        margin: 0 !important;
     }
 
     .nav-menu.active .nav-links li {
-        border-bottom: 1px solid var(--border-color);
         list-style: none;
+        border-bottom: 1px solid var(--border-color);
     }
 
     body.dark-mode .nav-menu.active .nav-links li {
-        border-bottom-color: #444;
+        border-bottom-color: #333;
     }
 
     .nav-menu.active .nav-links li:last-child {
@@ -86,121 +98,209 @@
     .nav-menu.active .nav-links a {
         display: block;
         padding: 14px 20px;
-        color: var(--text-color);
+        color: var(--text-dark);
         text-decoration: none;
         font-weight: 500;
+        font-size: 15px;
+        transition: var(--transition);
+    }
+
+    body.dark-mode .nav-menu.active .nav-links a {
+        color: #e0e0e0;
     }
 
     .nav-menu.active .nav-links a:hover,
     .nav-menu.active .nav-links a.active {
-        background: #f5f5f5;
-        color: #c41e3a;
+        background: var(--bg-light);
+        color: var(--primary);
     }
 
     body.dark-mode .nav-menu.active .nav-links a:hover,
     body.dark-mode .nav-menu.active .nav-links a.active {
         background: #333;
+        color: var(--primary);
     }
 
-    /* FIX NAV MERGING: Right side buttons stay in flow */
+    /* Nav right stays in place */
     .nav-right {
         display: flex !important;
-        position: relative !important; 
-        top: auto !important;
-        right: auto !important;
         gap: 10px !important;
         align-items: center !important;
     }
 
-    /* Hide desktop search on mobile */
-    .search-input, .search-bar {
+    .search-input {
         display: none !important;
     }
 
-    /* Logo Text Resize for Mobile */
-    .logo h1 {
+    /* Logo resize */
+    .logo {
+        gap: 8px;
+    }
+
+    .logo img {
+        height: 36px !important;
+        width: 36px !important;
+    }
+
+    .logo-text h1 {
         font-size: 18px !important;
     }
 
-    .logo .tagline {
+    .logo-text .tagline {
         display: none !important;
     }
 
-    /* HERO COMPRESSION FIX */
+    /* Hero responsive */
     .hero {
-        aspect-ratio: auto !important;
-        background-size: cover !important;
-        background-position: center center !important;
-        padding: 50px 0 55px 0 !important; 
+        padding: 45px 0 50px !important;
     }
 
     .hero h2 {
-        font-size: 1.6rem !important;
-        margin-bottom: 10px !important;
+        font-size: 1.8rem !important;
+        margin-bottom: 12px !important;
     }
 
     .hero p {
         font-size: 0.95rem !important;
-        padding: 0 10px !important;
-        margin-bottom: 15px !important;
+        margin-bottom: 20px !important;
     }
 
     .hero-buttons {
-        flex-direction: row !important;
         gap: 10px !important;
-        justify-content: center !important;
     }
 
-    /* Featured Story Stack Adjustments */
+    /* Featured content stack */
     .featured-content {
-        flex-direction: column !important;
+        grid-template-columns: 1fr !important;
     }
 
-    .featured-content img {
-        width: 100% !important;
-        height: 220px !important;
+    .featured-image {
+        height: 240px !important;
     }
 
     .featured-text {
-        width: 100% !important;
-        padding: 20px !important;
+        padding: 24px !important;
     }
 
+    .featured-text h2 {
+        font-size: 1.4rem !important;
+    }
+
+    /* Grids */
+    .trending-grid,
+    .news-grid {
+        grid-template-columns: 1fr !important;
+    }
+
+    .category-grid {
+        grid-template-columns: repeat(2, 1fr) !important;
+    }
+
+    /* Forms */
     .form-row {
-        grid-template-columns: 1fr;
+        grid-template-columns: 1fr !important;
+    }
+
+    .submit-container {
+        padding: 24px !important;
+    }
+
+    /* CTA banners */
+    .cta-banner {
+        flex-direction: column !important;
+        text-align: center !important;
+        padding: 32px 24px !important;
+        margin: 40px 0 !important;
+        gap: 16px !important;
+    }
+
+    .cta-icon {
+        font-size: 40px !important;
+    }
+
+    .cta-content h3 {
+        font-size: 1.2rem !important;
+    }
+
+    /* Breaking ticker */
+    .breaking-ticker .container {
+        gap: 12px !important;
+    }
+
+    .breaking-label {
+        font-size: 11px !important;
+    }
+
+    .ticker-content {
+        font-size: 13px !important;
     }
 }
 
-/* Desktop: hide hamburger, always show menu */
+/* Desktop: hide hamburger */
 @media (min-width: 769px) {
     .nav-toggle {
         display: none !important;
     }
-    
+
     .nav-menu {
-        display: block !important;
-        position: static !important;
-    }
-    
-    .nav-links {
         display: flex !important;
-        flex-direction: row !important;
-        gap: 20px;
+        position: static !important;
     }
 }
 
-/* Mobile (480px and below) */
+/* Small Mobile (480px and below) */
 @media (max-width: 480px) {
-    .logo h1 {
+    .navbar-content {
+        padding: 8px 0 !important;
+    }
+
+    .logo img {
+        height: 32px !important;
+        width: 32px !important;
+    }
+
+    .logo-text h1 {
         font-size: 16px !important;
     }
 
     .admin-link {
-        padding: 6px 12px !important;
+        padding: 8px 14px !important;
         font-size: 12px !important;
+    }
+
+    .theme-toggle {
+        font-size: 16px !important;
     }
 
     .hero h2 {
         font-size: 1.4rem !important;
+    }
+
+    .section-title {
+        font-size: 20px !important;
+    }
+
+    .section-title::before {
+        height: 20px !important;
+    }
+
+    .news-grid {
+        gap: 16px !important;
+    }
+
+    .trending-grid {
+        gap: 16px !important;
+    }
+
+    .category-grid {
+        grid-template-columns: repeat(2, 1fr) !important;
+    }
+
+    .cta-content h3 {
+        font-size: 1.1rem !important;
+    }
+
+    .cta-content p {
+        font-size: 0.9rem !important;
     }
 }
