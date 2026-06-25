@@ -16,8 +16,8 @@
     <link rel="apple-touch-icon" href="assets/logo.png">
     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8402633423386929" crossorigin="anonymous"></script>
     <title>खबर दार्जिलिंग - Your Trusted News Source</title>
-    <link rel="stylesheet" href="css/style.css?v=129">
-    <link rel="stylesheet" href="css/responsive.css?v=129">
+    <link rel="stylesheet" href="css/style.css?v=130">
+    <link rel="stylesheet" href="css/responsive.css?v=130">
     <style>
         #gatekeeperLoader {
             position:fixed;top:0;left:0;width:100vw;height:100vh;
@@ -75,7 +75,8 @@
             display:inline-flex;
             white-space:nowrap;
             will-change:transform;
-            animation:tickerScroll 35s linear infinite;
+            padding-left:100%;
+            animation:tickerScroll 30s linear infinite;
         }
         .ticker-content:hover .ticker-track,
         .ticker-content:active .ticker-track { animation-play-state:paused; }
@@ -86,7 +87,7 @@
         .ticker-track a:hover { text-decoration:underline;opacity:0.85; }
         @keyframes tickerScroll {
             from { transform:translateX(0); }
-            to   { transform:translateX(-50%); }
+            to   { transform:translateX(-100%); }
         }
 
         .article-author {
@@ -854,7 +855,7 @@
             const items = articles.slice(0, 8).map(a =>
                 `<a href="article.html?id=${a.$id}">🔴 ${esc(a.title)}</a>`
             ).join('');
-            el.innerHTML = items + items;
+            el.innerHTML = items;
         }
 
         function renderFeaturedStory(featuredArray) {
