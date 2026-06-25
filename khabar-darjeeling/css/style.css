@@ -742,6 +742,19 @@ body {
     cursor: not-allowed;
     transform: none;
 }
+.btn-secondary {
+    background: rgba(255, 255, 255, 0.15);
+    color: white;
+    border: 2px solid rgba(255, 255, 255, 0.7);
+    backdrop-filter: blur(4px);
+}
+
+.btn-secondary:hover {
+    background: rgba(255, 255, 255, 0.25);
+    border-color: white;
+    transform: translateY(-2px);
+}
+
 
 body.dark-mode {
     background: #121212;
