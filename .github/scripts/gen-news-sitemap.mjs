@@ -18,6 +18,22 @@ function esc(s) {
     .replace(/"/g, '&quot;').replace(/'/g, '&apos;');
 }
 
+// Detect language from the article's title + content.
+// Devanagari (\u0900-\u097F) is shared by Hindi and Nepali, so we look for
+// a few Nepali-specific function words to tell them apart; otherwise Hindi;
+// if there's no Devanagari at all, treat it as English.
+function detectLang(a) {
+  const text = `${a.title || ''} ${a.content || ''}`;
+  const hasDevanagari = /[\u0900-\u097F]/.test(text);
+  if (!hasDevanagari) return 'en';
+
+  // Common Nepali markers rarely used the same way in Hindi.
+  const nepaliMarkers = /(छ|हो|भएको|गर्न|लागि|हुन्छ|पर्खाइ|र |मा |को |हरू|छन्|थियो|गरेको)/;
+  if (nepaliMarkers.test(text)) return 'ne';
+
+  return 'hi';
+}
+
 async function main() {
   const cutoff = new Date(Date.now() - 48 * 3600 * 1000).toISOString();
   const queries = [
@@ -40,10 +56,11 @@ async function main() {
 
   const items = docs.map(a => {
     const d = new Date(a.publishedAt || a.$createdAt).toISOString();
+    const lang = detectLang(a);
     return `  <url>
     <loc>${esc(`${SITE}/article.html?id=${a.$id}`)}</loc>
     <news:news>
-      <news:publication><news:name>${esc(PUB)}</news:name><news:language>en</news:language></news:publication>
+      <news:publication><news:name>${esc(PUB)}</news:name><news:language>${lang}</news:language></news:publication>
       <news:publication_date>${d}</news:publication_date>
       <news:title>${esc(a.title)}</news:title>
     </news:news>
@@ -58,7 +75,7 @@ ${items}
 
   await mkdir(dirname(OUT), { recursive: true });
   await writeFile(OUT, xml, 'utf8');
-  console.log(`Wrote ${OUT}`);
+  console.log(`Wrote ${OUT} with ${docs.length} entries.`);
 }
 
 main().catch(err => { console.error(err); process.exit(1); });
