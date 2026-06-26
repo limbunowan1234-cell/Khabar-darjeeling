@@ -1,69 +1,67 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:news="http://www.google.com/schemas/sitemap-news/0.9">
   <url>
-    <loc>https://khabardarjeeling.space/</loc>
-    <changefreq>hourly</changefreq>
-    <priority>1.0</priority>
+    <loc>https://khabardarjeeling.space/article.html?id=6a3e2bfedea105c79812</loc>
+    <news:news>
+      <news:publication><news:name>Khabar Darjeeling</news:name><news:language>en</news:language></news:publication>
+      <news:publication_date>2026-06-26T07:36:30.598Z</news:publication_date>
+      <news:title>GRAVE OF HOPE</news:title>
+    </news:news>
   </url>
-
-  <url>
-    <loc>https://khabardarjeeling.space/contest.html</loc>
-    <changefreq>daily</changefreq>
-    <priority>0.9</priority>
-  </url>
-
-  <url>
-    <loc>https://khabardarjeeling.space/post.html</loc>
-    <changefreq>weekly</changefreq>
-    <priority>0.6</priority>
-  </url>
-
   <url>
     <loc>https://khabardarjeeling.space/article.html?id=6a3d6828cc60f950fee2</loc>
-    <lastmod>2026-06-25</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
+    <news:news>
+      <news:publication><news:name>Khabar Darjeeling</news:name><news:language>ne</news:language></news:publication>
+      <news:publication_date>2026-06-25T17:40:55.039Z</news:publication_date>
+      <news:title>&apos;नयाँ उज्यालोको पर्खाइ&apos;</news:title>
+    </news:news>
   </url>
-
   <url>
     <loc>https://khabardarjeeling.space/article.html?id=6a3d1f73c36dd4ae6cfe</loc>
-    <lastmod>2026-06-25</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
+    <news:news>
+      <news:publication><news:name>Khabar Darjeeling</news:name><news:language>en</news:language></news:publication>
+      <news:publication_date>2026-06-25T12:30:41.796Z</news:publication_date>
+      <news:title>The aspirations  of people with the new party for bettter opportunities</news:title>
+    </news:news>
   </url>
-
   <url>
     <loc>https://khabardarjeeling.space/article.html?id=6a3cf2fd904dcb8ddfb0</loc>
-    <lastmod>2026-06-25</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
+    <news:news>
+      <news:publication><news:name>Khabar Darjeeling</news:name><news:language>en</news:language></news:publication>
+      <news:publication_date>2026-06-25T09:19:52.613Z</news:publication_date>
+      <news:title>Morcha Delegation Seeks Revival of Cinchona Plantations, Urges Horticulture Minister to Act</news:title>
+    </news:news>
   </url>
-
   <url>
     <loc>https://khabardarjeeling.space/article.html?id=6a3cce0abf8fd85a7f09</loc>
-    <lastmod>2026-06-25</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
+    <news:news>
+      <news:publication><news:name>Khabar Darjeeling</news:name><news:language>en</news:language></news:publication>
+      <news:publication_date>2026-06-25T06:43:22.038Z</news:publication_date>
+      <news:title>Riya Thapa</news:title>
+    </news:news>
   </url>
-
   <url>
     <loc>https://khabardarjeeling.space/article.html?id=6a3cc7f4b30f543db8cb</loc>
-    <lastmod>2026-06-25</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
+    <news:news>
+      <news:publication><news:name>Khabar Darjeeling</news:name><news:language>en</news:language></news:publication>
+      <news:publication_date>2026-06-25T06:17:24.410Z</news:publication_date>
+      <news:title>Landslide on Lifeline NH-10 Blinks Siliguri–Sikkim Traffic Amid Heavy Rains</news:title>
+    </news:news>
   </url>
-
   <url>
     <loc>https://khabardarjeeling.space/article.html?id=6a3c2aa6e75e4b4df9eb</loc>
-    <lastmod>2026-06-24</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
+    <news:news>
+      <news:publication><news:name>Khabar Darjeeling</news:name><news:language>en</news:language></news:publication>
+      <news:publication_date>2026-06-24T19:06:14.148Z</news:publication_date>
+      <news:title>𝐈 𝐀𝐌 𝐃𝐀𝐑𝐉𝐄𝐄𝐋𝐈𝐍𝐆</news:title>
+    </news:news>
   </url>
-
   <url>
     <loc>https://khabardarjeeling.space/article.html?id=6a3bd5b1f2d598540c0b</loc>
-    <lastmod>2026-06-24</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
+    <news:news>
+      <news:publication><news:name>Khabar Darjeeling</news:name><news:language>en</news:language></news:publication>
+      <news:publication_date>2026-06-24T13:03:45.677Z</news:publication_date>
+      <news:title>•	Anit Thapa Confirms GTA Resignation: “From Today, I Fight for Caste Liberation”</news:title>
+    </news:news>
   </url>
 </urlset>
