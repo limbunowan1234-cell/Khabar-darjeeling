@@ -1,26 +1,11 @@
 User-agent: *
 Allow: /
-Allow: /index.html
-Allow: /article.html
-Allow: /submit.html
+
+# Keep admin out of the index
 Disallow: /admin.html
 Disallow: /admin/
-Disallow: /*.json
-Disallow: /*.js
 
-Sitemap: https://khabardarjeeling.online/sitemap.xml
+# NOTE: Do NOT disallow /js/ or *.js — this site renders via JavaScript,
+# so blocking scripts would stop Google from seeing any content.
 
-# Allow search engines to crawl
-Allow: /css/
-Allow: /js/
-Allow: /images/
-
-# Specific rules for popular bots
-User-agent: Googlebot
-Allow: /
-
-User-agent: Bingbot
-Allow: /
-
-# Crawl delay (in seconds)
-Crawl-delay: 1
+Sitemap: https://khabardarjeeling.space/sitemap.xml
