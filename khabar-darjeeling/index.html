@@ -16,8 +16,8 @@
     <link rel="apple-touch-icon" href="assets/logo.png">
     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8402633423386929" crossorigin="anonymous"></script>
     <title>खबर दार्जिलिंग - Your Trusted News Source</title>
-    <link rel="stylesheet" href="css/style.css?v=130">
-    <link rel="stylesheet" href="css/responsive.css?v=130">
+    <link rel="stylesheet" href="css/style.css?v=131">
+    <link rel="stylesheet" href="css/responsive.css?v=131">
     <style>
         #gatekeeperLoader {
             position:fixed;top:0;left:0;width:100vw;height:100vh;
@@ -545,6 +545,7 @@
                         window.APPWRITE_DB_ID, window.COL_LIKES,
                         [ window.Query.equal('articleId', articleId),
                           window.Query.equal('userId', currentUser.$id),
+                          window.Query.isNull('commentId'),
                           window.Query.limit(1) ]
                     );
                     if (existing.documents.length) {
@@ -556,7 +557,7 @@
                 } else {
                     await window.databases.createDocument(
                         window.APPWRITE_DB_ID, window.COL_LIKES, 'unique()',
-                        { articleId, userId: currentUser.$id }
+                        { articleId, commentId: null, userId: currentUser.$id }
                     );
                     liked[articleId] = true;
                 }
@@ -756,7 +757,9 @@
                 await Promise.all(list.map(async e => {
                     try {
                         const likes = await window.databases.listDocuments(window.APPWRITE_DB_ID, window.COL_LIKES,
-                            [ window.Query.equal('articleId', e.$id), window.Query.limit(1) ]);
+                            [ window.Query.equal('articleId', e.$id),
+                              window.Query.isNull('commentId'),
+                              window.Query.limit(1) ]);
                         e._votes = likes.total != null ? likes.total : 0;
                     } catch { e._votes = 0; }
                 }));
