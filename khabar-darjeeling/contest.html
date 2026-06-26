@@ -194,12 +194,14 @@
         return;
       }
 
-      // Load live vote counts for each entry (from likes collection)
+      // Load live vote counts for each entry (article-level likes only — commentId must be null)
       await Promise.all(entries.map(async e => {
         try {
           const likes = await window.databases.listDocuments(
             window.APPWRITE_DB_ID, window.COL_LIKES,
-            [ window.Query.equal('articleId', e.$id), window.Query.limit(1) ]
+            [ window.Query.equal('articleId', e.$id),
+              window.Query.isNull('commentId'),
+              window.Query.limit(1) ]
           );
           e._votes = likes.total != null ? likes.total : (likes.documents ? likes.documents.length : 0);
         } catch { e._votes = 0; }
@@ -280,7 +282,7 @@
     renderGallery();
   };
 
-  // Vote = like (reuses likes collection, one row per user per entry)
+  // Vote = like (reuses likes collection, one row per user per entry — article-level, commentId null)
   window.vote = async function(e, id, btn){
     e.preventDefault(); e.stopPropagation();
     if (!currentUser){ if(confirm('Please log in to vote. Go to login?')) location.href='login.html'; return; }
@@ -298,12 +300,12 @@
     try {
       if (isLiked){
         const ex = await window.databases.listDocuments(window.APPWRITE_DB_ID, window.COL_LIKES,
-          [ window.Query.equal('articleId',id), window.Query.equal('userId',currentUser.$id), window.Query.limit(1) ]);
+          [ window.Query.equal('articleId',id), window.Query.equal('userId',currentUser.$id), window.Query.isNull('commentId'), window.Query.limit(1) ]);
         if (ex.documents.length) await window.databases.deleteDocument(window.APPWRITE_DB_ID, window.COL_LIKES, ex.documents[0].$id);
         delete liked[id];
       } else {
         await window.databases.createDocument(window.APPWRITE_DB_ID, window.COL_LIKES, 'unique()',
-          { articleId:id, userId:currentUser.$id });
+          { articleId:id, commentId:null, userId:currentUser.$id });
         liked[id]=true;
       }
       setLikedLocal(liked);
