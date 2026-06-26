@@ -1,11 +1,16 @@
 User-agent: *
 Allow: /
 
-# Keep admin out of the index
+# Keep admin and debug pages out of search results
 Disallow: /admin.html
 Disallow: /admin/
+Disallow: /debug.html
 
-# NOTE: Do NOT disallow /js/ or *.js — this site renders via JavaScript,
+# Do NOT block /js/ or *.js — this site renders via JavaScript,
 # so blocking scripts would stop Google from seeing any content.
 
+# Auto-generated news sitemap (updated by GitHub Action)
+Sitemap: https://khabardarjeeling.space/news-sitemap.xml
+
+# Static sitemap for core pages
 Sitemap: https://khabardarjeeling.space/sitemap.xml
