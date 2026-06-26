@@ -4,6 +4,57 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="Khabar Darjeeling - Latest news from Darjeeling, Kalimpong, Kurseong, Mirik, Siliguri and West Bengal">
+
+    <!-- ───────── SEO: CANONICAL + OPENGRAPH + TWITTER (added Phase 1) ───────── -->
+    <link rel="canonical" href="https://khabardarjeeling.space/">
+    <meta property="og:site_name" content="खबर दार्जिलिंग">
+    <meta property="og:title" content="खबर दार्जिलिंग - Latest News from Darjeeling &amp; West Bengal">
+    <meta property="og:description" content="Khabar Darjeeling - Local news, stories, and updates from Darjeeling, Kalimpong, Kurseong, Mirik, Siliguri, and West Bengal.">
+    <meta property="og:image" content="https://khabardarjeeling.space/assets/og-homepage.jpg">
+    <meta property="og:url" content="https://khabardarjeeling.space/">
+    <meta property="og:type" content="website">
+    <meta property="og:locale" content="en_US">
+    <meta property="og:locale:alternate" content="hi_IN">
+    <meta property="og:locale:alternate" content="ne_NP">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="खबर दार्जिलिंग - Your Trusted News Source">
+    <meta name="twitter:description" content="Latest news from Darjeeling, Kalimpong, and West Bengal">
+    <meta name="twitter:image" content="https://khabardarjeeling.space/assets/og-homepage.jpg">
+
+    <!-- ───────── SEO: ORGANIZATION JSON-LD (added Phase 1) ───────── -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "NewsMediaOrganization",
+      "name": "खबर दार्जिलिंग",
+      "alternateName": "Khabar Darjeeling",
+      "url": "https://khabardarjeeling.space",
+      "logo": "https://khabardarjeeling.space/assets/logo.png",
+      "image": "https://khabardarjeeling.space/assets/og-homepage.jpg",
+      "description": "Local news platform covering Darjeeling, Kalimpong, Kurseong, Mirik, Siliguri, and West Bengal region",
+      "foundingDate": "2026-06-01",
+      "contactPoint": {
+        "@type": "ContactPoint",
+        "contactType": "Editorial",
+        "telephone": "+91-7557061046",
+        "email": "nowanad@gmail.com"
+      },
+      "sameAs": [
+        "https://whatsapp.com/channel/0029VbD933y3LdQQ0g9Z682b",
+        "https://github.com/limbunowan1234-cell/Khabar-darjeeling"
+      ],
+      "areaServed": [
+        { "@type": "City", "name": "Darjeeling" },
+        { "@type": "City", "name": "Kalimpong" },
+        { "@type": "City", "name": "Kurseong" },
+        { "@type": "City", "name": "Mirik" },
+        { "@type": "City", "name": "Siliguri" },
+        { "@type": "AdministrativeArea", "name": "West Bengal" }
+      ]
+    }
+    </script>
+    <!-- ───────── END SEO BLOCK ───────── -->
+
     <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
     <meta http-equiv="Pragma" content="no-cache">
     <meta http-equiv="Expires" content="0">
@@ -264,6 +315,21 @@
         <div class="spinner"></div>
         <p style="font-weight:600;letter-spacing:0.5px;">Loading News...</p>
     </div>
+
+    <!-- ───────── SEO: STATIC CRAWLABLE FALLBACK (added Phase 1) ─────────
+         Visible to Googlebot/Bing in raw HTML before JS runs. Hidden from
+         users the instant the app boots (removed in checkAuthAndRender). -->
+    <div id="seoFallback" style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);">
+        <h1>खबर दार्जिलिंग — Latest News from Darjeeling, Gorkhaland &amp; West Bengal</h1>
+        <p>Khabar Darjeeling (खबर दार्जिलिंग) is your trusted local news source covering Darjeeling,
+           Kalimpong, Kurseong, Mirik, Siliguri and the wider West Bengal and Gorkhaland region.
+           Read breaking news, hill region updates, community stories and the Khabar Darjeeling
+           Story Contest 2026.</p>
+        <p>दार्जिलिंग, कालिंपोंग, कर्सियांग, मिरिक और सिलीगुड़ी की ताज़ा खबरें — खबर दार्जिलिंग पर पढ़ें।</p>
+        <p>दार्जिलिङ, कालिम्पोङ, कर्सियाङ र सिलिगुडीको ताजा समाचार — खबर दार्जिलिङमा पढ्नुहोस्।</p>
+        <p><a href="contest.html">Khabar Darjeeling Story Contest 2026 — ₹10,000 prize pool, theme: Life After Election, deadline July 31, 2026.</a></p>
+    </div>
+    <!-- ───────── END SEO FALLBACK ───────── -->
 
     <nav class="navbar">
         <div class="container">
@@ -714,6 +780,8 @@
                 authButtons.innerHTML = `<a href="login.html" class="nav-auth-btn btn-login">Login</a>`;
                 mobileAuth.innerHTML  = `<a href="login.html">Login</a>`;
             }
+            /* SEO: remove the static crawl fallback once the real app takes over */
+            document.getElementById('seoFallback')?.remove();
             const loader = document.getElementById('gatekeeperLoader');
             if (loader) { loader.style.opacity = '0'; setTimeout(() => loader.style.display = 'none', 300); }
             loadHomepage();
