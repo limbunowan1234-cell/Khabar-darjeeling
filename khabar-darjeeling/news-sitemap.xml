@@ -1,6 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:news="http://www.google.com/schemas/sitemap-news/0.9">
   <url>
+    <loc>https://khabardarjeeling.space/article.html?id=6a3f6ce57c7b63e0a193</loc>
+    <news:news>
+      <news:publication><news:name>Khabar Darjeeling</news:name><news:language>en</news:language></news:publication>
+      <news:publication_date>2026-06-27T06:25:41.207Z</news:publication_date>
+      <news:title>Latest tracker of repair and infrastructure deadline</news:title>
+    </news:news>
+  </url>
+  <url>
+    <loc>https://khabardarjeeling.space/article.html?id=6a3efddbd9cebee6a2e2</loc>
+    <news:news>
+      <news:publication><news:name>Khabar Darjeeling</news:name><news:language>en</news:language></news:publication>
+      <news:publication_date>2026-06-26T22:31:54.144Z</news:publication_date>
+      <news:title>Life After Election: When the Hills Chose Hope</news:title>
+    </news:news>
+  </url>
+  <url>
     <loc>https://khabardarjeeling.space/article.html?id=6a3e6d6d3cc0f8062b96</loc>
     <news:news>
       <news:publication><news:name>Khabar Darjeeling</news:name><news:language>en</news:language></news:publication>
@@ -38,22 +54,6 @@
       <news:publication><news:name>Khabar Darjeeling</news:name><news:language>en</news:language></news:publication>
       <news:publication_date>2026-06-25T09:19:52.613Z</news:publication_date>
       <news:title>Morcha Delegation Seeks Revival of Cinchona Plantations, Urges Horticulture Minister to Act</news:title>
-    </news:news>
-  </url>
-  <url>
-    <loc>https://khabardarjeeling.space/article.html?id=6a3cce0abf8fd85a7f09</loc>
-    <news:news>
-      <news:publication><news:name>Khabar Darjeeling</news:name><news:language>en</news:language></news:publication>
-      <news:publication_date>2026-06-25T06:43:22.038Z</news:publication_date>
-      <news:title>Riya Thapa</news:title>
-    </news:news>
-  </url>
-  <url>
-    <loc>https://khabardarjeeling.space/article.html?id=6a3cc7f4b30f543db8cb</loc>
-    <news:news>
-      <news:publication><news:name>Khabar Darjeeling</news:name><news:language>en</news:language></news:publication>
-      <news:publication_date>2026-06-25T06:17:24.410Z</news:publication_date>
-      <news:title>Landslide on Lifeline NH-10 Blinks Siliguri–Sikkim Traffic Amid Heavy Rains</news:title>
     </news:news>
   </url>
 </urlset>
