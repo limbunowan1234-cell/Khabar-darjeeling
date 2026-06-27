@@ -339,7 +339,7 @@
                         <img src="assets/logo.png" alt="Khabar Darjeeling Logo"
                              style="height:55px;width:55px;object-fit:cover;border-radius:50%;flex-shrink:0;">
                         <div>
-                            <h1 style="font-size:24px;color:var(--primary-color);margin:0;line-height:1.2;">खबर दार्जिलिंग</h1>
+                            <h1 style="font-size:24px;color:#c41e3a;margin:0;line-height:1.2;">खबर दार्जिलिंग</h1>
                             <p class="tagline" style="margin:0;font-size:11px;color:var(--text-light);font-weight:500;">Hamro Khabar, Hami Lekhaw</p>
                         </div>
                     </a>
@@ -570,7 +570,7 @@
                 ? `By <a href="profile.html?userId=${uid}" style="text-decoration:none;color:inherit;"><span class="author-name">${esc(name)}</span></a>`
                 : `By <span class="author-name">${esc(name)}</span>`;
             const avatarEl = (avatar && avatar !== '' && avatar !== 'null')
-                ? `<img src="${avatar}" alt="${esc(name)}" class="author-avatar" onerror="this.outerHTML='<div class=\\'author-initials\\'>${initials(name)}</div>'">`
+                ? `<img src="${avatar}" alt="${esc(name)}" class="author-avatar" onerror="this.outerHTML='<div class=\\'author-initials\\'>${initials(name)}</div>'\">`
                 : `<div class="author-initials">${initials(name)}</div>`;
             return `<div class="article-author">${avatarEl}<span>${nameEl}</span></div>`;
         }
