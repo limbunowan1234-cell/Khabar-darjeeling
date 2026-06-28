@@ -285,6 +285,55 @@
             font-weight:700;font-size:0.9rem;text-decoration:none;white-space:nowrap;
         }
 
+        /* ──────────── CONGRATULATIONS BANNER ──────────── */
+        .congrats-banner {
+            background:linear-gradient(135deg,#c41e3a,#8b0000);
+            padding:14px 20px;
+            text-align:center;
+            color:white;
+            font-weight:600;
+            display:flex;
+            justify-content:center;
+            align-items:center;
+            gap:15px;
+            animation:slideDown 0.5s ease;
+            z-index:9997;
+        }
+
+        .congrats-content {
+            display:flex;
+            justify-content:center;
+            align-items:center;
+            gap:20px;
+            max-width:100%;
+        }
+
+        .close-btn {
+            background:rgba(255,255,255,0.2);
+            border:none;
+            color:white;
+            cursor:pointer;
+            font-size:18px;
+            padding:5px 10px;
+            border-radius:4px;
+            flex-shrink:0;
+            transition:background 0.2s;
+        }
+
+        .close-btn:hover {
+            background:rgba(255,255,255,0.3);
+        }
+
+        @keyframes slideDown {
+            from { transform:translateY(-100%);opacity:0; }
+            to { transform:translateY(0);opacity:1; }
+        }
+
+        @media (max-width:768px) {
+            .congrats-banner { padding:10px 15px; font-size:14px; gap:10px; }
+            .congrats-content { flex-direction:column; gap:10px; }
+        }
+
         @media (max-width:768px) {
             .nav-right { flex-wrap:wrap;gap:8px !important; }
             .search-row input { width:120px;font-size:13px; }
@@ -299,6 +348,14 @@
     </style>
 </head>
 <body>
+
+    <!-- Congratulations Banner -->
+    <div id="congratsBanner" class="congrats-banner">
+        <div class="congrats-content">
+            🎉 Thank you for being part of KhabarDarjeeling! We're growing together!
+            <button onclick="closeBanner()" class="close-btn">✕</button>
+        </div>
+    </div>
 
     <!-- Install App Banner -->
     <div id="installBanner" style="display:none;position:fixed;bottom:0;left:0;right:0;z-index:9998;background:#c41e3a;color:#fff;padding:12px 16px;box-shadow:0 -2px 12px rgba(0,0,0,0.2);align-items:center;gap:12px;font-family:inherit;">
@@ -506,6 +563,17 @@
 
         let allArticles = [];
         let currentUser = null;
+
+        // Congratulations banner close function
+        window.closeBanner = function() {
+            const banner = document.getElementById('congratsBanner');
+            if (banner) {
+                banner.style.animation = 'slideDown 0.5s ease reverse';
+                setTimeout(() => {
+                    banner.style.display = 'none';
+                }, 500);
+            }
+        };
 
         /* ── APK DOWNLOAD CLICK LOGGING ── */
         window.logApkClick = function () {
