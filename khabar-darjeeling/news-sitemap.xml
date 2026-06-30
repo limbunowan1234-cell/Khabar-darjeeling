@@ -1,6 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:news="http://www.google.com/schemas/sitemap-news/0.9">
   <url>
+    <loc>https://khabardarjeeling.space/article.html?id=6a4381005a13876a84ce</loc>
+    <news:news>
+      <news:publication><news:name>Khabar Darjeeling</news:name><news:language>en</news:language></news:publication>
+      <news:publication_date>2026-06-30T09:01:40.506Z</news:publication_date>
+      <news:title>&quot;LIFE AFTER ELECTION&quot;</news:title>
+    </news:news>
+  </url>
+  <url>
+    <loc>https://khabardarjeeling.space/article.html?id=6a4378f56f6889ef2e12</loc>
+    <news:news>
+      <news:publication><news:name>Khabar Darjeeling</news:name><news:language>en</news:language></news:publication>
+      <news:publication_date>2026-06-30T08:04:54.683Z</news:publication_date>
+      <news:title>🚨 URGENT: Safety Tips for Tourists During Heavy Rain in Darjeeling (IMD Red Alert)</news:title>
+    </news:news>
+  </url>
+  <url>
     <loc>https://khabardarjeeling.space/article.html?id=6a4290f6a2c6b3e53529</loc>
     <news:news>
       <news:publication><news:name>Khabar Darjeeling</news:name><news:language>hi</news:language></news:publication>
@@ -14,30 +30,6 @@
       <news:publication><news:name>Khabar Darjeeling</news:name><news:language>ne</news:language></news:publication>
       <news:publication_date>2026-06-29T09:10:00.256Z</news:publication_date>
       <news:title>म  दार्जिलिङ &apos;पहाड की रानी&apos; अनि मेरो कथा</news:title>
-    </news:news>
-  </url>
-  <url>
-    <loc>https://khabardarjeeling.space/article.html?id=6a40f7f0126f9321e80d</loc>
-    <news:news>
-      <news:publication><news:name>Khabar Darjeeling</news:name><news:language>en</news:language></news:publication>
-      <news:publication_date>2026-06-28T10:31:11.792Z</news:publication_date>
-      <news:title>⚠️ Weather Alert | Darjeeling -  Kalimpong -  Kurseong — Heavy Rainfall Warning Issued</news:title>
-    </news:news>
-  </url>
-  <url>
-    <loc>https://khabardarjeeling.space/article.html?id=6a40d5b6750ea0f85417</loc>
-    <news:news>
-      <news:publication><news:name>Khabar Darjeeling</news:name><news:language>en</news:language></news:publication>
-      <news:publication_date>2026-06-28T08:05:10.124Z</news:publication_date>
-      <news:title>Landslide Hits Lower Sumphu, Sombaria — One House at Risk, Swift Rescue Response</news:title>
-    </news:news>
-  </url>
-  <url>
-    <loc>https://khabardarjeeling.space/article.html?id=6a409c2d025635d6a46a</loc>
-    <news:news>
-      <news:publication><news:name>Khabar Darjeeling</news:name><news:language>en</news:language></news:publication>
-      <news:publication_date>2026-06-28T03:59:40.169Z</news:publication_date>
-      <news:title>Mero pahar ma</news:title>
     </news:news>
   </url>
 </urlset>
