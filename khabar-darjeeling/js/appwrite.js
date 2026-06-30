@@ -1,5 +1,5 @@
 // js/appwrite.js — NO SDK, direct fetch. First-party domain = clean cookie auth.
-window.ENDPOINT = 'https://nyc.cloud.appwrite.io/v1';
+window.ENDPOINT = 'https://api.khabardarjeeling.space/v1';
 window.PROJECT  = 'khabardarjeeling';
 
 window.APPWRITE_ENDPOINT   = window.ENDPOINT;
