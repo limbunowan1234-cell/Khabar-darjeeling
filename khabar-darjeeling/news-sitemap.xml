@@ -1,6 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:news="http://www.google.com/schemas/sitemap-news/0.9">
   <url>
+    <loc>https://khabardarjeeling.space/article.html?id=6a44d0c04d2959f177d0</loc>
+    <news:news>
+      <news:publication><news:name>Khabar Darjeeling</news:name><news:language>en</news:language></news:publication>
+      <news:publication_date>2026-07-01T08:31:44.974Z</news:publication_date>
+      <news:title>World Cup 2026 Knockout Bracket Takes Shape as Teams Begin Road to Final</news:title>
+    </news:news>
+  </url>
+  <url>
     <loc>https://khabardarjeeling.space/article.html?id=6a4381005a13876a84ce</loc>
     <news:news>
       <news:publication><news:name>Khabar Darjeeling</news:name><news:language>en</news:language></news:publication>
@@ -22,14 +30,6 @@
       <news:publication><news:name>Khabar Darjeeling</news:name><news:language>hi</news:language></news:publication>
       <news:publication_date>2026-06-29T15:36:21.807Z</news:publication_date>
       <news:title>Unseasonal Heavy Snowfall - Darjeeling Hills : 6–10 Feet in Sandakphu &amp; Falut, Tourists Stranded</news:title>
-    </news:news>
-  </url>
-  <url>
-    <loc>https://khabardarjeeling.space/article.html?id=6a423a2017fbda62e25f</loc>
-    <news:news>
-      <news:publication><news:name>Khabar Darjeeling</news:name><news:language>ne</news:language></news:publication>
-      <news:publication_date>2026-06-29T09:10:00.256Z</news:publication_date>
-      <news:title>म  दार्जिलिङ &apos;पहाड की रानी&apos; अनि मेरो कथा</news:title>
     </news:news>
   </url>
 </urlset>
