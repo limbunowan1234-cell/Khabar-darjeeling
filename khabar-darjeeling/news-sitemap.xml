@@ -24,20 +24,4 @@
       <news:title>आशाले सजिएको दार्जिलिङ</news:title>
     </news:news>
   </url>
-  <url>
-    <loc>https://khabardarjeeling.space/article.html?id=6a50f7ab921a546c0584</loc>
-    <news:news>
-      <news:publication><news:name>Khabar Darjeeling</news:name><news:language>en</news:language></news:publication>
-      <news:publication_date>2026-07-10T13:44:42.414Z</news:publication_date>
-      <news:title>Black Fever Alert: What Darjeeling Residents Need to Know About Kala-Azar&apos;s Return</news:title>
-    </news:news>
-  </url>
-  <url>
-    <loc>https://khabardarjeeling.space/article.html?id=6a50f0a8047fc1d89b09</loc>
-    <news:news>
-      <news:publication><news:name>Khabar Darjeeling</news:name><news:language>en</news:language></news:publication>
-      <news:publication_date>2026-07-10T13:14:46.447Z</news:publication_date>
-      <news:title>Digital Marketing: Why Darjeeling&apos;s Local Businesses Can&apos;t Afford to Ignore It Anymore</news:title>
-    </news:news>
-  </url>
 </urlset>
