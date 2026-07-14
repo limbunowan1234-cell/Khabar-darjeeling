@@ -1,6 +1,30 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:news="http://www.google.com/schemas/sitemap-news/0.9">
   <url>
+    <loc>https://khabardarjeeling.space/article.html?id=6a566853973c10a3152e</loc>
+    <news:news>
+      <news:publication><news:name>Khabar Darjeeling</news:name><news:language>en</news:language></news:publication>
+      <news:publication_date>2026-07-14T16:48:18.695Z</news:publication_date>
+      <news:title>The Return Ticket: Life on Hold</news:title>
+    </news:news>
+  </url>
+  <url>
+    <loc>https://khabardarjeeling.space/article.html?id=6a566637e4a755431b14</loc>
+    <news:news>
+      <news:publication><news:name>Khabar Darjeeling</news:name><news:language>en</news:language></news:publication>
+      <news:publication_date>2026-07-14T16:39:08.619Z</news:publication_date>
+      <news:title>The Return Ticket: Life on Hold</news:title>
+    </news:news>
+  </url>
+  <url>
+    <loc>https://khabardarjeeling.space/article.html?id=6a5655f660d39fc1a0d9</loc>
+    <news:news>
+      <news:publication><news:name>Khabar Darjeeling</news:name><news:language>en</news:language></news:publication>
+      <news:publication_date>2026-07-14T15:29:56.816Z</news:publication_date>
+      <news:title>Darjeeling Deserves Better</news:title>
+    </news:news>
+  </url>
+  <url>
     <loc>https://khabardarjeeling.space/article.html?id=6a55d00ca5a70f19c991</loc>
     <news:news>
       <news:publication><news:name>Khabar Darjeeling</news:name><news:language>ne</news:language></news:publication>
