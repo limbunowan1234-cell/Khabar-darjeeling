@@ -1,6 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:news="http://www.google.com/schemas/sitemap-news/0.9">
   <url>
+    <loc>https://khabardarjeeling.space/article.html?id=6a5919c131ef842302fe</loc>
+    <news:news>
+      <news:publication><news:name>Khabar Darjeeling</news:name><news:language>ne</news:language></news:publication>
+      <news:publication_date>2026-07-16T17:49:51.426Z</news:publication_date>
+      <news:title>GNLF , GJM , BGPM , IGJF The TRUE IDENTITY CRISIS TILL DATE</news:title>
+    </news:news>
+  </url>
+  <url>
     <loc>https://khabardarjeeling.space/article.html?id=6a58d825369f5774c3a4</loc>
     <news:news>
       <news:publication><news:name>Khabar Darjeeling</news:name><news:language>ne</news:language></news:publication>
@@ -30,14 +38,6 @@
       <news:publication><news:name>Khabar Darjeeling</news:name><news:language>en</news:language></news:publication>
       <news:publication_date>2026-07-15T11:30:36.034Z</news:publication_date>
       <news:title>we are UNIQUE</news:title>
-    </news:news>
-  </url>
-  <url>
-    <loc>https://khabardarjeeling.space/article.html?id=6a567ead47051666d4f0</loc>
-    <news:news>
-      <news:publication><news:name>Khabar Darjeeling</news:name><news:language>en</news:language></news:publication>
-      <news:publication_date>2026-07-14T18:23:38.714Z</news:publication_date>
-      <news:title>The whispering Hills of Darjeeling</news:title>
     </news:news>
   </url>
 </urlset>
