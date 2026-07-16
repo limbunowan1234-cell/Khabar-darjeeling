@@ -1,6 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:news="http://www.google.com/schemas/sitemap-news/0.9">
   <url>
+    <loc>https://khabardarjeeling.space/article.html?id=6a5881a3a2faaf3e3caa</loc>
+    <news:news>
+      <news:publication><news:name>Khabar Darjeeling</news:name><news:language>en</news:language></news:publication>
+      <news:publication_date>2026-07-16T07:00:50.200Z</news:publication_date>
+      <news:title>Darjeeling Is Dying of Thirst While the World Admires Its Beauty</news:title>
+    </news:news>
+  </url>
+  <url>
     <loc>https://khabardarjeeling.space/article.html?id=6a5790d27dae3137934b</loc>
     <news:news>
       <news:publication><news:name>Khabar Darjeeling</news:name><news:language>en</news:language></news:publication>
@@ -38,14 +46,6 @@
       <news:publication><news:name>Khabar Darjeeling</news:name><news:language>en</news:language></news:publication>
       <news:publication_date>2026-07-14T15:29:56.816Z</news:publication_date>
       <news:title>Darjeeling Deserves Better</news:title>
-    </news:news>
-  </url>
-  <url>
-    <loc>https://khabardarjeeling.space/article.html?id=6a55d00ca5a70f19c991</loc>
-    <news:news>
-      <news:publication><news:name>Khabar Darjeeling</news:name><news:language>ne</news:language></news:publication>
-      <news:publication_date>2026-07-14T05:58:35.330Z</news:publication_date>
-      <news:title>निर्वाचनपछि दार्जिलिङको जीवन</news:title>
     </news:news>
   </url>
 </urlset>
