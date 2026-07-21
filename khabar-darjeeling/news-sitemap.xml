@@ -40,12 +40,4 @@
       <news:title>The Power of One Voice</news:title>
     </news:news>
   </url>
-  <url>
-    <loc>https://khabardarjeeling.space/article.html?id=6a5c5efc5c0923da9461</loc>
-    <news:news>
-      <news:publication><news:name>Khabar Darjeeling</news:name><news:language>en</news:language></news:publication>
-      <news:publication_date>2026-07-19T05:22:03.605Z</news:publication_date>
-      <news:title>Tukvar Valley: Darjeeling&apos;s Quiet Treasure Waiting to Bloom Again</news:title>
-    </news:news>
-  </url>
 </urlset>
