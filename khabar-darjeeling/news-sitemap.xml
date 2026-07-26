@@ -72,12 +72,4 @@
       <news:title>परिवर्तनको प्रतीक्षा</news:title>
     </news:news>
   </url>
-  <url>
-    <loc>https://khabardarjeeling.space/article.html?id=6a6341810f60eccc3abd</loc>
-    <news:news>
-      <news:publication><news:name>Khabar Darjeeling</news:name><news:language>ne</news:language></news:publication>
-      <news:publication_date>2026-07-24T10:42:07.423Z</news:publication_date>
-      <news:title>किन गर्छौ अभिमान?</news:title>
-    </news:news>
-  </url>
 </urlset>
