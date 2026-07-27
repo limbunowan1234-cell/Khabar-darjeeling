@@ -56,12 +56,4 @@
       <news:title>The Hills Are Changing: A True Story from Darjeeling</news:title>
     </news:news>
   </url>
-  <url>
-    <loc>https://khabardarjeeling.space/article.html?id=6a64219c433079fbb730</loc>
-    <news:news>
-      <news:publication><news:name>Khabar Darjeeling</news:name><news:language>ne</news:language></news:publication>
-      <news:publication_date>2026-07-25T02:38:19.105Z</news:publication_date>
-      <news:title>एक प्रतिशत ब्याट्री</news:title>
-    </news:news>
-  </url>
 </urlset>
