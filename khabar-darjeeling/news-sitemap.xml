@@ -32,20 +32,4 @@
       <news:title>कर्मठ वीरहरू</news:title>
     </news:news>
   </url>
-  <url>
-    <loc>https://khabardarjeeling.space/article.html?id=6a650e4c07dc240f5a55</loc>
-    <news:news>
-      <news:publication><news:name>Khabar Darjeeling</news:name><news:language>en</news:language></news:publication>
-      <news:publication_date>2026-07-25T19:28:11.273Z</news:publication_date>
-      <news:title>Kurseong — Where My Heart Belongs 🤍⛰️</news:title>
-    </news:news>
-  </url>
-  <url>
-    <loc>https://khabardarjeeling.space/article.html?id=6a650e195b1e1cd8a475</loc>
-    <news:news>
-      <news:publication><news:name>Khabar Darjeeling</news:name><news:language>ne</news:language></news:publication>
-      <news:publication_date>2026-07-25T19:27:19.944Z</news:publication_date>
-      <news:title>कर्सियाङ — मेरो आत्माको ठेगाना 🤍⛰️</news:title>
-    </news:news>
-  </url>
 </urlset>
