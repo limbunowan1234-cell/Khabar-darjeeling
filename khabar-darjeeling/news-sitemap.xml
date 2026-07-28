@@ -24,12 +24,4 @@
       <news:title>Lament of the Grieving Mountain</news:title>
     </news:news>
   </url>
-  <url>
-    <loc>https://khabardarjeeling.space/article.html?id=6a663c06c8a49e9b30a8</loc>
-    <news:news>
-      <news:publication><news:name>Khabar Darjeeling</news:name><news:language>en</news:language></news:publication>
-      <news:publication_date>2026-07-26T16:55:32.909Z</news:publication_date>
-      <news:title>Redrawing the Canvas: From Blue and White to Saffron and Green</news:title>
-    </news:news>
-  </url>
 </urlset>
