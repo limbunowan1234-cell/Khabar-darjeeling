@@ -40,12 +40,4 @@
       <news:title>आज होइन...</news:title>
     </news:news>
   </url>
-  <url>
-    <loc>https://khabardarjeeling.space/article.html?id=6a68c03abe7a8cdac7a0</loc>
-    <news:news>
-      <news:publication><news:name>Khabar Darjeeling</news:name><news:language>ne</news:language></news:publication>
-      <news:publication_date>2026-07-28T14:44:09.927Z</news:publication_date>
-      <news:title>समयको मूल्य धेरै नै महत्वपूर्ण हुन्छ।</news:title>
-    </news:news>
-  </url>
 </urlset>
