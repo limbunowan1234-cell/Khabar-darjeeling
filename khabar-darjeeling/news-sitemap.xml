@@ -1,6 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:news="http://www.google.com/schemas/sitemap-news/0.9">
   <url>
+    <loc>https://khabardarjeeling.space/article.html?id=6a6efa9be679214a9018</loc>
+    <news:news>
+      <news:publication><news:name>Khabar Darjeeling</news:name><news:language>en</news:language></news:publication>
+      <news:publication_date>2026-08-02T08:04:33.384Z</news:publication_date>
+      <news:title>Nepal&apos;s Mountaineering Legend Nirmal &quot;Nims&quot; Purja Dies in Pakistan Avalanche</news:title>
+    </news:news>
+  </url>
+  <url>
     <loc>https://khabardarjeeling.space/article.html?id=6a6df85f1cf48991d6bf</loc>
     <news:news>
       <news:publication><news:name>Khabar Darjeeling</news:name><news:language>en</news:language></news:publication>
@@ -38,14 +46,6 @@
       <news:publication><news:name>Khabar Darjeeling</news:name><news:language>en</news:language></news:publication>
       <news:publication_date>2026-07-31T14:27:07.799Z</news:publication_date>
       <news:title>The Struggles of Small Businesses During the Monsoon in Darjeeling</news:title>
-    </news:news>
-  </url>
-  <url>
-    <loc>https://khabardarjeeling.space/article.html?id=6a6c747dc08271a757f5</loc>
-    <news:news>
-      <news:publication><news:name>Khabar Darjeeling</news:name><news:language>ne</news:language></news:publication>
-      <news:publication_date>2026-07-31T10:10:04.734Z</news:publication_date>
-      <news:title>अनिश्चित भविष्य</news:title>
     </news:news>
   </url>
 </urlset>
