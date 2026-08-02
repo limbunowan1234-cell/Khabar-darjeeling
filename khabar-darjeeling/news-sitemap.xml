@@ -40,12 +40,4 @@
       <news:title>After the Election</news:title>
     </news:news>
   </url>
-  <url>
-    <loc>https://khabardarjeeling.space/article.html?id=6a6cb0be28b6768fe1e6</loc>
-    <news:news>
-      <news:publication><news:name>Khabar Darjeeling</news:name><news:language>en</news:language></news:publication>
-      <news:publication_date>2026-07-31T14:27:07.799Z</news:publication_date>
-      <news:title>The Struggles of Small Businesses During the Monsoon in Darjeeling</news:title>
-    </news:news>
-  </url>
 </urlset>
