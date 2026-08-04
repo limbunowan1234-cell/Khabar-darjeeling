@@ -1,6 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:news="http://www.google.com/schemas/sitemap-news/0.9">
   <url>
+    <loc>https://khabardarjeeling.space/article.html?id=6a720a4e2ff4c870cbf1</loc>
+    <news:news>
+      <news:publication><news:name>Khabar Darjeeling</news:name><news:language>ne</news:language></news:publication>
+      <news:publication_date>2026-08-04T15:50:37.018Z</news:publication_date>
+      <news:title>प्रतिशोधको पदचाप</news:title>
+    </news:news>
+  </url>
+  <url>
+    <loc>https://khabardarjeeling.space/article.html?id=6a720976cd951bced213</loc>
+    <news:news>
+      <news:publication><news:name>Khabar Darjeeling</news:name><news:language>ne</news:language></news:publication>
+      <news:publication_date>2026-08-04T15:47:01.207Z</news:publication_date>
+      <news:title>आजको रावण</news:title>
+    </news:news>
+  </url>
+  <url>
     <loc>https://khabardarjeeling.space/article.html?id=6a71d78a1e1a9db76fc6</loc>
     <news:news>
       <news:publication><news:name>Khabar Darjeeling</news:name><news:language>ne</news:language></news:publication>
