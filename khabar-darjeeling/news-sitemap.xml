@@ -1,6 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:news="http://www.google.com/schemas/sitemap-news/0.9">
   <url>
+    <loc>https://khabardarjeeling.space/article.html?id=6a71bd0a705e7159b7b0</loc>
+    <news:news>
+      <news:publication><news:name>Khabar Darjeeling</news:name><news:language>ne</news:language></news:publication>
+      <news:publication_date>2026-08-04T10:20:57.220Z</news:publication_date>
+      <news:title>गोर्खाल्यान्डको नसुनिने आवाज</news:title>
+    </news:news>
+  </url>
+  <url>
     <loc>https://khabardarjeeling.space/article.html?id=6a7160b9c2b9a2ff5016</loc>
     <news:news>
       <news:publication><news:name>Khabar Darjeeling</news:name><news:language>ne</news:language></news:publication>
