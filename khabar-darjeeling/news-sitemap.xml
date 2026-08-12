@@ -40,20 +40,4 @@
       <news:title>Trust Sells: Why Reviews and Storytelling Matter More Than Any Ad</news:title>
     </news:news>
   </url>
-  <url>
-    <loc>https://khabardarjeeling.space/article.html?id=6a79da602ecd0197d825</loc>
-    <news:news>
-      <news:publication><news:name>Khabar Darjeeling</news:name><news:language>en</news:language></news:publication>
-      <news:publication_date>2026-08-10T14:04:15.248Z</news:publication_date>
-      <news:title>Gorkhaland Statehood Demand Resurfaces in Darjeeling</news:title>
-    </news:news>
-  </url>
-  <url>
-    <loc>https://khabardarjeeling.space/article.html?id=6a79cf875f8b70ae3ada</loc>
-    <news:news>
-      <news:publication><news:name>Khabar Darjeeling</news:name><news:language>ne</news:language></news:publication>
-      <news:publication_date>2026-08-10T13:17:57.589Z</news:publication_date>
-      <news:title>भावपूर्ण  श्रद्धान्जली    वीर सहिदहरू प्रति</news:title>
-    </news:news>
-  </url>
 </urlset>
