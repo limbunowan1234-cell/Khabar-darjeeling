@@ -24,12 +24,4 @@
       <news:title>When her Independence knows no fear</news:title>
     </news:news>
   </url>
-  <url>
-    <loc>https://khabardarjeeling.space/article.html?id=6a7f6217176368507f1a</loc>
-    <news:news>
-      <news:publication><news:name>Khabar Darjeeling</news:name><news:language>ne</news:language></news:publication>
-      <news:publication_date>2026-08-14T18:44:38.674Z</news:publication_date>
-      <news:title>स्वतन्त्रता दिवस अनि हामी</news:title>
-    </news:news>
-  </url>
 </urlset>
