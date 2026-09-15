@@ -1,13 +1,18 @@
-// Generates khabar-darjeeling/news-sitemap.xml from Appwrite (published, last 48h)
-// Run by .github/workflows/news-sitemap.yml
+// Generates khabar-darjeeling/news-sitemap.xml from the khabar-redesign
+// project's Cloudflare Worker (published, last 48h). Run by
+// .github/workflows/news-sitemap.yml.
+//
+// Used to query Appwrite's Database API directly -- that's been fully
+// billing-blocked (402) for weeks now, same root cause as the auth outage
+// in khabar-redesign, so every hourly run has been failing since. Swapped
+// to the Worker's own /articles endpoint, which mirrors Appwrite's
+// document shape ($id, $createdAt, title, content, publishedAt) closely
+// enough that only the fetch itself needed to change.
 
 import { writeFile, mkdir } from 'node:fs/promises';
 import { dirname } from 'node:path';
 
-const EP = 'https://nyc.cloud.appwrite.io/v1';
-const PID = 'khabardarjeeling';
-const DB = 'Khabar_db';
-const COL = 'articles';
+const WORKER_URL = 'https://khabar-worker.limbunowan1234.workers.dev';
 const SITE = 'https://khabardarjeeling.space';
 const PUB = 'Khabar Darjeeling';
 const OUT = 'khabar-darjeeling/news-sitemap.xml';
@@ -35,23 +40,20 @@ function detectLang(a) {
 }
 
 async function main() {
-  const cutoff = new Date(Date.now() - 48 * 3600 * 1000).toISOString();
-  const queries = [
-    JSON.stringify({ method: 'equal', attribute: 'status', values: ['published'] }),
-    JSON.stringify({ method: 'greaterThanEqual', attribute: '$createdAt', values: [cutoff] }),
-    JSON.stringify({ method: 'orderDesc', attribute: '$createdAt' }),
-    JSON.stringify({ method: 'limit', values: [1000] }),
-  ];
-  const u = new URL(`${EP}/databases/${DB}/collections/${COL}/documents`);
-  queries.forEach(q => u.searchParams.append('queries[]', q));
+  const cutoffMs = Date.now() - 48 * 3600 * 1000;
 
-  const r = await fetch(u.toString(), { headers: { 'X-Appwrite-Project': PID } });
+  // No server-side date filter on the Worker's /articles -- same approach
+  // khabar-redesign's own app/news-sitemap.xml route already takes:
+  // fetch everything published (default status filter), filter by date
+  // client-side. limit=1000 comfortably covers 48h of real posting volume.
+  const r = await fetch(`${WORKER_URL}/articles?limit=1000`);
   if (!r.ok) {
     const body = await r.text();
-    throw new Error(`Appwrite ${r.status}: ${body.slice(0, 300)}`);
+    throw new Error(`Worker ${r.status}: ${body.slice(0, 300)}`);
   }
 
-  const docs = (await r.json()).documents || [];
+  const all = (await r.json()).documents || [];
+  const docs = all.filter(a => new Date(a.publishedAt || a.$createdAt).getTime() >= cutoffMs);
   console.log(`Found ${docs.length} published article(s) in the last 48h.`);
 
   const items = docs.map(a => {
