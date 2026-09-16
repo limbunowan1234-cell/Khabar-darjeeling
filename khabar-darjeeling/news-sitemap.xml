@@ -1,4 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:news="http://www.google.com/schemas/sitemap-news/0.9">
-
+  <url>
+    <loc>https://khabardarjeeling.space/article.html?id=e7974568-201f-4923-ac6b-ac9ac3244c84</loc>
+    <news:news>
+      <news:publication><news:name>Khabar Darjeeling</news:name><news:language>en</news:language></news:publication>
+      <news:publication_date>2026-09-16T04:12:46.089Z</news:publication_date>
+      <news:title>Darjeeling fever deaths · MD Fever Deaths in Darjeeling-Kalimpong-Siliguri Raise Questions Over Health Department&apos;s Response</news:title>
+    </news:news>
+  </url>
 </urlset>
