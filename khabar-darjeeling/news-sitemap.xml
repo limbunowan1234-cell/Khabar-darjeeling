@@ -1,6 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:news="http://www.google.com/schemas/sitemap-news/0.9">
   <url>
+    <loc>https://khabardarjeeling.space/article.html?id=43e05559-cc17-4ace-8050-7092635ee7b0</loc>
+    <news:news>
+      <news:publication><news:name>Khabar Darjeeling</news:name><news:language>ne</news:language></news:publication>
+      <news:publication_date>2026-09-18T13:27:35.498Z</news:publication_date>
+      <news:title>माइलाको आँसु</news:title>
+    </news:news>
+  </url>
+  <url>
+    <loc>https://khabardarjeeling.space/article.html?id=da30eaf6-826a-41e3-bbff-c71a5d990654</loc>
+    <news:news>
+      <news:publication><news:name>Khabar Darjeeling</news:name><news:language>ne</news:language></news:publication>
+      <news:publication_date>2026-09-18T13:27:33.744Z</news:publication_date>
+      <news:title>माइलाको आँसु</news:title>
+    </news:news>
+  </url>
+  <url>
     <loc>https://khabardarjeeling.space/article.html?id=c7072931-344a-451d-bf9c-b74ef1f7ea53</loc>
     <news:news>
       <news:publication><news:name>Khabar Darjeeling</news:name><news:language>ne</news:language></news:publication>
