@@ -1,6 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:news="http://www.google.com/schemas/sitemap-news/0.9">
   <url>
+    <loc>https://khabardarjeeling.space/article.html?id=c5d522d1-4e49-4d6e-9e8d-19edd513d640</loc>
+    <news:news>
+      <news:publication><news:name>Khabar Darjeeling</news:name><news:language>en</news:language></news:publication>
+      <news:publication_date>2026-09-19T07:55:00.922Z</news:publication_date>
+      <news:title>Government Holiday List 2026: Darjeeling (West Bengal) and Sikkim</news:title>
+    </news:news>
+  </url>
+  <url>
     <loc>https://khabardarjeeling.space/article.html?id=43e05559-cc17-4ace-8050-7092635ee7b0</loc>
     <news:news>
       <news:publication><news:name>Khabar Darjeeling</news:name><news:language>ne</news:language></news:publication>
@@ -22,14 +30,6 @@
       <news:publication><news:name>Khabar Darjeeling</news:name><news:language>ne</news:language></news:publication>
       <news:publication_date>2026-09-18T02:29:44.074Z</news:publication_date>
       <news:title>मेरो देश नै मेरो गौरव</news:title>
-    </news:news>
-  </url>
-  <url>
-    <loc>https://khabardarjeeling.space/article.html?id=2fa5d670-180f-43e3-99c5-9cd8021872da</loc>
-    <news:news>
-      <news:publication><news:name>Khabar Darjeeling</news:name><news:language>en</news:language></news:publication>
-      <news:publication_date>2026-09-17T08:50:02.511Z</news:publication_date>
-      <news:title>Darjeeling NGO Brings Two Stranded Youths Home From Dubai After 18-Day Rescue Effort</news:title>
     </news:news>
   </url>
 </urlset>
