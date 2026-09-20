@@ -1,6 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:news="http://www.google.com/schemas/sitemap-news/0.9">
   <url>
+    <loc>https://khabardarjeeling.space/article.html?id=57afbdd6-83bc-4866-a6e0-db379856c458</loc>
+    <news:news>
+      <news:publication><news:name>Khabar Darjeeling</news:name><news:language>en</news:language></news:publication>
+      <news:publication_date>2026-09-20T07:30:05.769Z</news:publication_date>
+      <news:title>From Darjeeling to Environmental Science: One Scientist&apos;s Message to the Next Generation</news:title>
+    </news:news>
+  </url>
+  <url>
     <loc>https://khabardarjeeling.space/article.html?id=c5d522d1-4e49-4d6e-9e8d-19edd513d640</loc>
     <news:news>
       <news:publication><news:name>Khabar Darjeeling</news:name><news:language>en</news:language></news:publication>
@@ -22,14 +30,6 @@
       <news:publication><news:name>Khabar Darjeeling</news:name><news:language>ne</news:language></news:publication>
       <news:publication_date>2026-09-18T13:27:33.744Z</news:publication_date>
       <news:title>माइलाको आँसु</news:title>
-    </news:news>
-  </url>
-  <url>
-    <loc>https://khabardarjeeling.space/article.html?id=c7072931-344a-451d-bf9c-b74ef1f7ea53</loc>
-    <news:news>
-      <news:publication><news:name>Khabar Darjeeling</news:name><news:language>ne</news:language></news:publication>
-      <news:publication_date>2026-09-18T02:29:44.074Z</news:publication_date>
-      <news:title>मेरो देश नै मेरो गौरव</news:title>
     </news:news>
   </url>
 </urlset>
