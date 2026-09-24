@@ -1,19 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:news="http://www.google.com/schemas/sitemap-news/0.9">
   <url>
+    <loc>https://khabardarjeeling.space/article.html?id=c3466f9c-1811-4c7e-8900-fc1a2f110900</loc>
+    <news:news>
+      <news:publication><news:name>Khabar Darjeeling</news:name><news:language>en</news:language></news:publication>
+      <news:publication_date>2026-09-24T05:38:14.629Z</news:publication_date>
+      <news:title>Sikkim Woman Rescued From Alleged Abuse in Singapore, Now Safe in Delhi</news:title>
+    </news:news>
+  </url>
+  <url>
     <loc>https://khabardarjeeling.space/article.html?id=26be0384-5427-41ad-8d20-8f6616f9b8cc</loc>
     <news:news>
       <news:publication><news:name>Khabar Darjeeling</news:name><news:language>en</news:language></news:publication>
       <news:publication_date>2026-09-22T19:18:20.251Z</news:publication_date>
       <news:title>Empowering the Hills in the Capital: Gorkha Hill Students&apos; Association Marks a New Chapter in New Delhi</news:title>
-    </news:news>
-  </url>
-  <url>
-    <loc>https://khabardarjeeling.space/article.html?id=2f1d01fa-f3ae-4c2e-b3c4-42960482c035</loc>
-    <news:news>
-      <news:publication><news:name>Khabar Darjeeling</news:name><news:language>en</news:language></news:publication>
-      <news:publication_date>2026-09-22T07:40:21.815Z</news:publication_date>
-      <news:title>Darjeeling Will Be Number One Hill Station Again Within Five Years, Says PWD Minister Ajay Poddar</news:title>
     </news:news>
   </url>
 </urlset>
