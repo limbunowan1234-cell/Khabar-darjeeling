@@ -8,12 +8,4 @@
       <news:title>ChatGpt बोल्दैछ</news:title>
     </news:news>
   </url>
-  <url>
-    <loc>https://khabardarjeeling.space/article.html?id=d0b3f11b-933c-4e9b-b16e-93ac46bbf921</loc>
-    <news:news>
-      <news:publication><news:name>Khabar Darjeeling</news:name><news:language>en</news:language></news:publication>
-      <news:publication_date>2026-09-30T18:11:36.527Z</news:publication_date>
-      <news:title>Darjeeling–Sikkim Merger Row: What the &apos;Fourth Pathway&apos; Said and Why It Caused Concern</news:title>
-    </news:news>
-  </url>
 </urlset>
