@@ -1,4 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:news="http://www.google.com/schemas/sitemap-news/0.9">
-
+  <url>
+    <loc>https://khabardarjeeling.space/article.html?id=3a690890-39ff-40b6-ba73-05097b90e843</loc>
+    <news:news>
+      <news:publication><news:name>Khabar Darjeeling</news:name><news:language>en</news:language></news:publication>
+      <news:publication_date>2026-10-22T18:36:07.647Z</news:publication_date>
+      <news:title>One Town, Two Lit Fests: Darjeeling&apos;s Literary Calendar Fills Up with DALF and DLF</news:title>
+    </news:news>
+  </url>
+  <url>
+    <loc>https://khabardarjeeling.space/article.html?id=b0f8efb5-993a-485e-83e9-ec3c09d2f716</loc>
+    <news:news>
+      <news:publication><news:name>Khabar Darjeeling</news:name><news:language>en</news:language></news:publication>
+      <news:publication_date>2026-10-22T18:28:41.145Z</news:publication_date>
+      <news:title>Toy Train Puja Rush: 12,000 Joyride Passengers and Rs 1.41 Crore in Three Weeks</news:title>
+    </news:news>
+  </url>
 </urlset>
