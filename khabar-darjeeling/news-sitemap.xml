@@ -1,19 +1,4 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:news="http://www.google.com/schemas/sitemap-news/0.9">
-  <url>
-    <loc>https://khabardarjeeling.space/article.html?id=cbd2e66b-d3b6-429f-875f-2da40957023b</loc>
-    <news:news>
-      <news:publication><news:name>Khabar Darjeeling</news:name><news:language>en</news:language></news:publication>
-      <news:publication_date>2026-11-02T17:05:54.279Z</news:publication_date>
-      <news:title>The Only Student in the Room: Gangtok Medic Brings Sikkim&apos;s Rivers, and Lepcha Cane Bridges, to India–Australia Drowning Prevention Talks</news:title>
-    </news:news>
-  </url>
-  <url>
-    <loc>https://khabardarjeeling.space/article.html?id=fb3695b9-89ae-4202-b73e-4e53164866aa</loc>
-    <news:news>
-      <news:publication><news:name>Khabar Darjeeling</news:name><news:language>en</news:language></news:publication>
-      <news:publication_date>2026-11-02T17:00:25.077Z</news:publication_date>
-      <news:title>Snow at Tsomgo and Nathu La, a 14°C Afternoon in Gangtok: Cyclone Arnab&apos;s Chilly Parting Gift to Sikkim</news:title>
-    </news:news>
-  </url>
+
 </urlset>
