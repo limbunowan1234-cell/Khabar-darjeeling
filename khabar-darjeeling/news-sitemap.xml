@@ -1,6 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:news="http://www.google.com/schemas/sitemap-news/0.9">
   <url>
+    <loc>https://khabardarjeeling.space/article.html?id=b96c12d0-2bab-4e53-86fc-9049858ab694</loc>
+    <news:news>
+      <news:publication><news:name>Khabar Darjeeling</news:name><news:language>en</news:language></news:publication>
+      <news:publication_date>2026-11-13T17:36:01.357Z</news:publication_date>
+      <news:title>Deusi Bhailo Comes to Milan More: Three-Day Gorkha Culture Festival Under Way in Siliguri</news:title>
+    </news:news>
+  </url>
+  <url>
+    <loc>https://khabardarjeeling.space/article.html?id=7285ede4-5739-40e1-b671-3b0f7bd01dc3</loc>
+    <news:news>
+      <news:publication><news:name>Khabar Darjeeling</news:name><news:language>en</news:language></news:publication>
+      <news:publication_date>2026-11-13T17:33:03.422Z</news:publication_date>
+      <news:title>Snowbound at Nathula: Army Brings Over 900 Tourists and Locals to Safety in East Sikkim</news:title>
+    </news:news>
+  </url>
+  <url>
     <loc>https://khabardarjeeling.space/article.html?id=af02ca46-e1da-4459-9313-f2417eec1f7b</loc>
     <news:news>
       <news:publication><news:name>Khabar Darjeeling</news:name><news:language>en</news:language></news:publication>
@@ -14,22 +30,6 @@
       <news:publication><news:name>Khabar Darjeeling</news:name><news:language>en</news:language></news:publication>
       <news:publication_date>2026-11-12T08:33:56.781Z</news:publication_date>
       <news:title>Shillong Turns White as Intense Hailstorm Blankets the City</news:title>
-    </news:news>
-  </url>
-  <url>
-    <loc>https://khabardarjeeling.space/article.html?id=63c1715e-8222-4052-9adb-af7d7f717740</loc>
-    <news:news>
-      <news:publication><news:name>Khabar Darjeeling</news:name><news:language>en</news:language></news:publication>
-      <news:publication_date>2026-11-11T17:50:11.921Z</news:publication_date>
-      <news:title>Back on the Map After Four Years: North Sikkim&apos;s Green Lake Trek Reopens, and a Russian Team Is First to Finish</news:title>
-    </news:news>
-  </url>
-  <url>
-    <loc>https://khabardarjeeling.space/article.html?id=ec8e253e-9711-4dfa-9ea7-ad3ead75df75</loc>
-    <news:news>
-      <news:publication><news:name>Khabar Darjeeling</news:name><news:language>en</news:language></news:publication>
-      <news:publication_date>2026-11-11T17:47:43.770Z</news:publication_date>
-      <news:title>Hail by Morning, Snow by Afternoon: Sandakphu Gets Its First Snowfall of the Season on Bhai Tika</news:title>
     </news:news>
   </url>
 </urlset>
