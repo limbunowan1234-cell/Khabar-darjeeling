@@ -1,6 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:news="http://www.google.com/schemas/sitemap-news/0.9">
   <url>
+    <loc>https://khabardarjeeling.space/article.html?id=48310b1b-0c40-45d4-8676-a84d3cac3580</loc>
+    <news:news>
+      <news:publication><news:name>Khabar Darjeeling</news:name><news:language>en</news:language></news:publication>
+      <news:publication_date>2026-11-17T15:58:35.236Z</news:publication_date>
+      <news:title>A First for the Database: Beetle Spotted at Gangtok Moth Night Becomes iNaturalist&apos;s Only Record of Its Species</news:title>
+    </news:news>
+  </url>
+  <url>
+    <loc>https://khabardarjeeling.space/article.html?id=33564aec-1727-4915-844a-e819ae622be6</loc>
+    <news:news>
+      <news:publication><news:name>Khabar Darjeeling</news:name><news:language>en</news:language></news:publication>
+      <news:publication_date>2026-11-17T15:56:32.048Z</news:publication_date>
+      <news:title>No Night Drives to Sikkim Until December 13: NH-10 Shuts 9 pm to 6 am for Landslide Work</news:title>
+    </news:news>
+  </url>
+  <url>
     <loc>https://khabardarjeeling.space/article.html?id=db77d835-11d5-4c01-a9c5-193ff5bfb57b</loc>
     <news:news>
       <news:publication><news:name>Khabar Darjeeling</news:name><news:language>en</news:language></news:publication>
@@ -22,22 +38,6 @@
       <news:publication><news:name>Khabar Darjeeling</news:name><news:language>en</news:language></news:publication>
       <news:publication_date>2026-11-16T07:01:23.173Z</news:publication_date>
       <news:title>Assam Team Wins ₹5 Lakh as Siliguri&apos;s First MP Deusi-Bhailo Mahotsav Ends; Kalimpong Takes Third</news:title>
-    </news:news>
-  </url>
-  <url>
-    <loc>https://khabardarjeeling.space/article.html?id=70a4c1a7-8669-4d30-844d-ed66080cbd81</loc>
-    <news:news>
-      <news:publication><news:name>Khabar Darjeeling</news:name><news:language>en</news:language></news:publication>
-      <news:publication_date>2026-11-15T16:32:57.929Z</news:publication_date>
-      <news:title>Sikkim&apos;s Birds Fly to Texas: State&apos;s Birding Hotspot Map Unveiled at International Birdfair</news:title>
-    </news:news>
-  </url>
-  <url>
-    <loc>https://khabardarjeeling.space/article.html?id=91ad6a3c-ad43-4aeb-88cc-f5207e113e8e</loc>
-    <news:news>
-      <news:publication><news:name>Khabar Darjeeling</news:name><news:language>en</news:language></news:publication>
-      <news:publication_date>2026-11-15T16:30:51.752Z</news:publication_date>
-      <news:title>Pitch Your Manuscript at Chowrasta: Darjeeling&apos;s First Arts and Literature Festival Is Under Way</news:title>
     </news:news>
   </url>
 </urlset>
