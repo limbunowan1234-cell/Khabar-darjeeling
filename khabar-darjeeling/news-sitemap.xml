@@ -1,6 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:news="http://www.google.com/schemas/sitemap-news/0.9">
   <url>
+    <loc>https://khabardarjeeling.space/article.html?id=740dc465-b5d0-4c5c-8552-a4cc233e3642</loc>
+    <news:news>
+      <news:publication><news:name>Khabar Darjeeling</news:name><news:language>en</news:language></news:publication>
+      <news:publication_date>2026-11-18T06:17:46.046Z</news:publication_date>
+      <news:title>An Offering to the Unnoticed: The Meaning of Kag Tihar</news:title>
+    </news:news>
+  </url>
+  <url>
     <loc>https://khabardarjeeling.space/article.html?id=48310b1b-0c40-45d4-8676-a84d3cac3580</loc>
     <news:news>
       <news:publication><news:name>Khabar Darjeeling</news:name><news:language>en</news:language></news:publication>
@@ -22,22 +30,6 @@
       <news:publication><news:name>Khabar Darjeeling</news:name><news:language>en</news:language></news:publication>
       <news:publication_date>2026-11-17T03:17:02.334Z</news:publication_date>
       <news:title>Dalle Goes to New York: Sikkim Supreme Pickles Ship Abroad for the First Time</news:title>
-    </news:news>
-  </url>
-  <url>
-    <loc>https://khabardarjeeling.space/article.html?id=b7edd22a-2af1-47d6-a4e4-47086f48f0d4</loc>
-    <news:news>
-      <news:publication><news:name>Khabar Darjeeling</news:name><news:language>en</news:language></news:publication>
-      <news:publication_date>2026-11-16T07:05:06.025Z</news:publication_date>
-      <news:title>155 Butterfly Species in Nine Days: Dzongu&apos;s Late-Season Surprise, Blue Duke Included</news:title>
-    </news:news>
-  </url>
-  <url>
-    <loc>https://khabardarjeeling.space/article.html?id=4359d874-1c5a-4340-bbf7-931652e1b95f</loc>
-    <news:news>
-      <news:publication><news:name>Khabar Darjeeling</news:name><news:language>en</news:language></news:publication>
-      <news:publication_date>2026-11-16T07:01:23.173Z</news:publication_date>
-      <news:title>Assam Team Wins ₹5 Lakh as Siliguri&apos;s First MP Deusi-Bhailo Mahotsav Ends; Kalimpong Takes Third</news:title>
     </news:news>
   </url>
 </urlset>
